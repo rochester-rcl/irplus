@@ -139,8 +139,11 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 		if( (other.getOwner() != null && !other.getOwner().equals(owner)) ||
 			(other.getOwner() == null && owner != null )) return false;
 		
-		if( (other.getFullPath() != null && !other.getFullPath().equals(getFullPath())) ||
-			(other.getFullPath() == null && getFullPath() != null )	) return false;
+		if( (other.getName() != null && !other.getName().equals(getName())) ||
+			(other.getName() == null && getName() != null )	) return false;
+		
+		if( (other.getPersonalFolder() != null && !other.getPersonalFolder().equals(getPersonalFolder())) ||
+			(other.getPersonalFolder() == null && getPersonalFolder() != null )	) return false;
 		
 		return true;
 			

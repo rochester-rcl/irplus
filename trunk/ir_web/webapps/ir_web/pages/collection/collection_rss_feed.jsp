@@ -25,7 +25,9 @@
 			   </c:url>
 			   <title><c:out value="${item.versionedInstitutionalItem.currentVersion.item.name}"/></title>
 			   <link><ir:baseUrl/>${itemView}</link>
-			   <description><c:out value="${ir:getItemDescription(item.versionedInstitutionalItem.currentVersion.item)}"/></description>
+			   <c:if test="${item.versionedInstitutionalItem.currentVersion.item.publiclyViewable}">
+			       <description><c:out value="${ir:getItemDescription(item.versionedInstitutionalItem.currentVersion.item)}"/></description>
+               </c:if>
                <pubDate><fmt:formatDate pattern="EE, dd MMM yyyy HH:mm:ss Z" value="${item.versionedInstitutionalItem.currentVersion.dateOfDeposit}"/></pubDate>
                <guid  isPermaLink="false">institutional_item_version_id:${item.versionedInstitutionalItem.currentVersion.id}</guid>
           </item>

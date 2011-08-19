@@ -23,6 +23,7 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -167,6 +168,16 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	 * @return number of institutional item versions to be re-indexed.
 	 */
 	public Long insertAllItemsForLangaugeType(LanguageType languageType, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a place of publication to be re-indexed.
+	 * 
+	 * @param placeOfPublication - the place of publication.
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForPlaceOfPublication(PlaceOfPublication placeOfPublcation, IndexProcessingType processingType);
 	
 	/**
 	 * Insert all items for a person name to be re-indexed.

@@ -26,10 +26,33 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class ExtentType extends CommonPersistent {
 	
-	/**
-	 * Eclipse Generated id.
-	 */
+	// Eclipse gernerated id
 	private static final long serialVersionUID = -90727690993732794L;
+	
+	
+	/**
+	 * Default constructor
+	 */
+	public ExtentType(){}
+	
+	/**
+	 * @param name - name of the extent type
+	 */
+	public ExtentType(String name)
+	{
+		setName(name);
+	}
+	
+	/**
+	 * Create an extent type
+	 * @param name - name of the extent type
+	 * @param description - description of the extent type
+	 */
+	public ExtentType(String name, String description)
+	{
+		setName(name);
+		setDescription(description);
+	}
 
 	/**
 	 * @see java.lang.Object#hashCode()

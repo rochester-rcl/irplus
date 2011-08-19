@@ -26,7 +26,7 @@
     </c:url>
     
  
-            <img class="repository_image"  src="${pictureUrl}"/>
+    <img class="repository_image"  src="${pictureUrl}"/>
     <c:if test="${numResearcherPictures > 1}">
     <table class="buttonTable">
         <tr>
@@ -50,6 +50,6 @@
 
 <c:if test="${irFile == null }">
     
-     <img class="repository_image" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="300" width="80"/>
+     <img class="repository_image picture_module_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg"/>
 </c:if>
 

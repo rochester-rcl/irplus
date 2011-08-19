@@ -29,7 +29,6 @@
 </c:if>
 
 	<c:forEach items="${item.itemIdentifiers}" var="itemIdentifier" varStatus="rowCounter">
-    
    	<table id="identifier_table_${rowCounter.count}">
 
 		<tr>

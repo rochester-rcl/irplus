@@ -43,8 +43,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.affiliation.getAffiliations(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'desc');">
 	                    <u>Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					<urstb:td>Author Permission</urstb:td>
 					<urstb:td>Researcher Permission</urstb:td>
 					<urstb:td>Approval Required</urstb:td>

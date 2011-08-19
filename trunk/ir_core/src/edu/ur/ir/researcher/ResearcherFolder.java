@@ -408,10 +408,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		boolean removed = false;
 		if( files.contains(rf))
 		{
-			ResearcherFile researcherFile = getResearcherFile(rf.getName());
 			removed = files.remove(rf);
 			rf.setParentFolder(null);
-			researcherFile.setParentFolder(null);
+			rf.setParentFolder(null);
 		}
 		return removed;
 	}

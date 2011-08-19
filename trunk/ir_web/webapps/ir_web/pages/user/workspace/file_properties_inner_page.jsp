@@ -254,7 +254,7 @@
                                       <c:param name="personalFileId" value="${personalFile.id}"/>
                                       <c:param name="versionNumber" value="${version.versionNumber}"/>
                                   </c:url>
-                                  <img height="66px" width="100px" src="${url}"/>
+                                  <img class="basic_thumbnail" src="${url}"/>
                              </c:if>
                           </urstb:td>
                         

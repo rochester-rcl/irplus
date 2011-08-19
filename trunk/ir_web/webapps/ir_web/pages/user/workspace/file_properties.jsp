@@ -171,9 +171,9 @@
 		        <input type="hidden" name="personalFileId" value="${personalFileId}"/>        		
 				New Owner :
 				<select name="newOwnerId">
-					<option value="${personalFile.versionedFile.owner.id}"> ${personalFile.versionedFile.owner.firstName} ${personalFile.versionedFile.owner.lastName} </option>
+					<option value="${personalFile.versionedFile.owner.id}"> ${personalFile.versionedFile.owner.firstName}&nbsp;${personalFile.versionedFile.owner.lastName} </option>
 					<c:forEach var="collaborator" items="${personalFile.versionedFile.collaborators}">
-						<option value="${collaborator.collaborator.id}"> ${collaborator.collaborator.firstName} ${collaborator.collaborator.lastName} </option>
+						<option value="${collaborator.collaborator.id}">${collaborator.collaborator.firstName}&nbsp;${collaborator.collaborator.lastName}</option>
 					</c:forEach>
 				</select>
 		     </form>		          

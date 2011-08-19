@@ -48,8 +48,8 @@ public class SearchHelperTest {
 		assert SearchHelper.prepareFacetSearchString("the* *cool test *", true).equals("the* cool* test*") : "equals " + SearchHelper.prepareFacetSearchString("the* *cool test *", true);
 		assert SearchHelper.prepareFacetSearchString("the: ", true).equals("the\\:") : "equals " + SearchHelper.prepareFacetSearchString("the: ", true);
 		assert SearchHelper.prepareFacetSearchString("the()", true).equals("the\\(\\)") : "equals " + SearchHelper.prepareFacetSearchString("the()", true);
-		assert SearchHelper.prepareFacetSearchString("*the", true).equals("the*") : "equals " + SearchHelper.prepareFacetSearchString("*the", true);
-		assert SearchHelper.prepareFacetSearchString("?the", true).equals("the*") : "equals " + SearchHelper.prepareFacetSearchString("?the", true);
+		assert SearchHelper.prepareFacetSearchString("*thee", true).equals("thee*") : "equals " + SearchHelper.prepareFacetSearchString("*the", true);
+		assert SearchHelper.prepareFacetSearchString("?thee", true).equals("thee*") : "equals " + SearchHelper.prepareFacetSearchString("?the", true);
 		assert SearchHelper.prepareFacetSearchString("test *", true).equals("test*") : "equals " + SearchHelper.prepareFacetSearchString("test *", true);
 		assert SearchHelper.prepareFacetSearchString("test mult terms *", true).equals("test* mult* terms*") : "equals " + SearchHelper.prepareFacetSearchString("test mult terms *", true);
 		//assert SearchHelper.prepareFacetSearchString("dash-test", true).equals("dash\\-test*") : "equals " + SearchHelper.prepareFacetSearchString("dash-test", true);
@@ -82,8 +82,8 @@ public class SearchHelperTest {
 		assert SearchHelper.prepareMainSearchString("the* *cool test *", true).equals("the* cool* test*") : "equals " + SearchHelper.prepareMainSearchString("the* *cool test *", true);
 		assert SearchHelper.prepareMainSearchString("the: ", true).equals("the\\:") : "equals " + SearchHelper.prepareMainSearchString("the: ", true);
 		assert SearchHelper.prepareMainSearchString("the()", true).equals("the\\(\\)") : "equals " + SearchHelper.prepareMainSearchString("the()", true);
-		assert SearchHelper.prepareMainSearchString("*the", true).equals("the*") : "equals " + SearchHelper.prepareMainSearchString("*the", true);
-		assert SearchHelper.prepareMainSearchString("?the", true).equals("the*") : "equals " + SearchHelper.prepareMainSearchString("?the", true);
+		assert SearchHelper.prepareMainSearchString("*thee", true).equals("thee*") : "equals " + SearchHelper.prepareMainSearchString("*the", true);
+		assert SearchHelper.prepareMainSearchString("?thee", true).equals("thee*") : "equals " + SearchHelper.prepareMainSearchString("?the", true);
 		assert SearchHelper.prepareMainSearchString("test *", true).equals("test*") : "equals " + SearchHelper.prepareMainSearchString("test *", true);
 		assert SearchHelper.prepareMainSearchString("test mult terms *", true).equals("test* mult* terms*") : "equals " + SearchHelper.prepareMainSearchString("test mult terms *", true);
 		//assert SearchHelper.prepareFacetSearchString("dash-test", true).equals("dash\\-test*") : "equals " + SearchHelper.prepareFacetSearchString("dash-test", true);
@@ -93,7 +93,7 @@ public class SearchHelperTest {
 		assert SearchHelper.prepareMainSearchString("\"test\" this + ", false).equals("\"test\" this \\+ ") : "equals " + SearchHelper.prepareMainSearchString("\"test\" this + ", false);		
 		assert SearchHelper.prepareMainSearchString("\"test\" this + \"more quotes\" ", false).equals("\"test\" this \\+ \"more quotes\"") : "equals " + SearchHelper.prepareMainSearchString("\"test\" this + \"more quotes\"", false);		
 		
-		assert SearchHelper.prepareMainSearchString("\"P-Selectivity\" Immunity, and", true).equals("\"P-Selectivity\" Immunity,* and*") : "equals " + SearchHelper.prepareMainSearchString("\"P-Selectivity\" Immunity, and", true);
+		assert SearchHelper.prepareMainSearchString("\"P-Selectivity\" Immunity, and", true).equals("\"P-Selectivity\" Immunity,* and") : "equals " + SearchHelper.prepareMainSearchString("\"P-Selectivity\" Immunity, and", true);
 
 	}
 	

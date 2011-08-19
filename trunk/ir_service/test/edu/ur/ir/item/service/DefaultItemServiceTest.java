@@ -338,6 +338,7 @@ public class DefaultItemServiceTest {
 		
 		// Start the transaction 
 		ts = tm.getTransaction(td);
+		personalItem = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
 		GenericItem clonedItem = personalItem.getVersionedItem().getCurrentVersion().getItem().clone();
 		personalItem.getVersionedItem()
 			.addNewVersion(clonedItem);
@@ -374,15 +375,16 @@ public class DefaultItemServiceTest {
 		TransactionStatus ts = tm.getTransaction(td);
 		
 		GenericItem item = new GenericItem("name");
-		OriginalItemCreationDate originalItemCreationDate = item.addOriginalItemCreationDate(1, 12, 1990);
+		OriginalItemCreationDate originalItemCreationDate = item.updateOriginalItemCreationDate(1, 12, 1990);
 		itemService.makePersistent(item);
 		
 		tm.commit(ts);
 
 
 		assert item.getOriginalItemCreationDate().equals(originalItemCreationDate) :"Release date should be equal";
-		
-
+		assert item.getOriginalItemCreationDate().getMonth() == 1 : "Moth equals " + item.getOriginalItemCreationDate().getMonth();
+		assert item.getOriginalItemCreationDate().getDay() == 12 : "Day equals " + item.getOriginalItemCreationDate().getDay();
+		assert item.getOriginalItemCreationDate().getYear() == 1990 : "Year equals " + item.getOriginalItemCreationDate().getYear();
 		// Start the transaction 
 		ts = tm.getTransaction(td);
 		

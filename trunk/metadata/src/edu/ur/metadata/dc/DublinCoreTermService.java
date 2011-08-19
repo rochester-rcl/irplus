@@ -25,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface DublinCoreTermService  extends Serializable
+public interface DublinCoreTermService extends Serializable
 {
 	
 	/**

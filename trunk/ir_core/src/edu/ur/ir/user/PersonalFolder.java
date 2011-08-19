@@ -344,7 +344,13 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	 */
 	public boolean removePersonalFile(PersonalFile pf)
 	{
-		return files.remove(pf);
+		boolean removed = false;
+		if( files.contains(pf))
+		{
+			removed = files.remove(pf);
+		    pf.setPersonalFolder(null);
+		}
+		return removed;
 	}
 	
 	/**

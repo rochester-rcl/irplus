@@ -33,7 +33,7 @@
            <a href="<c:url value="/help.action"/>">Help</a> | <a href="<c:url value="/contactUs.action"/>">Contact Us</a> | <a href="<c:url value="/about.action"/>">About</a> | <a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a>
            <br>
            <c:url var="poweredByImage" value="/page-resources/images/all-images/poweredby.gif"/>
-           <a href="http://www.irplus.org/"><img class="powered_by" alt="Powered By IR Plus" src="${poweredByImage}"></a>
+           <a href="http://www.irplus.org/"><img class="powered_by" alt="Powered By IR Plus institutional repository software" src="${poweredByImage}"></a>
        </div>
    </div>
   
@@ -82,6 +82,8 @@
                                  <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInviteInfos.action"/>"><span class="menu_text">Invite Information</span></a></li>
                                 </c:if>
+                                
+                                
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExternalAccountTypes.action"/>"><span class="menu_text">External Account Types</span></a></li>
@@ -112,9 +114,23 @@
                                 
                                 
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLanguageTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewLanguageTypes"/></span></a></li>
+                                <li class="yuimenuitem">
+                                    <a class="yuimenuitemlabel">MARC21 Mappings</a>
+
+                                    <div id="marcmapping" class="yuimenu">
+                                        <div class="bd">                    
+                                            <ul>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypeMarcMappings.action" />"><span class="menu_text">MARC21 Leader/Control Field Mappings</span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypeRelatorCodes.action" />"><span class="menu_text">Contributor Type Relator Code</span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewMarcDataFieldMappers.action" />"><span class="menu_text">MARC21 Data Field Mappings</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>                    
+                                </li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewTopMediaTypes.action" />"><span class="menu_text"><fmt:message key="menu.viewTopMediaTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><span class="menu_text"><fmt:message key="menu.viewNewsItem"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPersons.action" />"><span class="menu_text">Person Name Authority</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPlacesOfPublication.action" />"><span class="menu_text">Places Of Publication</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPublishers.action"/>"><span class="menu_text"><fmt:message key="menu.viewPublishers"/></span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action"/>"><span class="menu_text">Repository</span></a></li>

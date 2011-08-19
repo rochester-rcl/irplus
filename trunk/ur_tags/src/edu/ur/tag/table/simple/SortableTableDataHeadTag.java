@@ -47,6 +47,12 @@ public class SortableTableDataHeadTag extends TableDataTag {
 	/** value to set the href to */
 	protected String hrefVar;
 	
+	/** Sets the default sort when the user clicks on the column for the first time 
+	 * can be [ asc | desc ] - if null defaults to asc */
+	protected String defaultSort;
+	
+
+
 
 
 	/** default on mouse over action */
@@ -122,7 +128,14 @@ public class SortableTableDataHeadTag extends TableDataTag {
 		String url ="";
 		if( currentSortAction.equalsIgnoreCase("none"))
 		{
-			url = ascendingSortAction;
+			if( defaultSort == null || defaultSort.equals("asc"))
+			{
+			    url = ascendingSortAction;
+			}
+			else
+			{
+				url = descendingSortAction;
+			}
 		}
 		else if( currentSortAction.equalsIgnoreCase("asc"))
 		{
@@ -176,5 +189,13 @@ public class SortableTableDataHeadTag extends TableDataTag {
 		this.hrefVar = hrefVar;
 	}
 
+	/**
+	 * Set the default sort option
+	 * 
+	 * @param defaultSort
+	 */
+	public void setDefaultSort(String defaultSort) {
+		this.defaultSort = defaultSort;
+	}
 	
 }

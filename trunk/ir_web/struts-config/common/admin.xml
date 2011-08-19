@@ -32,6 +32,7 @@
 <struts>
     
     <include file="struts-default.xml"/>
+  
     
     <package name="admin" namespace="/admin" extends="struts-default">
     
@@ -85,11 +86,17 @@
         
         <!--  set the default action for this package -->
         <default-interceptor-ref name="default"/>
-        
-         <default-action-ref name="unknownAction" />
+        <default-action-ref name="unknownAction" />
          
+
          <global-results>
         	 <result name="change-password">/pages/home.jsp</result>
+        	 <result type="redirect" name="handleError">/pages/error.jsp</result>
+        	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
+        	 <result type="redirectAction" name="acceptLicense">
+        	      <param name="actionName">acceptRepositoryLicense.action</param>
+        	      <param name="namespace">/user</param>
+        	 </result>
         </global-results>
         
         <!--  ************************************ -->
@@ -300,7 +307,10 @@
             <result name="added">/pages/admin/external_account_type/external_account_type_form.jsp</result>
             <result name="deleted">/pages/admin/external_account_type/external_account_type_deleted.jsp</result>
             <result name="get">/pages/admin/external_account_type/external_account_type_form.jsp</result>
-        </action>       
+        </action> 
+        
+
+              
     </package>
     
 </struts>

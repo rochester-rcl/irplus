@@ -130,9 +130,20 @@ public class ViewContributorPage extends Pager {
 	 */
 	public String getRss()
 	{
+		if(personNameId == null )
+		{
+			return "not_found";
+		}
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		rowEnd = rowStart + numberOfResultsToShow;
+		
 		personName = personService.getName(personNameId, false);
+		
+		if( personName == null )
+		{
+		    return "not_found";	
+		}
+		
 		PersonNameAuthority authority = personName.getPersonNameAuthority();
 		Set<PersonName> names = authority.getNames();
 		totalDownloads = institutionalItemVersionService.getNumberOfDownlodsForPersonNames(names);
@@ -148,9 +159,17 @@ public class ViewContributorPage extends Pager {
 	 */
 	public String execute()
 	{
-		
+		if( personNameId == null )
+		{
+		    return "not_found";	
+		}
 		rowEnd = rowStart + numberOfResultsToShow;
 		personName = personService.getName(personNameId, false);
+		
+		if( personName == null )
+		{
+		    return "not_found";	
+		}
 		PersonNameAuthority authority = personName.getPersonNameAuthority();
 		Set<PersonName> names = authority.getNames();
 
@@ -373,8 +392,6 @@ public class ViewContributorPage extends Pager {
 		return contributorPublications;
 	}
 
-
-	
 	public long getPublicationsCount() {
 		return publicationsCount;
 	}

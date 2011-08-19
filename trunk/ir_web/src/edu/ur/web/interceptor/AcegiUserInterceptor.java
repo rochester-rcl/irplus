@@ -26,11 +26,14 @@ import org.apache.struts2.StrutsStatics;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.action.user.ChangePassword;
 import edu.ur.ir.web.action.user.EmailVerification;
+import edu.ur.ir.web.action.user.ViewWorkspace;
 
 /**
  * Will populate the session with needed user information.  This
@@ -51,10 +54,13 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	
 	/** Service for dealing with users */
 	private UserService userService;
-
 	
+	/**  Repository information data access  */
+	private RepositoryService repositoryService;
+
 	/**
-	 * Gets the user and sets them in the session.
+	 * Gets the user and sets them in the session if they exist.  Also does some checking 
+	 * and forces certain requirements for users who are logged in.
 	 * 
 	 * @see com.opensymphony.xwork2.interceptor.AbstractInterceptor#intercept(com.opensymphony.xwork2.ActionInvocation)
 	 */
@@ -87,6 +93,8 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 		}
 
 		
+		//Any action that implements user id aware requires the user id
+		//is set 
 		if (action instanceof UserIdAware) {
 			if( log.isDebugEnabled() )
 			{
@@ -104,8 +112,10 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 				// make sure user id is cleared out
 				((UserIdAware) action).injectUserId(null);
 			}
+
 	    }
 		
+		// put the user in the session
 		invocation.getInvocationContext().getSession().put("user", user);
 
 		
@@ -114,18 +124,20 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 			return "change-password";
 		}
 		
+		//make the user accept the license if the user does not have
+	    //the most current license.
+		if(  (user != null) && (action instanceof ViewWorkspace) )
+		{	   
+	 	    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		    if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		    {
+			    return "acceptLicense";
+		    }
+		}
+		
 		return invocation.invoke();
 	}
 
-
-	/**
-	 * Get the user service to access information.
-	 * 
-	 * @return
-	 */
-	public UserService getUserService() {
-		return userService;
-	}
 
 
 	/**
@@ -136,5 +148,15 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
 
 }

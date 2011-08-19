@@ -26,7 +26,7 @@
 <!--  images used by the page -->
 <html>
     <head>
-        <title>Welcome</title>
+        <title>Submit to Collections</title>
         <c:import url="/inc/meta-frag.jsp"/>
 
 	    <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
@@ -69,7 +69,7 @@
 				
 				<br/>
 				
-				<h3>Submit item: ${item.name}</h3>
+				<h3>Submit item: ${item.fullName}</h3>
 				
        	        <div class="yui-g">
 			        <div class="yui-u first">

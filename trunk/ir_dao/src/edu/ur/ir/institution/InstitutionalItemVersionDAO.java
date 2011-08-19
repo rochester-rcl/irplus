@@ -26,6 +26,7 @@ import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -462,6 +463,20 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return the number of item versions set as modified
 	 */
 	public Long setAsModifiedByLanguageTypeChange(LanguageType languageType, IrUser user, String message);
+	
+	
+	/**
+	 * Updates all versions withthe specified place of pulicaiton as modified with current time and
+	 * specified message.
+	 * 
+	 * @param placeOfPublication - place of publication that was modified
+	 * @param user - user making the change
+	 * @param message - message to set
+	 * @return - numver of item versions set as modified
+	 */
+	public Long setAsModifiedByPlaceOfPublicationChange(PlaceOfPublication placeOfPublication,
+			IrUser user, String message);
+	
 	
 	/**
 	 * Updates all versions with the specified person name as modified with current time and
