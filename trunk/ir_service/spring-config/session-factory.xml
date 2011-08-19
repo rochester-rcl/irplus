@@ -79,7 +79,7 @@
                 <value>edu/ur/hibernate/ir/item/db/ItemSponsor.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/CopyrightStatement.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemContentType.hbm.xml</value>
-
+                <value>edu/ur/hibernate/ir/item/db/PlaceOfPublication.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/person/db/PersonNameAuthority.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/person/db/PersonName.hbm.xml</value>
@@ -174,6 +174,16 @@
                 
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreEncodingScheme.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreTerm.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcDataField.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcSubField.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcRelatorCode.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcTypeOfRecord.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcContentTypeFieldMapper.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcContributorTypeRelatorCode.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcDataFieldMapper.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/metadata/marc/db/IdentifierTypeSubFieldMapper.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/metadata/marc/db/ExtentTypeSubFieldMapper.hbm.xml</value>
                 
             </set>
         </property>

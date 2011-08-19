@@ -28,9 +28,9 @@
     <info organisation="ir_hibernate" module="ir_hibernate"/>
     <dependencies>
 
-        <dependency org="ir_dao" name="ir_dao" rev="2.0" changing="true"/>
-        <dependency org="file_db_service" name="file_db_service" rev="2.0" changing="true"/>
-        <dependency org="metadata_service" name="metadata_service" rev="2.0" changing="true"/>
+        <dependency org="ir_dao" name="ir_dao" rev="3.0" changing="true"/>
+        <dependency org="file_db_service" name="file_db_service" rev="3.0" changing="true"/>
+        <dependency org="metadata_service" name="metadata_service" rev="3.0" changing="true"/>
         
         <!-- commons dbcp files -->
         <dependency org="commons-dbcp" name="commons-dbcp" rev="1.2.2" transitive="false">
