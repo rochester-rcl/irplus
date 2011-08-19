@@ -99,7 +99,7 @@
 			insert="true"
 			update="true" 
 			unique="true"  
-			cascade="all"/>
+			cascade="all, delete-orphan"/>
 
 		<!-- Date the Item will be first made available to public -->
 		<many-to-one class="FirstAvailableDate" 
@@ -109,7 +109,7 @@
 			insert="true"
 			update="true" 
 			unique="true"  
-			cascade="all"/>			
+			cascade="all, delete-orphan"/>			
 					          
 		<!-- User this item belongs to -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
@@ -134,7 +134,7 @@
 			update="true" 
 			unique="true"  
 			access="field"
-			cascade="all"/>
+			cascade="all, delete-orphan"/>
 
 		<!--  Sponsors for this Item -->	
 		<set name="itemSponsors" 

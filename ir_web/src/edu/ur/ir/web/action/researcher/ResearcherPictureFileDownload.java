@@ -95,9 +95,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		    IrFile irFile = researcher.getPicture(irFileId);
 		    
 		    if (irFile == null) {
-		    	if (researcher.getPrimaryPicture().getId().equals(irFileId)) {
-		    		irFile = researcher.getPrimaryPicture();
-		    	}
+		        if (researcher.getPrimaryPicture().getId().equals(irFileId)) {
+		    	    irFile = researcher.getPrimaryPicture();
+		        }
 		    }
 		    
 		    if( irFile != null )
@@ -178,9 +178,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.researcherId = researcherId;
 	}
 
-
 	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
+
 
 }

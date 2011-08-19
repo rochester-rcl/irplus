@@ -67,9 +67,7 @@ public class ItemExtentDAOTest {
 	public void baseItemExtentDAOTest() throws Exception{
 		TransactionStatus ts = tm.getTransaction(td);
 
-		ExtentType extentType = new ExtentType();
-		extentType.setName("extentTypeName");
- 		extentType.setDescription("extentTypeDescription");
+		ExtentType extentType = new ExtentType("extentTypeName","extentTypeDescription" );
  		extentTypeDAO.makePersistent(extentType);
 
 		GenericItem item = new GenericItem("item2");
@@ -100,14 +98,10 @@ public class ItemExtentDAOTest {
 	public void countItemExtentDAOTest() throws Exception{
 
 		TransactionStatus ts = tm.getTransaction(td);
-		ExtentType extentType = new ExtentType();
-		extentType.setName("extentTypeName");
- 		extentType.setDescription("extentTypeDescription");
+		ExtentType extentType = new ExtentType("extentTypeName", "extentTypeDescription");
  		extentTypeDAO.makePersistent(extentType);
  		
- 		ExtentType extentType2 = new ExtentType();
-		extentType2.setName("extentTypeName2");
- 		extentType2.setDescription("extentTypeDescription2");
+ 		ExtentType extentType2 = new ExtentType("extentTypeName2", "extentTypeName2");
  		extentTypeDAO.makePersistent(extentType2);
 
 		

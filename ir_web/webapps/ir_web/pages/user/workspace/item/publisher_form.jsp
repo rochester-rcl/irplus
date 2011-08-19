@@ -17,9 +17,7 @@
    limitations under the License.
 -->
 
-<!--  form fragment for dealing with adding publishers
-      
- -->
+<!--  form fragment for dealing with adding publishers -->
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
 		<!--  represents a successful submission -->

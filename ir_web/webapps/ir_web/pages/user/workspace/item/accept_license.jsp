@@ -98,21 +98,21 @@
                       </tr>
                       <tr>
                           <td align="left" class="label">License</td>
-                          <td><textarea disabled="disabled" rows="20" cols="60"><c:out value="${repository.defaultLicense.license.text}"/> </textarea></td>
+                          <td><textarea disabled="disabled" rows="20" cols="120"><c:out value="${repository.defaultLicense.license.text}"/> </textarea></td>
                       </tr>
     
                       <tr>
                       <td colspan="2" align="center">
 						  <button id="create_account" class="ur_button" type="submit"
  		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Continue Submission</button>                      
+ 		                               onmouseout="this.className='ur_button';">Continue</button>                      
                       </td>
                       </tr>
                       
                       
                   </table>
-		              <input type="hidden" name="licenseId" value="${repository.defaultLicense.id}"/>
-		              <input type="hidden" name="genericItemId" value="${genericItemId}"/>
+		          <input type="hidden" name="licenseId" value="${repository.defaultLicense.id}"/>
+		          <input type="hidden" name="genericItemId" value="${genericItemId}"/>
 
 		        </form>
                

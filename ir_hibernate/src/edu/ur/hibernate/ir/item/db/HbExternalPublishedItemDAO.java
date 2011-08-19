@@ -17,6 +17,8 @@
 package edu.ur.hibernate.ir.item.db;
 
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
@@ -66,15 +68,55 @@ public class HbExternalPublishedItemDAO implements ExternalPublishedItemDAO {
 		return (Long)q.uniqueResult();
 	}
 
+	/**
+	 * Get the extneral published item by id.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
 	public ExternalPublishedItem getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
+	/**
+	 * Add the external published item to persistent storage.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
+	 */
 	public void makePersistent(ExternalPublishedItem entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
+	/**
+	 * Remove the external published item from persistent storage.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
 	public void makeTransient(ExternalPublishedItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
+	/**
+	 * Get the count fo the publisher.
+	 * 
+	 * @see edu.ur.ir.item.ExternalPublishedItemDAO#getCountForPublisher(java.lang.Long)
+	 */
+	public Long getCountForPublisher(Long publisherId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("externalPublishedItemCountByPublisher");
+		q.setParameter("publisherId", publisherId);
+		return (Long)q.uniqueResult();
+	}
+
+	
+
+	/**
+	 * Get all publishers.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

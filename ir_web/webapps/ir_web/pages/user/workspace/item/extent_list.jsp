@@ -40,7 +40,7 @@
 		      			<c:if test="${extentType.name == itemExtent.extentType.name}">
 		      				selected
 		      			</c:if>
-		      		> <ur:maxText numChars="70" text="${extentType.name}" />${extentType.name}</option>
+		      		> <ur:maxText numChars="70" text="${extentType.name}" /></option>
 	      		</c:forEach>
 	      	   </select>
 	      </td>

@@ -63,6 +63,17 @@
 		</attribute>
 
 	</tag>
+	
+	<tag>
+		<name>fileDownloadTag</name>
+		<tag-class>edu.ur.tag.repository.FileDownloadTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>extension</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
 
 	<tag>
 		<name>authorName</name>
@@ -732,5 +743,16 @@
 			boolean isGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace)
 		</function-signature>
 	</function>
+
+   <function>
+		<name>getSlashedDate</name>
+		<function-class>
+			edu.ur.tag.repository.DateUtilFunctions
+		</function-class>
+		<function-signature>
+			String getSlashedDate(edu.ur.ir.Date)
+		</function-signature>
+	</function>
+	
   
 </taglib>

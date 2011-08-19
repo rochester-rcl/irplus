@@ -51,14 +51,15 @@ YAHOO.ur.user = {
         var authorRole = document.getElementById("newUserForm_isAuthor");
         var researcherRole = document.getElementById("newUserForm_isResearcher");
         var collectionAdminRole = document.getElementById("newUserForm_isCollectionAdmin");
+        var importerRole = document.getElementById("newUserForm_isImporter");
         
 	    if (permission.id == 'newUserForm_isAdmin') 
 	    {
 		    if (permission.checked) 
 		    {
-		        userRole.checked = true;
-		        authorRole.checked = true;
-		        researcherRole.checked = true;
+		    	 userRole.checked = true;
+			     authorRole.checked = true;
+			     importerRole.checked = true;
 		    }
 	    }
 	
@@ -69,10 +70,6 @@ YAHOO.ur.user = {
 		        userRole.checked = true;
 		        authorRole.checked = true;
 		    } 
-		    else 
-		    {
-		        adminRole.checked = false;
-		    }
 	    }
 
 	    if (permission.id == 'newUserForm_isAuthor') 
@@ -85,6 +82,7 @@ YAHOO.ur.user = {
 		    {
 		        adminRole.checked = false;
 		        researcherRole.checked = false;
+		        importerRole.checked = false;
 		    }
 	    }
 	    
@@ -105,8 +103,19 @@ YAHOO.ur.user = {
 		        authorRole.checked = false;
 		        researcherRole.checked = false;
 		        collectionAdminRole.checked = false;
+		        importerRole.checked = false;
 		    }
 	    }
+	    
+	    if (permission.id == 'newUserForm_isImporter') 
+	    {
+		    if (permission.checked) 
+		    {
+		        authorRole.checked = true;
+		        userRole.checked = true;
+		    }
+	    }
+	    
 	    return true;
     },
 	

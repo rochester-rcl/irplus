@@ -53,7 +53,7 @@
                                     <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                     <c:param name="researcherId" value="${researcher.id}"/>
                                 </c:url>
-                                <img height="66px" width="100px" src="${url}"/>
+                                <img class="basic_thumbnail" src="${url}"/>
                             </c:if>
 						 </td>
 						 </tr>
@@ -101,7 +101,7 @@
                             <c:param name="irFileId" value="${picture.id}"/>
                             <c:param name="researcherId" value="${researcher.id}"/>
                         </c:url>
-                        <img height="66px" width="100px" src="${url}"/>
+                        <img class="basic_thumbnail" src="${url}"/>
                     </c:if>	    
 				    				   
 				 </td>

@@ -47,7 +47,7 @@
                                                <c:url var="url" value="/repositoryThumbnailDownloader.action">
                                                    <c:param name="irFileId" value="${irFile.id}"/>
                                                </c:url>
-                                               <img height="66px" width="100px" src="${url}"/>
+                                               <img class="basic_thumbnail" src="${url}"/>
                                            </c:if>
 	                                    </urstb:td>
 	                                    <urstb:td>${irFile.description}</urstb:td>

@@ -123,17 +123,13 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
             	
-            	 <h3> Browsing/Searching: <a href="browseRepositoryItems.action">${repository.name}</a> >
+            	 <h3> Browsing/Searching: <a href="home.action">${repository.name}</a> >
             	     <c:forEach var="collection" items="${collectionPath}">
-            	         <c:if test="${collection.id != institutionalCollection.id}">
-                         <c:url var="pathCollectionUrl" value="/browseCollectionItems.action">
+            	        
+                         <c:url var="pathCollectionUrl" value="/viewInstitutionalCollection.action">
                               <c:param name="collectionId" value="${collection.id}"/>
                          </c:url>
-                         <a href="${pathCollectionUrl}">${collection.name}</a> >
-                         </c:if>
-                         <c:if test="${collection.id == institutionalCollection.id}">
-                         ${collection.name}
-                         </c:if>
+                         <a href="${pathCollectionUrl}">${collection.name}</a> <c:if test="${collection.id != institutionalCollection.id}">&nbsp;>&nbsp;</c:if>
                      </c:forEach>
             	 </h3>
 		        
@@ -239,10 +235,67 @@
 											<c:param name="collectionId" value="${institutionalCollection.id}"/>
 											<c:param name="contentTypeId" value="${contentTypeId}"/>		
 										</c:url>
+										
+										
+										<c:url var="sortAscendingPublicationDateUrl" value="/browseCollectionItems.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortElement" value="publicationDate"/>		
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											 <c:param name="collectionId" value="${institutionalCollection.id}"/>
+											 <c:param name="contentTypeId" value="${contentTypeId}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortDescendingPublicationDateUrl" value="/browseCollectionItems.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortElement" value="publicationDate"/>		
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+											<c:param name="collectionId" value="${institutionalCollection.id}"/>
+											<c:param name="contentTypeId" value="${contentTypeId}"/>		
+										</c:url>
+										
+										
+										<c:url var="sortAscendingFirstAvailableDateUrl" value="/browseCollectionItems.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortElement" value="firstAvailableDate"/>		
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											 <c:param name="collectionId" value="${institutionalCollection.id}"/>
+											 <c:param name="contentTypeId" value="${contentTypeId}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortDescendingFirstAvailableDateUrl" value="/browseCollectionItems.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortElement" value="firstAvailableDate"/>		
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+											<c:param name="collectionId" value="${institutionalCollection.id}"/>
+											<c:param name="contentTypeId" value="${contentTypeId}"/>		
+										</c:url>
+										
 					                    
 					                    <c:set var="nameSort" value="none"/>
 					                    <c:if test='${sortElement == "name"}'>
 					                        <c:set var="nameSort" value="${sortType}"/>
+					                    </c:if>
+					                    
+					                    <c:set var="publicationDateSort" value="none"/>
+					                    <c:if test='${sortElement == "publicationDate"}'>
+					                        <c:set var="publicationDateSort" value="${sortType}"/>
+					                    </c:if>
+					                    
+					                    <c:set var="firstAvailableDateSort" value="none"/>
+					                    <c:if test='${sortElement == "firstAvailableDate"}'>
+					                        <c:set var="firstAvailableDateSort" value="${sortType}"/>
 					                    </c:if>
 					                    
 					                    <urstb:tdHeadSort  height="33"
@@ -250,15 +303,41 @@
 					                        hrefVar="href"
                                             currentSortAction="${nameSort}"
                                             ascendingSortAction="${sortAscendingNameUrl}"
-                                            descendingSortAction="${sortDescendingNameUrl}">
+                                            descendingSortAction="${sortDescendingNameUrl}"
+                                            defaultSort="asc">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
+                                        <urstb:tdHeadSort  height="33"
+                                            width="125"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${publicationDateSort}"
+                                            ascendingSortAction="${sortAscendingPublicationDateUrl}"
+                                            descendingSortAction="${sortDescendingPublicationDateUrl}"
+                                            defaultSort="desc">
+                                            <a href="${href}">Publication Date</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
+					                    <urstb:tdHeadSort  height="33" 
+					                        width="125"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${firstAvailableDateSort}"
+                                            ascendingSortAction="${sortAscendingFirstAvailableDateUrl}"
+                                            descendingSortAction="${sortDescendingFirstAvailableDateUrl}"
+                                            defaultSort="desc">
+                                            <a href="${href}">First Public Date</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                    <urstb:td>Contributors</urstb:td>
 						                </urstb:tr>
 						            </urstb:thead>
 						            <urstb:tbody
+						                
 						                var="institutionalItem" 
 						                oddRowClass="odd"
 						                evenRowClass="even"
@@ -273,7 +352,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                 <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                          <c:if test="${url != null}">
-                                                             <img height="66px" width="100px" src="${url}"/></a>
+                                                             <img class="basic_thumbnail" src="${url}"/>
                                                          </c:if>
 				                                     </c:if>	
 						                        </urstb:td>
@@ -283,9 +362,14 @@
 						                            </c:url>
 						                        <a href="${itemView}">${institutionalItem.name}</a><br>
                                                 <c:set var="description" value="${ir:getItemDescription(institutionalItem.versionedInstitutionalItem.currentVersion.item)}"/>
-						                        <c:if test="${!ir:isStringEmpty(description)}"><div class="smallText"><ur:maxText numChars="150" text="${description}"/></div></c:if>
+						                        <c:if test="${!ir:isStringEmpty(description)}"><div class="smallText"><ur:maxText numChars="350" text="${description}"/></div></c:if>
 						                        </urstb:td>
-						                        
+						                        <urstb:td>
+						                            ${ir:getSlashedDate(institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publishedDate)}
+						                        </urstb:td>
+						                        <urstb:td>
+						                            ${ir:getSlashedDate(institutionalItem.versionedInstitutionalItem.currentVersion.item.firstAvailableDate)}
+						                        </urstb:td>
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">
 						                                <c:url var="contributorUrl" value="/viewContributorPage.action">
@@ -482,7 +566,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                  <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                           <c:if test="${url != null}">
-                                                             <img height="66px" width="100px" src="${url}"/></a>
+                                                             <img class="basic_thumbnail" src="${url}"/></a>
                                                          </c:if>
 			                                         </c:if>	
 						                        </urstb:td>
@@ -579,8 +663,8 @@
                                             descendingSortAction="${sortLastNameDescendingUrl}">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                     
 						                </urstb:tr>
 						            </urstb:thead>
@@ -671,8 +755,8 @@
                                             descendingSortAction="${sortSponsorNameDescendingUrl}">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                     
 						                <urstb:td>Description</urstb:td>
 						                </urstb:tr>

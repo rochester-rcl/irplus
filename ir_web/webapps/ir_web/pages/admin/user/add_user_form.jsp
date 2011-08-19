@@ -229,6 +229,16 @@
             </td>
         </tr>
         <tr>
+		<td class="label" colspan="2"> 
+		 <input type="checkbox"	
+		     onclick="YAHOO.ur.user.autoCheckRoles(this);"
+		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_IMPORTER", "")}'> 
+                checked="true" 
+             </c:if>
+              name="importerRole" value="true" id="newUserForm_isImporter"/> Importer
+ 		</td>
+	    </tr>      
+        <tr>
             <td align="left" class="input">
             Email user name and password to user
 		        <input type="checkbox" 

@@ -183,7 +183,7 @@
                                                 <c:param name="collectionId" value="${child.id}"/>
                                                 <c:param name="irFileId" value="${child.primaryPicture.id}"/>
                                            </c:url>
-                                           <img height="66px" width="100px"  src="${url}"/>
+                                           <img class="basic_thumbnail" src="${url}"/>
                                        </c:if>
                                    </td>
                                    <td>

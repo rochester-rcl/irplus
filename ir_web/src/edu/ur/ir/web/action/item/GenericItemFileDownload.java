@@ -80,6 +80,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	/** User service */
 	private UserService userService; 	
 	
+	
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
 	
@@ -206,7 +207,6 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
         boolean forceDownload = true;
-        
         if( webBrowserFileViewerHelper.canShowFileTypeInBrowser(fileInfo.getExtension()) )
         {
             forceDownload = false;	

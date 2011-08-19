@@ -244,14 +244,21 @@ public class DefaultInstitutionalItemServiceTest {
 		securityService.createPermissions(collection, userGroup, permissions);
 		
 		tm.commit(ts);
-		List<InstitutionalCollection> collections = new LinkedList<InstitutionalCollection>();
-		collections.add(collection);
+		
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemService.setItemPrivatePermissions(genericItem, collections);
-        
 		GenericItem otherItem = itemService.getGenericItem(genericItem.getId(), false);
+		List<InstitutionalCollection> collections = new LinkedList<InstitutionalCollection>();
+		collections.add(institutionalCollectionService.getCollection(collection.getId(), false));
+		
+        institutionalItemService.setItemPrivatePermissions(otherItem, collections);
+        
+        tm.commit(ts);
+
+        
+        ts = tm.getTransaction(td);
+        otherItem = itemService.getGenericItem(genericItem.getId(), false);
 		ItemFile file = otherItem.getItemFile("fileName");
 		
 		assert !otherItem.isPubliclyViewable() : "Item should be private";

@@ -18,7 +18,22 @@
 -- **********************************************
 -- ----------------------------------------------
 
+DROP TABLE ir_metadata_marc.extent_type_sub_field_mapper;
+DROP SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
 
+DROP TABLE ir_metadata_marc.identifier_type_sub_field_mapper;
+DROP SEQUENCE ir_metadata_marc.identifier_type_sub_field_mapper_seq;
+
+DROP TABLE ir_metadata_marc.content_type_field_mapping;
+DROP SEQUENCE ir_metadata_marc.content_type_field_mapping_seq;
+
+DROP TABLE ir_metadata_marc.contributor_type_relator_code;
+DROP SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
+
+DROP TABLE ir_metadata_marc.data_field_mapper;
+DROP SEQUENCE ir_metadata_marc.data_field_mapper_seq;
+
+DROP SCHEMA ir_metadata_marc;
 
 -- ---------------------------------------------
 -- Drop Institutional Repository Metadata tables/schema
@@ -248,6 +263,7 @@ DROP TABLE ir_item.item_identifier;
 DROP TABLE ir_item.item_extent;
 DROP TABLE ir_item.item;
 DROP TABLE ir_item.external_published_item;
+DROP TABLE ir_item.place_of_publication;
 DROP TABLE ir_item.publisher;
 DROP TABLE ir_item.sponsor;
 DROP TABLE ir_item.identifier_type;
@@ -260,6 +276,7 @@ DROP TABLE ir_item.published_date;
 DROP TABLE ir_item.original_item_creation_date;
 DROP TABLE ir_item.first_available_date;
 
+DROP SEQUENCE ir_item.place_of_publication_seq;
 DROP SEQUENCE ir_item.copyright_statement_seq;
 DROP SEQUENCE ir_item.item_sponsor_seq;
 DROP SEQUENCE ir_item.item_contributor_seq;
@@ -441,11 +458,19 @@ DROP SCHEMA ir_index;
 DROP TABLE metadata.metadata_type;
 DROP TABLE metadata.dublin_core_term;
 DROP TABLE metadata.dublin_core_encoding_scheme;
+DROP TABLE metadata.marc_data_field;
+DROP TABLE metadata.marc_sub_field;
+DROP TABLE metadata.marc_relator_code;
+DROP TABLE metadata.marc_type_of_record;
 
 
 DROP SEQUENCE metadata.metadata_type_seq;
 DROP SEQUENCE metadata.dublin_core_term_seq;
 DROP SEQUENCE metadata.dublin_core_encoding_scheme_seq;
+DROP SEQUENCE metadata.marc_data_field_seq;
+DROP SEQUENCE metadata.marc_sub_field_seq;
+DROP SEQUENCE metadata.marc_relator_code_seq;
+DROP SEQUENCE metadata.marc_type_of_record_seq;
 
 
 DROP SCHEMA metadata;

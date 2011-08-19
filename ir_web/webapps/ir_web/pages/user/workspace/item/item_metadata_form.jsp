@@ -73,7 +73,7 @@
 						      <td>
 						      	   <input type="text" id="itemForm_titleArticles" name="subTitleArticles" value="<c:out value='${title.leadingArticles}'/>" size="15"/>&nbsp;<input type="text" id="itemForm_title" name="subTitles" value="<c:out value='${title.title}'/>" size="90"/>
 						      </td>
-						      <td>   
+						      <td>
 						      	  &nbsp;&nbsp;&nbsp; <input type="button" class="ur_button" id="itemForm_remove" value="Remove Other Title" onclick="javascript:YAHOO.ur.item.metadata.removeSubTitle('title_table_${rowCounter.count}');"/>
 						      </td>
 						    </tr>
@@ -408,7 +408,7 @@
 	      	      
 	      <tr>
 	        <td class="rowBorder" colspan="2">
-	          <label  for="itemForm_externallyPublished">Has the item been published or publically distributed before?</label>
+	          <label  for="itemForm_externallyPublished">Will this be considered published once submitted, or has it been publicly distributed before?</label>
 	        </td>
 	       </tr>
 	        
@@ -447,6 +447,24 @@
 		      	 		    </div>
 			              </td>
 			          </tr>
+			          <tr>
+				          <td>
+	          			      <input type="button" class="ur_button" id="show_place_of_publication" value="Add New Place Of Publication"/>
+	        		      </td> 	
+			      	  </tr>
+			          <tr>
+			              <td>
+			                  <label  for="itemForm_place_of_publication">Place Of Publication</label>
+			              </td>
+			          </tr>
+			          <tr>
+			              <td>
+			              	<div id="place_of_publication_form">
+			              	    <c:import url="/pages/user/workspace/item/place_of_publication_list.jsp"/>
+		      	 		    </div>
+			              </td>
+			          </tr>
+			          
 			          <tr>
 			              <td width="230">
 			         		 <label  for="itemForm_datePublished">Date Published (MM/DD/YYYY)</label>

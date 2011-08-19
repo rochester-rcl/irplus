@@ -299,6 +299,14 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- Service to manage place of publcation data -->
+   <!-- ****************************************** --> 
+   <bean id="placeOfPublicationService" 
+       class="edu.ur.ir.item.service.DefaultPlaceOfPublicationService">
+       <property name="placeOfPublicationDAO" ref="placeOfPublicationDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
    <!-- Service to manage identifier type data -->
    <!-- ****************************************** --> 
    <bean id="identifierTypeService" 
@@ -801,6 +809,13 @@
        <property name="listSetsService" ref="listSetsService"/>
    </bean>
    
+   <bean id="marc21OaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultMarcOaiMetadataProvider">
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+       <property name="marcExportService" ref="marcExportService"/>
+   </bean>
+   
    <!-- ****************************************** --> 
    <!-- OAI harvesting Service for the system -->
    <!-- ****************************************** --> 
@@ -810,6 +825,7 @@
            <list>
                <ref bean="dublinCoreOaiMetadataProvider"/>
                <ref bean="qualifiedDublinCoreOaiMetadataProvider"/>
+               <ref bean="marc21OaiMetadataProvider"/>
            </list>
        </property>
    </bean>
@@ -886,4 +902,89 @@
        <property name="groupWorkspaceGroupDAO" ref="groupWorkspaceGroupDAO"/>
    </bean>
    
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcContentTypeFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcContentTypeFieldMapperService">
+       <property name="marcContentTypeFieldMapperDAO" ref="marcContentTypeFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Contributor type -->
+   <!-- relator code mapping                         -->
+   <!-- ****************************************** --> 
+   <bean id="marcContributorTypeRelatorCodeService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcContributorTypeRelatorCodeService">
+       <property name="marcContributorTypeRelatorCodeDAO" ref="marcContributorTypeRelatorCodeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcExportService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultMarcExportService">
+       <property name="contentTypeService" ref="contentTypeService"/>
+       <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
+       <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+       <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
+   
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcDataFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcDataFieldMapperService">
+       <property name="marcDataFieldMapperDAO" ref="marcDataFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeSubFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultIdentifierTypeSubFieldMapperService">
+       <property name="identifierTypeSubFieldMapperDAO" ref="identifierTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!--  Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="extentTypeSubFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultExtentTypeSubFieldMapperService">
+       <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!--  Service that deals with importing marc    -->
+   <!--     files                                  -->
+   <!-- ****************************************** --> 
+   <bean id="marcFileToVersionedItemImporter" 
+       class="edu.ur.ir.importer.service.DefaultMarcFileToVersionedItemImporter">
+       
+ 	    <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+	    <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
+	    <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
+	    <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
+	    <property name="nameAuthoritySearchService" ref="nameAuthoritySearchService"/>
+	    <property name="repositoryService" ref="repositoryService"/>
+	    <property name="contributorTypeService" ref="contributorTypeService"/>
+	    <property name="contributorService" ref="contributorService"/>
+	    <property name="personService" ref="personService"/>
+	    <property name="publisherService" ref="publisherService"/>
+	    <property name="placeOfPublicationService" ref="placeOfPublicationService"/>
+	    <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
+	    <property name="languageTypeService" ref="languageTypeService"/>
+	    <property name="seriesService" ref="seriesService"/>
+	    <property name="errorEmailService" ref="errorEmailService"/>
+   </bean>
+
 </beans>

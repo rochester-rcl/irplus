@@ -162,6 +162,7 @@ public class DefaultReviewableItemServiceTest {
 
 		// start new transaction
         ts = tm.getTransaction(td);
+        item = itemService.getGenericItem(item.getId(), false);
         ReviewableItem ri = collection.addReviewableItem(item);
         institutionalCollectionService.saveCollection(collection);
         tm.commit(ts);

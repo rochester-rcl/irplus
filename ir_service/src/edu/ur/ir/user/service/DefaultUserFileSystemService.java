@@ -441,6 +441,11 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 				pf.getDescription());
 		personalFileDeleteRecord.setDeleteReason(deleteReason);
 		
+		// remove the file from the parent folder
+		if( pf.getPersonalFolder() != null )
+		{
+		    pf.getPersonalFolder().removePersonalFile(pf);
+		}
 		
 		// delete the personal file
 		personalFileDAO.makeTransient(pf);
@@ -533,6 +538,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 
 		for( PersonalFile aFile : personalFiles)
 		{
+			log.debug(personalFolder + "contains " + personalFolder.getFiles().contains(aFile));
 		    delete(aFile, deletingUser, deleteReason);
 		}
 		

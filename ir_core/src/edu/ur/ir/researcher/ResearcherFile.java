@@ -88,7 +88,7 @@ public class ResearcherFile extends BasePersistent implements FileSystem{
 	public int hashCode()
 	{
 		int hashCode = 0;
-		hashCode += getName() == null ? 0 : getName().hashCode();
+		hashCode += getNameWithExtension() == null ? 0 : getNameWithExtension().hashCode();
 		hashCode += researcher == null ? 0 : researcher.hashCode();
 		hashCode += parentFolder == null ? 0 : parentFolder.hashCode();
 		return hashCode;

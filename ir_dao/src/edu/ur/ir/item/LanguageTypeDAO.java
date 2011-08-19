@@ -45,4 +45,12 @@ CrudDAO<LanguageType>, NameListDAO, UniqueNameDAO<LanguageType>,UniqueSystemCode
 	 */
 	public List<LanguageType> getLanguageTypesOrderByName(final int rowStart, final int numberOfResultsToShow, final String sortType);
 
+	
+	/**
+	 * Get the language type by it's three letter code.  
+	 * 
+	 * @param value 3 letter code
+	 * @return the found language type otherwise null.
+	 */
+	public LanguageType getByIso639_2(String value);
 }

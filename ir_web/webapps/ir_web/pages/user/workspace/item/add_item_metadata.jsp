@@ -279,12 +279,30 @@
       
 	        <div id="newPublisherDialog" class="hidden">
                 <div class="hd">Publisher Information</div>
+                
                 <div class="bd">
+                    <div id="publisherError" class="publisherError">${message}</div>
                     <form id="addPublisher" name="newPublisherForm" 
 		                    method="post" 
 		                    action="<c:url value="/user/addPublisher.action"/>">
 	                  <div id="newPublisherDialogFields">
 	                       <c:import url="/pages/admin/item/metadata/publishers/publisher_form.jsp"/>
+	                  </div>
+	                </form>
+                </div>
+            </div>
+            
+            
+            <div id="newPlaceOfPublicationDialog" class="hidden">
+                <div class="hd">Place Of Publication Information</div>
+                
+                <div class="bd">
+                
+                    <form id="addPlaceOfPublication" name="newPlaceOfPublicationForm" 
+		                    method="post" 
+		                    action="<c:url value="/user/addPlaceOfPublication.action"/>">
+	                  <div id="newPlaceOfPublicationDialogFields">
+	                       <c:import url="/pages/admin/item/metadata/places_of_publication/place_of_publication_form.jsp"/>
 	                  </div>
 	                </form>
                 </div>

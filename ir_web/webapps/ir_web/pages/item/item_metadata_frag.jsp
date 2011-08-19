@@ -155,22 +155,10 @@
 				              item.firstAvailableDate.day != 0 || 
 				              item.firstAvailableDate.year != 0) }">
 				    <tr>
-				        <td class="previewLabel"> Date this publication was first presented to the public:</td>
+				        <td class="previewLabel"> First presented to the public:</td>
 				    </tr>
 				    <tr>
-				        <td>
-					        <c:if test="${item.firstAvailableDate.month != 0}">
-							    Month: ${item.firstAvailableDate.month} &nbsp;&nbsp;
-						    </c:if>
-
-						    <c:if test="${item.firstAvailableDate.day != 0}">
-						        Day: ${item.firstAvailableDate.day} &nbsp;&nbsp;
-						    </c:if>
-
-						    <c:if test="${item.firstAvailableDate.year != 0}">
-						        Year: ${item.firstAvailableDate.year} &nbsp;&nbsp;
-						    </c:if>
-					    </td>
+				        <td>${ir:getSlashedDate(item.firstAvailableDate)}</td>
 				    </tr>
 				</c:if>
 				
@@ -178,23 +166,12 @@
 				              item.originalItemCreationDate.day != 0 ||
 				              item.originalItemCreationDate.year != 0)}">						
 				<tr>
-				    <td class="previewLabel"> Date this publication was originally created:</td>
+				    <td class="previewLabel">Originally created:</td>
 				</tr>
 				<tr>
-				    <td>
-					<c:if test="${item.originalItemCreationDate.month != 0}">
-					    Month: ${item.originalItemCreationDate.month} &nbsp;&nbsp;
-					</c:if>
-
-					<c:if test="${item.originalItemCreationDate.day != 0}">
-					    Day: ${item.originalItemCreationDate.day} &nbsp;&nbsp;
-					</c:if>
-
-					<c:if test="${item.originalItemCreationDate.year != 0}">
-					    Year: ${item.originalItemCreationDate.year} &nbsp;&nbsp;
-					</c:if>
-					</td>
+				    <td>${ir:getSlashedDate(item.originalItemCreationDate)}</td>
 				</tr>
+				
 				</c:if>
 				
 				<c:if test="${item.releaseDate != null}">					
@@ -216,22 +193,10 @@
 				              item.externalPublishedItem.publishedDate.year != 0)}">
 				     <tr>
 				        <td class="previewLabel">Original Publication Date:</td>
-				    </tr>						
+				    </tr>	
 				    <tr>
-				        <td> 
-					    <c:if test="${item.externalPublishedItem.publishedDate.month != 0}">
-					        Month: ${item.externalPublishedItem.publishedDate.month} &nbsp;&nbsp;
-					    </c:if>
-	
-					    <c:if test="${item.externalPublishedItem.publishedDate.day != 0}">
-					        Day: ${item.externalPublishedItem.publishedDate.day} &nbsp;&nbsp;
-					    </c:if>
-	
-					    <c:if test="${item.externalPublishedItem.publishedDate.year != 0}">
-					        Year: ${item.externalPublishedItem.publishedDate.year} &nbsp;&nbsp;
-					    </c:if>
-				        </td>
-				    </tr>
+				        <td>${ir:getSlashedDate(item.externalPublishedItem.publishedDate)}</td>
+				    </tr>					
 				</c:if>
 
                 <c:if test="${item.externalPublishedItem.publisher != null}">
@@ -240,9 +205,19 @@
 				</tr>
 						
 				<tr>
-				    <td>${item.externalPublishedItem.publisher.name} </td>
+				    <td>${item.externalPublishedItem.publisher.name}</td>
 				</tr>	
 				</c:if>	
+				<c:if test="${item.externalPublishedItem.placeOfPublication != null}">
+				<tr>
+				    <td class="previewLabel">Place Of Publication:</td>
+				</tr>
+						
+				<tr>
+				    <td>${item.externalPublishedItem.placeOfPublication.name}</td>
+				</tr>	
+				</c:if>
+				
 				 <c:if test="${item.externalPublishedItem.citation != null}">
                  <tr>
 				    <td class="previewLabel">Citation:</td>

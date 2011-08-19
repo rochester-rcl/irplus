@@ -231,6 +231,7 @@ s
 			institutionalCollectionIndexService.update(collection, new File(repository.getInstitutionalCollectionIndexFolder()));
 
 		}
+
         return "update";
 	}
 	

@@ -30,6 +30,7 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -212,6 +213,21 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	    Long numCreated = 0l;
 	    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForLanguageType");
 	    q.setParameter("languageTypeId", languageType.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+	
+	/**
+	 * insert all items for a place of publication.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForLanguageType(edu.ur.ir.item.LanguageType, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPlaceOfPublication(PlaceOfPublication placeOfPublication,
+			IndexProcessingType processingType) {
+	    Long numCreated = 0l;
+	    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForPlaceOfPublication");
+	    q.setParameter("placeOfPublicationId", placeOfPublication.getId());
 		q.setParameter("processingTypeId", processingType.getId());
 		numCreated += q.executeUpdate();
 		return numCreated;

@@ -168,8 +168,10 @@ public class DefaultStatisticsServiceTest {
 		ts = tm.getTransaction(td);		
 		repo = helper.getRepository();
 		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		item1 = itemService.getGenericItem(item1.getId(), false);
 		collection.createInstitutionalItem(item1);
 		InstitutionalCollection subCollection = collection.createChild("subChild");
+		item2 = itemService.getGenericItem(item2.getId(), false);
 		subCollection.createInstitutionalItem(item2);
 		institutionalCollectionService.saveCollection(collection);
 		tm.commit(ts);
@@ -275,8 +277,10 @@ public class DefaultStatisticsServiceTest {
 		ts = tm.getTransaction(td);		
 		repo = helper.getRepository();
 		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		item1 = itemService.getGenericItem(item1.getId(), false);
 		collection.createInstitutionalItem(item1);
 		InstitutionalCollection subCollection = collection.createChild("subChild");
+		item2 = itemService.getGenericItem(item2.getId(), false);
 		subCollection.createInstitutionalItem(item2);
 		institutionalCollectionService.saveCollection(collection);
 		tm.commit(ts);

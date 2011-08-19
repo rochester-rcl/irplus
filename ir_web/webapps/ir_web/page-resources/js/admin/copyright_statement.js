@@ -15,8 +15,7 @@
 */
 
 /**
- * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * This code is for dealing with adding and removing copyright statements
  */
 YAHOO.namespace("ur.copyright.statement");
 
@@ -33,7 +32,7 @@ var getCopyrightStatementAction = basePath + 'admin/getCopyrightStatement.action
 var myCopyrightStatementTable = new  YAHOO.ur.table.Table('myCopyrightStatements', 'newCopyrightStatements');
 
 /**
- * contributor namespace
+ * copyright statement name space
  */
 YAHOO.ur.copyright.statement = {
 
