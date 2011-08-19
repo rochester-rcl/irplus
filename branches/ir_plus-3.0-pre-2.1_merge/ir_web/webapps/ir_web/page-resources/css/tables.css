@@ -1,0 +1,556 @@
+/*
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+/*base table - this table only has spacing*/
+table.baseTable { 
+	width: 100%;
+	cellpadding: 0;
+	cellspacing: 0;
+	border-collapse: collapse; 
+}
+
+.baseTableImage
+{
+	width: 80px;
+}
+
+.baseTable td, th {	
+	padding: 10px;
+}
+
+.baseTable td {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    text-align: left;
+    align: left;
+}
+
+/* table for buttons */
+.buttonTable td {
+	width: 100%;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    text-align: left;
+    align: left;
+}
+
+.buttonTable table { 
+	width: 464px;
+	cellpadding: 0;
+	cellspacing: 0;
+	border-collapse: collapse; 
+}
+
+.rightButton {
+	width : 100%;
+	align: right;
+}
+
+.leftButton {
+	width : 100%;
+	align: left;
+}
+
+
+/* this is forms created using tables */
+.formTable {
+	align: left;
+}
+.formTable td, th { padding: 10px; }
+
+.formTable td.label {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+}
+.formTable td.input {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+}
+
+.formTable td.buttons
+{
+	align: right;
+}
+
+
+.form table { 
+	text-align: right; 
+	border-collapse: collapse; 
+}
+
+/* upload buttons for the upload file table */
+.upload_buttons
+{
+    float: right;
+}
+
+.uploadFile
+{
+	float: right;
+}
+
+.uploadFile td, th
+{
+	padding: 10px;
+	background: #daf6ff;
+}
+
+/* this table is for adding contributors to item */
+.itemSelectTable {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-sides: 1px groove #CFD2D0;
+}
+
+.tdItemSelectLeftBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #CFD2D0;
+    border-left: 1px solid #CFD2D0;
+  
+}
+
+.tdItemSelectRightBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #CFD2D0;
+    border-right: 1px solid #CFD2D0;
+  
+}
+
+.tdItemSelect {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #CFD2D0;
+    align:left;
+  
+}
+
+.thItemSelect {
+    border: 1px groove #CFD2D0;
+    background-color: #FFE3A0;
+    color: black;
+    font-weight: bold;
+    font-size: 1em;
+
+}
+
+
+
+/* this table is for adding files to item */
+.itemFileTable {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-sides: 1px groove #CFD2D0;
+}
+
+.tdItemFileLeftBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-left: 1px solid #CFD2D0;
+  
+}
+
+.tdItemFileRightBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-right: 1px solid #CFD2D0;
+  
+}
+
+.tdItemFile {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #CFD2D0;
+    border-left: 1px solid #CFD2D0;
+    border-right: 1px solid #CFD2D0;
+    text-align:left;
+  
+}
+
+.thItemFile {
+    border: 1px groove #CFD2D0;
+    background-color: #FFE3A0;
+    color: black;
+    font-weight: bold;
+    font-size: 1em;
+
+}
+
+/*-----------------------------------------------*/
+/* this table is for displaying data tables */
+/*-----------------------------------------------*/
+.dataTable
+{
+	margin: 0;
+	padding: 0;
+}
+
+.dataTable table
+{
+	border: 1px solid #C0C8CA;
+}
+
+.dataTable .odd td, .dataTable .even td {
+	padding-top: 2px;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+}
+
+.dataTable .odd {
+	background-color: #ffffff;
+}
+
+.dataTable .even {
+  	background-color: #e3e3e3;
+}
+
+.dataTable thead td {
+	border-left: 1px solid #C0C8CA;
+	border-right: 1px solid #C0C8CA;
+    height: 32px;
+    padding-right: 5px;
+    padding-left: 5px;
+    background: url(../images/all-images/item_table_background.gif);
+    color: black;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.dataTable caption {
+	caption-side: top;
+	color: #444444;
+	font-weight: bold;
+	font-size: 1em;
+	text-align: left;
+	padding-left: 5px;
+}
+
+.dataTable .highlight td {
+	background-color: #fdecae;
+	padding-top: 2px;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+}
+
+.dataTable .highlight a, .highlight a {
+	color: black;
+}
+/*-----------------------------------------------*/
+/* this table is for displaying files and folders */
+/*-----------------------------------------------*/
+ 
+
+.itemFolderTable {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border: 1px groove #CFD2D0;
+  
+}
+
+.tdItemFolderLeftBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #C0C8CA;
+    border-left: 1px solid #C0C8CA;
+  
+}
+
+.tdItemContributorLeftBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+   
+    border-left: 1px solid #C0C8CA;
+  
+}
+
+.tdItemContributorRightBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-right: 1px solid #C0C8CA;
+  
+}
+
+
+.tdItemFolderSideBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #C0C8CA;
+    border-left: 1px solid #C0C8CA;
+    border-right: 1px solid #C0C8CA;
+  
+}
+
+.tdItemFolderRightBorder {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    border-bottom: 1px solid #C0C8CA;
+    border-right: 1px solid #C0C8CA;
+  
+}
+
+.thItemFolder {
+    border: 1px groove #CFD2D0;
+    background-color: #99EAFB;
+    color: black;
+    font-weight: bold;
+    font-size: 1em;    
+}
+
+  
+/* this table is for displaying item metadata */
+.itemMetadataTable {
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #D6DADA;
+    background-color: #F3FEFF;
+}      
+
+.itemMetadataTable td {
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    
+}
+
+.itemMetadataTable label {
+    font-weight:bold;
+    
+}
+
+.rowBorder {
+	border-top: 1px solid #D0F0FF;
+}
+
+/* Grey table for item preview */
+.greyTable {
+	width:100%;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #E5E5E5;
+    color: #959593;
+    font-weight:bold;
+}
+
+/* Borderless table for  item preview */
+.noBorderTable {
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    cellpadding: 10px;
+	cellspacing: 10px;
+
+}
+
+.noBorderTabletd {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    text-align: left;
+    align: left;
+}
+
+.bottomBorder {
+	padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    text-align: left;
+    align: left;
+    border-bottom:1px solid #E5E5E5;
+}
+
+.noBorderTableLabel {
+	font-weight:bold;
+	font-color: black;
+}
+
+.noBorderTableGreyLabel {
+	font-weight:bold;
+	color: #959593;
+}
+
+.greyBorderTable {
+	width:100%;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #E5E5E5;
+    font-color:black;
+}
+
+.greyBorderBlueBgTable {
+	width:100%;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    border: 1px solid #E5E5E5;
+    font-color:black;
+	background-color: #F3FEFF;    
+}
+
+.previewLabel {
+    padding-top: 10px;
+    padding-bottom: 3px;
+    text-align: left;
+    align: left;
+	font-weight:bold;
+}
+
+.greyBorderTableTd {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    text-align: left;
+    align: left;
+}
+
+/* Table for researcher images */
+.outerBorderTable {
+	width:900;
+    border: 1px solid #E5E5E5;
+    background-color: white;
+}
+
+/* Table with spacing */
+table.spaceTable { 
+	cellpadding: 0;
+	cellspacing: 0;
+	border-collapse: collapse; 
+}
+
+.spaceTable td, th {	
+	padding: 10px;
+}
+
+.spaceTable td {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    text-align: left;
+    align: left;
+}
+
+/* Table with NO padding */
+table.noPaddingTable { 
+	cellpadding: 0;
+	cellspacing: 0;
+	border-collapse: collapse; 
+}
+
+.noPaddingTable td, th {	
+	padding: 0px;
+}
+
+.noPaddingTable td {
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    text-align: left;
+    align: left;
+}
+
+/** For the pager */
+.pager {
+	background-color:#D4D4D4;
+ 	padding-top: 8px;
+    padding-right: 10px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    text-align: center;
+    align: left;	
+}
+
+
+
+/** Blue box in statistics */
+.blueBox {
+    border: 1px groove #CFD2D0;
+    background-color: #E9F8FD;
+    color: black;
+    font-weight: bold;
+    font-size: 1em;
+    padding:6px;
+    width:75%;
+    
+}
+
+.blueBox td{
+    padding:6px;
+}
+
+/** Box in statistics */
+.statBox {
+    border: 1px groove #CFD2D0;
+    color: black;
+    font-size: 1em;
+    padding:10px;
+    width:95%;
+}
+
+.statBox td{
+    padding:10px;
+}

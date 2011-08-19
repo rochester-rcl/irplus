@@ -1,0 +1,71 @@
+ <!--  
+   Copyright 2008-2011 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+--> 
+ 
+ 
+       <!--  ************************************ -->
+       <!-- Group spaces actions                  -->
+       <!--  ************************************ -->
+       <action name="viewGroupWorkspaces" 
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_table.jsp</result>
+        </action>
+       
+        <!--  This handles update, save and delete -->
+        <action name="*GroupWorkspace" 
+            method="{1}"
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/user/workspace/group_workspace/group_workspace.jsp</result>
+            <result name="added">/pages/admin/groupspace/group_workspace_form.jsp</result>
+            <result name="deleted">/pages/user/workspace/group_workspace/group_workspace_table.jsp</result>
+            <result name="get">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete for creating workspace groups -->
+        <action name="*WorkspaceGroup" 
+            method="{1}"
+            class="edu.ur.ir.web.action.groupspace.ManageWorkspaceGroups">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/user/workspace/group_workspace/workspace_group.jsp</result>
+            <result name="added">/pages/user/workspace/group_workspace/workspace_group_form.jsp</result>
+            <result name="deleted">/pages/user/workspace/group_workspace/workspace_groups_table.jsp</result>
+            <result name="get">/pages/user/workspace/group_workspace/edit_workspace_group.jsp</result>
+        </action>
+        
+         <!--  view all groups for a group workspace -->
+        <action name="viewWorkspaceGroups" 
+            method="viewGroups"
+            class="edu.ur.ir.web.action.groupspace.ManageWorkspaceGroups">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/workspace_groups_table.jsp</result>
+        </action>
+        
+        <action name="viewGroupWorkspaceFolders"
+            method="getTable"
+            class="edu.ur.ir.web.action.groupspace.ViewGroupWorkspaceFolders">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_system_table.jsp</result>
+        </action>
+        
+        <!--  NOTE this action uses the personal folder form -->
+        <action name="*GroupWorkspaceFolder"
+            method ="{1}"
+            class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceFolder">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/user/workspace/personal_folder_form.jsp</result>
+            <result name="get">/pages/user/workspace/personal_folder_form.jsp</result>
+        </action>

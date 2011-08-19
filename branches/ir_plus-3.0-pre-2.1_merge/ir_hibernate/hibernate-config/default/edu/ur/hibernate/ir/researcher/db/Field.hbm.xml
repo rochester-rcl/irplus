@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for fields.
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.researcher">
+	<class name="Field" table="ir_researcher.field"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="field_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_researcher.field_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+						
+	 </class>
+		
+	<!--  Get a count of Researcher field in the system -->
+	<query name="fieldCount">
+	    select count(*) from Field
+	</query>
+	
+	<!-- named query for getting all departments ordered by name -->
+    <query name="getAllFieldNameAsc">from Field order by name </query>
+    
+    <!-- named query for getting a department-->
+	<query name="getFieldByName">
+		from Field as Field where
+		Field.name = ?
+	</query>
+
+	<!-- named query for getting all departments ordered by name asc -->
+    <query name="getFieldsOrderByNameAsc">from Field order by name asc </query>
+
+	<!-- named query for getting all departments ordered by name desc-->
+    <query name="getFieldsOrderByNameDesc">from Field order by name desc</query>
+	
+</hibernate-mapping>

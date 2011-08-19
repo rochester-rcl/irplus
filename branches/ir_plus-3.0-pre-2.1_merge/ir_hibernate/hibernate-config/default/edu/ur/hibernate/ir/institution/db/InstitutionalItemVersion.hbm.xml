@@ -1,0 +1,735 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a published version.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+	<class name="InstitutionalItemVersion" schema="ir_repository" table="institutional_item_version"
+		lazy="true">
+	
+		<!-- Common id property. -->
+		<id name="id" type="long" column="institutional_item_version_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.institutional_item_version_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="dateOfDeposit" column="date_of_deposit" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>
+	    
+	    <property name="dateLastModified" column="date_modified" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>
+	
+	    <property name="lastModifiedNote" column="modification_note" type="string" 
+		          access="field" 
+		          not-null="false"/>
+
+		<property name="versionNumber" column="version_number" type="int" 
+		          access="field" 
+		          not-null="true"/>		  
+			
+        <!--  withdrawn token -->
+		<many-to-one class="WithdrawnToken" 
+			unique="true" 
+			name="withdrawnToken" 
+			column="withdrawn_token_id" 
+			access="field"
+			cascade="all"/>
+	
+	    <!--  institutional item repository license -->
+	    <one-to-one name="repositoryLicense" 
+	        cascade="all"
+	        property-ref="institutionalItemVersion"/>
+		
+                
+        <!--  The versioned institutional item -->
+		<many-to-one class="VersionedInstitutionalItem" 
+		    optimistic-lock="false"
+			unique="true" 
+			name="versionedInstitutionalItem" 
+			column="versioned_institutional_item_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+
+        <!--  The Generic item Institutional ItemVersion version wraps -->
+        <many-to-one name="item" 
+              optimistic-lock="false"
+              class="edu.ur.ir.item.GenericItem" 
+              unique="true" 
+              column="item_id" 
+              cascade="save-update"
+              not-null="true" 
+              access="field"/>
+        
+        <!--  The handle information for the generic item-->
+		<many-to-one class="edu.ur.ir.handle.HandleInfo" 
+			unique="true" 
+			name="handleInfo" 
+			column="handle_info_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+			
+        <!--  withdrawn history -->
+		<set name="withdrawHistory" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all, delete-orphan" 
+		     access="field"
+			 lazy="true"  
+			 fetch="subselect">
+			<key column="institutional_item_version_id"/>
+			<one-to-many class="WithdrawnToken"/>
+		</set>	
+		
+		<!--  ReInstate history -->
+		<set name="reinstateHistory" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all, delete-orphan" 
+		     access="field"
+			 lazy="true"  
+			 fetch="subselect">
+			<key column="institutional_item_version_id"/>
+			<one-to-many class="ReinstateToken"/>
+		</set>
+		
+		<!-- User who last modified the insitutional item version or underlying generic itemitem -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			name="lastModifiedBy" 
+			column="modified_by_user_id" 
+			access="field" 
+			unique="true"/>          	
+ 
+	</class>
+
+
+	<!-- count of all institutional items in the system for a repository-->
+	<query name="institutionalItemVersionCount">
+	    select count(*) from InstitutionalItemVersion
+	</query>
+	
+    <!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a person-->
+	<!-- ********************************************************* -->
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdTitleAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by item.lowerCaseName asc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdTitleDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber    
+	    order by item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	</query>		
+	
+		<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdDownloadAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by  coalesce(sum(irFile.downloadCount), 0) asc, item.lowerCaseName asc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdDownloadDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by  coalesce(sum(irFile.downloadCount), 0) desc, item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdSubmissionDateAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, item.lowerCaseName
+	    order by institutionalItemVersion.dateOfDeposit asc, item.lowerCaseName desc
+	</query>
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdSubmissionDateDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, item.lowerCaseName
+	    order by institutionalItemVersion.dateOfDeposit desc, item.lowerCaseName desc
+	</query>
+
+	<!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a handle  -->
+	<!-- ********************************************************* -->
+	<!-- institutional item version for a given handle -->
+	<query name="getInstitutionalItemByHandleId">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
+	    where handleInfo.id = ?
+	</query>
+	
+
+	
+	
+	<!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a sponsor  -->
+	<!-- ********************************************************* -->
+	<query name="getPublicationsForSponsorAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by item.lowerCaseName asc, institutionalItemVersion.versionNumber asc
+	</query>
+
+	<query name="getPublicationsForSponsorDesc">
+	   select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<query name="getPublicationsForSponsorCount">
+	    select count(institutionalItemVersion) from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    where sponsor.id = :sponsorId
+	</query>
+	
+	<!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a sponsor -->
+	<!--  order by deposit date-->
+	<!-- ********************************************************* -->
+	
+	<query name="getPublicationsForSponsorDepositDateDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+	    order by institutionalItemVersion.dateOfDeposit desc 
+	</query>
+	
+	<query name="getPublicationsForSponsorDepositDateAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from  InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit 
+	    order by institutionalItemVersion.dateOfDeposit asc 
+	</query>
+
+	<!-- ********************************************************* -->
+	<!--  get the publications  along with download count -->
+	<!-- ********************************************************* -->
+	<query name="getPublicationsSponsorDownloadCountOrderByCountDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount) ) 
+	    from  InstitutionalItem institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemSponsors itemSponsor
+	    join itemSponsor.sponsor sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+	    order by coalesce(sum(irFile.downloadCount), 0) desc, institutionalItemVersion.dateOfDeposit desc
+    </query>
+	
+	<query name="getPublicationsSponsorDownloadCountOrderByCountAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount) ) 
+	    from  InstitutionalItem institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemSponsors itemSponsor
+	    join itemSponsor.sponsor sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+	    order by coalesce(sum(irFile.downloadCount), 0) asc, institutionalItemVersion.dateOfDeposit asc
+    </query>
+    
+    	
+	<!-- Count of institutional item contributed by given person name -->
+	<query name="getInstitutionalItemVersionCountByPersonName">
+	    select  institutionalItemVersion, sum(irFile.downloadCount)
+	    from InstitutionalItem institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.contributors itemContributor
+	    join itemContributor.contributor contributor
+	    left join item.itemFiles itemFile
+	    left join itemFile.irFile irFile
+	    where  contributor.personName.id in (:personNameIds)
+		group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+		order by coalesce(sum(irFile.downloadCount), 0) desc, institutionalItemVersion.dateOfDeposit desc
+	</query>
+	
+	<!-- Count of downloads for a given sponsor -->
+	<query name="getDownloadCountBySponsor">
+	    select sum(file.downloadCount) as downloadCount 
+	    from IrFile as file 
+	    where file.id in
+	    (select irFile.id 
+	     from  InstitutionalItem institutionalItem
+	     join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	     join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	     join institutionalItemVersion.item item
+	     join item.itemSponsors itemSponsor
+	     join itemSponsor.sponsor sponsor
+	     join item.itemFiles itemFile
+	     join itemFile.irFile irFile
+	     where sponsor.id = ?)
+	</query>	
+	
+	<!-- Count of downloads for a given contributor -->
+	<query name="getDownloadCountByPersonNames">
+	    select sum(file.downloadCount) as downloadCount 
+	    from IrFile as file 
+	    where file.id in
+	    ( select irFile.id 
+	      from InstitutionalItem institutionalItem 
+	      join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	      join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	      join institutionalItemVersion.item item
+	      join item.contributors itemContributor
+	      join itemContributor.contributor contributor
+	      join item.itemFiles itemFile
+	      join itemFile.irFile irFile
+	      where  contributor.personName.id in (:personNameIds) )
+	</query>
+	
+	<!--  get the ealieast date of depostit -->
+    <query name="getEarliestDateOfDeposit">
+	    select min(dateOfDeposit) from InstitutionalItemVersion
+	</query>	
+	
+	<!--  get the institutional item versions for a given generic item -->
+	<query name="getInstitutionalItemVersionsForGenericItemId">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 	    
+	    where institutionalItemVersion.item.id = ?
+	</query>
+	
+		<!--  get institutional item versions by id order with  -->
+	<query name="getInstitutionalItemVersionCount">
+	    select count(*) from InstitutionalItemVersion
+    </query>
+    
+    
+    
+    
+	<!-- ********************************************************* -->
+	<!--  These selects are primarily used for OAI harvesting -->
+	<!-- ********************************************************* -->
+	
+	<!--  get institutional item versions by id order with  -->
+	<query name="getInstitutionalItemVersionByLastIdOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 	    
+	    where institutionalItemVersion.id &gt; :lastId
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+    
+    <!--  get institutional item versions by id order with between the specified dates -->
+	<query name="getInstitutionalItemVersionByLastIdBetweenDatesOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+    
+    <!--  get institutional item versions by id order with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionByLastIdFromDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified &gt;= :fromDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+       <!--  get a count of institutional item versions with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionFromDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.dateLastModified &gt;= :fromDate 
+    </query>
+    
+        <!--  get institutional item versions by id order with a modified 
+              date less than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionByLastIdUntilDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+     
+    
+         <!--  get a count of institutional item versions with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionUntilDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.dateLastModified &lt;= :untilDate 
+    </query>
+    
+    
+       <!--  get institutional item versions by id order with between the specified dates -->
+	<query name="getInstitutionalItemVersionBetweenDatesCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+    </query>
+    
+    
+    <!--  get the count of institutional item versions in a collection  -->
+	<query name="getInstitutionalItemVersionBySetCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+    </query>
+    
+    <!--  get institutional item versions by id order for a given institutional collection  -->
+	<query name="getInstitutionalItemVersionByLastIdSetOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id &gt; :lastId
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+    
+     <!--  get institutional item versions by id order with modification date
+          greater than or equal to the specified date
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionByLastIdSetFromDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified &gt;= :fromDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+    
+     <!--  get  count of institutional item versions by id order with modification date
+           greater than or equal to the specified date
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionSetFromDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.dateLastModified &gt;= :fromDate 
+    </query>
+    
+    
+        <!--  get institutional item versions by id order with modification date
+          less than or equal to the specified date
+           within a given collection   -->
+	<query name="getInstitutionalItemVersionByLastIdSetUntilDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+   
+    
+    <!--  get  count of institutional item versions by id order with modification date
+           less than or equal to the specified date
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionSetUntilDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
+    </query> 
+    
+    
+    <!--  get institutional item versions by id order with between the specified dates
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionByLastIdSetBetweenDatesOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+	    order by institutionalItemVersion.id asc
+    </query>
+ 
+ 
+     <!--  get institutional item versions count with between the specified dates
+          within a given collection -->
+	<query name="getInstitutionalItemVersionSetBetweenDatesCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+    </query>
+ 
+     
+		<!-- ********************************************************* -->
+	<!--  Update versioned items by changes in metadata  -->
+	<!-- ********************************************************* -->
+	
+	<query name="updateItemVersionsForContentTypeChange">
+	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemContentTypes as itemContentType
+	       where itemContentType.contentType.id = :contentTypeId 
+	      )
+	</query>
+	
+	<!-- contributor type changes -->
+	<query name="updateItemVersionForContributorTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.contributors as itemContributor
+	       where itemContributor.contributor.contributorType.id = :contributorTypeId 
+	      )
+	</query>
+	
+	<!--extent changes -->
+    <query name="updateItemVersionForExtentTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemExtents as itemExtent
+	       where itemExtent.extentType.id = :extentTypeId 
+	      )
+	</query>
+	
+    <!--copyright statement type changes -->
+    <query name="updateItemVersionForCopyrightStatementChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.copyrightStatement.id = :copyrightStatementId 
+	      )
+	</query>
+	
+	<!--identifier type changes -->
+    <query name="updateItemVersionForIdentifierTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemIdentifiers as itemIdentifier
+	       where itemIdentifier.identifierType.id = :identifierTypeId 
+	      )
+	</query>
+	
+    <!--language type changes -->
+    <query name="updateItemVersionForLanguageTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.languageType.id = :languageTypeId 
+	      )
+	</query>
+	
+	<!--person name changes -->
+    <query name="updateItemVersionForContributorPersonNameChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.contributors as itemContributor
+	       where itemContributor.contributor.personName.id = :personNameId 
+	      )
+	</query>
+	
+	<!--publisher changes -->
+    <query name="updateItemVersionForPublisherChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.externalPublishedItem.publisher.id = :publisherId 
+	      )
+	</query>
+	
+	
+    <!--series changes -->
+    <query name="updateItemVersionForSeriesChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemReports as itemReport
+	       where itemReport.series.id = :seriesId 
+	      )
+	</query>
+	
+	<!--sponsor changes -->
+    <query name="updateItemVersionForSponsorChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemSponsors as itemSponsor
+	       where itemSponsor.sponsor.id = :sponsorId 
+	      )
+	</query>
+	
+	
+</hibernate-mapping>
