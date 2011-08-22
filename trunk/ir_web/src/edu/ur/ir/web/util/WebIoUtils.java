@@ -138,6 +138,11 @@ public class WebIoUtils implements Serializable{
             response.addHeader("Content-Disposition", "attachment; filename=\"" + 
         		 fullFileName + "\"");
         }
+        else
+        {
+        	response.addHeader("Content-Disposition", "inline; filename=\"" + 
+        		 fullFileName + "\"");
+        }
         
         String contentType = null;
         if( fileInfo.getExtension() != null)
