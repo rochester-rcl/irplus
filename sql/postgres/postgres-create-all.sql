@@ -2835,6 +2835,29 @@ CREATE SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
 ALTER TABLE ir_group_workspace.group_workspace_group_invite_seq OWNER TO ir_plus;
 
 
+-- ---------------------------------------------
+-- group workspace file delete record
+-- ---------------------------------------------
+
+CREATE TABLE ir_group_workspace.group_workspace_file_delete_record
+(
+  group_workspace_file_delete_record_id BIGINT PRIMARY KEY,
+  group_workspace_file_id BIGINT NOT NULL,
+  group_workspace_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  date_deleted TIMESTAMP WITH TIME ZONE NOT NULL,
+  full_path TEXT NOT NULL,
+  group_workspace_name TEXT NOT NULL,
+  description TEXT,
+  delete_reason TEXT,
+  UNIQUE(group_workspace_file_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_file_delete_record OWNER TO ir_plus;
+
+-- The group workspace file delete record sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
+ALTER TABLE ir_group_workspace.group_workspace_file_delete_record_seq OWNER TO ir_plus;
+
 
 -- ----------------------------------------------
 -- **********************************************

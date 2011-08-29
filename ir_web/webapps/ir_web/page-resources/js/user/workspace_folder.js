@@ -31,13 +31,6 @@ var newFolderAction = basePath + 'user/addPersonalFolder.action';
 var deleteFolderAction = basePath + 'user/deletePersonalFileSystemObjects.action';
 var getFolderAction = basePath + 'user/getPersonalFolder.action';
 
-//actions for adding and removing folders - group workspace
-var updateGroupWorkspaceFolderAction = basePath + 'user/updateGroupWorkspaceFolder.action';
-var newGroupWorkspaceFolderAction = basePath + 'user/addGroupWorkspaceFolder.action';
-var deleteGroupWorkspaceFolderAction = basePath + 'user/deleteGroupWorkspaceFileSystemObjects.action';
-var getGroupWorkspaceFolderAction = basePath + 'user/getGroupWorkspaceFolder.action';
-
-
 // Action to rename file
 var fileRenameAction = basePath + 'user/renameFile.action';
 var getFileNameAction = basePath + 'user/getFile.action';
@@ -100,7 +93,6 @@ YAHOO.ur.folder =
 	    document.newFolderForm.folderDescription.value = "";
 	    document.newFolderForm.newFolder.value = "true";
 	    document.newFolderForm.updateFolderId.value = "";
-    
     },
     
     /**
@@ -225,25 +217,10 @@ YAHOO.ur.folder =
      */
     clearHiddenWorkspaceInfo : function()
     {
-        document.getElementById('newfolderForm_workspaceId').value = '';
         document.getElementById('newFolderForm_parentFolderId').value = '';
     },
     
-    /**
-     * This creates a hidden field appends it to the folder form for
-     * adding new sub folders for a given parent folder id for a workspace.
-     */ 
-    insertHiddenGroupWorkspaceFolderInfo : function()
-    {
-        var parentFolderId = document.getElementById('groupFoldersParentFolderId').value;
-        var groupWorkspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
-        
-        // update the values
-        document.getElementById('newFolderForm_parentFolderId').value = parentFolderId;
-        document.getElementById('newfolderForm_workspaceId').value = groupWorkspaceId;
-
-        //document.getElementById('file_upload_parent_folder_id').value = value;
-    },
+ 
     
     /**
      * Dialog to create new folders
@@ -266,10 +243,8 @@ YAHOO.ur.folder =
 	   // handle a successful return
 	   var handleSuccess = function(o) 
 	   {
-		    alert('success!');
-		    alert(o.responseText);
-			// check for the timeout - forward user to login page if timout
-	        // occured
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       		 	   
 	            //get the response from adding a folder
@@ -292,20 +267,13 @@ YAHOO.ur.folder =
 	            }
 	            else
 	            {
-	            	if( document.newFolderForm.groupWorkspaceId.value != '' )
-	            	{
-	            		alert('get workspace stuff');
-	            	}
-	            	else
-	            	{
-	                    // we can clear the form if the folder was added
-	                    YAHOO.ur.folder.newFolderDialog.hide();
-	                    YAHOO.ur.folder.clearFolderForm();
-	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                    YAHOO.ur.folder.getFolderById(folderId, -1); 
-	            	}
+	                // we can clear the form if the folder was added
+	                YAHOO.ur.folder.newFolderDialog.hide();
+	                YAHOO.ur.folder.clearFolderForm();
+	                var folderId = document.getElementById("myFolders_parentFolderId").value;
+	                YAHOO.ur.folder.getFolderById(folderId, -1); 
+	            	
 	            }
-	           
 	        }
 	    };
 	
@@ -339,30 +307,14 @@ YAHOO.ur.folder =
 	        if( YAHOO.ur.folder.newFolderDialog.validate() )
 	        {
 	            //based on what we need to do (update or create a 
-	            // new folder) based on the action.  This also looks
-	        	// for group workspace actions
+	            // new folder) based on the action.  
                 var action = newFolderAction;
                 
-                alert('update folder id = ' + document.newFolderForm.updateFolderId.value );
-                alert('update workspace id = ' + document.newFolderForm.groupWorkspaceId.value );
-	            if( document.newFolderForm.updateFolderId.value != '' && document.newFolderForm.groupWorkspaceId.value == '')
+	            if( document.newFolderForm.updateFolderId.value != '' )
 	            {
 	               // update folder personal workspace
 	               action = updateFolderAction;
 	            }
-	            if( document.newFolderForm.groupWorkspaceId.value != '' && document.newFolderForm.updateFolderId.value == '')
-	            {
-	            	// new folder group workspace
-	            	action = newGroupWorkspaceFolderAction; 
-	            }
-	            if( document.newFolderForm.groupWorkspaceId.value != '' && document.newFolderForm.updateFolderId.value != '')
-	            {
-	            	// update folder group workspace
-	            	action = updateGroupWorkspaceFolderAction;
-	            }
-
-	            alert('action = ' + action);
-	            
                 var cObj = YAHOO.util.Connect.asyncRequest('POST',
                 action, callback);
             }

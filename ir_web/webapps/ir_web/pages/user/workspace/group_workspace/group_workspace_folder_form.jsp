@@ -2,7 +2,7 @@
 
 
 <!--  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -20,29 +20,33 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
 <!--  represents a successful submission -->
-<input type="hidden" id="newFolderForm_success" 
+<input type="hidden" id="groupFolderForm_success" 
 		   value="${folderAdded}"/>
 		   		               
-<input type="hidden" id="newFolderForm_new"
-       name="newFolder" value="true"/>
+<input type="hidden" id="groupFolderForm_new"
+       name="newGroupFolder" value="true"/>
 
 <!--  indicates the folder that is too be updated -->      
-<input type="hidden" id="newfolderForm_folderId"
+<input type="hidden" id="groupFolderForm_folderId"
     name="updateFolderId" value="${updateFolderId}"/>
 
-<div id="folder_error_div">       
+<!--  indicates this is a folder within a group workspace -->
+<input type="hidden" id="groupFolderForm_workspaceId"
+    name="groupWorkspaceId" value="${groupWorkspaceId}"/>
+
+<div id="group_folder_error_div">       
     <!--  get the error messages from fieldErrors -->
     <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-       key="personalFolderAlreadyExists"/></p>
+       key="groupFolderAlreadyExists"/></p>
     <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-        key="illegalPersonalFolderName"/></p> 
+        key="illegalGroupFolderName"/></p> 
 </div>
           
  <table class="formTable">
      <tr>
          <td class="label"> Folder Name:</td>
          <td align="left" class="input"> 
-             <input id="folder" size="50" type="text" name="folderName" value="${folderName}"/>
+             <input size="50" type="text" name="folderName" value="${folderName}"/>
          </td>
      </tr>
      <tr>

@@ -313,13 +313,6 @@ public interface UserFileSystemService extends Serializable{
 	 */
 	public void makePersonalFilePersistent(PersonalFile personalFile);	
 
-	/**
-	 * Delete the Acess control list for the specified versioned file.
-	 * 
-	 * @param versionedFile - versioned file to remove the ACL from
-	 * @param user - user to remove the ACL from.
-	 */
-	public void deleteAclForVersionedFile(VersionedFile versionedFile, IrUser user);
 	
 	/**
 	 * Get all versioned files for the specified folder.

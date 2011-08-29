@@ -143,4 +143,12 @@
 	    and folder.id = folder.treeRoot.id
 	</query>
 	
+			
+	<!--  All files for the specified folder including files in sub folders -->
+	<query name="getAllGroupWorkspaceFilesForFolder">
+	    from GroupWorkspaceFile as groupFile
+	    where groupFile.groupWorkspaceFolder.leftValue between :leftValue and :rightValue
+	    and groupFile.groupWorkspaceFolder.treeRoot.id = :rootId
+	</query>
+	
 </hibernate-mapping>

@@ -22,6 +22,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
 
@@ -130,6 +131,24 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 	 */
 	public void makeTransient(GroupWorkspaceFolder entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+	
+	
+	/**
+	 * This returns all personal files for the specified parent folder.  This
+	 * includes all files in sub folders.
+	 * 
+	 * @param groupFolder - group workspace folder to find all files in (including sub folders)
+	 * @return all group files found.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFile> getAllFilesForFolder(GroupWorkspaceFolder groupFolder) {
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllGroupWorkspaceFilesForFolder");
+		q.setParameter("leftValue", groupFolder.getLeftValue());
+		q.setParameter("rightValue", groupFolder.getRightValue());
+		q.setParameter("rootId", groupFolder.getTreeRoot().getId());
+		return (List<GroupWorkspaceFile>) q.list();
 	}
 
 }

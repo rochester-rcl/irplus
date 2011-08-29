@@ -462,7 +462,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 				inviteUserService.unshareFile(fileCollaborator, deletingUser);
 			}
 
-			deleteAclForVersionedFile(versionedFile, pf.getOwner());
+			securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
 			repositoryService.deleteVersionedFile(versionedFile);
 			
 		} else {
@@ -772,17 +772,6 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 */
 	public List<PersonalFolder> getFolders(Long userId, List<Long> folderIds) {
 		return personalFolderDAO.getFolders(userId, folderIds);
-	}
-
-	/**
-	 * Remove all access to collaborators for a versioned file.
-	 * 
-	 * @param versionedFile - versioned file that has an acl
-	 * @param user - user to remove the access to.
-	 */
-	public void deleteAclForVersionedFile(VersionedFile versionedFile, IrUser user) {
-		// Delete ACL for this file
-		securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
 	}
 
 

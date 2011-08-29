@@ -74,7 +74,7 @@
     <ur:js src="page-resources/js/user/workspace_folder.js"/>
     <ur:js src="page-resources/js/user/workspace_search.js"/>
     <ur:js src="page-resources/js/user/group_workspace.js"/>
-
+ 
 </head>
 
 
@@ -242,7 +242,7 @@
     </div>
     <!--  end doc tag -->
 		        
-	      
+	<!--  personal folder dialog -->      
 	<div id="newFolderDialog" class="hidden">
 	    <div class="hd">Folder Information</div>
 		<div class="bd">
@@ -261,6 +261,26 @@
 		 <!-- end dialog body -->
 	 </div>
 	 <!--  end the new folder dialog -->
+	 
+	<!--  group folder dialog -->      
+	<div id="groupFolderDialog" class="hidden">
+	    <div class="hd">Group Folder Information</div>
+		<div class="bd">
+		    <form id="groupFolder" name="groupFolderForm" 
+		        method="post" action="user/addGroupFolder.action">
+		        
+		         <input type="hidden" id="groupFolderForm_parentFolderId"
+		               name="parentFolderId" value="${parentFolderId}"/>
+		               
+              	<div id="groupFolderDialogFields">
+              	    <c:import url="group_workspace/group_workspace_folder_form.jsp"/>
+              	</div>
+		     </form>
+		 </div>
+		 <!-- end dialog body -->
+	 </div>
+	 <!--  end group folder dialog -->
+	 
 	          
 	<!--  new collection dialog -->
 	<div id="newCollectionDialog" class="hidden">
@@ -333,6 +353,15 @@
 	          
 	<!--  delete files folder dialog -->
 	<div id="deleteFileFolderConfirmDialog" class="hidden">
+	    <div class="hd">Delete?</div>
+		<div class="bd">
+		    <p>Do you want to delete the selected files and folders?</p>
+		</div>
+	</div>
+	<!--  end delete files and folder dialog -->
+	
+    <!--  delete group workspace files folder dialog -->
+	<div id="deleteGroupWorkspaceFileFolderConfirmDialog" class="hidden">
 	    <div class="hd">Delete?</div>
 		<div class="bd">
 		    <p>Do you want to delete the selected files and folders?</p>

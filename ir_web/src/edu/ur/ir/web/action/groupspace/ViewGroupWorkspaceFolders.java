@@ -16,6 +16,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.user.IrUser;
 
+
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.action.user.FileSystemSortHelper;
@@ -83,7 +84,13 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	/* Service to deal with group workspace information */
 	private GroupWorkspaceService groupWorkspaceService;
 	
+	/* list of folder ids to perform actions on*/
+	private Long[] groupFolderIds;
+	
 
+
+	/* list of file ids to perform actions on*/
+	private Long[] groupFileIds;
 
 	/**
 	 * Get folder table
@@ -115,6 +122,50 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	 */
 	public String deleteFileSystemObjects()
 	{		
+		log.debug("Delete folders called");
+		user = userService.getUser(userId, false);
+		
+		if( groupFolderIds != null )
+		{
+		    for(int index = 0; index < groupFolderIds.length; index++)
+		    {
+			    log.debug("Deleting folder with id " + groupFolderIds[index]);
+			    GroupWorkspaceFolder gf = groupWorkspaceFileSystemService.getFolder(groupFolderIds[index], false);
+			    
+			    
+			    //THIS WILL have to change to check for permission to delete folder
+			    if( !gf.getOwner().getId().equals(userId))
+			    {
+			    	return "accessDenied";
+			    }
+			    
+			    //un-index all the files
+			    //List<PersonalFile> allFiles =  userFileSystemService.getAllFilesForFolder(pf);
+			    
+			    //for(PersonalFile aFile : allFiles)
+			    //{
+			    //	deleteFileFromIndex(aFile, user);
+			    //}
+			    
+			    groupWorkspaceFileSystemService.deleteFolder(gf, user, "OWNER DELETING FOLDER - " + gf.getFullPath());
+		    }
+		}
+		
+		if(groupFileIds != null)
+		{
+			for(int index = 0; index < groupFileIds.length; index++)
+			{
+				log.debug("Deleting file with id " + groupFileIds[index]);
+				//GroupWorkspaceFile pf = groupWorkspaceFileSystemService.getPersonalFile( fileIds[index], false);
+				// if( !pf.getOwner().getId().equals(userId))
+				// {
+				//   	return "accessDenied";
+				// }
+				//deleteFileFromIndex(pf, user);
+				//userFileSystemService.delete(pf, user, "OWNER DELETING FILE");
+			}
+		}
+		createFileSystem();
 		return SUCCESS;
 	}
 	
@@ -365,6 +416,24 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	 */
 	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
 		this.groupWorkspaceService = groupWorkspaceService;
+	}
+	
+	/**
+	 * Set the group folder ids.
+	 * 
+	 * @param groupFolderIds
+	 */
+	public void setGroupFolderIds(Long[] groupFolderIds) {
+		this.groupFolderIds = groupFolderIds;
+	}
+
+	/**
+	 * Set the group file ids.
+	 * 
+	 * @param groupFileIds
+	 */
+	public void setGroupFileIds(Long[] groupFileIds) {
+		this.groupFileIds = groupFileIds;
 	}
 
 }

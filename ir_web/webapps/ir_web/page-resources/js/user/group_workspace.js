@@ -32,6 +32,14 @@ var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
 //If there is no bookmarked state, assign the default state:
 var groupWorkspaceFolderState = "0";
 
+
+//actions for adding and removing folders - group workspace
+var updateGroupWorkspaceFolderAction = basePath + 'user/updateGroupWorkspaceFolder.action';
+var newGroupWorkspaceFolderAction = basePath + 'user/addGroupWorkspaceFolder.action';
+var deleteGroupWorkspaceFolderAction = basePath + 'user/deleteGroupWorkspaceFileSystemObjects.action';
+var getGroupWorkspaceFolderAction = basePath + 'user/getGroupWorkspaceFolder.action';
+
+
 /**
  * content type namespace
  */
@@ -55,16 +63,6 @@ YAHOO.ur.user.group_workspace = {
 	    	YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
 	    }
 	    
-	    //var currentFolder = document.getElementById('myFolders_parentFolderId').value;
-	    
-	    // do not change state if we are on the current file / folder
-	    /*if( currentState != currentFolder )
-	    {
-	        document.getElementById('myFolders_parentFolderId').value = folderId;
-	        var folderId = document.getElementById("myFolders_parentFolderId").value;
-	        YAHOO.ur.folder.getFolderById(folderId, -1); 
-	        YAHOO.ur.folder.insertHiddenParentFolderId();
-	    }*/
 	},	
 		
 	/**
@@ -333,7 +331,6 @@ YAHOO.ur.user.group_workspace = {
      */
     getGroupWorkspaceById : function(workspaceId)
     {
-		
 		// handle a successful return
 	    var handleSuccess = function(o) 
 	    {
@@ -343,8 +340,7 @@ YAHOO.ur.user.group_workspace = {
 	        {       	    
 	            var response = o.responseText;
 	            document.getElementById('group_workspaces').innerHTML = response;	 
-	            YAHOO.util.History.navigate( "groupWorkspaceFolderModule", workspaceId + "" );
-	            YAHOO.ur.folder.insertHiddenGroupWorkspaceFolderInfo(); 
+	            YAHOO.ur.user.group_workspace.insertHiddenGroupWorkspaceFolderInfo(); 
 	            
 	            // this is for capturing history
                 // it may fail if this is not an A grade browser so we need to
@@ -365,7 +361,7 @@ YAHOO.ur.user.group_workspace = {
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('get folder by id failure '  + o.status + ' status text ' + o.statusText);
+	        alert('get group workspace by id failure '  + o.status + ' status text ' + o.statusText);
 	    };
 
     
@@ -373,7 +369,266 @@ YAHOO.ur.user.group_workspace = {
         		'?groupWorkspaceId=' + workspaceId +  '&bustcache=' + new Date().getTime(),
           {success: handleSuccess, failure: handleFailure});
     },
+    
+    
+	/**
+     * This will clear the hidden workspace id if it is set in the folder form
+     * or file upload form it will indicate uploading a file to the group workspace
+     * rather than the personal file workspace
+     */
+    clearHiddenWorkspaceInfo : function()
+    {
+        document.getElementById('groupFolderForm_workspaceId').value = '';
+        document.getElementById('groupFolderForm_parentFolderId').value = '';
+    },
+    
+    /**
+     * This creates a hidden field appends it to the folder form for
+     * adding new sub folders for a given parent folder id for a workspace.
+     */ 
+    insertHiddenGroupWorkspaceFolderInfo : function()
+    {
+        var parentFolderId = document.getElementById('groupFoldersParentFolderId').value;
+        var groupWorkspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+        
+        // update the values
+        document.getElementById('groupFolderForm_parentFolderId').value = parentFolderId;
+        document.getElementById('groupFolderForm_workspaceId').value = groupWorkspaceId;
+    },
 	
+    /**
+     * Clear the folder form
+     */
+    clearFolderForm : function()
+    {
+        // clear out the error message
+        var folderError = document.getElementById('folder_error_div');
+        folderError.innerHTML = "";    
+	
+	    document.groupFolderForm.folderName.value = "";
+	    document.groupFolderForm.folderDescription.value = "";
+	    document.groupFolderForm.newGroupFolder.value = "true";
+	    document.groupFolderForm.updateFolderId.value = "";
+	    document.groupFolderForm.groupWorkspaceId.value = "";
+    },
+    
+    /**
+     * Dialog to create new folders for group workspace
+     */
+    createFolderDialog : function()
+    {
+      
+	    // Define various event handlers for Dialog
+	    var handleSubmit = function() 
+	    {
+	    	this.submit();
+	    };
+		
+	    // handle a cancel of the adding folder dialog
+	    var handleCancel = function() 
+	    {
+	    	YAHOO.ur.user.group_workspace.clearFolderForm();
+	    	YAHOO.ur.user.group_workspace.groupFolderDialog.hide();
+	    };
+	
+	   // handle a successful return
+	   var handleSuccess = function(o) 
+	   {
+		    // check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	   
+	            //get the response from adding a folder
+	            var response = o.responseText;
+	            var folderForm = document.getElementById('groupFolderDialogFields');
+	    
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            folderForm.innerHTML = response;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("groupFolderForm_success").value;
+	    
+	            //if the folder was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+	            	YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder();
+	            }
+	            else
+	            {
+	            	workspaceId = document.groupFolderForm.groupWorkspaceId.value;
+	            	YAHOO.ur.user.group_workspace.groupFolderDialog.hide();
+	            	YAHOO.ur.user.group_workspace.clearFolderForm();
+		            YAHOO.ur.util.wait.waitDialog.hide();
+		            YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	            }
+	           
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert("Create group workspace folder failed due an error: " + o.status);
+	    };
+
+	    // Instantiate the Dialog
+	    // make it modal - 
+	    // it should not start out as visible - it should not be shown until 
+	    // new folder button is clicked.
+	    YAHOO.ur.user.group_workspace.groupFolderDialog = new YAHOO.widget.Dialog('groupFolderDialog', 
+        { 
+	    	width : "600px",
+		    visible : false, 
+		    modal : true,
+		    buttons : [ { text:"Submit", handler:handleSubmit, isDefault:true },
+					  { text:"Cancel", handler:handleCancel } ]
+		} );
+	
+	    // override the submit
+	    YAHOO.ur.user.group_workspace.groupFolderDialog.submit = function()
+	    {
+	    	YAHOO.ur.user.group_workspace.newFolderDialog.hide();
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
+	    	YAHOO.ur.user.group_workspace.destroyFolderMenus();
+	        YAHOO.util.Connect.setForm('groupFolderForm');
+	    
+	        if( YAHOO.ur.user.group_workspace.groupFolderDialog.validate() )
+	        {
+	            //based on what we need to do (update or create a 
+	            // new folder) based on the action.  
+                var action = newGroupWorkspaceFolderAction;
+                
+	            if( document.groupFolderForm.updateFolderId.value != '' )
+	            {
+	               // update folder personal workspace
+	               action = updateGroupWorkspaceFolderAction;
+	            }
+                var cObj = YAHOO.util.Connect.asyncRequest('POST',
+                action, callback);
+            }
+	    };
+	    
+	    YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder = function()
+	    {
+	        YAHOO.ur.user.group_workspace.groupFolderDialog.center();
+	        YAHOO.ur.user.group_workspace.groupFolderDialog.show();
+	        YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+	    };
+   
+ 	    // Validate the entries in the form to require that both first and last name are entered
+	    YAHOO.ur.user.group_workspace.groupFolderDialog.validate = function() {
+	        var data = this.getData();
+		    if (data.folderName == "" ) 
+		    {
+		        alert("A folder name must be entered");
+			    return false;
+		    } 
+		    else 
+		    {
+			    return true;
+		    }
+	    };
+
+	    // Wire up the success and failure handlers
+	    var callback = { success: handleSuccess, failure: handleFailure };
+			
+	    // Render the Dialog
+	    YAHOO.ur.user.group_workspace.groupFolderDialog.render();
+    },
+    
+	/**
+	 * Dialog to confirm delete of folders and files
+	 */
+	createFolderDeleteConfirmDialog : function() 
+	{
+        // Define various event handlers for Dialog
+	    var handleYes = function() 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
+	    	//ADD THIS FUNCTION
+        	//YAHOO.ur.user.group_workspace.destroyFolderMenus();
+		    this.hide();
+		    YAHOO.ur.user.group_workspace.deleteFilesFolders();
+	    };
+	    
+	    var handleNo = function() 
+	    {
+	        //uncheck all the ones that have been checked
+	        checked = document.groupFolders.checkAllSetting.checked = false;
+	        
+	        //ADD THIS FUNCTION
+	        //YAHOO.ur.user.group_workspace.setCheckboxes();
+		    this.hide();
+	    };
+
+	    // Instantiate the Dialog
+	    YAHOO.ur.user.group_workspace.deleteFolder = 
+	        new YAHOO.widget.Dialog("deleteGroupWorkspaceFileFolderConfirmDialog", 
+									     { width: "400px",
+										   visible: false,
+										   modal: true,
+										   buttons: [ { text:"Yes", handler:handleYes, isDefault:true },
+													  { text:"No",  handler:handleNo } ]
+										} );
+	
+	    YAHOO.ur.user.group_workspace.deleteFolder.setHeader("Delete?");
+	
+	    //show the dialog and center
+	    YAHOO.ur.user.group_workspace.deleteFolder.showDialog = function()
+	    {
+	    	
+	        if (!urUtil.checkForNoSelections(document.groupFolders.groupFolderIds) &&
+	            !urUtil.checkForNoSelections(document.groupFolders.groupFileIds))
+		    {
+			     alert('Please select at least one checkbox next to the files or folders you wish to delete.');
+	        } 
+	        else
+	        {
+	            YAHOO.ur.user.group_workspace.deleteFolder.center();
+	            YAHOO.ur.user.group_workspace.deleteFolder.show();
+	        }
+	    };
+	
+	    // Render the Dialog
+	    YAHOO.ur.user.group_workspace.deleteFolder.render();
+
+    },
+    
+	/**
+	 * Delete the files and folders by submitting the form.
+	 */
+	deleteFilesFolders : function()
+	{
+		// handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            document.getElementById('group_workspaces').innerHTML = response;
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('delete files folders failure '  + o.status + ' status text ' + o.statusText);
+	    };
+
+	    YAHOO.util.Connect.setForm('groupFolders');
+    
+        YAHOO.util.Connect.asyncRequest('POST', deleteGroupWorkspaceFolderAction,
+          {success: handleSuccess, failure: handleFailure});
+	},
+ 	
 	// initialize the page
 	// this is called once the dom has
 	// been created
@@ -381,12 +636,14 @@ YAHOO.ur.user.group_workspace = {
 	{
 	    YAHOO.ur.user.group_workspace.createCreateGroupWorkspaceDialog();
 	    YAHOO.ur.user.group_workspace.createDeleteGroupWorkspaceDialog();
+	    YAHOO.ur.user.group_workspace.createFolderDialog();	
+	    YAHOO.ur.user.group_workspace.createFolderDeleteConfirmDialog();
+	    
 	    
         // register the history system
         YAHOO.util.History.register("groupWorkspaceFolderModule", 
         		groupWorkspaceFolderState, 
         		YAHOO.ur.user.group_workspace.groupWorkspaceStateChangeHandler);
-
   	}
 	
 }	

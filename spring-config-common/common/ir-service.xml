@@ -892,6 +892,7 @@
        class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemService">
        <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
        <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
+       <property name="groupWorkspaceFileDeleteRecordDAO" ref="groupWorkspaceFileDeleteRecordDAO"/>
    </bean>
    
    <!-- ****************************************** --> 

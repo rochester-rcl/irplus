@@ -24,22 +24,29 @@
 	
 	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.user">
-	<class name="PersonalFileDeleteRecord" table="ir_user.personal_file_delete_record"
+<hibernate-mapping package="edu.ur.ir.groupspace">
+	<class name="GroupWorkspaceFileDeleteRecord" schema="ir_group_workspace"
+	    table="group_workspace_file_delete_record" 
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="personal_file_delete_record_id"
+		<id name="id" type="long" column="group_workspace_file_delete_record_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_user.personal_file_delete_record_seq</param>
+				<param name="sequence">ir_group_workspace.group_workspace_file_delete_record_seq</param>
 			</generator>
 		</id>
 
 		<property name="userId" column="user_id" type="long"
 			not-null="true" access="field" />
+		
+		<property name="groupWorkspaceName" column="group_workspace_name"  
+		    type="string" not-null="true" access="field" />
+		
+		<property name="groupWorkspaceId" column="group_workspace_id"  
+		    type="long" not-null="true" access="field" />
 			
-		<property name="personalFileId" column="personal_file_id" type="long"
+		<property name="groupWorkspaceFileId" column="group_workspace_file_id" type="long"
 			not-null="true" access="field" />
 
 		<property name="dateDeleted" column="date_deleted" type="timestamp"
@@ -56,13 +63,13 @@
 	 </class>
 		
 	<!--  Get a count of personal file delete records in the system -->
-	<query name="personalFileDeleteRecordCount">
-	    select count(*) from PersonalFileDeleteRecord
+	<query name="groupWorkspaceFileDeleteRecordCount">
+	    select count(*) from GroupWorkspaceFileDeleteRecord
 	</query>
 	
-		<!--  delete all fo the group workspace file delete information -->
-	<query name="personalFileDeleteRecordDeleteAll">
-	    delete from PersonalFileDeleteRecord
+	<!--  delete all fo the group workspace file delete information -->
+	<query name="groupWorkspaceFileDeleteRecordAll">
+	    delete from GroupWorkspaceFileDeleteRecord
 	</query>
 	
 
