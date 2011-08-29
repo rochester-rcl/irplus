@@ -491,11 +491,11 @@ YAHOO.ur.user.group_workspace = {
 	    // override the submit
 	    YAHOO.ur.user.group_workspace.groupFolderDialog.submit = function()
 	    {
-	    	YAHOO.ur.user.group_workspace.newFolderDialog.hide();
+	    	YAHOO.ur.user.group_workspace.groupFolderDialog.hide();
 	    	YAHOO.ur.util.wait.waitDialog.showDialog();
-	    	YAHOO.ur.user.group_workspace.destroyFolderMenus();
+	    	//THIS WILL NEED TO BE UPDATED Once folder menus are created
+	    	//YAHOO.ur.user.group_workspace.destroyFolderMenus();
 	        YAHOO.util.Connect.setForm('groupFolderForm');
-	    
 	        if( YAHOO.ur.user.group_workspace.groupFolderDialog.validate() )
 	        {
 	            //based on what we need to do (update or create a 
