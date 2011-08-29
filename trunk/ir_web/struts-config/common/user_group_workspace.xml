@@ -66,6 +66,16 @@
             method ="{1}"
             class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceFolder">
             <interceptor-ref name="crudStack" />
-            <result name="added">/pages/user/workspace/personal_folder_form.jsp</result>
-            <result name="get">/pages/user/workspace/personal_folder_form.jsp</result>
+            <result name="added">/pages/user/workspace/group_workspace/group_workspace_folder_form.jsp</result>
+            <result name="get">/pages/user/workspace/group_workspace/group_workspace_folder_form.jsp</result>
         </action>
+        
+        <!--  Allows a user to delete group workspace files and folders -->
+        <action name="deleteGroupWorkspaceFileSystemObjects"
+            method ="deleteFileSystemObjects"
+            class="edu.ur.ir.web.action.groupspace.ViewGroupWorkspaceFolders">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_system_table.jsp</result>
+        </action>
+        

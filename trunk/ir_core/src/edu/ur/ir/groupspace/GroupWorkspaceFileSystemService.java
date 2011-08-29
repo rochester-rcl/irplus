@@ -146,4 +146,12 @@ public interface GroupWorkspaceFileSystemService extends Serializable
     		String fileName, 
     		String description )throws DuplicateNameException, IllegalFileSystemNameException;
 	
+    /**
+     * Delete the group workspace folder. 
+     * 
+     * @param folder - folder to delete
+     * @param deletingUser - user performing the delete
+     * @param deleteReason - reason for the delete.
+     */
+    public void deleteFolder(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason);
 }

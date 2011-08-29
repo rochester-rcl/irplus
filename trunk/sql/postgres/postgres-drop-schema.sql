@@ -89,12 +89,14 @@ DROP TABLE ir_group_workspace.group_workspace_owner;
 DROP TABLE ir_group_workspace.group_workspace_file;
 DROP TABLE ir_group_workspace.group_workspace_folder;
 DROP TABLE ir_group_workspace.group_workspace;
+DROP TABLE ir_group_workspace.group_workspace_file_delete_record;
 
 DROP SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_group_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_file_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
 
 DROP SCHEMA ir_group_workspace;
 

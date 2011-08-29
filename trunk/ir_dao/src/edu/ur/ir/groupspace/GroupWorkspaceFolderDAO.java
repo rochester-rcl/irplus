@@ -56,4 +56,13 @@ public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
 	 * @return list of folders at the root of the given workspace.
 	 */
 	public List<GroupWorkspaceFolder> getRootFolders(Long workspaceId);
+	
+	/**
+	 * This returns all personal files for the specified parent folder.  This
+	 * includes all files in sub folders.
+	 * 
+	 * @param groupFolder - group workspace folder to find all files in (including sub folders)
+	 * @return all group files found.
+	 */
+	public List<GroupWorkspaceFile> getAllFilesForFolder(GroupWorkspaceFolder groupFolder);
 }

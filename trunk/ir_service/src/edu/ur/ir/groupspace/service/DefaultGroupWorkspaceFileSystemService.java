@@ -19,12 +19,15 @@ package edu.ur.ir.groupspace.service;
 import java.io.File;
 import java.util.List;
 
+import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFileDeleteRecord;
+import edu.ur.ir.groupspace.GroupWorkspaceFileDeleteRecordDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
@@ -51,12 +54,14 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	/* Group workspace file data access object */
 	private GroupWorkspaceFileDAO groupWorkspaceFileDAO;
 	
+	/* Group workspace file delete record data access object */
+	private GroupWorkspaceFileDeleteRecordDAO groupWorkspaceFileDeleteRecordDAO;
+
 	// Service class for dealing with the repository  
 	private RepositoryService repositoryService;
 		
 	// Service class for dealing with the (A)cess (C)ontrol (L)ists 
 	private SecurityService securityService;
-
 
 
 	/**
@@ -373,7 +378,75 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
         
         return workspaceFile;	
     }
+    
+    /**
+     * Delete the group workspace folder. 
+     * 
+     * @param folder - folder to delete
+     * @param deletingUser - user performing the delete
+     * @param deleteReason - reason for the delete.
+     */
+	public void deleteFolder(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason) {
+		List<GroupWorkspaceFile> files = groupWorkspaceFolderDAO.getAllFilesForFolder(folder);
+
+		// delete all the files within folder and sub folders
+		for( GroupWorkspaceFile aFile :files)
+		{
+		    delete(aFile, deletingUser, deleteReason);
+		}
+		
+		if( folder.getIsRoot())
+		{
+			GroupWorkspace owningWorkspace = folder.getGroupWorkspace();
+			owningWorkspace.removeRootFolder(folder);
+		}
+		else
+		{
+			GroupWorkspaceFolder parent = folder.getParent();
+			parent.removeChild(folder);
+		}
+
+		groupWorkspaceFolderDAO.makeTransient(folder);
+
+	}
 	
+	
+	/**
+	 * Delete a group workspace file.
+	 * 
+	 * @param personalFileId
+	 */
+	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason)
+	{
+		VersionedFile versionedFile = gf.getVersionedFile();
+		GroupWorkspace groupWorkspace = gf.getGroupWorkspace();
+		
+		// create a delete record 
+		GroupWorkspaceFileDeleteRecord groupWorkspaceFileDeleteRecord = new GroupWorkspaceFileDeleteRecord(deletingUser.getId(),
+				gf.getId(),
+				groupWorkspace.getId(),
+				groupWorkspace.getName(),
+				gf.getFullPath(), 
+				gf.getDescription());
+		groupWorkspaceFileDeleteRecord.setDeleteReason(deleteReason);
+		
+		// remove the file from the parent folder
+		if( gf.getGroupWorkspaceFolder() != null )
+		{
+		    gf.getGroupWorkspaceFolder().removeGroupFile(gf);
+		}
+		
+		// delete the personal file
+		groupWorkspaceFileDAO.makeTransient(gf);
+		
+		groupWorkspaceFileDeleteRecordDAO.makePersistent(groupWorkspaceFileDeleteRecord);
+		
+	
+		securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
+		repositoryService.deleteVersionedFile(versionedFile);
+			
+	
+	}
     
 	/**
 	 * Set the security service.
@@ -382,5 +455,24 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	 */
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	/**
+	 * Set the group workspace file delete record dao.
+	 * 
+	 * @return group workspace file delete record data access object
+	 */
+	public GroupWorkspaceFileDeleteRecordDAO getGroupWorkspaceFileDeleteRecordDAO() {
+		return groupWorkspaceFileDeleteRecordDAO;
+	}
+
+	/**
+	 * Set the group workspace file delete record data access object.
+	 * 
+	 * @param groupWorkspaceFileDeleteRecordDAO
+	 */
+	public void setGroupWorkspaceFileDeleteRecordDAO(
+			GroupWorkspaceFileDeleteRecordDAO groupWorkspaceFileDeleteRecordDAO) {
+		this.groupWorkspaceFileDeleteRecordDAO = groupWorkspaceFileDeleteRecordDAO;
 	}
 }

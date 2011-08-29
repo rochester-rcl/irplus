@@ -59,7 +59,7 @@
 	           <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
- 		                   onClick="YAHOO.ur.folder.newFolderDialog.showFolder();"
+ 		                   onClick="YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder();"
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
 	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
@@ -78,7 +78,7 @@
  		                   onmouseout="this.className='ur_button';"
 	                       id="moveButton"><span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
 	               <button class="ur_button" 
-	                       onclick="YAHOO.ur.folder.deleteFolder.showDialog();"
+	                       onclick="YAHOO.ur.user.group_workspace.deleteFolder.showDialog();"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>

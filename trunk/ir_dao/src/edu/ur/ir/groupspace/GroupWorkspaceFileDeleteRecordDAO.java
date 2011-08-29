@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,27 +14,28 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.user;
+package edu.ur.ir.groupspace;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 
 /**
- * Interface for data access dealing with personal file delete records.
+ * Track the deleting of group workspace files.
  * 
  * @author Nathan Sarr
  *
  */
-public interface PersonalFileDeleteRecordDAO extends CountableDAO, 
-CrudDAO<PersonalFileDeleteRecord>
+public interface GroupWorkspaceFileDeleteRecordDAO extends CountableDAO, 
+CrudDAO<GroupWorkspaceFileDeleteRecord>
 {
 	
 	/**
-	 * Delete all personal file delete records.  This should be used with EXTREAM CAUTION.  This 
-	 * deletes all personal file delete records.
+	 * Delete all group workspace file delete records.  This should be used with EXTREAM CAUTION.  This 
+	 * deletes all group workspace file delete records.
 	 * 
 	 * 
 	 * @return
 	 */
 	public int deleteAll();
+
 }

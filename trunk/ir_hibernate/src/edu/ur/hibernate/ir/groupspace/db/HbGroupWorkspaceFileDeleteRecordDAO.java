@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,34 +14,35 @@
    limitations under the License.
 */  
 
-package edu.ur.hibernate.ir.user.db;
+package edu.ur.hibernate.ir.groupspace.db;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.user.PersonalFileDeleteRecord;
-import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFileDeleteRecordDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFileDeleteRecord;
 
 /**
- * Implementation of the personal file delete record data access object.
+ * Implementation of the group workspace file delete record - for
+ * tracking the deletion of group workspace files.
  * 
  * @author Nathan Sarr
  *
  */
-public class HbPersonalFileDeleteRecordDAO implements PersonalFileDeleteRecordDAO{
+public class HbGroupWorkspaceFileDeleteRecordDAO implements GroupWorkspaceFileDeleteRecordDAO {
 	
-	/** eclipse generated id*/
-	private static final long serialVersionUID = 3499126646933499847L;
+	/* Eclipse generated id */
+	private static final long serialVersionUID = 3300445865233862130L;
 	
 	/**  Helper for persisting information using hibernate.  */
-	private final HbCrudDAO<PersonalFileDeleteRecord> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspaceFileDeleteRecord> hbCrudDAO;
 
 	/**
 	 * Default Constructor
 	 */
-	public HbPersonalFileDeleteRecordDAO() {
-		hbCrudDAO = new HbCrudDAO<PersonalFileDeleteRecord>(PersonalFileDeleteRecord.class);
+	public HbGroupWorkspaceFileDeleteRecordDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspaceFileDeleteRecord>(GroupWorkspaceFileDeleteRecord.class);
 	}
 	
 	/**
@@ -55,25 +56,27 @@ public class HbPersonalFileDeleteRecordDAO implements PersonalFileDeleteRecordDA
     }
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personalFileDeleteRecordCount");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceFileDeleteRecordCount");
 		return (Long)q.uniqueResult();
 	}
 
-	public PersonalFileDeleteRecord getById(Long id, boolean lock) {
+	public GroupWorkspaceFileDeleteRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-	public void makePersistent(PersonalFileDeleteRecord entity) {
+	public void makePersistent(GroupWorkspaceFileDeleteRecord entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
-	public void makeTransient(PersonalFileDeleteRecord entity) {
+	public void makeTransient(GroupWorkspaceFileDeleteRecord entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	
 	public int deleteAll() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personalFileDeleteRecordDeleteAll");
-		return  q.executeUpdate();
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceFileDeleteRecordDeleteAll");
+		return q.executeUpdate();
 	}
+
 
 }
