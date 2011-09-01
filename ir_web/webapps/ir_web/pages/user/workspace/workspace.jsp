@@ -322,7 +322,7 @@
 	</div>
 	<!--  end the publication dialog -->  
 	      
-	<!-- Dialog box for uploading a file -->
+	<!-- Dialog box for uploading a file for personal workspace -->
     <div id="singleFileUploadDialog" class="hidden">
 	    <div class="hd">File Upload</div>
 		<div class="bd">
@@ -338,7 +338,29 @@
 		    </form>
 		</div>
 	</div>
-	<!--  end file upload dialog -->   
+	<!--  end file upload dialog for personal workspace -->   
+	
+	<!-- Dialog box for uploading a file for group workspace -->
+    <div id="groupWorkspaceSingleFileUploadDialog" class="hidden">
+	    <div class="hd">File Upload</div>
+		<div class="bd">
+		    <form id="groupWorkspaceSingleFileUploadForm" name="groupWorkspaceSingleFileUploadForm" 
+		                 method="post" enctype="multipart/form-data"
+		                 action="user/singleFileGroupWorkspaceUpload.action">
+		              
+		         <input type="hidden" id="file_upload_group_workspace_parent_folder_id" 
+		                     name="folderId" value="${parentFolderId}"/>
+
+		         <input type="hidden" id="file_upload_group_workspace_group_id" 
+		                     name="groupWorkspaceId" value="${groupWorkspaceId}"/>
+		                     
+		         <div id="group_workspace_upload_form_fields">
+		              <c:import url="group_workspace/group_workspace_single_file_upload_frag.jsp"/>
+		         </div>
+		    </form>
+		</div>
+	</div>
+	<!--  end file upload dialog for personal workspace -->
 	       
 	       
     <!--  wait div -->

@@ -837,8 +837,7 @@ YAHOO.ur.folder =
                 var cObj = YAHOO.util.Connect.asyncRequest('post',
                       singleFileUploadAction, callback);
                 
-                // clear the upload form of the file name
-                YAHOO.ur.folder.clearSingleFileUploadForm();
+               
             }
 	    };
 	
@@ -851,8 +850,9 @@ YAHOO.ur.folder =
 	
 	    var handleSuccess = function(o) 
 	    {
+	    	var response = o.responseText;
 	        YAHOO.ur.folder.destroyFolderMenus();
-	        var response = o.responseText;
+	       
 	        
 	        // check for the timeout - forward user to login page if timout
 	        // occured

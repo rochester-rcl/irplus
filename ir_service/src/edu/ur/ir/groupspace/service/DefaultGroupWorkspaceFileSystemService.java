@@ -78,6 +78,19 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	}
 	
 	/**
+	 * Get the group workspace file.
+	 * 
+	 * @param id - id of the group workspace file
+ 	 * @param lock - if set to true upgrade the lock mode.
+ 	 * 
+	 * @return - the group workspace file or null if not found
+	 */
+	public GroupWorkspaceFile getFile(Long id, boolean lock)
+	{
+		return groupWorkspaceFileDAO.getById(id, lock);
+	}
+	
+	/**
 	 * Get the path to the folder.
 	 * 
 	 * @param parentFolderId - id of the parent folder
@@ -386,7 +399,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      * @param deletingUser - user performing the delete
      * @param deleteReason - reason for the delete.
      */
-	public void deleteFolder(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason) {
+	public void delete(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason) {
 		List<GroupWorkspaceFile> files = groupWorkspaceFolderDAO.getAllFilesForFolder(folder);
 
 		// delete all the files within folder and sub folders

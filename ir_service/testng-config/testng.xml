@@ -63,6 +63,8 @@
 		    
 		    <class name="edu.ur.ir.oai.metadata.provider.service.DefaultResumptionTokenTest"/>
 		    
+		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemServiceTest"/>
+		    
 		    
 
 		</classes>

@@ -126,7 +126,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		}
 		
 	    groupWorkspace = groupWorkspaceService.get(id,false);
-	    groupWorkspaceService.delete(groupWorkspace);
+	    groupWorkspaceService.delete(groupWorkspace, user);
 	    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 
 		return "deleted";

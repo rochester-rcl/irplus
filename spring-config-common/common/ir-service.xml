@@ -880,8 +880,9 @@
    <!-- Group workspace service -->
    <!-- ****************************************** --> 
    <bean id="groupWorkspaceService"
-         class="edu.ur.ir.groupspace.service.DefaultGroupSpaceService">
+         class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceService">
          <property name="groupWorkspaceDAO" ref="groupWorkspaceDAO"/>
+         <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
    </bean>
    
    
@@ -893,6 +894,8 @@
        <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
        <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
        <property name="groupWorkspaceFileDeleteRecordDAO" ref="groupWorkspaceFileDeleteRecordDAO"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="securityService" ref="securityService"/>
    </bean>
    
    <!-- ****************************************** --> 

@@ -74,7 +74,7 @@ public class HbGroupWorkspaceFileDeleteRecordDAO implements GroupWorkspaceFileDe
 
 	
 	public int deleteAll() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceFileDeleteRecordDeleteAll");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceFileDeleteRecordAll");
 		return q.executeUpdate();
 	}
 

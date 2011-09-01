@@ -57,7 +57,7 @@ import edu.ur.util.FileUtil;
 
 
 /**
- * Test the service methods for the default user services.
+ * Test the service methods for the default user file system services.
  * 
  * @author Nathan Sarr
  * 

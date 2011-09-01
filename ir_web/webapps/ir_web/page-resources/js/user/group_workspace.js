@@ -26,7 +26,7 @@ var updateGroupWorkspaceAction = basePath + 'user/updateGroupWorkspace.action';
 var newGroupWorkspaceAction = basePath + 'user/createGroupWorkspace.action';
 var deleteGroupWorkspaceAction = basePath + 'user/deleteGroupWorkspace.action';
 var getGroupWorkspaceAction = basePath + 'user/getGroupWorkspace.action';
-var viewGroupWorkspaceAction =  basePath + 'user/viewGroupWorkspaceFolders.action';
+var viewGroupWorkspaceFolderAction =  basePath + 'user/viewGroupWorkspaceFolders.action';
 var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
 
 //If there is no bookmarked state, assign the default state:
@@ -365,7 +365,7 @@ YAHOO.ur.user.group_workspace = {
 	    };
 
     
-        YAHOO.util.Connect.asyncRequest('GET', viewGroupWorkspaceAction + 
+        YAHOO.util.Connect.asyncRequest('GET', viewGroupWorkspaceFolderAction + 
         		'?groupWorkspaceId=' + workspaceId +  '&bustcache=' + new Date().getTime(),
           {success: handleSuccess, failure: handleFailure});
     },
@@ -394,6 +394,8 @@ YAHOO.ur.user.group_workspace = {
         // update the values
         document.getElementById('groupFolderForm_parentFolderId').value = parentFolderId;
         document.getElementById('groupFolderForm_workspaceId').value = groupWorkspaceId;
+        document.getElementById('file_upload_group_workspace_parent_folder_id').value = parentFolderId;
+        document.getElementById('file_upload_group_workspace_group_id').value = groupWorkspaceId;
     },
 	
     /**
@@ -437,7 +439,8 @@ YAHOO.ur.user.group_workspace = {
 		    // check for the timeout - forward user to login page if timeout
 	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {       		 	   
+	        {  
+	        	 YAHOO.ur.util.wait.waitDialog.hide();
 	            //get the response from adding a folder
 	            var response = o.responseText;
 	            var folderForm = document.getElementById('groupFolderDialogFields');
@@ -459,10 +462,18 @@ YAHOO.ur.user.group_workspace = {
 	            else
 	            {
 	            	workspaceId = document.groupFolderForm.groupWorkspaceId.value;
+	            	parentFolderId = document.groupFolderForm.parentFolderId.value;
+	            	
 	            	YAHOO.ur.user.group_workspace.groupFolderDialog.hide();
 	            	YAHOO.ur.user.group_workspace.clearFolderForm();
-		            YAHOO.ur.util.wait.waitDialog.hide();
-		            YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	            	if( parentFolderId == null || parentFolderId < 0 )
+	            	{
+		                YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	            	}
+	            	else
+	            	{
+	            		YAHOO.ur.user.group_workspace.getFolderById(parentFolderId, -1);
+	            	}
 	            }
 	           
 	        }
@@ -628,7 +639,216 @@ YAHOO.ur.user.group_workspace = {
         YAHOO.util.Connect.asyncRequest('POST', deleteGroupWorkspaceFolderAction,
           {success: handleSuccess, failure: handleFailure});
 	},
- 	
+	
+    /**
+     *  Function that retireves folder information
+     *  based on the given folder id.  If a file id is passed in
+     *  then the brower location will be pointed to for the file download.  
+     *  This is required to work for all browsers Safari/IE/Chrome/Fire Fox.
+     *
+     *  folderId - The folder id used to get the folder.
+     *  fileId - id of the file a -1 indicates no file id 
+     */
+    getFolderById : function(folderId, fileId)
+    {
+    	
+		// handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            //alert(o.responseText);
+	            document.getElementById('group_workspaces').innerHTML = response;
+	            
+	            YAHOO.ur.user.group_workspace.clearHiddenWorkspaceInfo();
+	            YAHOO.ur.user.group_workspace.insertHiddenGroupWorkspaceFolderInfo();
+	            
+	            // this is for capturing history
+	            // it may fail if this is not an A grade browser so we need to
+	            // catch the error.
+	            // this will store the folder Id in the URL
+	            try 
+	            {
+	            	// do not remove the string conversion on folder id otherwise an error occurs
+	                //YAHOO.util.History.navigate( "groupWorkspaceFolderModule", folderId + "" );
+	            } 
+	            catch ( e ) 
+	            {
+	                // history failed
+	            }
+	            
+	            // only call this if we do not need to download a file
+	            // otherwise a javascript error will occur when chaning the window location
+	            if( fileId == -1 )
+	            {
+	                YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+	            }
+	            else
+	            {
+	            	alert('download file');
+	            	//window.location.href= basePath + 'user/personalFileDownload.action' + '?personalFileId=' +fileId;
+	            }
+	            YAHOO.ur.util.wait.waitDialog.hide();
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('get group workspace folder by id failure '  + o.status + ' status text ' + o.statusText);
+	    };
+
+	    //destroy the folder menus
+        //YAHOO.ur.folder.destroyFolderMenus();
+    
+      
+        //set the folder id
+        document.getElementById('groupFoldersParentFolderId').value = folderId;
+	    
+	    YAHOO.util.Connect.setForm('groupFolders');
+    
+        YAHOO.util.Connect.asyncRequest('POST', viewGroupWorkspaceFolderAction,
+          {success: handleSuccess, failure: handleFailure});
+    },
+    
+    /**
+     * Function to upload a single file
+     */
+    singleFileUpload : function()
+    {
+	    // Define various event handlers for Dialog
+	    var handleSubmit = function() 
+	    {
+	        // action to perform when submitting the news items.
+            var groupFileUploadAction = basePath + 'user/groupWorkspaceSingleFileUpload.action';
+	        YAHOO.util.Connect.setForm('groupWorkspaceSingleFileUploadForm', true, true);
+	    	
+	        if( YAHOO.ur.user.group_workspace.singleFileUploadDialog.validate() )
+	        {
+	        	YAHOO.ur.user.group_workspace.singleFileUploadDialog.hide();
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
+	            
+	            //based on what we need to do (update or create a 
+	            // new news item) based on the action.
+                var cObj = YAHOO.util.Connect.asyncRequest('post',
+                      groupFileUploadAction, callback);
+                // clear the upload form of the file name
+                
+                // FIX THIS
+                //YAHOO.ur.user.group_workspace.clearSingleFileUploadForm();
+            }
+	    };
+	
+	    // handle a cancel of the adding news item dialog
+	    var handleCancel = function() 
+	    {
+	    	YAHOO.ur.user.group_workspace.singleFileUploadDialog.hide();
+	    	//YAHOO.ur.user.group_workspace.clearSingleFileUploadForm();
+	    };
+	
+	    var handleSuccess = function(o) 
+	    {
+	    	//YAHOO.ur.user.group_workspace.destroyFolderMenus();
+	        var response = o.responseText;
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var uploadForm = document.getElementById('group_workspace_upload_form_fields');
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
+	            try{
+	                // determine if the add/edit was a success
+	                var success = document.getElementById("group_workspace_file_added").value;
+	                //if the content type was not added then show the user the error message.
+	                // received from the server
+	                if( success == "false" )
+	                {
+	        	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        	    	YAHOO.ur.user.group_workspace.singleFileUploadDialog.showDialog();
+	                }
+	                else
+	                {
+	                    // we can clear the upload form and get the pictures
+	                	
+	                	//FIX THIS
+	                	//YAHOO.ur.user.group_workspace.clearSingleFileUploadForm();
+	                    var folderId = document.getElementById("groupFolderForm_parentFolderId").value;
+	                    YAHOO.ur.user.group_workspace.getFolderById(folderId, -1); 
+	        	    	YAHOO.ur.util.wait.waitDialog.hide();
+	                }
+	            }
+	            catch(err)
+	            {
+	    	    	  YAHOO.ur.util.wait.waitDialog.hide();
+	            	  txt="There was an error on this page.\n\n";
+	            	  txt+="Error description: " + err + "\n\n";
+	            	  txt+="Click OK to continue.\n\n";
+	            	  alert(txt);
+	            }
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('group workspace single file upload submission failed ' + o.status);
+	    };
+
+	    // Instantiate the Dialog
+	    // make it modal - 
+	    // it should not start out as visible - it should not be shown until 
+	    // new news item button is clicked.
+	
+	    YAHOO.ur.user.group_workspace.singleFileUploadDialog = new YAHOO.widget.Dialog('groupWorkspaceSingleFileUploadDialog', 
+        { width : "850px",
+		  visible : false, 
+		  modal : true,
+		  buttons : [ { text:'Submit', handler:handleSubmit, isDefault:true },
+					  { text:'Cancel', handler:handleCancel } ]
+        } );
+		
+        //shows
+        //and centers the dialog box
+	    YAHOO.ur.user.group_workspace.singleFileUploadDialog.showDialog = function()
+        {
+	    	YAHOO.ur.user.group_workspace.singleFileUploadDialog.center();
+	    	YAHOO.ur.user.group_workspace.singleFileUploadDialog.show();
+            YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+        }
+    
+ 	    // Validate the entries in the form to require that a name is entered
+	    YAHOO.ur.user.group_workspace.singleFileUploadDialog.validate = function() 
+	    {
+	        var fileName = document.getElementById('group_workspace_single_file_upload').value;
+		    if (fileName == "" || fileName == null) 
+		    {
+		        alert('A File name must be entered');
+			    return false;
+		    } 
+		    else 
+		    {
+			    return true;
+		    }
+	    };
+
+	    // Wire up the success and failure handlers
+	    var callback = {  upload: handleSuccess, failure: handleFailure };
+			
+	    // Render the Dialog
+	    YAHOO.ur.user.group_workspace.singleFileUploadDialog.render();
+
+    },
+    
+  	
 	// initialize the page
 	// this is called once the dom has
 	// been created
@@ -638,7 +858,7 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.createDeleteGroupWorkspaceDialog();
 	    YAHOO.ur.user.group_workspace.createFolderDialog();	
 	    YAHOO.ur.user.group_workspace.createFolderDeleteConfirmDialog();
-	    
+	    YAHOO.ur.user.group_workspace.singleFileUpload();
 	    
         // register the history system
         YAHOO.util.History.register("groupWorkspaceFolderModule", 

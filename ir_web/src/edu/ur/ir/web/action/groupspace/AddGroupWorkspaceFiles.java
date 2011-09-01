@@ -45,11 +45,16 @@ import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.FileUploadInfo;
 
+/**
+ * Add files to a group workspace.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware{
 
-
-	/* eclipse generated id */
-	private static final long serialVersionUID = 5884172682874434022L;
+	/* eclipse generated id  */
+	private static final long serialVersionUID = -1222831812927650995L;
 
 	/*  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(AddGroupWorkspaceFiles.class);

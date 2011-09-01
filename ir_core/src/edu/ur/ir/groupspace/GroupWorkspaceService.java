@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
 /**
@@ -50,9 +51,10 @@ public interface GroupWorkspaceService extends Serializable{
     /**
      * Delete the group space from the system.
      * 
-     * @param groupWorkspace
+     * @param groupWorkspace  - workspace to delete
+     * @param user - user performing the delete
      */
-    public void delete(GroupWorkspace groupWorkspace);
+    public void delete(GroupWorkspace groupWorkspace, IrUser user);
     
     /**
      * Get a count of the group spaces in the system.

@@ -55,6 +55,8 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	/* The folder that owns the listed files and folders */
 	private Long parentFolderId;	
 
+
+
 	/* type of sort [ ascending | descending ] 
 	 *  this is for incoming requests */
 	private String sortType = "desc";
@@ -100,8 +102,10 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	public String getTable()
 	{
 		user = userService.getUser(userId, false);
+		log.debug("parent folder id = " + parentFolderId);
 		if(parentFolderId != null && parentFolderId > 0)
 		{
+			
 		    GroupWorkspaceFolder parent = groupWorkspaceFileSystemService.getFolder(parentFolderId, false);
 		    //if( !parent.getOwner().getId().equals(userId))
 		    //{
@@ -147,7 +151,7 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			    //	deleteFileFromIndex(aFile, user);
 			    //}
 			    
-			    groupWorkspaceFileSystemService.deleteFolder(gf, user, "OWNER DELETING FOLDER - " + gf.getFullPath());
+			    groupWorkspaceFileSystemService.delete(gf, user, "OWNER DELETING FOLDER - " + gf.getFullPath());
 		    }
 		}
 		
@@ -156,13 +160,13 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			for(int index = 0; index < groupFileIds.length; index++)
 			{
 				log.debug("Deleting file with id " + groupFileIds[index]);
-				//GroupWorkspaceFile pf = groupWorkspaceFileSystemService.getPersonalFile( fileIds[index], false);
+				GroupWorkspaceFile gf = groupWorkspaceFileSystemService.getFile( groupFileIds[index], false);
 				// if( !pf.getOwner().getId().equals(userId))
 				// {
 				//   	return "accessDenied";
 				// }
 				//deleteFileFromIndex(pf, user);
-				//userFileSystemService.delete(pf, user, "OWNER DELETING FILE");
+				groupWorkspaceFileSystemService.delete(gf, user, "OWNER DELETING FILE");
 			}
 		}
 		createFileSystem();
@@ -434,6 +438,15 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	 */
 	public void setGroupFileIds(Long[] groupFileIds) {
 		this.groupFileIds = groupFileIds;
+	}
+	
+	/**
+	 * Get the parent folder id.
+	 * 
+	 * @return
+	 */
+	public Long getParentFolderId() {
+		return parentFolderId;
 	}
 
 }

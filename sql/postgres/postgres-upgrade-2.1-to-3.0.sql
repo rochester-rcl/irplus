@@ -455,3 +455,39 @@ ALTER TABLE ir_group_workspace.group_workspace_file_delete_record OWNER TO ir_pl
 -- The group workspace file delete record sequence
 CREATE SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
 ALTER TABLE ir_group_workspace.group_workspace_file_delete_record_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace Group Acess control list table.
+-- ---------------------------------------------
+CREATE TABLE ir_security.group_workspace_group_control_entry
+(
+    group_workspace_group_control_entry_id BIGINT PRIMARY KEY,
+    group_workspace_group_id BIGINT NOT NULL,
+    acl_id BIGINT NOT NULL,
+    version INTEGER,
+    UNIQUE (group_workspace_group_id , acl_id),
+    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group(group_workspace_group_id),
+    FOREIGN KEY (acl_id) REFERENCES ir_security.acl(acl_id)
+);
+ALTER TABLE ir_security.group_workspace_group_control_entry OWNER TO ir_plus;
+
+-- The object identity sequence
+CREATE SEQUENCE ir_security.group_workspace_group_control_entry_seq ;
+ALTER TABLE ir_security.group_workspace_group_control_entry_seq OWNER TO ir_plus;
+
+
+
+-- ---------------------------------------------
+-- Permissions for the user group control entries
+-- ---------------------------------------------
+CREATE TABLE ir_security.group_workspace_group_control_entry_permission
+(
+    group_workspace_group_control_entry_id BIGINT NOT NULL,
+    class_type_permission_id BIGINT NOT NULL,
+    PRIMARY KEY (group_workspace_group_control_entry_id, class_type_permission_id),
+    FOREIGN KEY (group_workspace_group_control_entry_id) REFERENCES 
+       ir_security.group_workspace_group_control_entry(group_workspace_group_control_entry_id),
+    FOREIGN KEY (class_type_permission_id) 
+        REFERENCES ir_security.class_type_permission(class_type_permission_id)
+);
+ALTER TABLE ir_security.group_workspace_group_control_entry_permission OWNER TO ir_plus;
