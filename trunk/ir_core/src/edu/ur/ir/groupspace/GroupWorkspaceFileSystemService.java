@@ -28,9 +28,19 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @param id - id of the group workspace folder
  	 * @param lock - if set to true upgrade the lock mode.
  	 * 
-	 * @return - the group workspace folder
+	 * @return - the group workspace folder or null if not found
 	 */
 	public GroupWorkspaceFolder getFolder(Long id, boolean lock);
+	
+	/**
+	 * Get the group workspace file.
+	 * 
+	 * @param id - id of the group workspace file
+ 	 * @param lock - if set to true upgrade the lock mode.
+ 	 * 
+	 * @return - the group workspace file or null if not found
+	 */
+	public GroupWorkspaceFile getFile(Long id, boolean lock);
 	
 	/**
 	 * Get the path to the folder.
@@ -153,5 +163,14 @@ public interface GroupWorkspaceFileSystemService extends Serializable
      * @param deletingUser - user performing the delete
      * @param deleteReason - reason for the delete.
      */
-    public void deleteFolder(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason);
+    public void delete(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason);
+    
+	/**
+	 * Delete a group workspace file.
+	 * 
+	 * @param gf - group workspace file
+	 * @param deletingUser - user deleting the file
+	 * @param deleteReason - reason for deleting the group workspace file
+	 */
+	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason);
 }

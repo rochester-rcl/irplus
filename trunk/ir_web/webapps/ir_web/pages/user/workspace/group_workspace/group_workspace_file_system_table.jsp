@@ -31,19 +31,21 @@
    <tr>
        <td align="left" width="75%">
            <strong>Path:&nbsp;/
-	          <span class="folderBtnImg">&nbsp;</span>
+	          <span class="groupImg">&nbsp;</span>
 	          <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaces()">Group Workspaces</a> /
 	          <c:if test="${!empty folderPath}">
-                   <a href="javascript:YAHOO.ur.groupFolder.getFolderById(0, -1)">${groupWorkspace.name}</a>&nbsp;/
+	              <span class="groupImg">&nbsp;</span>
+                   <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaceById(${groupWorkspace.id})">${groupWorkspace.name}</a>&nbsp;/
                </c:if>
                <c:if test="${empty folderPath}">
+                   <span class="groupImg">&nbsp;</span>
                    ${groupWorkspace.name}&nbsp;/
                </c:if>
 	    
                <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span>
                    <c:if test="${folder.id != parentFolderId}">
-                       <a href="javascript:YAHOO.ur.groupFolder.getFolderById(${folder.id}, -1)">${folder.name}</a>&nbsp;/
+                       <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${folder.id},-1)">${folder.name}</a>&nbsp;/
                    </c:if>
                    <c:if test="${folder.id == parentFolderId}">
                        ${folder.name}&nbsp;/
@@ -63,7 +65,7 @@
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
 	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
-	                       onclick="YAHOO.ur.folder.singleFileUploadDialog.showDialog();"
+	                       onclick="YAHOO.ur.user.group_workspace.singleFileUploadDialog.showDialog();"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="addSingleFileButton"><span class="pageAddBtnImg">&nbsp;</span>Add File</button>
@@ -158,22 +160,26 @@
 	                            <button type="button"  class="table_button" 
 	                                onmouseover="this.className='table_buttonover';"
  		                            onmouseout="this.className='table_button';"
-	                                onclick="javascript:YAHOO.ur.folder.buildFolderMenu(${fileSystemObject.id}, 
-	                                this,'folder_'+ ${fileSystemObject.id}, 
-	                                'folder_menu_' + ${fileSystemObject.id});"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+	                                ><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
 	                         </c:if>
 	                     
 	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             <input type="checkbox" name="groupFileIds" id="file_checkbox_${fileSystemObject.id}" 
-	                                 value="${fileSystemObject.id}"/>
+	                              <button type="button" class="table_button"
+	                                 onmouseover="this.className='table_buttonover';"
+ 		                             onmouseout="this.className='table_button';"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
 	                         </c:if>
                         </urstb:td>
                         
                         <urstb:td>
-                            ${fileSystemObject.name}  
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id}, -1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+	                        </c:if>
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+		                        ${fileSystemObject.name}
+	                         </c:if>
                         </urstb:td>
                         
                         <urstb:td>

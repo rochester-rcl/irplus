@@ -16,12 +16,19 @@
 
 package edu.ur.ir.groupspace.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
 /**
@@ -30,13 +37,19 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class DefaultGroupSpaceService implements GroupWorkspaceService {
+public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	
 	/* eclipse generated id */
 	private static final long serialVersionUID = 1L;
 	
 	/* group space data access object  */
 	private GroupWorkspaceDAO groupWorkspaceDAO;
+	
+	/* service to deal with group workspace file system information */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
+
+	/*  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceService.class);
 
 	/**
 	 * Save the group space to the system.
@@ -66,8 +79,10 @@ public class DefaultGroupSpaceService implements GroupWorkspaceService {
      * 
      * @param groupSpace
      */
-    public void delete(GroupWorkspace groupSpace)
+    public void delete(GroupWorkspace groupSpace, IrUser user)
     {
+    	// delete all files within the group workspace
+        deleteRootFiles(groupSpace, user);
     	groupWorkspaceDAO.makeTransient(groupSpace);
     }
     
@@ -128,5 +143,45 @@ public class DefaultGroupSpaceService implements GroupWorkspaceService {
 	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId)
 	{
 		return groupWorkspaceDAO.getGroupWorkspacesForUser(userId);
+	}
+	
+	/**
+	 * Get the group workpsace file system service.
+	 * 
+	 * @return the group workspace file system service.
+	 */
+	public GroupWorkspaceFileSystemService getGroupWorkspaceFileSystemService() {
+		return groupWorkspaceFileSystemService;
+	}
+
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService - set the group workspace file system service.
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+	
+	/**
+	 * Delete the root files for the user.
+	 * 
+	 * @param user
+	 * @param deletingUser
+	 */
+	private void deleteRootFiles(GroupWorkspace workspace, IrUser deletingUser)
+	{
+		log.debug("Delete root files");
+		// delete the users root files
+		Set<GroupWorkspaceFile> files = new HashSet<GroupWorkspaceFile>();
+		files.addAll(workspace.getRootFiles());
+		for(GroupWorkspaceFile wf : files)
+		{
+			workspace.removeRootFile(wf);
+			groupWorkspaceFileSystemService.delete(wf, deletingUser, "DELETING USER");
+	       
+		}
+		log.debug("DONE deleting root files");
 	}
 }

@@ -25,9 +25,10 @@
 
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-     -->
- 	<property name="yui.unzip" value="true"/>
  	
+ -->
+ 	<property name="yui.unzip" value="true"/>
+   
 
 
 	<!-- always disable emma -->
@@ -117,6 +118,7 @@
     <!-- Set the location where the libraries this project is dependent -->
     <path id="libraries">
 	  <fileset dir="${lib.dir}" includes="*.jar" excludes="emma*"/>
+      <fileset dir="../marc4j/2.4" includes="*.jar"/>	
     </path>
 
     <!-- Copy non java resources -->
@@ -258,6 +260,7 @@
 
         <copy todir="${webapp.lib.dir}">
 	        <fileset refid="web.libs"/>
+        	<fileset dir="../marc4j/2.4" includes="*.jar"/>
         </copy>
 
    	    <!-- create the web inf directory -->
@@ -275,7 +278,7 @@
 	<!-- unzip the YUI files  -->
 	<target name="prep-yui"  if="yui.unzip" description="--> unzips the yui libraries">
 		<mkdir dir="${basedir}/yui-unzip"/>
-		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.8.2.zip"/>
+		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.9.0.zip"/>
 	</target>
 	
 	<!-- copy the YUI files  -->
@@ -318,7 +321,7 @@
 		    <fileset dir="${custom.build.dir}/ir_web/spring-config/local"/>
 		</copy>
 		<copy todir="${production.staging.dir}/lib/" overwrite="true" 
-			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-2.0.jar"/>
+			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-2.1.jar"/>
 		
 		<copy todir="${production.staging.dir}/web-inf/" overwrite="true" 
 		    file="${custom.build.dir}/properties/production/ir_plus.properties"/>
@@ -357,6 +360,7 @@
 		<!--copy the necessary library directories -->
         <copy todir="${production.staging.dir}/lib">
 	        <fileset refid="web.libs"/>
+        	<fileset dir="../marc4j/2.4" includes="*.jar"/>
         </copy>
 	
 		<!--copy the necessary jsp files and resources -->

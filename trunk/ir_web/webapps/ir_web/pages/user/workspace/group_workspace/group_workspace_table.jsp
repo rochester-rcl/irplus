@@ -30,12 +30,13 @@
    <table width="100%">
    <tr>
        <td align="left" width="75%">
-           
-       </td>
-       <td align="right" width="25%">
-       </td>
+           <strong>Path:&nbsp;/
+	          <span class="groupImg">&nbsp;</span>Group Workspaces /   
+           </strong>
+       </td>      
    </tr>
    </table>
+   
    
    
   <div align="right">
@@ -81,7 +82,7 @@
 	                        <div id="group_workspace_${groupWorkspace.id}">
 	                             <button type="button"  class="table_button" 
 	                                onmouseover="this.className='table_buttonover';"
- 		                            onmouseout="this.className='table_button';"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+ 		                            onmouseout="this.className='table_button';"><span class="groupImg"></span><img src="${downArrow}"/></button>
 	                        </div>
                         </urstb:td>
                         <urstb:td>

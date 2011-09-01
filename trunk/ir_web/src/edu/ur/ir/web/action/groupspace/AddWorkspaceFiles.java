@@ -1,21 +1,4 @@
-/**  
-   Copyright 2008 University of Rochester
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/  
-
-
-package edu.ur.ir.web.action.user;
+package edu.ur.ir.web.action.groupspace;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,40 +14,41 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.transformer.ThumbnailTransformerService;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
-import edu.ur.ir.security.PermissionNotGrantedException;
-import edu.ur.ir.user.FileSharingException;
-import edu.ur.ir.user.FolderAutoShareInfo;
-import edu.ur.ir.user.FolderInviteInfo;
-import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.PersonalFile;
-import edu.ur.ir.user.PersonalFolder;
-import edu.ur.ir.user.UserFileSystemService;
-import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
+
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.FileUploadInfo;
 
 /**
- * Add personal files to the specified folder.
+ * Upload files to a workspace
  * 
  * @author Nathan Sarr
  *
  */
-public class AddPersonalFiles extends ActionSupport implements UserIdAware, Preparable{
+public class AddWorkspaceFiles extends ActionSupport implements UserIdAware, Preparable{
 
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 8046524638321276009L;
 
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(AddPersonalFiles.class);
+	private static final Logger log = Logger.getLogger(AddWorkspaceFiles.class);
 	
-	/* Personal Folder the user will be adding files to */
-	PersonalFolder personalFolder;
+	/* Group Folder the user will be adding files to */
+	private GroupWorkspaceFolder groupWorkspaceFolder;
+
+	/* group workspace the user will be adding the files to */
+	private GroupWorkspace groupWorkspace;
 	
 	/* The id of the user to add files to  */
 	private Long userId;
@@ -72,12 +56,12 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	/* the users folder to add the files to */
 	private Long folderId;
 	
+	/* id of the group workspace */
+	private Long groupWorkspaceId;
+
 	/* Service for dealing with user information  */
 	private UserService userService;
 	
-	/*  Service for dealing with user file systems */
-	private UserFileSystemService userFileSystemService;
-
 	/* description of the file  */
 	private String[] userFileDescription;
 	
@@ -92,7 +76,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				
 	/* Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
-	
 	
 	/* Files not added due to errors */
 	LinkedList<FileUploadInfo> filesNotAdded = new LinkedList<FileUploadInfo>();
@@ -109,14 +92,14 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	/* service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
 	
-	/* invite user service. */
-	private InviteUserService inviteUserService;
+	/* service to deal with group workspace file system */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 
+	/* service to deal with group workspaces */
+	private GroupWorkspaceService groupWorkspaceService;
 	
 	/* service to send emails when an error occurs */
 	private ErrorEmailService errorEmailService;
-
-
 
 	/**
 	 * Set the user id.
@@ -130,7 +113,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	public String execute()
 	{
 		IrUser user = userService.getUser(userId, false);
-		//only authoring roles can add personal files
+		//only authoring roles can add group workspace files
 		if( !user.hasRole(IrRole.AUTHOR_ROLE))
 		{
 			return("accessDenied");
@@ -156,27 +139,27 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 			return("accessDenied");
 		}
 		
-		if( personalFolder != null && !personalFolder.getOwner().getId().equals(userId))
+		
+		// THIS WILL NEED to change to see if the user has add file privileges
+		if( groupWorkspaceFolder != null && !groupWorkspaceFolder.getOwner().getId().equals(userId))
     	{
 			//destination does not belong to user
-    		log.error("user does not own folder = " + personalFolder + " user = " + user);
+    		log.error("user does not own folder = " + groupWorkspaceFolder + " user = " + user);
     		return("accessDenied");
     		
     	}
 		
-		LinkedList<PersonalFile> addedFiles = new LinkedList<PersonalFile>();
+		LinkedList<GroupWorkspaceFile> addedFiles = new LinkedList<GroupWorkspaceFile>();
 		
-		log.debug("file != null " + (file != null) );
 		if( file != null)
 		{
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 			
-			log.debug("file length = " + file.length);
 			for( int index = 0; index < file.length; index++)
 			{
 				
-				PersonalFile pf = null;
+				GroupWorkspaceFile gf = null;
 				
 				FileUploadInfo fileUploadInfo = new FileUploadInfo(fileFileName[index], 
 						userFileDescription[index]);
@@ -189,12 +172,12 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				    {
 					    log.debug( "Creating non EMPTY file " + fileFileName[index]);
 					    try {
-							pf = createNonEmptyFile( repository,
+							gf = createNonEmptyFile( repository,
 									file[index],
 									user, 
 									fileFileName[index],
 									userFileDescription[index]);
-							addedFiles.add(pf);
+							addedFiles.add(gf);
 						} catch (DuplicateNameException e) {
 							
 							filesNotAdded.add(fileUploadInfo);
@@ -205,15 +188,17 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				    else
 				    {
 					    log.debug( "Creating EMPTY file " + fileFileName[index]);
-					    if( personalFolder == null)
+					    // add to root level
+					    if( groupWorkspaceFolder == null && groupWorkspace != null)
 					    {
 					        try
 					        {
-					            pf = userFileSystemService.addFileToUser(repository, 
+					            gf = groupWorkspaceFileSystemService.addFile(repository, 
+					            groupWorkspace,
 						        user, 
 						        fileFileName[index],
 						        userFileDescription[index] );
-					            addedFiles.add(pf);
+					            addedFiles.add(gf);
 					        }
 					        catch(DuplicateNameException e)
 					        {
@@ -222,15 +207,16 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 					    	    illegalFileNames.add(fileUploadInfo);
 					        }
 					    }
-					    else
+					    else if(groupWorkspaceFolder != null)
 					    {
 					    	try
 					    	{
-					    	     pf = userFileSystemService.addFileToUser(repository,
-					    			 personalFolder,
+					    	     gf = groupWorkspaceFileSystemService.addFile(repository,
+					    			 groupWorkspaceFolder,
+					    			 user,
 					    			 fileFileName[index],
 									 userFileDescription[index]);
-					    	     addedFiles.add(pf);
+					    	     addedFiles.add(gf);
 					    	     
 					    	     
 					    	}
@@ -245,54 +231,18 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				}
 			}
 			
-			for( PersonalFile personalFile : addedFiles)
+			for( GroupWorkspaceFile workspaceFile : addedFiles)
 			{
-				userWorkspaceIndexProcessingRecordService.saveAll(personalFile, 
+				userWorkspaceIndexProcessingRecordService.saveAll(workspaceFile, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			}
 			
-			// add the files to the user if the personal folder is not null
-			if( personalFolder != null)
-		    {
-				for(FolderAutoShareInfo info: personalFolder.getAutoShareInfos())
-				{
-					LinkedList<String> emails = new LinkedList<String>();
-					emails.add(info.getCollaborator().getDefaultEmail().getEmail());
-					try {
-						inviteUserService.inviteUsers(personalFolder.getOwner(), emails, info.getPermissions(), addedFiles, "");
-					} catch (FileSharingException e) {
-						// this should never happen so log and send email
-						log.error(e);
-						errorEmailService.sendError(e);
-					} catch (PermissionNotGrantedException e) {
-						// this should never happen so log and send email
-						log.error(e);
-						errorEmailService.sendError(e);
-					}
-				}
-				
-				for(FolderInviteInfo info: personalFolder.getFolderInviteInfos())
-				{
-					LinkedList<String> emails = new LinkedList<String>();
-					emails.add(info.getEmail());
-					try {
-						inviteUserService.inviteUsers(personalFolder.getOwner(), emails, info.getPermissions(), addedFiles, "These files were automatically shared");
-					} catch (FileSharingException e) {
-						// this should never happen so log and send email
-						log.error(e);
-						errorEmailService.sendError(e);
-					} catch (PermissionNotGrantedException e) {
-						// this should never happen so log and send email
-						log.error(e);
-						errorEmailService.sendError(e);
-					}
-				}
-				
-		    }
+			
 		}
 		
 		if( this.getAllFilesAdded() )
 		{
+			log.debug("returning SUCCESS");
 		    return SUCCESS;
 		}
 		else
@@ -305,10 +255,19 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				    illegalFileNameCharacters = illegalFileNameCharacters + " " + ch;
 			    }
 			}
+			log.debug("returning INPUT");
 			return INPUT;
 		}
 	}
 	
+	/**
+	 * Get the group workspace folder.
+	 * 
+	 * @return group workspace folder
+	 */
+	public GroupWorkspaceFolder getGroupWorkspaceFolder() {
+		return groupWorkspaceFolder;
+	}
 
 	public String[] getUserFileDescription() {
 		return userFileDescription;
@@ -343,21 +302,19 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	}
 
 	public void prepare() throws Exception {
+		log.debug("prepare called folder id = " + folderId + " group workspace id = " + groupWorkspaceId);
 		if( folderId != null && folderId > 0 )
 		{
-		    personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
+		    groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(folderId, false);
+		}
+		if( groupWorkspaceId != null )
+		{
+			groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		}
 		
 	}
 
-	public PersonalFolder getPersonalFolder() {
-		return personalFolder;
-	}
-
-	public void setPersonalFolder(PersonalFolder personalFolder) {
-		this.personalFolder = personalFolder;
-	}
-
+	
 	public String[] getFileFileName() {
 		return fileFileName;
 	}
@@ -371,46 +328,41 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		this.repositoryService = repositoryService;
 	}
 
-	private PersonalFile createNonEmptyFile(
+	private GroupWorkspaceFile createNonEmptyFile(
 			Repository repository,
 			File file, 
 			IrUser user, 
 			String fileName, 
 			String description) throws DuplicateNameException, IllegalFileSystemNameException
 	{
-		PersonalFile pf = null;
-		if( personalFolder != null)
+		GroupWorkspaceFile gf = null;
+		if(groupWorkspaceFolder != null)
 		{
-		    pf = userFileSystemService.addFileToUser(repository, 
+		    gf = groupWorkspaceFileSystemService.addFile(repository, 
+		        groupWorkspaceFolder,
+		        user,
 			    file, 
-			    personalFolder,
 			    fileName,
 			    description);
 		}
 		else
 		{
-			pf = userFileSystemService.addFileToUser(repository, 
-				file, 
+			gf = groupWorkspaceFileSystemService.addFile(repository, 
+				groupWorkspace,
 				user,
+				file, 
 				fileName,
 				description );
 		}
 		
-		IrFile irFile = pf.getVersionedFile().getCurrentVersion().getIrFile();
+		IrFile irFile = gf.getVersionedFile().getCurrentVersion().getIrFile();
 	    thumbnailTransformerService.transformFile(repository, irFile);			    
-		return pf;
+		return gf;
 		
 	}
 
 
-	/**
-	 * Set the user file system service.
-	 * 
-	 * @param userFileSystemService
-	 */
-	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
-		this.userFileSystemService = userFileSystemService;
-	}
+
 	
 	/**
 	 * Determine if all the files were added
@@ -485,15 +437,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
-
-	/**
-	 * Set the user invite service.
-	 * 
-	 * @param inviteUserService
-	 */
-	public void setInviteUserService(InviteUserService inviteUserService) {
-		this.inviteUserService = inviteUserService;
-	}
 	
 	/**
 	 * Set the error email service.
@@ -503,4 +446,42 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	public void setErrorEmailService(ErrorEmailService errorEmailService) {
 		this.errorEmailService = errorEmailService;
 	}
+	
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+
+	/**
+	 * Set the group workspace.
+	 * 
+	 * @param groupWorkspaceService
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
+	}
+	
+	/**
+	 * Id of the group workspace.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
+
+	/**
+	 * Set the id of the group workspace.
+	 * 
+	 * @param groupWorkspaceId
+	 */
+	public void setGroupWorkspaceId(Long groupWorkspaceId) {
+		this.groupWorkspaceId = groupWorkspaceId;
+	}
+
 }
