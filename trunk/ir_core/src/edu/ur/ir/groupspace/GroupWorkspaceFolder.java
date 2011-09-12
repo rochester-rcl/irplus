@@ -473,6 +473,16 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceFolder>, FileSystem{
 	}
 	
 	/**
+	 * Get the set of group workspace files.
+	 * 
+	 * @return list of group workspace files
+	 */
+	public Set<GroupWorkspaceFile> getFiles()
+	{
+		return Collections.unmodifiableSet(files);
+	}
+	
+	/**
 	 * List of children for the group folder.
 	 * 
 	 * @param children
@@ -480,6 +490,16 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceFolder>, FileSystem{
 	void setChildren(Set<GroupWorkspaceFolder> children)
 	{
 		this.children = children;
+	}
+	
+	/**
+	 * Set the files for this group workspace folder
+	 * 
+	 * @param files - list of files for this group workspace folder
+	 */
+	void setFiles(Set<GroupWorkspaceFile> files)
+	{
+		this.files = files;
 	}
 
 	/**
@@ -672,4 +692,5 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceFolder>, FileSystem{
 	public void setGroupWorkspace(GroupWorkspace groupSpace) {
 		this.groupWorkspace = groupSpace;
 	}
+	
 }

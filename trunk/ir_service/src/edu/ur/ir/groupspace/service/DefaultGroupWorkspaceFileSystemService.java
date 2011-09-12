@@ -333,8 +333,8 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
         
 		save(folder);
        
-        //securityService.assignOwnerPermissions(personalFile.getVersionedFile(), 
-        //		personalFolder.getOwner());
+        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
+        		user);
         
 		return workspaceFile;
     }
