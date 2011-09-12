@@ -120,6 +120,14 @@ public class FileSystemType implements Serializable, Orderable{
 		{
 			return RESEARCHER_INSTITUTIONAL_ITEM;
 		}
+		else if(systemType.equalsIgnoreCase(GROUP_FOLDER.getType()))
+		{
+			return GROUP_FOLDER;
+		}
+		else if(systemType.equalsIgnoreCase(GROUP_FILE.getType()))
+		{
+			return GROUP_FILE;
+		}
 		
 		return null;
 	}
