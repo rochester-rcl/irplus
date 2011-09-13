@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,9 +14,7 @@
    limitations under the License.
 */  
 
-
-package edu.ur.ir.web.action.user;
-
+package edu.ur.ir.web.action.groupspace;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,32 +27,31 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.FileVersion;
-import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
-import edu.ur.ir.web.util.WebIoUtils;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.WebIoUtils;
 
 /**
- * Allows a personal file to be downloaded.
+ * Allows users to download workspace files.
  * 
  * @author Nathan Sarr
  *
  */
-public class DownloadPersonalFile extends ActionSupport 
+public class GroupWorkspaceFileDownload  extends ActionSupport 
 implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
-
-	/** Eclipse generated id. */
-	private static final long serialVersionUID = 5430030320610916010L;
+	/* eclipse generated id*/
+	private static final long serialVersionUID = -4196678277252147739L;
 
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(DownloadPersonalFile.class);
+	private static final Logger log = Logger.getLogger(GroupWorkspaceFileDownload.class);
 	
 	/**  File to download */
-	private Long personalFileId;
-	
+	private Long groupWorkspaceFileId;
+
 	/** id of the user **/
 	private Long userId;
 	
@@ -64,9 +61,11 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	/** Service for accessing user information */
 	private UserService userService;
 	
-	/** file system managagment services */
-	private UserFileSystemService userFileSystemService;
+	/** group workpsace file services */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 	
+
+
 	/**  Servlet response to write to */
 	private transient HttpServletResponse response;
 	
@@ -84,15 +83,16 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
     public String execute() throws Exception {
 	    log.debug("Trying to download the file to user");
 	    
-        if (personalFileId == null) {
+        if (groupWorkspaceFileId == null) {
         	log.debug("File  id is null");
             return "notFound";
         }
         
-        PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
+        GroupWorkspaceFile workspaceFile = groupWorkspaceFileSystemService.getFile(groupWorkspaceFileId, false);
         IrUser user = userService.getUser(userId, false);
         
-        if( !personalFile.getOwner().equals(user))
+        //FIX this deal with permissions
+        if( !workspaceFile.getVersionedFile().getOwner().equals(user))
         {
         	return "accessDenied";
         }
@@ -100,11 +100,11 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         FileVersion fileVersion = null;
         if( versionNumber != 0)
         {
-            fileVersion = personalFile.getVersionedFile().getVersion(versionNumber);
+            fileVersion = workspaceFile.getVersionedFile().getVersion(versionNumber);
         }
         else
         {
-        	fileVersion = personalFile.getVersionedFile().getCurrentVersion();
+        	fileVersion = workspaceFile.getVersionedFile().getCurrentVersion();
         }
 
         FileInfo fileInfo = null;
@@ -114,7 +114,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         }
         else
         {
-        	throw new IllegalStateException( "File version for personal file id = " + personalFileId +
+        	throw new IllegalStateException( "File version for personal file id = " + groupWorkspaceFileId +
         			" and file version number " + versionNumber + " could not be found");
         }
       
@@ -131,36 +131,6 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	}
 
 	/**
-	 * Get the personal file id
-	 * 
-	 * @return
-	 */
-	public Long getPersonalFileId() {
-		return personalFileId;
-	}
-
-
-	/**
-	 * Set the personal file id.
-	 * 
-	 * @param personalFileId
-	 */
-	public void setPersonalFileId(Long personalFileId) {
-		this.personalFileId = personalFileId;
-	}
-
-
-	/**
-	 * Get the version number for the file 
-	 * 
-	 * @return
-	 */
-	public int getVersionNumber() {
-		return versionNumber;
-	}
-
-
-	/**
 	 * Set the version number for the file
 	 * 
 	 * @param versionNumber
@@ -168,7 +138,6 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	public void setVersionNumber(int versionNumber) {
 		this.versionNumber = versionNumber;
 	}
-
 
 	/**
 	 * Set the user service
@@ -179,19 +148,11 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.userService = userService;
 	}
 
+
 	/** id of the user */
 	public void injectUserId(Long userId)
 	{
 		this.userId = userId;
-	}
-
-	/**
-	 * Set the user file system service.
-	 * 
-	 * @param userFileSystemService
-	 */
-	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
-		this.userFileSystemService = userFileSystemService;
 	}
 
 	/**
@@ -211,5 +172,23 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}
+	
+	/**
+	 * Set the group workspace file id.
+	 * 
+	 * @param groupWorkspaceFileId
+	 */
+	public void setGroupWorkspaceFileId(Long groupWorkspaceFileId) {
+		this.groupWorkspaceFileId = groupWorkspaceFileId;
+	}
 
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
 }
