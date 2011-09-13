@@ -89,4 +89,13 @@
             <result name="input">/pages/user/workspace/group_workspace/group_workspace_single_file_upload_frag.jsp</result>
         </action>
         
+        <!-- download a group workspace file -->
+        <action name="groupWorkspaceFileDownload" 
+            class="edu.ur.ir.web.action.groupspace.GroupWorkspaceFileDownload">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/fileNotFound.jsp</result>
+            <result name="success" type="no-op"/>
+        </action> 
+        
         

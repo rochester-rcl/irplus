@@ -178,7 +178,14 @@
 	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id}, -1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-		                        ${fileSystemObject.name}
+		                        <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
+		                            <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
+		                        </c:url>
+	                            <a href="${groupWorkspaceFileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a>
+	                            <c:if test="${fileSystemObject.versionedFile.locked}">
+	                                <span class="lockBtnImg">&nbsp;</span><div class="smallText">Locked by ${fileSystemObject.versionedFile.lockedBy.username}</div>
+	                            </c:if>
+	                            <c:if test="${fileSystemObject.versionedFile.description != '' && fileSystemObject.versionedFile.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.versionedFile.description}"/></div></c:if>
 	                         </c:if>
                         </urstb:td>
                         

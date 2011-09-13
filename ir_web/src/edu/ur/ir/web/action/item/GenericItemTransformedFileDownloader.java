@@ -162,10 +162,6 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 		this.systemCode = systemCode;
 	}
 
-	public WebIoUtils getWebIoUtils() {
-		return webIoUtils;
-	}
-
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}
