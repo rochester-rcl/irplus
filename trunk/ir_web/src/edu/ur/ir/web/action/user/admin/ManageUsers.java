@@ -77,6 +77,8 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	/** Service for accessing role information */
 	private RoleService roleService;
 
+
+
 	/** Service for accessing department information */
 	private DepartmentService departmentService;
 	
@@ -811,10 +813,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.emailPassword = emailPassword;
 	}
 
-	public RoleService getRoleService() {
-		return roleService;
-	}
-
 	/**
 	 * Get all affiliations
 	 * 
@@ -833,6 +831,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public List<IrRole> getRoles() {
 		List<IrRole> roles = roleService.getAllRoles();
+		log.debug(" rolses size = " + roles.size());
 		Collections.sort(roles, nameComparator);
 		return roles ;
 	}
@@ -1267,6 +1266,13 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return userGroups;
 	}
 
-
+	/**
+	 * Set the role service.
+	 * 
+	 * @param roleService
+	 */
+	public void setRoleService(RoleService roleService) {
+		this.roleService = roleService;
+	}
 
 }

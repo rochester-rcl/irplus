@@ -27,6 +27,9 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 </c:if>
+<c:if test="${totalHits <= 0}">
+   <h3>Viewing: 0 of 0</h3>
+</c:if>
 
 <c:import url="browse_all_users_pager.jsp"/>
 <br/>
