@@ -22,8 +22,8 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInvite;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInviteDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteDAO;
 import edu.ur.order.OrderType;
 
 /**
@@ -33,19 +33,19 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInviteDAO{
+public class HbGroupWorkspaceInviteDAO implements GroupWorkspaceInviteDAO{
 	
 	/* eclipse generated id. */
 	private static final long serialVersionUID = -865713437299976405L;
 	
 	/**  Helper for persisting information using hibernate.  */	
-	private final HbCrudDAO<GroupWorkspaceGroupInvite> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspaceInvite> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbGroupWorkspaceGroupInviteDAO() {
-		hbCrudDAO = new HbCrudDAO<GroupWorkspaceGroupInvite>(GroupWorkspaceGroupInvite.class);
+	public HbGroupWorkspaceInviteDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspaceInvite>(GroupWorkspaceInvite.class);
 	}
 
 	/**
@@ -65,11 +65,11 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceGroupInvite findInviteInfoForToken(String token)
+	public GroupWorkspaceInvite findInviteInfoForToken(String token)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findGroupWorkspaceGroupInviteForToken");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findGroupWorkspaceInviteForToken");
 		q.setParameter("token", token);
-		return (GroupWorkspaceGroupInvite) q.uniqueResult();
+		return (GroupWorkspaceInvite) q.uniqueResult();
 	}
 	
 	/**
@@ -79,9 +79,9 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * @return List of invite information
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceGroupInvite> getInviteInfoByEmail(String email)
+	public List<GroupWorkspaceInvite> getInviteInfoByEmail(String email)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findGroupWorkspaceGroupInviteForEmail");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findGroupWorkspaceInviteForEmail");
 		q.setParameter("email", email.trim().toLowerCase());
 		return q.list();
 	}
@@ -96,7 +96,7 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * @return list of invite infos found
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceGroupInvite> getInviteInfosOrderByGroup(int rowStart,
+	public List<GroupWorkspaceInvite> getInviteInfosOrderByGroup(int rowStart,
 			int maxResults, OrderType orderType)
 	{
 		Query q = null;
@@ -105,19 +105,19 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getGroupWorkspaceGroupInviteOrderByInvitorDesc");
+							"getGroupWorkspaceInviteOrderByInvitorDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getGroupWorkspaceGroupInviteOrderByInvitorAsc");
+							"getGroupWorkspaceInviteOrderByInvitorAsc");
 		}
 
 		q.setFirstResult(rowStart);
 		q.setMaxResults(maxResults);
 		q.setFetchSize(maxResults);
-		return (List<GroupWorkspaceGroupInvite>) q.list();
+		return (List<GroupWorkspaceInvite>) q.list();
 	}
 
 	
@@ -126,7 +126,7 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public GroupWorkspaceGroupInvite getById(Long id, boolean lock) {
+	public GroupWorkspaceInvite getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -136,7 +136,7 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(GroupWorkspaceGroupInvite entity) {
+	public void makePersistent(GroupWorkspaceInvite entity) {
 		hbCrudDAO.makePersistent(entity);
 		
 	}
@@ -146,7 +146,7 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(GroupWorkspaceGroupInvite entity) {
+	public void makeTransient(GroupWorkspaceInvite entity) {
 		hbCrudDAO.makeTransient(entity);
 		
 	}
@@ -157,7 +157,7 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceGroupInviteCount").uniqueResult();
+		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceInviteCount").uniqueResult();
 	}
 
 }

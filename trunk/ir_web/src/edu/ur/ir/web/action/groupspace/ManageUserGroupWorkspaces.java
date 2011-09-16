@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -102,7 +103,21 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String get()
 	{
+		log.debug("get a group space with id = " +  id);
 		groupWorkspace = groupWorkspaceService.get(id, false);
+		
+		IrUser user = userService.getUser(userId, false);
+		// only owners and admins can delete  group workspaces
+		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+		
+		log.debug("workspace user = " + workspaceUser);
+		if( !user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+		    if( workspaceUser == null || !workspaceUser.isOwner() )	
+		    {
+		    	return "accessDenied";
+		    }
+		}
 	    return "get";
 	}
 	
@@ -115,17 +130,18 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	{
 		log.debug("deleting a group space with id = " +  id);
 		IrUser user = userService.getUser(userId, false);
-
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE)  )
+		// only owners and admins can delete  group workspaces
+		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+		
+		log.debug("workspace user = " + workspaceUser);
+		if( !user.hasRole(IrRole.ADMIN_ROLE) )
 		{
-			return "accessDenied";
+		    if( workspaceUser == null || !workspaceUser.isOwner() )	
+		    {
+		    	return "accessDenied";
+		    }
 		}
 		
-		// only owners and admins can delete  group workspaces
-		if( !user.hasRole(IrRole.ADMIN_ROLE) && !groupWorkspace.getIsOwner(user))
-		{
-			return "accessDenied";
-		}
 		
 	    groupWorkspace = groupWorkspaceService.get(id,false);
 	    groupWorkspaceService.delete(groupWorkspace, user);
@@ -135,11 +151,12 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	}
 	
 	/**
-	 * Create a new user group.
+	 * Create a new user group workspace.
 	 * 
 	 * @return
+	 * @throws DuplicateNameException 
 	 */
-	public String create()
+	public String create() throws DuplicateNameException
 	{
 		log.debug("creating a group space with name = " + name);
 		IrUser user = userService.getUser(userId, false);
@@ -152,7 +169,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		if( other == null )
 		{
 			groupWorkspace = new GroupWorkspace(name, description);
-			groupWorkspace.addOwner(user);
+			groupWorkspace.add(user, true);
 		    groupWorkspaceService.save(groupWorkspace);
 		} 
 		else

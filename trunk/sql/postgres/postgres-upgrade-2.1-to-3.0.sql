@@ -195,51 +195,29 @@ ALTER TABLE ir_group_workspace.group_workspace_file OWNER TO ir_plus;
 CREATE SEQUENCE ir_group_workspace.group_workspace_file_seq;
 ALTER TABLE ir_group_workspace.group_workspace_file_seq OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Group space owner Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_owner
-(
-    group_workspace_id BIGINT NOT NULL,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    PRIMARY KEY(group_workspace_id, user_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_owner OWNER TO ir_plus;
+
 
 -- ---------------------------------------------
--- Group space group Information
+-- Group workspace user Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_group
+CREATE TABLE ir_group_workspace.group_workspace_user
 (
-    group_workspace_group_id BIGINT PRIMARY KEY,
+    group_workspace_user_id BIGINT PRIMARY KEY,
     group_workspace_id BIGINT NOT NULL,
-    name TEXT NOT NULL,
-    lower_case_name TEXT NOT NULL,
-    description TEXT,
+    is_owner boolean NOT NULL,
+    user_id BIGINT NOT NULL,
     version INTEGER,
-    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id)
+    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id)
 );
-ALTER TABLE ir_group_workspace.group_workspace_group OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_user OWNER TO ir_plus;
 
 -- The group file sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_group_seq;
-ALTER TABLE ir_group_workspace.group_workspace_group_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_user_seq;
+ALTER TABLE ir_group_workspace.group_workspace_user_seq OWNER TO ir_plus;
 
 
--- ---------------------------------------------
--- Group space group membership Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_group_users
-(
-    group_workspace_group_id BIGINT NOT NULL,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    PRIMARY KEY(group_workspace_group_id, user_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_group_users OWNER TO ir_plus;
+
 
 
 
@@ -283,22 +261,19 @@ values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorksp
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'FOLDER_EDIT','The user can add and delete any files and folders from the 
-specified folder including child files and folders',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_EDIT','The user can add and delete any files and folders from the specified folder including child files and folders',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspaceFolder';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'FOLDER_ADD_FILE','The user can add files to the specified folder 
-and only delete files they own',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_ADD_FILE','The user can add files to the specified folder and only delete files they own',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspaceFolder';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'FOLDER_READ','The user can view the folder and the names of 
-all files and folders within the folder',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_READ','The user can view the folder and read all of the files and folders within the folder',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspaceFolder';
 
@@ -309,23 +284,23 @@ all files and folders within the folder',0
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_EDIT','The user(s) can read, add and delete any files and folders from the 
-specified group',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_EDIT','The user(s) can read, add and delete any files and folders from the specified group',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_ADD_FILE','The user(s) can read all files and add files to group folders  
-and only delete files they own',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_ADD_FILE','The user can add files to the root of the group group folders and only delete files they own',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_READ','The user(s) can view all files and folders within the group',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_READ','The user(s) can read and open all files and folders within the group',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
+
+
 
 -- ---------------------------------------------
 -- Add a new column most recent login date
@@ -411,27 +386,26 @@ and token is not null;
 -- create an index on the handle info local name
 CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
 
-
 -- ---------------------------------------------
 -- Group workspace group invite Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_group_invite
+CREATE TABLE ir_group_workspace.group_workspace_invite
 (
-    group_workspace_group_invite_id BIGINT PRIMARY KEY,
+    group_workspace_invite_id BIGINT PRIMARY KEY,
     version INTEGER,
     invite_token_id BIGINT NOT NULL,
     invited_user_id BIGINT,
-    group_workspace_group_id BIGINT NOT NULL,
-    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
+    group_workspace_id BIGINT NOT NULL,
+    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
     FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token(invite_token_id),
     FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id),
     UNIQUE(invite_token_id)
 );
-ALTER TABLE ir_group_workspace.group_workspace_group_invite OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_invite OWNER TO ir_plus;
 
 -- The group workspace group sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
-ALTER TABLE ir_group_workspace.group_workspace_group_invite_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_invite_seq;
+ALTER TABLE ir_group_workspace.group_workspace_invite_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- group workspace file delete record
@@ -456,38 +430,3 @@ ALTER TABLE ir_group_workspace.group_workspace_file_delete_record OWNER TO ir_pl
 CREATE SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
 ALTER TABLE ir_group_workspace.group_workspace_file_delete_record_seq OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Group workspace Group Acess control list table.
--- ---------------------------------------------
-CREATE TABLE ir_security.group_workspace_group_control_entry
-(
-    group_workspace_group_control_entry_id BIGINT PRIMARY KEY,
-    group_workspace_group_id BIGINT NOT NULL,
-    acl_id BIGINT NOT NULL,
-    version INTEGER,
-    UNIQUE (group_workspace_group_id , acl_id),
-    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group(group_workspace_group_id),
-    FOREIGN KEY (acl_id) REFERENCES ir_security.acl(acl_id)
-);
-ALTER TABLE ir_security.group_workspace_group_control_entry OWNER TO ir_plus;
-
--- The object identity sequence
-CREATE SEQUENCE ir_security.group_workspace_group_control_entry_seq ;
-ALTER TABLE ir_security.group_workspace_group_control_entry_seq OWNER TO ir_plus;
-
-
-
--- ---------------------------------------------
--- Permissions for the user group control entries
--- ---------------------------------------------
-CREATE TABLE ir_security.group_workspace_group_control_entry_permission
-(
-    group_workspace_group_control_entry_id BIGINT NOT NULL,
-    class_type_permission_id BIGINT NOT NULL,
-    PRIMARY KEY (group_workspace_group_control_entry_id, class_type_permission_id),
-    FOREIGN KEY (group_workspace_group_control_entry_id) REFERENCES 
-       ir_security.group_workspace_group_control_entry(group_workspace_group_control_entry_id),
-    FOREIGN KEY (class_type_permission_id) 
-        REFERENCES ir_security.class_type_permission(class_type_permission_id)
-);
-ALTER TABLE ir_security.group_workspace_group_control_entry_permission OWNER TO ir_plus;

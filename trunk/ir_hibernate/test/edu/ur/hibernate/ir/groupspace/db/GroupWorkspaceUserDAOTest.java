@@ -27,8 +27,8 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroup;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
@@ -41,15 +41,15 @@ import edu.ur.ir.user.UserEmail;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupWorkspaceGroupDAOTest 
+public class GroupWorkspaceUserDAOTest 
 {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
 	// group workspace group data access
-	GroupWorkspaceGroupDAO groupWorkspaceGroupDAO = (GroupWorkspaceGroupDAO) ctx
-	.getBean("groupWorkspaceGroupDAO");
+	GroupWorkspaceUserDAO groupWorkspaceUserDAO = (GroupWorkspaceUserDAO) ctx
+	.getBean("groupWorkspaceUserDAO");
 
 	// group workspace data access
 	GroupWorkspaceDAO groupWorkspaceDAO = (GroupWorkspaceDAO) ctx
@@ -64,37 +64,13 @@ public class GroupWorkspaceGroupDAOTest
     /** user data access  */
     IrUserDAO userDAO= (IrUserDAO) ctx.getBean("irUserDAO");
 
-	/**
-	 * Test group persistence
-	 */
-	@Test
-	public void baseGroupDAOTest() throws Exception{
-		
-        TransactionStatus ts = tm.getTransaction(td);
-		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
-        groupWorkspaceDAO.makePersistent(groupSpace);
-        GroupWorkspaceGroup group = groupSpace.createGroup("groupName");
-        group.setDescription("groupDescription");
- 		groupWorkspaceGroupDAO.makePersistent(group);
- 	    tm.commit(ts);
 
-		
- 	    ts = tm.getTransaction(td);
- 	    GroupWorkspaceGroup other = groupWorkspaceGroupDAO.getById(group.getId(), false);
-        assert other.equals(group) : "Role types should be equal";
-        groupWorkspaceGroupDAO.makeTransient(other);
-        assert  groupWorkspaceGroupDAO.getById(other.getId(), false) == null : "Should no longer be able to find group";
-        groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
-        tm.commit(ts);
-
-
-	}
 	
 	/**
-	 * Test group persistence
+	 * Test group workspace user persistence
 	 */
 	@Test
-	public void addUserToGroupDAOTest() throws Exception{
+	public void addUserToWorkspaceDAOTest() throws Exception{
 		
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -103,31 +79,21 @@ public class GroupWorkspaceGroupDAOTest
 		user.setPasswordEncoding("encoding");
 		user.addUserEmail(userEmail, true);
         userDAO.makePersistent(user);
- 		tm.commit(ts);
- 		
- 		//start a new transaction
- 		ts = tm.getTransaction(td);
- 		
- 		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+        GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
         groupWorkspaceDAO.makePersistent(groupSpace);
-        GroupWorkspaceGroup group = groupSpace.createGroup("groupName");
-        group.setDescription("groupDescription");
- 		group.addUser(user);
- 		groupWorkspaceGroupDAO.makePersistent(group);
+        GroupWorkspaceUser workspaceUser = groupSpace.add(user, false);
+       
+ 		groupWorkspaceUserDAO.makePersistent(workspaceUser);
+        
  		tm.commit(ts);
+ 		
+ 		
         
  		ts = tm.getTransaction(td);
- 		group = groupWorkspaceGroupDAO.getById(group.getId(), false);
- 		assert group.getUsers().contains(user) : "Group should contain user " + user;
+ 		workspaceUser = groupWorkspaceUserDAO.getById(workspaceUser.getId(), false);
+ 		assert workspaceUser.getUser().equals(user) : "Workspace user should contain user " + user;
  		
- 		//make sure select works.
- 		user = groupWorkspaceGroupDAO.getUserForGroup(group.getId(), user.getId());	
- 		assert user != null : "Should find user";
- 		
- 		IrUser otherUser = groupWorkspaceGroupDAO.getUserForGroup(group.getId(), user.getId() + 55);
- 		assert otherUser == null : "Should not find other user";
- 		
-        groupWorkspaceGroupDAO.makeTransient(group);
+        groupWorkspaceUserDAO.makeTransient(workspaceUser);
         userDAO.makeTransient(userDAO.getById(user.getId(), false));
         groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
         tm.commit(ts);

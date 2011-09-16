@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -53,7 +54,11 @@ public class GroupWorkspaceWebUtilFunctions {
 		
         if( user != null )
         {
-		    isOwner = groupWorkspace.getIsOwner(user);
+        	GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+        	if( workspaceUser != null )
+        	{
+        		isOwner = workspaceUser.isOwner();
+        	}
         }
         return isOwner;
 	}

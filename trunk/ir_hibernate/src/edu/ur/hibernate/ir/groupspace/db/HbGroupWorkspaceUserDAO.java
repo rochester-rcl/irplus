@@ -23,8 +23,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroup;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -34,19 +34,19 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class HbGroupWorkspaceGroupDAO implements GroupWorkspaceGroupDAO {
+public class HbGroupWorkspaceUserDAO implements GroupWorkspaceUserDAO {
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 7129354264082297025L;
 	
 	/** hibernate helper */
-	private final HbCrudDAO<GroupWorkspaceGroup> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspaceUser> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbGroupWorkspaceGroupDAO() {
-		hbCrudDAO = new HbCrudDAO<GroupWorkspaceGroup>(GroupWorkspaceGroup.class);
+	public HbGroupWorkspaceUserDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspaceUser>(GroupWorkspaceUser.class);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class HbGroupWorkspaceGroupDAO implements GroupWorkspaceGroupDAO {
 	 * @return list of user groups.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceGroup> getGroupsByName(Long groupWorkspaceId, int rowStart,
+	public List<GroupWorkspaceUser> getGroupsByName(Long groupWorkspaceId, int rowStart,
 			int numberOfResultsToShow, OrderType orderType) 
 	{
 		Query q = null;
@@ -99,12 +99,12 @@ public class HbGroupWorkspaceGroupDAO implements GroupWorkspaceGroupDAO {
 	 * @return - list of groups the user is in.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceGroup> getGroups(Long groupWorkspaceId, Long userId) {
+	public List<GroupWorkspaceUser> getGroups(Long groupWorkspaceId, Long userId) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = session.getNamedQuery("getGroupWorkspaceGroupsForUser");
 		q.setParameter("groupWorkspaceId", groupWorkspaceId);
 		q.setParameter("userId", userId);
-		return (List<GroupWorkspaceGroup>)q.list();
+		return (List<GroupWorkspaceUser>)q.list();
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class HbGroupWorkspaceGroupDAO implements GroupWorkspaceGroupDAO {
 	 *  
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public GroupWorkspaceGroup getById(Long id, boolean lock) {
+	public GroupWorkspaceUser getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -137,7 +137,7 @@ public class HbGroupWorkspaceGroupDAO implements GroupWorkspaceGroupDAO {
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(GroupWorkspaceGroup entity) {
+	public void makePersistent(GroupWorkspaceUser entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -146,7 +146,7 @@ public class HbGroupWorkspaceGroupDAO implements GroupWorkspaceGroupDAO {
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(GroupWorkspaceGroup entity) {
+	public void makeTransient(GroupWorkspaceUser entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 

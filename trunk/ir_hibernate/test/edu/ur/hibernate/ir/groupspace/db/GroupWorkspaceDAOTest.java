@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
@@ -105,14 +106,16 @@ public class GroupWorkspaceDAOTest {
 		// create the user and their folder.
 		userDAO.makePersistent(user);
 		
-		groupSpace.addOwner(user);
+		groupSpace.add(user, true);
 		
         groupWorkspaceDAO.makePersistent(groupSpace);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);
  		GroupWorkspace other = groupWorkspaceDAO.getById(groupSpace.getId(), false);
- 		assert other.getIsOwner(user) : "User " + user + " should be owner of project but is not";
+ 		GroupWorkspaceUser workspaceUser = other.getUser(user);
+ 		assert workspaceUser != null : "Workspace user for " + user + " should not be null";
+ 		assert workspaceUser.isOwner() : "Workspace user  " + workspaceUser + " should be owner of project but is not";
  		List<GroupWorkspace> workspaces = groupWorkspaceDAO.getGroupWorkspacesForUser(user.getId());
  		assert workspaces.size() == 1 : "Should find one workspace but found " + workspaces.size();
  		assert workspaces.contains(other) : "List should contain " + other + " but does not";

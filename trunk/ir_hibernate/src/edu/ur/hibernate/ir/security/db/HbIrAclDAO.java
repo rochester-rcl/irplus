@@ -25,7 +25,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Query;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroup;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrAclDAO;
 import edu.ur.ir.security.Sid;
@@ -143,20 +142,7 @@ public class HbIrAclDAO implements IrAclDAO {
 			q.setParameter("name", className);
 			acl = (IrAcl) q.uniqueResult();
 		}
-		else if( sid instanceof GroupWorkspaceGroup)
-		{
-			GroupWorkspaceGroup group = (GroupWorkspaceGroup)sid;
-			if( log.isDebugEnabled())
-			{
-			    log.debug("GroupWorkspaceGroup id = " + group.getId() + " identity id = "
-					+ objectId + " class type = "+ className);
-			}
-			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByGroupWorkspaceGroupAndObjectIdentity");
-			q.setParameter("groupId", group.getId());
-			q.setParameter("objectId", objectId);
-			q.setParameter("name", className);
-			acl = (IrAcl) q.uniqueResult();
-		}
+		
 		else
 		{
 			throw new IllegalStateException("No select for sid " + sid);
@@ -237,17 +223,7 @@ public class HbIrAclDAO implements IrAclDAO {
 			q.setParameter("roleId", role.getId());
 			acls = (List<IrAcl>) q.list();
 		}
-		else if( sid instanceof GroupWorkspaceGroup)
-		{
-			GroupWorkspaceGroup group = (GroupWorkspaceGroup)sid;
-			if( log.isDebugEnabled())
-			{
-			    log.debug("Group workspace Group id = " + group.getId());
-			}
-			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByGroupWorkspaceGroup");
-			q.setParameter("groupId", group.getId());
-			acls = (List<IrAcl>) q.list();
-		}
+		
 		else
 		{
 			throw new IllegalStateException("No select for sid " + sid);
@@ -285,12 +261,6 @@ public class HbIrAclDAO implements IrAclDAO {
 			q2.setParameter("permissionName", permission);
 			count += (Long)q2.uniqueResult();
 			
-			Query q3 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userHasPermissionByGroupWorkspaceGroupCount");
-			q3.setParameter("userId", user.getId());
-			q3.setParameter("objectId", objectId );
-			q3.setParameter("className", className);
-			q3.setParameter("permissionName", permission);
-			count += (Long)q3.uniqueResult();
 		}
 		else
 		{
@@ -322,15 +292,8 @@ public class HbIrAclDAO implements IrAclDAO {
 		q2.setParameter("permissionName", permission);
 		List<Sid> groupSids = (List<Sid>) q2.list();
 		
-		Query q3 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupsWorksapceGroupsWithSpecifiedPermission");
-		q3.setParameter("objectId", objectId);
-		q3.setParameter("className", className);
-		q3.setParameter("permissionName", permission);
-		List<Sid> workspaceGroupSids = (List<Sid>) q3.list();
-		
 		sids.addAll(userSids);
 		sids.addAll(groupSids);
-		sids.addAll(workspaceGroupSids);
 		return sids;
 	}
 	
@@ -345,7 +308,7 @@ public class HbIrAclDAO implements IrAclDAO {
 		HashSet<Sid> sids = new HashSet<Sid>();
 		Set<Long> userIds = new HashSet<Long>();
 		Set<Long> groupIds = new HashSet<Long>();
-		Set<Long> groupWorkspaceGroupIds = new HashSet<Long>();
+		
 		
 		for(Sid sid : specificSids)
 		{
@@ -356,10 +319,6 @@ public class HbIrAclDAO implements IrAclDAO {
 			else if( sid.getSidType().equals(IrUserGroup.GROUP_SID_TYPE))
 			{
 				groupIds.add( ((IrUserGroup)sid).getId() );
-			}
-			else if( sid.getSidType().equals(GroupWorkspaceGroup.WORKSPACE_GROUP_SID_TYPE))
-			{
-				groupWorkspaceGroupIds.add( ((GroupWorkspaceGroup)sid).getId() );
 			}
 			else
 			{
@@ -394,18 +353,7 @@ public class HbIrAclDAO implements IrAclDAO {
 		    sids.addAll(groupSids);
 		}
 		
-		if( groupWorkspaceGroupIds.size() > 0 )
-		{
-		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("specifiedGroupWorkspaceGroupsWithPermission");
 		
-		    q.setParameter("objectId", objectId);
-		    q.setParameter("className", className);
-		    q.setParameter("permissionName", permission);
-		    q.setParameterList("groupIds", groupIds);
-		
-		    List<Sid> groupSids = (List<Sid>)q.list();
-		    sids.addAll(groupSids);
-		}
 		return sids;
 	}
 }

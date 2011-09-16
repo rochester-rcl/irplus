@@ -898,14 +898,6 @@
        <property name="securityService" ref="securityService"/>
    </bean>
    
-   <!-- ****************************************** --> 
-   <!-- Group workspace group service        -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceGroupService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceGroupService">
-       <property name="groupWorkspaceGroupDAO" ref="groupWorkspaceGroupDAO"/>
-   </bean>
-   
    
    <!-- ****************************************** --> 
    <!-- Service that deals with Marc Conntent type -->

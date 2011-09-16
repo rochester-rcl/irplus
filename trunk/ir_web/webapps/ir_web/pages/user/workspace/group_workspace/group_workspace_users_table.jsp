@@ -16,47 +16,43 @@
    limitations under the License.
 -->
 
-
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
-
-
 <div class="dataTable">
     <urstb:table width="100%">
         <urstb:thead>
             <urstb:tr>
                 <urstb:td> Name </urstb:td>
-                <urstb:td> Description </urstb:td>
+                <urstb:td> Owner </urstb:td>
+                <urstb:td> Email </urstb:td>
                 <urstb:td> Action </urstb:td>
             </urstb:tr>
         </urstb:thead>
         <urstb:tbody
-            var="group" 
+            var="workspaceUser" 
             oddRowClass="odd"
             evenRowClass="even"
             currentRowClassVar="rowClass"
-            collection="${groupWorkspace.groups}">
+            collection="${groupWorkspace.users}">
             <urstb:tr 
                 cssClass="${rowClass}"
                 onMouseOver="this.className='highlight'"
                 onMouseOut="this.className='${rowClass}'">
                 <urstb:td>
-                    ${group.name}
+                    ${workspaceUser.user.firstName}&nbsp;${workspaceUser.user.lastName}
                 </urstb:td>
-                        
+                  <urstb:td>
+                    ${workspaceUser.owner}
+                </urstb:td>      
                 <urstb:td>
-                    ${group.description}
+                    ${workspaceUser.user.defaultEmail.email}
                 </urstb:td>
-
                 <urstb:td>
-                    <c:url var="viewWorkspaceGroup" value="/user/getWorkspaceGroup.action">
-                        <c:param name="id" value="${group.id}"/>
-                    </c:url>
-                    <a href="${viewWorkspaceGroup}">Edit</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.workspace_group.deleteWorkspaceGroup(${group.id})">Delete</a>
+                    <a href="">Add</a> / <a href="">Edit</a>
                 </urstb:td>                        
 
             </urstb:tr>

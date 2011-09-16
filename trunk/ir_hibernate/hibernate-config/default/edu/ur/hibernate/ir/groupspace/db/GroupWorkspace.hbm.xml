@@ -54,10 +54,9 @@
 		          access="field" 
 		          not-null="true"/>
 		
-	   <!--  Root Group Folders -->
-		<set name="groups" 
+	   <!--  Workspace users -->
+		<set name="users" 
 		     inverse="true" 
-		     order-by="lower_case_name asc"
 		     optimistic-lock="false"
 		     cascade="all, delete-orphan" 
 		     schema="ir_group_workspace"
@@ -65,7 +64,7 @@
 			 lazy="true"
 			 fetch="subselect">
 			<key column="group_workspace_id" not-null="true"/>
-			<one-to-many class="GroupWorkspaceGroup" />
+			<one-to-many class="GroupWorkspaceUser" />
 		</set>
 		
 		<!--  Root Group Folders -->
@@ -94,19 +93,7 @@
 			<one-to-many class="GroupWorkspaceFile"/>
 		</set>
 		
-	    <!-- users that own this group space -->
-		<set name="owners" 
-		    optimistic-lock="false"
-		    schema = "ir_group_workspace"
-		    table="group_workspace_owner"  
-		    cascade="save-update" 
-		    access="field" 
-		    lazy="true"
-		    fetch="subselect">
-			<key column="group_workspace_id" not-null="true"/>
-			<many-to-many column="user_id" unique="true" class="edu.ur.ir.user.IrUser"/>
-		</set>
-		
+
 	</class>
 		
 	<!--  Get a count of groupspaces in the system -->
@@ -135,8 +122,8 @@
 	<!--  get groupspaces for a given user by user id and name ascending  -->
 	<query name="groupWorkspaceByUserIdNameAsc">
 	    select groupWorkspace from GroupWorkspace as groupWorkspace
-	    join groupWorkspace.owners as owner
-	    where owner.id = :userId
+	    join groupWorkspace.users as workspaceUser
+	    where workspaceUser.user.id = :userId
 		order by groupWorkspace.lowerCaseName asc
 	</query>
 	

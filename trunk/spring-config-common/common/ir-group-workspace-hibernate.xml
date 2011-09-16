@@ -91,15 +91,15 @@
    <!-- Group workspace Group information  -->
    <!-- ****************************************** --> 
    
-   <bean id="groupWorkspaceGroupDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceGroupDAO">
+   <bean id="groupWorkspaceUserDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceUserDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
      
-   <bean id="groupWorkspaceGroupDAO" 
+   <bean id="groupWorkspaceUserDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupWorkspaceGroupDAOTarget"/>
+       <property name="target" ref="groupWorkspaceUserDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
@@ -113,15 +113,15 @@
    <!-- Invited Group workspace Group information  -->
    <!-- ****************************************** --> 
    
-   <bean id="groupWorkspaceGroupInviteDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceGroupInviteDAO">
+   <bean id="groupWorkspaceInviteDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceInviteDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
      
-   <bean id="groupWorkspaceGroupInviteDAO" 
+   <bean id="groupWorkspaceInviteDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupWorkspaceGroupInviteDAOTarget"/>
+       <property name="target" ref="groupWorkspaceInviteDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
