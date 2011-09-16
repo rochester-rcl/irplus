@@ -59,6 +59,8 @@ their workspace
 
 - Fixed issues with IE and FF related to add/remove of other title.
 
+- Set license to be read only so it can be scrolled in IE 
+
 IR+ 2.0.7 to 2.0.8
 ==========================
 - Updated almost all images to use css rather than hard coded sizes
