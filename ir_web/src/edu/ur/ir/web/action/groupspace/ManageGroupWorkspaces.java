@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -30,7 +31,7 @@ import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
 /**
- * Manage a group spaces.
+ * Manage  group workspaces.
  * 
  * @author Nathan Sarr
  *
@@ -113,16 +114,16 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	{
 		log.debug("deleting a group space with id = " +  id);
 		IrUser user = userService.getUser(userId, false);
-
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) )
-		{
-			return "accessDenied";
-		}
-		
 		// only owners and admins can delete  group workspaces
-		if( !user.hasRole(IrRole.ADMIN_ROLE) && !groupWorkspace.getIsOwner(user))
+		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+		log.debug("workspace user = " + workspaceUser);
+		
+		if( !user.hasRole(IrRole.ADMIN_ROLE) )
 		{
-			return "accessDenied";
+		    if( workspaceUser == null || !workspaceUser.isOwner() )	
+		    {
+		    	return "accessDenied";
+		    }
 		}
 		
 	    groupWorkspace = groupWorkspaceService.get(id,false);

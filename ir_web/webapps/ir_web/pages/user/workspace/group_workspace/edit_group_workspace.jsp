@@ -75,8 +75,8 @@
             <div id="groupWorkspacePropertiesTabs" class="yui-navset">
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>Group Workspace Information</em></a></li>
-                     <li><a href="#tab2"><em>Owner(s)</em></a></li>
-                     <li><a href="#tab3"><em>Group(s)</em></a></li>
+                     <li><a href="#tab2"><em>User(s)</em></a></li>
+                     
                  </ul>
 
                  <div class="yui-content">
@@ -138,7 +138,7 @@
                                  <!--  create the first column -->
                                  <div class="yui-u first">
                                      <div id="workspace_owners">
-                                         <c:import url="group_workspace_owners_table.jsp"/>
+                                         <c:import url="group_workspace_users_table.jsp"/>
                                      </div>
                                  </div>
                                  <div class="yui-u">
@@ -149,24 +149,7 @@
                      </div>
                      <!--  end second tab -->
                      
-                     <!--  third tab -->
-                     <div id="tab3">
-                         <div id="workspace_groups">
-                             <br/>
-                                 <div align="right">
-	                             <button class="ur_button" 
- 		                             onmouseover="this.className='ur_buttonover';"
- 		                             onmouseout="this.className='ur_button';"
- 		                             onClick="javascript:YAHOO.ur.user.workspace_group.newWorkspaceGroupDialog.showDialog()"><span class="groupAddBtnImg">&nbsp;</span>New Group</button> 
-                                 </div>
-                            
-                             <br/>
-                             <div id="workspace_groups_table">
-                                 <c:import url="workspace_groups_table.jsp"/>
-                             </div>
-                         </div>
-                     </div>
-                     <!--  end third tab -->
+                    
                  </div>
                  
             </div>
@@ -181,37 +164,8 @@
   <!--  End doc div-->
   
   
-  <!-- Dialog box for deleting a workspace group-->
-  <div id="deleteWorkspaceGroupDialog" class="hidden">
-      <div class="hd">Delete Workspace Group</div>
-		<div class="bd">
-		    <form id="deleteWorkspaceGroupForm" name="deleteWorkspaceGroup" method="post" 
-		                action="/user/deleteWorkspaceGroup.action">
-			   <p>Are you sure you wish to delete the selected workspace group?</p>
-			   <input type="hidden" id="deleteId" name="id" value=""/>
-		    </form>
-		</div>
-  </div>
-  <!-- Dialog box for deleting a workspace group -->
  
-  <!-- Dialog box for creating a workspace group-->
-  <div id="newWorkspaceGroupDialog" class="hidden">
-       <div class="hd">Workspace Group Information</div>
-       <div class="bd">
-          <form id="addWorkspaceGroup" 
-                            name="newWorkspaceGroupForm" 
-		                    method="post"
-		                    action="/user/createWorkspaceGroup.action">
-		     <!--  if editing an id must be passed -->     
-	    <input type="hidden" id="groupWorkspaceId"
-		        name="groupWorkspaceId" value="${groupWorkspace.id}"/>
-	          <div id="workspaceGroupDialogFields">
-	              <c:import url="workspace_group_form.jsp"/>
-	          </div>
-	      </form>
-       </div>
-  </div>
-  <!--  end dialog for creating a workspace group--> 
+ 
 
 </body>
 </html>

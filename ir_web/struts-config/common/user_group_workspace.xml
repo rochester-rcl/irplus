@@ -35,25 +35,6 @@
             <result name="get">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action>
         
-        <!--  This handles update, save and delete for creating workspace groups -->
-        <action name="*WorkspaceGroup" 
-            method="{1}"
-            class="edu.ur.ir.web.action.groupspace.ManageWorkspaceGroups">
-            <interceptor-ref name="crudStack" />
-            <result name="input">/pages/user/workspace/group_workspace/workspace_group.jsp</result>
-            <result name="added">/pages/user/workspace/group_workspace/workspace_group_form.jsp</result>
-            <result name="deleted">/pages/user/workspace/group_workspace/workspace_groups_table.jsp</result>
-            <result name="get">/pages/user/workspace/group_workspace/edit_workspace_group.jsp</result>
-        </action>
-        
-         <!--  view all groups for a group workspace -->
-        <action name="viewWorkspaceGroups" 
-            method="viewGroups"
-            class="edu.ur.ir.web.action.groupspace.ManageWorkspaceGroups">
-            <interceptor-ref name="crudStack" />
-            <result name="success">/pages/user/workspace/group_workspace/workspace_groups_table.jsp</result>
-        </action>
-        
         <action name="viewGroupWorkspaceFolders"
             method="getTable"
             class="edu.ur.ir.web.action.groupspace.ViewGroupWorkspaceFolders">

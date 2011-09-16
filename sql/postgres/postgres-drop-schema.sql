@@ -53,8 +53,7 @@ DROP SCHEMA ir_metadata_dublin_core;
 -- ---------------------------------------------
  
 
-DROP TABLE ir_security.group_workspace_group_control_entry_permission;
-DROP TABLE ir_security.group_workspace_group_control_entry;
+
 DROP TABLE ir_security.role_control_entry_permission;
 DROP TABLE ir_security.role_control_entry;
 DROP TABLE ir_security.user_control_entry_permission;
@@ -69,7 +68,6 @@ ALTER TABLE ir_user.folder_auto_share_permissions DROP CONSTRAINT folder_auto_sh
 DROP TABLE ir_security.class_type_permission;
 DROP TABLE ir_security.class_type;
 
-DROP SEQUENCE ir_security.group_workspace_group_control_entry_seq;
 DROP SEQUENCE ir_security.role_control_entry_seq;
 DROP SEQUENCE ir_security.class_type_permission_seq;
 DROP SEQUENCE ir_security.user_control_entry_seq;
@@ -82,17 +80,15 @@ DROP SCHEMA ir_security;
 -- ---------------------------------------------
 -- Drop Group spaces tables/schema
 -- ---------------------------------------------
-DROP TABLE ir_group_workspace.group_workspace_group_invite;
-DROP TABLE ir_group_workspace.group_workspace_group_users;
-DROP TABLE ir_group_workspace.group_workspace_group;
-DROP TABLE ir_group_workspace.group_workspace_owner;
+DROP TABLE ir_group_workspace.group_workspace_invite;
+DROP TABLE ir_group_workspace.group_workspace_user;
 DROP TABLE ir_group_workspace.group_workspace_file;
 DROP TABLE ir_group_workspace.group_workspace_folder;
 DROP TABLE ir_group_workspace.group_workspace;
 DROP TABLE ir_group_workspace.group_workspace_file_delete_record;
 
-DROP SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_group_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_user_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_invite_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_file_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;

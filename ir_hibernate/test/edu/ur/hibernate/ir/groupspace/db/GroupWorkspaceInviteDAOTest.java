@@ -31,10 +31,9 @@ import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroup;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInvite;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInviteDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
@@ -48,22 +47,22 @@ import edu.ur.ir.user.UserManager;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupWorkspaceGroupInviteDAOTest 
+public class GroupWorkspaceInviteDAOTest 
 {
 	//get the application context 
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 	
 	// group workspace group data access
-	GroupWorkspaceGroupDAO groupWorkspaceGroupDAO = (GroupWorkspaceGroupDAO) ctx
-	.getBean("groupWorkspaceGroupDAO");
+	GroupWorkspaceUserDAO groupWorkspaceUserDAO = (GroupWorkspaceUserDAO) ctx
+	.getBean("groupWorkspaceUserDAO");
 
 	// group workspace data access
 	GroupWorkspaceDAO groupWorkspaceDAO = (GroupWorkspaceDAO) ctx
 	.getBean("groupWorkspaceDAO");
 	
 	// invite data access object
-	GroupWorkspaceGroupInviteDAO inviteDAO = (GroupWorkspaceGroupInviteDAO) ctx
-	.getBean("groupWorkspaceGroupInviteDAO");
+	GroupWorkspaceInviteDAO inviteDAO = (GroupWorkspaceInviteDAO) ctx
+	.getBean("groupWorkspaceInviteDAO");
 	
 	// Transaction manager
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
@@ -105,17 +104,15 @@ public class GroupWorkspaceGroupInviteDAOTest
 		// create group workspace and group
 		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
         groupWorkspaceDAO.makePersistent(groupSpace);
-        GroupWorkspaceGroup group = groupSpace.createGroup("groupName");
-        group.setDescription("groupDescription");
- 		groupWorkspaceGroupDAO.makePersistent(group);
+        
  		
 		tm.commit(ts);
 		
         // Start a transaction 
 		ts = tm.getTransaction(td);
 		
-	    group = groupWorkspaceGroupDAO.getById(group.getId(), false);
-        GroupWorkspaceGroupInvite invite = group.inviteUser("test@mail.com", user, "123");
+	   
+        GroupWorkspaceInvite invite = groupSpace.inviteUser("test@mail.com", user, "123");
         invite.getInviteToken().setInviteMessage("invite message");
 		inviteDAO.makePersistent(invite);
 		
@@ -123,14 +120,14 @@ public class GroupWorkspaceGroupInviteDAOTest
 		tm.commit(ts);
         
 		ts = tm.getTransaction(td);
-		GroupWorkspaceGroupInvite other = inviteDAO.getById(invite.getId(), false);
+		GroupWorkspaceInvite other = inviteDAO.getById(invite.getId(), false);
 		assert other.equals(invite) : "The user invite information should be equal invite = " + invite + " other = " + other;
 		assert invite.getInviteToken().getEmail() == "test@mail.com" : "Email should be equal but email = " + invite.getInviteToken().getEmail();
 		assert invite.getInviteToken().getInviteMessage() == "invite message" : "Message should be equal";
 		assert invite.getInviteToken().getToken() == "123" : "inviteInfo should be equal";
 		assert invite.getInviteToken().getInvitingUser().equals(user) : "User should be equal user = " + user + " invitingUser = " + invite.getInviteToken().getInvitingUser();
 		assert (inviteDAO.findInviteInfoForToken("123")).equals(other) : "The user inviteInfo should be equal";
-		List<GroupWorkspaceGroupInvite> invites = inviteDAO.getInviteInfoByEmail("TeSt@Mail.com");
+		List<GroupWorkspaceInvite> invites = inviteDAO.getInviteInfoByEmail("TeSt@Mail.com");
 		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
 		assert invites.get(0).equals(invite) : "invite " + invites.get(0) + " should equal " + invite;
 		

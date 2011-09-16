@@ -20,17 +20,15 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.order.OrderType;
 
 /**
- * Interface to store invites to join a group workspace
- * group.
+ * Interface to store invites to join a group workspace.
  * 
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceGroupInviteDAO 
-extends CrudDAO<GroupWorkspaceGroupInvite>, CountableDAO {
+public interface GroupWorkspaceInviteDAO 
+extends CrudDAO<GroupWorkspaceInvite>, CountableDAO {
 	
 	/**
 	 * Find the Invite information for a specified token
@@ -38,7 +36,7 @@ extends CrudDAO<GroupWorkspaceGroupInvite>, CountableDAO {
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceGroupInvite findInviteInfoForToken(String token);
+	public GroupWorkspaceInvite findInviteInfoForToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email
@@ -46,20 +44,7 @@ extends CrudDAO<GroupWorkspaceGroupInvite>, CountableDAO {
 	 * @param email email address shared with
 	 * @return List of invite information
 	 */
-	public List<GroupWorkspaceGroupInvite> getInviteInfoByEmail(String email);
-		
-	/**
-	 * Get the list of invite infos ordered by inviteor
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results to retrieve
-	 * @param orderType - ascending/descending order
-	 * 
-	 * @return list of invite infos found
-	 */
-	public List<GroupWorkspaceGroupInvite> getInviteInfosOrderByGroup(int rowStart,
-			int maxResults, OrderType orderType);
-	
+	public List<GroupWorkspaceInvite> getInviteInfoByEmail(String email);
 
  
 }
