@@ -26,7 +26,6 @@ import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
 import edu.ur.cgLib.CgLibHelper;
-import edu.ur.ir.groupspace.GroupWorkspaceGroup;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
@@ -70,8 +69,6 @@ public class IrAcl extends BasePersistent implements Acl
 	/**  Set of Group access control entries */
 	private Set<IrUserGroupAccessControlEntry> groupEntries = new HashSet<IrUserGroupAccessControlEntry>();
 	
-	/**  Set of Group access control entries */
-	private Set<IrGroupWorkspaceGroupAccessControlEntry> workspaceGroupEntries = new HashSet<IrGroupWorkspaceGroupAccessControlEntry>();
 
 	/**  Version of the irAcl */
 	private int version;
@@ -235,11 +232,6 @@ public class IrAcl extends BasePersistent implements Acl
 		{
 			IrRole role = (IrRole)sid;
 			return roleEntries.remove(this.getRoleAccessControlEntry(role.getName()));
-		}
-		else if( sid.getSidType().equals(GroupWorkspaceGroup.WORKSPACE_GROUP_SID_TYPE))
-		{
-			IrRole role = (IrRole)sid;
-			return workspaceGroupEntries.remove(this.getRoleAccessControlEntry(role.getName()));
 		}
 		else
 		{
@@ -481,98 +473,6 @@ public class IrAcl extends BasePersistent implements Acl
 	{
 		return groupEntries.remove(groupControlEntry);
 	}
-
-	/**
-	 * Create a new group workspace group access control entry for this acl.  If an access control
-	 * entry for this group already exists, the existing group access control
-	 * entry is returned
-	 * 
-	 * @param group to create an access control entry for
-	 * @return the newly created group access control entry with this acl as the parent.
-	 */
-	public IrGroupWorkspaceGroupAccessControlEntry createGroupWorkspaceGroupAccessControlEntry(GroupWorkspaceGroup group) 
-	{
-		IrGroupWorkspaceGroupAccessControlEntry gace = null;
-		gace = getGroupWorkspaceGroupAccessControlEntry(group);
-		
-		if( gace == null)
-		{
-			gace = new IrGroupWorkspaceGroupAccessControlEntry(group, this);
-			workspaceGroupEntries.add(gace);
-		}
-		
-		return gace;
-	}
-	
-	
-	/**
-	 * Return the group access control entry if found otherwise null.
-	 * 
-	 * @param id - id for the group access control entry
-	 * @return the found entry or null if no entry found
-	 */
-	public IrGroupWorkspaceGroupAccessControlEntry  getGroupWorkspaceGroupAccessControlEntry(GroupWorkspaceGroup g)
-	{
-		for(IrGroupWorkspaceGroupAccessControlEntry gac : workspaceGroupEntries)
-		{
-			if( gac.getSid().equals(g) )
-			{
-				return gac;
-			}
-		}
-		
-		return null;
-	}
-	
-	
-	/**
-	 * Return the group access control entry if found otherwise null.
-	 * 
-	 * @param id - id for the group access control entry
-	 * @return the found entry or null if no entry found
-	 */
-	public IrGroupWorkspaceGroupAccessControlEntry getGroupWorkspaceGroupAccessControlEntry(Long id)
-	{
-		for(IrGroupWorkspaceGroupAccessControlEntry gac : workspaceGroupEntries)
-		{
-			if( gac.getId().equals(id) )
-			{
-				return gac;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Return the group access control entry by group id if found otherwise null.
-	 * 
-	 * @param id - id for the group access control entry
-	 * @return the found entry or null if no entry found
-	 */
-	public IrGroupWorkspaceGroupAccessControlEntry getGroupWorkspaceGroupAccessControlEntryByGroupId(Long id)
-	{
-		for(IrGroupWorkspaceGroupAccessControlEntry gac : workspaceGroupEntries)
-		{
-			if( gac.getSid().getId().equals(id) )
-			{
-				return gac;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Remove the group entry for this object.
-	 * 
-	 * @param groupControlEntry
-	 * @return true if the group entry is removed
-	 */
-	public boolean removeGroupWorkspaceGroupAccessControlEntry(IrGroupWorkspaceGroupAccessControlEntry groupControlEntry)
-	{
-		return groupEntries.remove(groupControlEntry);
-	}
 	
 	/**
 	 * Get the parent acl.
@@ -653,16 +553,6 @@ public class IrAcl extends BasePersistent implements Acl
 				return true;
 			}
 		}
-		else if(  sid.getSidType().equals(GroupWorkspaceGroup.WORKSPACE_GROUP_SID_TYPE))
-		{
-			log.debug("checking group workspace group");
-			if( checkGroupWorkspceGroupEntries(permission, (GroupWorkspaceGroup)sid))
-			{
-				log.debug("group returned true");
-				return true;
-			}
-		}
-		
 		
 		if(isEntriesInheriting() && irParentAcl != null )
 		{
@@ -745,26 +635,7 @@ public class IrAcl extends BasePersistent implements Acl
 	}
 	
 	/**
-	 * Get the set of workspace entries.
-	 * 
-	 * @return unmodifiable set of workspace entries.
-	 */
-	public Set<IrGroupWorkspaceGroupAccessControlEntry> getWorkspaceGroupEntries() {
-		return Collections.unmodifiableSet(workspaceGroupEntries);
-	}
-
-	/**
-	 * Set the workspace group entries.
-	 * 
-	 * @param workspaceGroupEntries
-	 */
-	public void setWorkspaceGroupEntries(
-			Set<IrGroupWorkspaceGroupAccessControlEntry> workspaceGroupEntries) {
-		this.workspaceGroupEntries = workspaceGroupEntries;
-	}
-
-	/**
-	 * Set this to true if the entries inherity the permissions of the parent.
+	 * Set this to true if the entries inherit the permissions of the parent.
 	 * 
 	 * @param entriesInheriting
 	 */
@@ -838,24 +709,6 @@ public class IrAcl extends BasePersistent implements Acl
 		return false;
 	}
 	
-	/**
-	 * Check the group entry for the specified permission.
-	 * 
-	 * @param permission
-	 * @param sid
-	 * @return
-	 */
-	private boolean checkGroupWorkspceGroupEntries(String permission, GroupWorkspaceGroup sid )
-	{
-		for(IrGroupWorkspaceGroupAccessControlEntry groupEntry : workspaceGroupEntries)
-		{
-			if( groupEntry.getWorkspaceGroup().equals(sid))
-			{
-				return groupEntry.isGranting(permission, sid);
-			}
-		}
-		return false;
-	}
 	
 	/**
 	 * Check the groups for the specified user.  If the group 
