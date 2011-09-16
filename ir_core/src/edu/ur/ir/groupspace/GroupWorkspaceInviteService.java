@@ -18,7 +18,7 @@ package edu.ur.ir.groupspace;
 
 import java.util.List;
 
-import edu.ur.order.OrderType;
+
 
 /**
  * Service to deal with users who are invited to join a group
@@ -27,7 +27,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceGroupInviteService 
+public interface GroupWorkspaceInviteService 
 {
 	/**
 	 * Find the Invite information for a specified token
@@ -35,7 +35,7 @@ public interface GroupWorkspaceGroupInviteService
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceGroupInvite findByToken(String token);
+	public GroupWorkspaceInvite findByToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email
@@ -43,19 +43,7 @@ public interface GroupWorkspaceGroupInviteService
 	 * @param email email address shared with
 	 * @return List of invite information
 	 */
-	public List<GroupWorkspaceGroupInvite> getByEmail(String email);
-		
-	/**
-	 * Get the list of invite infos ordered by inviteor
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results to retrieve
-	 * @param orderType - ascending/descending order
-	 * 
-	 * @return list of invite infos found
-	 */
-	public List<GroupWorkspaceGroupInvite> getAllOrderByGroup(int rowStart,
-			int maxResults, OrderType orderType);
+	public List<GroupWorkspaceInvite> getByEmail(String email);
 	
 	
 	/**
@@ -66,7 +54,7 @@ public interface GroupWorkspaceGroupInviteService
 	 * 
 	 * @return the invite if found.
 	 */
-	public GroupWorkspaceGroupInvite getById(Long id, boolean lock);
+	public GroupWorkspaceInvite getById(Long id, boolean lock);
 
 	
 	/**
@@ -74,14 +62,14 @@ public interface GroupWorkspaceGroupInviteService
 	 * 
 	 * @param entity
 	 */
-	public void save(GroupWorkspaceGroupInvite entity);
+	public void save(GroupWorkspaceInvite entity);
 
 	/**
 	 * Delete the invite 
 	 * 
 	 * @param entity
 	 */
-	public void delete(GroupWorkspaceGroupInvite entity);
+	public void delete(GroupWorkspaceInvite entity);
 
 	/**
 	 * Get a count of the number of invite records.
@@ -95,7 +83,7 @@ public interface GroupWorkspaceGroupInviteService
 	 * 
 	 * @param invite
 	 */
-	public void sendEmailInvite(GroupWorkspaceGroupInvite invite);
+	public void sendEmailInvite(GroupWorkspaceInvite invite);
 	
 	
 }
