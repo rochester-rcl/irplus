@@ -25,7 +25,9 @@ import java.util.Set;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserEmail;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.simple.type.DescriptionAware;
 import edu.ur.simple.type.NameAware;
@@ -48,9 +50,6 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	/* lower case value of the name */
 	private String lowerCaseName;
 
-	/* Owners of the group space */
-	private Set<IrUser> owners = new HashSet<IrUser>();
-	
 	/* Description of the group space */
 	private String description;
 	
@@ -60,8 +59,11 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	/*  Root files for this person.  */
 	private Set<GroupWorkspaceFile> rootFiles = new HashSet<GroupWorkspaceFile>();
 	
-	/* list of groups for this group space */
-	private Set<GroupWorkspaceGroup> groups = new HashSet<GroupWorkspaceGroup>();
+	/* list of users this group space */
+	private Set<GroupWorkspaceUser> users = new HashSet<GroupWorkspaceUser>();
+	
+	/* users invited to join the group workspace */
+	private Set<GroupWorkspaceInvite> invitedUsers = new HashSet<GroupWorkspaceInvite>();
 
 	/* date this record was created */
 	private Timestamp createdDate;
@@ -116,56 +118,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 		lowerCaseName = this.name.toLowerCase();
 	}
 	
-	/**
-	 * Owner of the group space.
-	 * 
-	 * @return owners of the group space
-	 */
-	public Set<IrUser> getOwners() {
-		return Collections.unmodifiableSet(owners);
-	}
-	
-	/**
-	 * Determine if the user is an owner of this group space.
-	 * 
-	 * @param user - user to determine if they are an owner of the group space.
-	 * @return - true if the user is an owner of the group space.
-	 */
-	public boolean getIsOwner(IrUser user)
-	{
-		return owners.contains(user);
-	}
 
-	/**
-	 * Owner of the group space.
-	 * 
-	 * @param owner
-	 */
-	void setOwners(Set<IrUser> owners) {
-		this.owners = owners;
-	}
-	
-	/**
-	 * Remove a group owner.
-	 * 
-	 * @param owner - owner of the group
-	 * @return true if the owner is removed
-	 */
-	public boolean removeOwner(IrUser owner)
-	{
-		return owners.remove(owner);
-	}
-	
-	/**
-	 * Add an owner to the list of owners.
-	 * 
-	 * @param owner
-	 */
-	public void addOwner(IrUser owner)
-	{
-		owners.add(owner);
-	}
-	
 	/**
 	 * Hash code is based on the name of
 	 * the group space
@@ -512,18 +465,18 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	}
 	
 	/**
-	 * Get a group by name.
+	 * Get a workspace user by user.
 	 * 
 	 * @param name - name of the group
 	 * @return group if found otherwise null
 	 */
-	public GroupWorkspaceGroup getGroup(String name)
+	public GroupWorkspaceUser getUser(IrUser user)
 	{
-	    for(GroupWorkspaceGroup group : groups)
+	    for(GroupWorkspaceUser workspaceUser : users)
 	    {
-	    	if( group.getName().equalsIgnoreCase(name))
+	    	if( workspaceUser.getUser().equals(user))
 	    	{
-	    		return group;
+	    		return workspaceUser;
 	    	}
 	    }
 	    return null;
@@ -535,51 +488,39 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * @param group - group to remove
 	 * @return - true if the group is removed
 	 */
-	public boolean remove(GroupWorkspaceGroup group)
+	public boolean remove(GroupWorkspaceUser groupWorkspaceUser)
 	{
-		return groups.remove(group);
+		return users.remove(groupWorkspaceUser);
 	}
 	
 	/**
-	 * Create a new group for the given group workspace.
+	 * Add a user to the workspace.
 	 * 
 	 * @param name - name to create the group with
 	 * @param description - description of the group
 	 * @return - created group
 	 * @throws DuplicateNameException - if a group with the given name exists regardless of case 
 	 */
-	public GroupWorkspaceGroup createGroup(String name, String description) throws DuplicateNameException
+	public GroupWorkspaceUser add(IrUser user, boolean setAsOwner) throws DuplicateNameException
 	{
-		if( getGroup(name) != null )
+		GroupWorkspaceUser workspaceUser = getUser(user);
+		if( workspaceUser == null )
 		{
-			throw new DuplicateNameException(name);
+			workspaceUser = new GroupWorkspaceUser(this, user, setAsOwner);
+			users.add(workspaceUser);
 		}
-		GroupWorkspaceGroup group = new GroupWorkspaceGroup(this, name, description);
-		groups.add(group);
-		return group;
+		return workspaceUser;
 
 	}
 	
 	/**
-	 * Create a group with the specified name for this group.
-	 * 
-	 * @param name - name to create the group with
-	 * @return the created group.
-	 * @throws DuplicateNameException - if a group with the given name exists regardless of case 
-	 */
-	public GroupWorkspaceGroup createGroup(String name) throws DuplicateNameException
-	{
-		return createGroup(name, null);
-	}
-	
-	/**
-	 * Get the groups for this group space.  This returns an
+	 * Get the users for this group space.  This returns an
 	 * unmodifiable set.
 	 * 
-	 * @return list of groups 
+	 * @return list of users
 	 */
-	public Set<GroupWorkspaceGroup> getGroups() {
-		return Collections.unmodifiableSet(groups);
+	public Set<GroupWorkspaceUser> getUsers() {
+		return Collections.unmodifiableSet(users);
 	}
 
 	/**
@@ -587,8 +528,164 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * 
 	 * @param groups
 	 */
-	void setGroups(Set<GroupWorkspaceGroup> groups) {
-		this.groups = groups;
+	void setUsers(Set<GroupWorkspaceUser> users) {
+		this.users = users;
+	}
+	
+	/**
+	 * Get the invited user by email - ignores case.  Retun the invite if found
+	 * otherwise return null.
+	 * 
+	 * @param email
+	 * @return invite if found otherwise null.
+	 */
+	public GroupWorkspaceInvite getInvite(String email)
+	{
+		for(GroupWorkspaceInvite invite : invitedUsers)
+		{
+			if( invite.getInviteToken().getEmail().equalsIgnoreCase(email))
+			{
+				return invite;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the invite for a user who has created an account.
+	 * 
+	 * @param user - user who exists in the system
+	 * @return the workspace group invite if one exists otherwise null
+	 */
+	public GroupWorkspaceInvite getInvite(IrUser user)
+	{
+        for(GroupWorkspaceInvite invite : invitedUsers)
+		{
+		    for( UserEmail email : user.getUserEmails())
+			{
+			    if(email.getEmail().equalsIgnoreCase(invite.getInviteToken().getEmail()))
+			    {
+				    return invite;
+			    }
+			} 
+		}
+		return null;
+	 }
+	
+	/**
+	 * Returns the user if they are a member of the users othwerwise returns null.
+	 * 
+	 * @param email - email of the user to look for
+	 * @return user if found otherwise null
+	 */
+	public GroupWorkspaceUser getUser(String email)
+	{
+		for(GroupWorkspaceUser workspaceUser : users)
+		{
+			if( workspaceUser.getUser().getUserEmail(email) != null)
+			{
+				return workspaceUser;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Create an invite for a user who does not yet exist in the system
+	 * 
+	 * @param email - email 
+	 * @param inviteingUser - user doing the invite
+	 * @param token - token for the invite
+	 * 
+	 * @return - the created invite
+	 * @throws GroupWorkspaceInviteException 
+	 */
+	public GroupWorkspaceInvite inviteUser(String email,
+			IrUser invitingUser, 
+			String token ) throws GroupWorkspaceInviteException
+	{
+		
+		if( getUser(email) != null )
+		{
+			throw new GroupWorkspaceInviteException("user already exists");
+		}
+		GroupWorkspaceInvite invite = getInvite(email);
+		
+		if(  invite == null )
+		{
+			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
+			invite = new GroupWorkspaceInvite(this, inviteToken); 
+		    invitedUsers.add(invite);
+		}
+		return invite;
+	}
+
+	/**
+	 * Create an invite for a user who exists in the system.
+	 * 
+	 * @param email - email the inviting user choose 
+	 * @param invitedUser - the user who was invited
+	 * @param invitingUser - user doing the inviting
+	 * @param token - token generated
+	 * 
+	 * @return the created group workspace group invite or the existing one 
+	 * 
+	 * @throws GroupWorkspaceInviteException if the user is already a member of the group workspace
+	 */
+	public GroupWorkspaceInvite inviteUser(String email, IrUser invitedUser,
+			IrUser invitingUser, String token) throws GroupWorkspaceInviteException
+	{
+		GroupWorkspaceUser workspaceUser = new GroupWorkspaceUser(this, invitedUser);
+		if( users.contains(workspaceUser) )
+		{
+			throw new GroupWorkspaceInviteException("user already exists in group");
+		}
+		
+		GroupWorkspaceInvite invite = getInvite(invitedUser);
+		if(  invite == null )
+		{
+			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
+			invite = new GroupWorkspaceInvite(this, inviteToken); 
+			invite.setInvitedUser(invitedUser);
+		    invitedUsers.add(invite);
+		}
+		return invite;
+	}
+	
+	/**
+	 * Delete the invite if found.  If the invite is not found
+	 * this returns true as it is not part of the set.
+	 * 
+	 * @param email - remove the invite based on email - ignores case
+	 * @return true if the invite is deleted.
+	 */
+	public boolean deleteInvite(String email)
+	{
+		GroupWorkspaceInvite invite = getInvite(email);
+		if( invite != null )
+		{
+			return invitedUsers.remove(invite);
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Set of users invited to join the group.
+	 * 
+	 * @return unmodifiable set of invited users
+	 */
+	public Set<GroupWorkspaceInvite> getInvitedUsers() {
+		return Collections.unmodifiableSet(invitedUsers);
+	}
+
+	/**
+	 * Set of users invited to join the group.
+	 * 
+	 * @param invitedUsers
+	 */
+	void setInvitedUsers(Set<GroupWorkspaceInvite> invitedUsers) {
+		this.invitedUsers = invitedUsers;
 	}
 
 

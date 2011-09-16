@@ -16,50 +16,56 @@
 
 package edu.ur.ir.groupspace;
 
+
 import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
 /**
  * Indicates a user who has been invited to be part of a
- * group workspace group.  This includes two different types of users
+ * group workspace.  This includes two different types of users
  * one who is already part of the system and one who has not yet
  * registered as part of the system.
  * 
  * @author Nathan Sarr
  *
  */
-public class GroupWorkspaceGroupInvite extends BasePersistent{
+public class GroupWorkspaceInvite extends BasePersistent{
 	
 	/* eclipse generated id */
 	private static final long serialVersionUID = -2662145849417211639L;
 
-	/* Group the user was invited to join */
-	private GroupWorkspaceGroup group;
+	/* Group workspace the user was invited to join */
+	private GroupWorkspace groupWorkspace;
 	
 	 /* token for the invite  */
     private InviteToken inviteToken;
     
     /* user invited  */
 	private IrUser invitedUser;
+	
+	/* indicates the user is an owner of the group workspace */
+	private boolean setAsOwner = false;
+
+
 
 
 
 	/**
 	 * Package protected constructor
 	 */
-	GroupWorkspaceGroupInvite(){}
+	GroupWorkspaceInvite(){}
 	
 	/**
-	 * Create the group invite for a user who does not yet
+	 * Create the workspace invite for a user who does not yet
 	 * exist in the system.
 	 * 
-	 * @param group - group the user is being invited to
+	 * @param groupWorkspace - workspace the user is being invited to
 	 * @param invite token - token for the invite
 	 */
-	public GroupWorkspaceGroupInvite( GroupWorkspaceGroup group, InviteToken inviteToken)
+	public GroupWorkspaceInvite( GroupWorkspace groupWorkspace, InviteToken inviteToken)
 	{
-		this.group = group;
+		this.groupWorkspace = groupWorkspace;
 		this.inviteToken = inviteToken;
 	}
 	
@@ -70,8 +76,8 @@ public class GroupWorkspaceGroupInvite extends BasePersistent{
 	 * 
 	 * @return group user was invited to
 	 */
-	public GroupWorkspaceGroup getGroup() {
-		return group;
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
 	}
 
 	/**
@@ -94,9 +100,9 @@ public class GroupWorkspaceGroupInvite extends BasePersistent{
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof GroupWorkspaceGroupInvite)) return false;
+		if (!(o instanceof GroupWorkspaceInvite)) return false;
 
-		final GroupWorkspaceGroupInvite other = (GroupWorkspaceGroupInvite) o;
+		final GroupWorkspaceInvite other = (GroupWorkspaceInvite) o;
 
 		if( ( inviteToken != null && !inviteToken.equals(other.getInviteToken()) ) ||
 			( inviteToken == null && other.getInviteToken() != null ) ) return false;
@@ -110,7 +116,7 @@ public class GroupWorkspaceGroupInvite extends BasePersistent{
 	 */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer("[Invited Group Workspace Group User id = ");
+		StringBuffer sb = new StringBuffer("[Invited Group Workspace  User id = ");
 		sb.append(id);
 		sb.append(" token = ");
 		sb.append(inviteToken);
@@ -145,6 +151,24 @@ public class GroupWorkspaceGroupInvite extends BasePersistent{
 	 */
 	public IrUser getInvitedUser() {
 		return invitedUser;
+	}
+	
+	/**
+	 * True indicates the user is to be set as an owner.
+	 * 
+	 * @return
+	 */
+	public boolean isSetAsOwner() {
+		return setAsOwner;
+	}
+
+	/**
+	 * Set the user as the owner 
+	 * 
+	 * @param setAsOwner
+	 */
+	public void setSetAsOwner(boolean setAsOwner) {
+		this.setAsOwner = setAsOwner;
 	}
 
 }
