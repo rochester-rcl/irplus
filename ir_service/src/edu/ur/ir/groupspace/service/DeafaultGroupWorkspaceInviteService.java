@@ -7,10 +7,9 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInvite;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInviteDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceGroupInviteService;
-import edu.ur.order.OrderType;
+import edu.ur.ir.groupspace.GroupWorkspaceInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 
 /**
  * Default implementation of the group workspace group invite service.
@@ -18,13 +17,13 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceGroupInviteService{
+public class DeafaultGroupWorkspaceInviteService implements GroupWorkspaceInviteService{
 	
 	/* Data access for the group workspace group invite  */
-	private GroupWorkspaceGroupInviteDAO groupWorkspaceGroupInviteDAO;
+	private GroupWorkspaceInviteDAO groupWorkspaceGroupInviteDAO;
 	
 	/*  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DeafaultGroupWorkspaceGroupInviteService.class);
+	private static final Logger log = Logger.getLogger(DeafaultGroupWorkspaceInviteService.class);
 
 	/* Mail message for inviting user who exist in the system*/
 	private SimpleMailMessage userWorkspaceGroupInviteUserExists;
@@ -45,7 +44,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceGroupInvite findByToken(String token)
+	public GroupWorkspaceInvite findByToken(String token)
 	{
 		return  groupWorkspaceGroupInviteDAO.findInviteInfoForToken(token);
 	}
@@ -56,26 +55,12 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * @param email email address shared with
 	 * @return List of invite information
 	 */
-	public List<GroupWorkspaceGroupInvite> getByEmail(String email)
+	public List<GroupWorkspaceInvite> getByEmail(String email)
 	{
 		return  groupWorkspaceGroupInviteDAO.getInviteInfoByEmail(email);
 	}
 		
-	/**
-	 * Get the list of invite infos ordered by inviteor
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results to retrieve
-	 * @param orderType - ascending/descending order
-	 * 
-	 * @return list of invite infos found
-	 */
-	public List<GroupWorkspaceGroupInvite> getAllOrderByGroup(int rowStart,
-			int maxResults, OrderType orderType)
-	{
-	    return  groupWorkspaceGroupInviteDAO.getInviteInfosOrderByGroup(rowStart, maxResults, orderType);	
-	}
-	
+
 	
 	/**
 	 * Get the invited group workspace group user by id.
@@ -85,7 +70,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * 
 	 * @return the invite if found.
 	 */
-	public GroupWorkspaceGroupInvite getById(Long id, boolean lock)
+	public GroupWorkspaceInvite getById(Long id, boolean lock)
 	{
 		return  groupWorkspaceGroupInviteDAO.getById(id, lock);
 	}
@@ -96,7 +81,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * 
 	 * @param entity
 	 */
-	public void save(GroupWorkspaceGroupInvite entity)
+	public void save(GroupWorkspaceInvite entity)
 	{
 		 groupWorkspaceGroupInviteDAO.makePersistent(entity);
 	}
@@ -106,7 +91,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * 
 	 * @param entity
 	 */
-	public void delete(GroupWorkspaceGroupInvite entity)
+	public void delete(GroupWorkspaceInvite entity)
 	{
 		 groupWorkspaceGroupInviteDAO.makeTransient(entity);
 	}
@@ -126,7 +111,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * 
 	 * @param invite
 	 */
-	public void sendEmailInvite(GroupWorkspaceGroupInvite invite)
+	public void sendEmailInvite(GroupWorkspaceInvite invite)
 	{
 		if( invite.getInvitedUser() != null )
 		{
@@ -145,7 +130,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * @param groupWorkspaceGroupInviteDAO
 	 */
 	public void setGroupWorkspaceGroupInviteDAO(
-			GroupWorkspaceGroupInviteDAO groupWorkspaceGroupInviteDAO) {
+			GroupWorkspaceInviteDAO groupWorkspaceGroupInviteDAO) {
 		this.groupWorkspaceGroupInviteDAO = groupWorkspaceGroupInviteDAO;
 	}
 	
@@ -183,7 +168,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * 
 	 * @param invite
 	 */
-	private void sendExistingUserEmail(GroupWorkspaceGroupInvite invite)
+	private void sendExistingUserEmail(GroupWorkspaceInvite invite)
 	{
 		SimpleMailMessage message = new SimpleMailMessage(userWorkspaceGroupInviteUserExists);
 		message.setTo(invite.getInviteToken().getEmail());
@@ -195,7 +180,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 		
 		String text = message.getText();
 		
-		text = StringUtils.replace(text, "%NAME%", invite.getGroup().getName());
+		text = StringUtils.replace(text, "%NAME%", invite.getGroupWorkspace().getName());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
 		if( invite.getInviteToken().getInviteMessage() != null )
 		{
@@ -210,7 +195,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	 * 
 	 * @param invite
 	 */
-	private void sendEmailToNotExistingUser(GroupWorkspaceGroupInvite invite)
+	private void sendEmailToNotExistingUser(GroupWorkspaceInvite invite)
 	{
 		SimpleMailMessage message = new SimpleMailMessage(userWorkspaceGroupInviteUserNotExistsMessage);
 		message.setTo(invite.getInviteToken().getEmail());
@@ -224,7 +209,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 
 		
 		
-		text = StringUtils.replace(text, "%NAME%", invite.getGroup().getName());
+		text = StringUtils.replace(text, "%NAME%", invite.getGroupWorkspace().getName());
 		text = StringUtils.replace(text, "%TOKEN%", invite.getInviteToken().getToken());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
 		if( invite.getInviteToken().getInviteMessage() != null )
