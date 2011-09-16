@@ -304,7 +304,7 @@
                       </tr>
                       <tr>
                           <td align="left" class="label">License</td>
-                          <td><textarea disabled="disabled" rows="20" cols="60"><c:out value="${repository.defaultLicense.license.text}"/> </textarea></td>
+                          <td><textarea readonly="true" rows="20" cols="60"><c:out value="${repository.defaultLicense.license.text}"/> </textarea></td>
                       </tr>
     
                       <tr>
