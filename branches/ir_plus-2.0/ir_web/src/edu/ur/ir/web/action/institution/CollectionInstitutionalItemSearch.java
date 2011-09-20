@@ -134,9 +134,19 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	public String execute()
 	{
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		institutionalCollection = null;
 		log.debug("COLLECTION ID = " + collectionId);
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
-		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
+		if( collectionId != null )
+		{
+		    institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		}
+		
+		if( institutionalCollection == null )
+	    {
+	    	return "collectionNotFound";
+	    }
+		
+	    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		log.debug("institutional collection = " + institutionalCollection);
 		return SUCCESS;
 	}
@@ -145,7 +155,17 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	ParseException
 	{
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		institutionalCollection = null;
+		log.debug("COLLECTION ID = " + collectionId);
+		if( collectionId != null )
+		{
+		    institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		}
+		
+		if( institutionalCollection == null )
+	    {
+	    	return "collectionNotFound";
+	    }
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		searchInit = false;
 		rowEnd = rowStart + numberOfResultsToShow;
@@ -185,7 +205,17 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	{
 		rowEnd = rowStart + numberOfResultsToShow;
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		institutionalCollection = null;
+		log.debug("COLLECTION ID = " + collectionId);
+		if( collectionId != null )
+		{
+		    institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		}
+		
+		if( institutionalCollection == null )
+	    {
+	    	return "collectionNotFound";
+	    }
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		searchInit = false;
 		
