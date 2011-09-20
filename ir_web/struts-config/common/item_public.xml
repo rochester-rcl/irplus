@@ -77,18 +77,21 @@
         <action name="startSearchCollectionItems" 
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
+             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="searchCollectionItems" 
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch"
              method="searchCollectionInstitutionalItems">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
+             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="filterSearchCollectionItems" 
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch"
              method="filteredSearchCollectionInstitutionalItems">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
+             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="browseCollectionItems" 
