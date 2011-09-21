@@ -46,6 +46,9 @@
 
 		<property name="token" column="token" type="string"
 			not-null="true" access="field" />
+	
+	    <property name="inviteMessage" column="invite_message" type="string"
+			access="field" />
 			
 		<property name="createdDate" column="created_date" type="timestamp"
 			not-null="true" access="field" />

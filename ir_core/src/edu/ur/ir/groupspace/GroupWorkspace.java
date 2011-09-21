@@ -27,7 +27,6 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.UserEmail;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.simple.type.DescriptionAware;
 import edu.ur.simple.type.NameAware;
@@ -63,7 +62,12 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	private Set<GroupWorkspaceUser> users = new HashSet<GroupWorkspaceUser>();
 	
 	/* users invited to join the group workspace */
-	private Set<GroupWorkspaceInvite> invitedUsers = new HashSet<GroupWorkspaceInvite>();
+	private Set<GroupWorkspaceUserInvite> existingUserInvites = new HashSet<GroupWorkspaceUserInvite>();
+
+	/* users who are not yet registered or have an email that is not yet registered */
+	private Set<GroupWorkspaceEmailInvite> emailInvites = new HashSet<GroupWorkspaceEmailInvite>();
+	
+
 
 	/* date this record was created */
 	private Timestamp createdDate;
@@ -539,9 +543,9 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * @param email
 	 * @return invite if found otherwise null.
 	 */
-	public GroupWorkspaceInvite getInvite(String email)
+	public GroupWorkspaceEmailInvite getInvite(String email)
 	{
-		for(GroupWorkspaceInvite invite : invitedUsers)
+		for(GroupWorkspaceEmailInvite invite : emailInvites)
 		{
 			if( invite.getInviteToken().getEmail().equalsIgnoreCase(email))
 			{
@@ -557,17 +561,14 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * @param user - user who exists in the system
 	 * @return the workspace group invite if one exists otherwise null
 	 */
-	public GroupWorkspaceInvite getInvite(IrUser user)
+	public GroupWorkspaceUserInvite getInvite(IrUser user)
 	{
-        for(GroupWorkspaceInvite invite : invitedUsers)
+        for(GroupWorkspaceUserInvite invite : existingUserInvites)
 		{
-		    for( UserEmail email : user.getUserEmails())
-			{
-			    if(email.getEmail().equalsIgnoreCase(invite.getInviteToken().getEmail()))
-			    {
-				    return invite;
-			    }
-			} 
+        	if( invite.getInvitedUser().equals(user))
+        	{
+        		return invite;
+        	}
 		}
 		return null;
 	 }
@@ -600,7 +601,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * @return - the created invite
 	 * @throws GroupWorkspaceInviteException 
 	 */
-	public GroupWorkspaceInvite inviteUser(String email,
+	public GroupWorkspaceEmailInvite addInviteUser(String email,
 			IrUser invitingUser, 
 			String token ) throws GroupWorkspaceInviteException
 	{
@@ -609,13 +610,13 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 		{
 			throw new GroupWorkspaceInviteException("user already exists");
 		}
-		GroupWorkspaceInvite invite = getInvite(email);
+		GroupWorkspaceEmailInvite invite = getInvite(email);
 		
 		if(  invite == null )
 		{
-			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
-			invite = new GroupWorkspaceInvite(this, inviteToken); 
-		    invitedUsers.add(invite);
+			InviteToken inviteToken = new InviteToken(email, token + email, invitingUser);
+			invite = new GroupWorkspaceEmailInvite(this, inviteToken); 
+			emailInvites.add(invite);
 		}
 		return invite;
 	}
@@ -623,17 +624,18 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	/**
 	 * Create an invite for a user who exists in the system.
 	 * 
-	 * @param email - email the inviting user choose 
+	 * @param email - email the inviting user choosen 
 	 * @param invitedUser - the user who was invited
 	 * @param invitingUser - user doing the inviting
-	 * @param token - token generated
+	 * @param setAsOwner - add the invited user as an owner
+	 * @param email - email used to identify the user
 	 * 
 	 * @return the created group workspace group invite or the existing one 
 	 * 
 	 * @throws GroupWorkspaceInviteException if the user is already a member of the group workspace
 	 */
-	public GroupWorkspaceInvite inviteUser(String email, IrUser invitedUser,
-			IrUser invitingUser, String token) throws GroupWorkspaceInviteException
+	public GroupWorkspaceUserInvite addInviteUser(IrUser invitedUser,
+			IrUser invitingUser, boolean setAsOwner, String email) throws GroupWorkspaceInviteException
 	{
 		GroupWorkspaceUser workspaceUser = new GroupWorkspaceUser(this, invitedUser);
 		if( users.contains(workspaceUser) )
@@ -641,13 +643,13 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 			throw new GroupWorkspaceInviteException("user already exists in group");
 		}
 		
-		GroupWorkspaceInvite invite = getInvite(invitedUser);
+		GroupWorkspaceUserInvite invite = getInvite(invitedUser);
 		if(  invite == null )
 		{
-			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
-			invite = new GroupWorkspaceInvite(this, inviteToken); 
-			invite.setInvitedUser(invitedUser);
-		    invitedUsers.add(invite);
+			
+			invite = new GroupWorkspaceUserInvite(this, invitingUser, invitedUser, email); 
+			invite.setSetAsOwner(setAsOwner);
+		    existingUserInvites.add(invite);
 		}
 		return invite;
 	}
@@ -659,12 +661,29 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * @param email - remove the invite based on email - ignores case
 	 * @return true if the invite is deleted.
 	 */
-	public boolean deleteInvite(String email)
+	public boolean deleteEmailInvite(String email)
 	{
-		GroupWorkspaceInvite invite = getInvite(email);
+		GroupWorkspaceEmailInvite invite = getInvite(email);
 		if( invite != null )
 		{
-			return invitedUsers.remove(invite);
+			return emailInvites.remove(invite);
+		}
+		return true;
+	}
+	
+	/**
+	 * Delete the invite if found.  If the invite is not found
+	 * this returns true as it is not part of the set.
+	 * 
+	 * @param email - remove the invite based on email - ignores case
+	 * @return true if the invite is deleted.
+	 */
+	public boolean deleteExistingUserInvite(IrUser user)
+	{
+		GroupWorkspaceUserInvite invite = getInvite(user);
+		if( invite != null )
+		{
+			return existingUserInvites.remove(invite);
 		}
 		return true;
 	}
@@ -675,8 +694,8 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * 
 	 * @return unmodifiable set of invited users
 	 */
-	public Set<GroupWorkspaceInvite> getInvitedUsers() {
-		return Collections.unmodifiableSet(invitedUsers);
+	public Set<GroupWorkspaceUserInvite> getExistingUserInvites() {
+		return Collections.unmodifiableSet(existingUserInvites);
 	}
 
 	/**
@@ -684,8 +703,27 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * 
 	 * @param invitedUsers
 	 */
-	void setInvitedUsers(Set<GroupWorkspaceInvite> invitedUsers) {
-		this.invitedUsers = invitedUsers;
+	void setExistingUserInvites(Set<GroupWorkspaceUserInvite> invitedUsers) {
+		this.existingUserInvites = invitedUsers;
+	}
+	
+	/**
+	 * Get email invited users - users who have not yet created an account or
+	 * do not have an email registered.
+	 * 
+	 * @return
+	 */
+	public Set<GroupWorkspaceEmailInvite> getEmailInvites() {
+		return Collections.unmodifiableSet(emailInvites);
+	}
+
+	/**
+	 * Set the email invited users
+	 * @param emailInvitedUsers
+	 */
+	void setEmailInvites(
+			Set<GroupWorkspaceEmailInvite> emailInvitedUsers) {
+		this.emailInvites = emailInvitedUsers;
 	}
 
 

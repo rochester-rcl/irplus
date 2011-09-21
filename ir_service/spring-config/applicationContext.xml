@@ -57,6 +57,7 @@
     <!-- Email Sender 		 -->
     <!-- ****************************************** --> 
     <import resource="mail-sender.xml"/>   
+    <import resource="group-workspaces-mail-sender.xml"/>   
     
     <!-- ****************************************** --> 
     <!-- Ir core resources	 -->

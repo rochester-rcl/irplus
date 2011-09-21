@@ -31,9 +31,9 @@ import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
-import edu.ur.ir.groupspace.GroupWorkspaceInvite;
-import edu.ur.ir.groupspace.GroupWorkspaceInviteDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceEmailInviteDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
@@ -47,7 +47,7 @@ import edu.ur.ir.user.UserManager;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupWorkspaceInviteDAOTest 
+public class GroupWorkspaceEmailInviteDAOTest 
 {
 	//get the application context 
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -61,8 +61,8 @@ public class GroupWorkspaceInviteDAOTest
 	.getBean("groupWorkspaceDAO");
 	
 	// invite data access object
-	GroupWorkspaceInviteDAO inviteDAO = (GroupWorkspaceInviteDAO) ctx
-	.getBean("groupWorkspaceInviteDAO");
+	GroupWorkspaceEmailInviteDAO groupWorkspaceEmailInviteDAO = (GroupWorkspaceEmailInviteDAO) ctx
+	.getBean("groupWorkspaceEmailInviteDAO");
 	
 	// Transaction manager
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
@@ -83,12 +83,12 @@ public class GroupWorkspaceInviteDAOTest
 	
      
 	/**
-	 * Test persistence of inviting a user into a group workspace group.
+	 * Test persistence of inviting a user into a group workspace.
 	 * @throws DuplicateNameException 
 	 * @throws GroupWorkspaceInviteException 
 	 */
 	@Test
-	public void basegroupWorkspaceGroupInviteDAOTest() throws DuplicateNameException, GroupWorkspaceInviteException{
+	public void basegroupWorkspaceEmailInviteDAOTest() throws DuplicateNameException, GroupWorkspaceInviteException{
 
 		TransactionStatus ts = tm.getTransaction(td);
 
@@ -112,40 +112,41 @@ public class GroupWorkspaceInviteDAOTest
 		ts = tm.getTransaction(td);
 		
 	   
-        GroupWorkspaceInvite invite = groupSpace.inviteUser("test@mail.com", user, "123");
+        GroupWorkspaceEmailInvite invite = groupSpace.addInviteUser("test@mail.com", user, "123");
         invite.getInviteToken().setInviteMessage("invite message");
-		inviteDAO.makePersistent(invite);
+		groupWorkspaceEmailInviteDAO.makePersistent(invite);
 		
 		//complete the transaction
 		tm.commit(ts);
         
 		ts = tm.getTransaction(td);
-		GroupWorkspaceInvite other = inviteDAO.getById(invite.getId(), false);
+		GroupWorkspaceEmailInvite other = groupWorkspaceEmailInviteDAO.getById(invite.getId(), false);
 		assert other.equals(invite) : "The user invite information should be equal invite = " + invite + " other = " + other;
-		assert invite.getInviteToken().getEmail() == "test@mail.com" : "Email should be equal but email = " + invite.getInviteToken().getEmail();
-		assert invite.getInviteToken().getInviteMessage() == "invite message" : "Message should be equal";
-		assert invite.getInviteToken().getToken() == "123" : "inviteInfo should be equal";
-		assert invite.getInviteToken().getInvitingUser().equals(user) : "User should be equal user = " + user + " invitingUser = " + invite.getInviteToken().getInvitingUser();
-		assert (inviteDAO.findInviteInfoForToken("123")).equals(other) : "The user inviteInfo should be equal";
-		List<GroupWorkspaceInvite> invites = inviteDAO.getInviteInfoByEmail("TeSt@Mail.com");
+		assert other.getInviteToken().getEmail().equals("test@mail.com") : "Email should be equal but email = " + other.getInviteToken().getEmail();
+		assert other.getInviteToken().getInviteMessage().equals("invite message") : "Message should be equal";
+		assert other.getInviteToken().getToken().equals("123test@mail.com") : "inviteInfo should be equal but is " + other.getInviteToken().getToken();
+		assert other.getInviteToken().getInvitingUser().equals(user) : "User should be equal user = " + user + " invitingUser = " + other.getInviteToken().getInvitingUser();
+		assert (groupWorkspaceEmailInviteDAO.findInviteInfoForToken("123test@mail.com")).equals(other) : "The user inviteInfo should be equal";
+		List<GroupWorkspaceEmailInvite> invites = groupWorkspaceEmailInviteDAO.getInviteInfoByEmail("TeSt@Mail.com");
 		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
 		assert invites.get(0).equals(invite) : "invite " + invites.get(0) + " should equal " + invite;
 		
 		
-		invites = inviteDAO.getInviteInfoByEmail("test@mail.com");
+		invites = groupWorkspaceEmailInviteDAO.getInviteInfoByEmail("test@mail.com");
 		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
 		assert invites.get(0).equals(invite) : "invite " + invites.get(0) + " should equal " + invite;
 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
-		inviteDAO.makeTransient(inviteDAO.getById(other.getId(), false));
+		groupWorkspaceEmailInviteDAO.makeTransient(groupWorkspaceEmailInviteDAO.getById(other.getId(), false));
 		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		assert inviteDAO.getById(other.getId(), false) == null : "Should not be able to find other";
+		assert groupWorkspaceEmailInviteDAO.getById(other.getId(), false) == null : "Should not be able to find other";
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
 	}
+	
 }

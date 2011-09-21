@@ -351,7 +351,7 @@ public class DefaultInviteUserService implements InviteUserService {
 			else 
 			{
 				/* If user does not exist in the system then get a token and send email with the token */
-				InviteToken inviteToken = new InviteToken(email, TokenGenerator.getToken(), invitingUser);
+				InviteToken inviteToken = new InviteToken(email, TokenGenerator.getToken() + email, invitingUser);
 				inviteToken.setInviteMessage(inviteMessage);
 				FileInviteInfo inviteInfo = new FileInviteInfo(versionedFiles, permissions, inviteToken );
 	

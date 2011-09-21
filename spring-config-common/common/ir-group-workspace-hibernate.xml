@@ -110,18 +110,40 @@
    </bean>
    
    <!-- ****************************************** --> 
-   <!-- Invited Group workspace Group information  -->
+   <!-- Invited Group workspace User Email information  -->
    <!-- ****************************************** --> 
    
-   <bean id="groupWorkspaceInviteDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceInviteDAO">
+   <bean id="groupWorkspaceEmailInviteDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceEmailInviteDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
      
-   <bean id="groupWorkspaceInviteDAO" 
+   <bean id="groupWorkspaceEmailInviteDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupWorkspaceInviteDAOTarget"/>
+       <property name="target" ref="groupWorkspaceEmailInviteDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Invited Group workspace User information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="groupWorkspaceUserInviteDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceUserInviteDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="groupWorkspaceUserInviteDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceUserInviteDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>

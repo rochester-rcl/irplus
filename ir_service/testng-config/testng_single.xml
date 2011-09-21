@@ -19,7 +19,7 @@
 <suite name="ir_service">
 	<test name="UR IR Service Test">
 		<classes>
-			<class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemServiceTest"/>
+			<class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceInviteServiceTest"/>
 		</classes>
 	</test>
 </suite>

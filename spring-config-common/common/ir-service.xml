@@ -361,7 +361,7 @@
     </bean>
     
    <!-- ****************************************** --> 
-   <!-- Service to invite user					   -->
+   <!-- Service to invite user for personal workspace -->
    <!-- ****************************************** --> 
    <bean id="inviteUserService" 
        class="edu.ur.ir.user.service.DefaultInviteUserService">
@@ -898,7 +898,18 @@
        <property name="securityService" ref="securityService"/>
    </bean>
    
-   
+     <!-- ****************************************** --> 
+   <!-- Service to invite user for personal workspace -->
+   <!-- ****************************************** --> 
+   <bean id="groupWorkspaceInviteService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceInviteService">
+	   <property name="groupWorkspaceEmailInviteDAO" ref="groupWorkspaceEmailInviteDAO"/>
+	   <property name="groupWorkspaceUserInviteDAO" ref="groupWorkspaceUserInviteDAO"/>
+       <property name="mailSender" ref="mailSender"/>
+       <property name="userWorkspaceInviteUserExists" ref="userWorkspaceInviteUserExists"/>
+       <property name="userWorkspaceInviteUserNotExistsMessage" ref="userWorkspaceInviteUserNotExistsMessage"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
+   </bean>
    <!-- ****************************************** --> 
    <!-- Service that deals with Marc Conntent type -->
    <!--  mapping                                   -->

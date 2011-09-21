@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 - 2011 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for invite information to a group workspace group
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.groupspace">
+	<class name="GroupWorkspaceUserInvite" schema="ir_group_workspace"
+	    table="group_workspace_user_invite"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="group_workspace_user_invite_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_group_workspace.group_workspace_user_invite_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+        <!--  indicates if the user should be set as the owner. -->
+        <property name="setAsOwner" column="set_as_owner" type="boolean" not-null="true" access="field" />
+	    
+	     <property name="email" column="email" type="string" not-null="true"
+			access="field" />
+	    
+	    <!--  date the record was created -->
+	    <property name="createdDate" column="created_date" type="timestamp"
+			not-null="true" access="field" />
+		
+	     <property name="inviteMessage" column="invite_message" type="string"
+			access="field" />
+			
+	   <!--  user sending the invitation -->
+	   <many-to-one class="edu.ur.ir.user.IrUser" 
+			name="invitingUser" 
+			column="inviting_user_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
+	
+	   <!--  user sending the invitation -->
+	   <many-to-one class="edu.ur.ir.user.IrUser" 
+			name="invitedUser" 
+			column="invited_user_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
+				
+	   <!-- group workspace  the user was added to -->
+	   <many-to-one class="GroupWorkspace" 
+			name="groupWorkspace" 
+			column="group_workspace_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
+
+    </class>
+		
+    <!-- named query for getting invite information for given token-->
+    <query name="findGroupWorkspaceUserInviteForUser">from GroupWorkspaceUserInvite inviteInfo where inviteInfo.invitedUser.id = :userId </query> 
+ 
+    <!-- named query for getting invite information made by a given user -->
+    <query name="getGroupWorkspaceUserInviteMadeByUser">from GroupWorkspaceUserInvite inviteInfo where inviteInfo.invitingUser.id = :userId </query> 
+    
+    	<!--  Get a count of roles in the system -->
+	<query name="groupWorkspaceUserInviteCount">
+	    select count(*) from GroupWorkspaceUserInvite
+	</query>
+	
+    <!-- sort by last name asc -->
+	<query name="getGroupWorkspaceUserInviteOrderByInvitorAsc">
+		select inviteInfo from GroupWorkspaceUserInvite as inviteInfo
+		order by inviteInfo.groupWorkspace.name asc, inviteInfo.invitingUser.lowerCaseLastName asc, inviteInfo.invitingUser.lowerCaseFirstName asc, inviteInfo.invitingUser.lowerCaseMiddleName asc
+	</query>	
+
+	<!-- sort by last name desc -->
+	<query name="getGroupWorkspaceUserInviteOrderByInvitorDesc">
+		select inviteInfo from GroupWorkspaceUserInvite as inviteInfo
+		order by inviteInfo.groupWorkspace.name desc, inviteInfo.invitingUser.lowerCaseLastName desc, inviteInfo.invitingUser.lowerCaseFirstName desc, inviteInfo.invitingUser.lowerCaseMiddleName desc
+	</query>	
+	
+</hibernate-mapping>

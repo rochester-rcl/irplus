@@ -27,10 +27,10 @@
 
   
 
-    <bean id = "userExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
+    <bean id = "userWorkspaceInviteUserExists" class="org.springframework.mail.SimpleMailMessage">
     	<property name="from" value="${mail.sender.from}"/>
     	<property name="replyTo" value="${mail.sender.replyTo}"/>
-    	<property name="subject"> <value>  <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate on a document ]]> </value> </property>
+    	<property name="subject"> <value>  <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate in a group workspace ]]> </value> </property>
     	<property name="text">
     		<value>
     			<![CDATA[
@@ -46,10 +46,10 @@
     	</property>
     </bean>
 
-    <bean id = "userNotExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
+    <bean id = "userWorkspaceInviteUserNotExistsMessage" class="org.springframework.mail.SimpleMailMessage">
     	<property name="from" value="${mail.sender.from}"/>
     	<property name="replyTo" value="${mail.sender.replyTo}"/>    	
-    	<property name="subject"> <value> <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate on a document ]]> </value> </property>
+    	<property name="subject"> <value> <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate in a group workspace ]]> </value> </property>
     	<property name="text">
     		<value>
     			<![CDATA[
@@ -60,7 +60,7 @@
     			
     			%BASE_WEB_APP_PATH%inviteLogin.action?token=%TOKEN%
     			
-    			Following registration you will be able to access the shared document(s).
+    			Following registration you will be able to access the work group.
     			]]>
     		</value>
     	</property>

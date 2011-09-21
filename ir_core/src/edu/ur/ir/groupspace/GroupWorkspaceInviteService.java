@@ -22,7 +22,9 @@ import java.util.List;
 
 /**
  * Service to deal with users who are invited to join a group
- * of a group workspace.
+ * of a group workspace.  This provides an interface to deal with
+ * both users who are already existing members of the system as 
+ * well as those who have not yet become members of the system.
  * 
  * @author Nathan Sarr
  *
@@ -35,7 +37,7 @@ public interface GroupWorkspaceInviteService
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceInvite findByToken(String token);
+	public GroupWorkspaceEmailInvite findByToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email
@@ -43,18 +45,28 @@ public interface GroupWorkspaceInviteService
 	 * @param email email address shared with
 	 * @return List of invite information
 	 */
-	public List<GroupWorkspaceInvite> getByEmail(String email);
+	public List<GroupWorkspaceEmailInvite> getByEmail(String email);
 	
 	
 	/**
-	 * Get the invited group workspace group user by id.
+	 * Get the invited group workspace email invite by id.
 	 * 
 	 * @param id - id of the invite id
 	 * @param lock - upgrade the lock.
 	 * 
 	 * @return the invite if found.
 	 */
-	public GroupWorkspaceInvite getById(Long id, boolean lock);
+	public GroupWorkspaceEmailInvite getEmailInviteById(Long id, boolean lock);
+	
+	/**
+	 * Get the invited group workspace user invite by id.
+	 * 
+	 * @param id - id of the invite id
+	 * @param lock - upgrade the lock.
+	 * 
+	 * @return the invite if found.
+	 */
+	public GroupWorkspaceUserInvite getUserInviteById(Long id, boolean lock);
 
 	
 	/**
@@ -62,20 +74,40 @@ public interface GroupWorkspaceInviteService
 	 * 
 	 * @param entity
 	 */
-	public void save(GroupWorkspaceInvite entity);
+	public void save(GroupWorkspaceUserInvite entity);
 
 	/**
 	 * Delete the invite 
 	 * 
 	 * @param entity
 	 */
-	public void delete(GroupWorkspaceInvite entity);
+	public void delete(GroupWorkspaceUserInvite entity);
+	
+	/**
+	 * Make the invite record persistent.
+	 * 
+	 * @param entity
+	 */
+	public void save(GroupWorkspaceEmailInvite entity);
+
+	/**
+	 * Delete the invite 
+	 * 
+	 * @param entity
+	 */
+	public void delete(GroupWorkspaceEmailInvite entity);
 
 	/**
 	 * Get a count of the number of invite records.
 	 * 
 	 */
-	public Long getCount();
+	public Long getUserInviteCount();
+	
+	/**
+	 * Get a count of the number of invite records.
+	 * 
+	 */
+	public Long getEmailInviteCount();
 	
 	/**
 	 * Sends an email notifying the specified user that  they have been invited
@@ -83,7 +115,16 @@ public interface GroupWorkspaceInviteService
 	 * 
 	 * @param invite
 	 */
-	public void sendEmailInvite(GroupWorkspaceInvite invite);
+	public void sendEmailInvite(GroupWorkspaceUserInvite invite);
+	
+	/**
+	 * Sends an email notifying the specified user that  they have been invited
+	 * to join a group workspace.  This also notifies the user they must join
+	 * the system to access the group workspace.
+	 * 
+	 * @param invite
+	 */
+	public void sendEmailInvite(GroupWorkspaceEmailInvite invite);
 	
 	
 }
