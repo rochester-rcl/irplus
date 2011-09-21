@@ -16,35 +16,14 @@
 
 package edu.ur.ir.groupspace;
 
-import java.util.List;
-
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 
 /**
- * Interface to store invites to join a group workspace.
+ * Deal with group workspace existing user invite data access object.
  * 
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceInviteDAO 
-extends CrudDAO<GroupWorkspaceInvite>, CountableDAO {
-	
-	/**
-	 * Find the Invite information for a specified token
-	 * 
-	 * @param token user token
-	 * @return User token information
-	 */
-	public GroupWorkspaceInvite findInviteInfoForToken(String token);
-	
-	/**
-	 * Find the Invite information for a specified email
-	 * 
-	 * @param email email address shared with
-	 * @return List of invite information
-	 */
-	public List<GroupWorkspaceInvite> getInviteInfoByEmail(String email);
-
- 
-}
+public interface GroupWorkspaceUserInviteDAO extends CrudDAO<GroupWorkspaceUserInvite>, 
+CountableDAO {}

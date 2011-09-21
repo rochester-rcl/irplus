@@ -16,7 +16,9 @@
 
 package edu.ur.ir.user;
 
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +47,12 @@ public class FileInviteInfo extends BasePersistent {
     /* token for the invite  */
     private InviteToken inviteToken;
     
- 	/**
+    /* date the record was created */
+    private Timestamp dateCreated;
+    
+
+
+	/**
 	 * Default Constructor
 	 */
 	FileInviteInfo() {}
@@ -54,6 +61,7 @@ public class FileInviteInfo extends BasePersistent {
 	 *  Constructor 
 	 */
 	public FileInviteInfo(Set<VersionedFile> versionedFile, Set<IrClassTypePermission> permissions, InviteToken inviteToken) {
+		dateCreated = new Timestamp(new Date().getTime());
 		setFiles(versionedFile);
 		setPermissions(permissions);
 		this.setInviteToken(inviteToken);
@@ -181,6 +189,24 @@ public class FileInviteInfo extends BasePersistent {
 	void setInviteToken(InviteToken inviteToken)
 	{
 		this.inviteToken = inviteToken;
+	}
+	
+ 	/**
+ 	 * Date the record was created.
+ 	 * 
+ 	 * @return
+ 	 */
+ 	public Timestamp getDateCreated() {
+		return dateCreated;
+	}
+
+	/**
+	 * Date the record was created.
+	 * 
+	 * @param dateCreated
+	 */
+	void setDateCreated(Timestamp dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 	
 	/**

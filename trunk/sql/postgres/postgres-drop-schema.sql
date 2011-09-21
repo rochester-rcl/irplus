@@ -80,7 +80,8 @@ DROP SCHEMA ir_security;
 -- ---------------------------------------------
 -- Drop Group spaces tables/schema
 -- ---------------------------------------------
-DROP TABLE ir_group_workspace.group_workspace_invite;
+DROP TABLE ir_group_workspace.group_workspace_user_invite;
+DROP TABLE ir_group_workspace.group_workspace_email_invite;
 DROP TABLE ir_group_workspace.group_workspace_user;
 DROP TABLE ir_group_workspace.group_workspace_file;
 DROP TABLE ir_group_workspace.group_workspace_folder;
@@ -88,7 +89,8 @@ DROP TABLE ir_group_workspace.group_workspace;
 DROP TABLE ir_group_workspace.group_workspace_file_delete_record;
 
 DROP SEQUENCE ir_group_workspace.group_workspace_user_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_invite_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_email_invite_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_user_invite_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_file_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;

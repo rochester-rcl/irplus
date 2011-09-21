@@ -147,7 +147,7 @@ public interface InviteUserService extends Serializable{
 	    throws FileSharingException;
 	
 	/**
-	 * Get all invite info information for a sepcified email.
+	 * Get all invite info information for a specified email.
 	 * 
 	 * @param email - email to get
 	 * @return the list of invite info objects

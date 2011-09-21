@@ -24,7 +24,7 @@ ALTER TABLE ir_repository.repository ADD COLUMN institutional_collection_index_f
 ALTER TABLE ir_repository.repository ADD COLUMN user_group_index_folder TEXT;
 
 
--- create the institutional collection index folder
+-- add invite info created date
 ALTER TABLE ir_user.invite_info ADD COLUMN created_date TIMESTAMP WITH TIME ZONE;
 UPDATE  ir_user.invite_info set created_date = date(now());
 
@@ -332,6 +332,7 @@ CREATE TABLE ir_invite.invite_token
   version INTEGER,
   token TEXT NOT NULL,
   email TEXT NOT NULL,
+  invite_message TEXT,
   inviting_user_id BIGINT NOT NULL,
   created_date TIMESTAMP WITH TIME ZONE NOT NULL,
   expiration_date TIMESTAMP WITH TIME ZONE,
@@ -386,26 +387,51 @@ and token is not null;
 -- create an index on the handle info local name
 CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
 
+
 -- ---------------------------------------------
--- Group workspace group invite Information
+-- Group workspace email invite Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_invite
+CREATE TABLE ir_group_workspace.group_workspace_email_invite
 (
-    group_workspace_invite_id BIGINT PRIMARY KEY,
+    group_workspace_email_invite_id BIGINT PRIMARY KEY,
     version INTEGER,
     invite_token_id BIGINT NOT NULL,
-    invited_user_id BIGINT,
+    set_as_owner BOOLEAN NOT NULL,
     group_workspace_id BIGINT NOT NULL,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
     FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token(invite_token_id),
-    FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id),
     UNIQUE(invite_token_id)
 );
-ALTER TABLE ir_group_workspace.group_workspace_invite OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_email_invite OWNER TO ir_plus;
 
 -- The group workspace group sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_invite_seq;
-ALTER TABLE ir_group_workspace.group_workspace_invite_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_email_invite_seq;
+ALTER TABLE ir_group_workspace.group_workspace_email_invite_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace user invite Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_user_invite
+(
+    group_workspace_user_invite_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    inviting_user_id BIGINT NOT NULL,
+    invited_user_id BIGINT NOT NULL,
+    set_as_owner BOOLEAN NOT NULL,
+    email TEXT NOT NULL,
+    invite_message TEXT,
+    group_workspace_id BIGINT NOT NULL,
+    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
+    FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id),
+    FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_user_invite OWNER TO ir_plus;
+
+-- The group workspace group sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_user_invite_seq;
+ALTER TABLE ir_group_workspace.group_workspace_user_invite_seq OWNER TO ir_plus;
+
 
 -- ---------------------------------------------
 -- group workspace file delete record
