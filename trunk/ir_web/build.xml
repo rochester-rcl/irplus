@@ -26,9 +26,9 @@
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
  	
- -->
+ 
  	<property name="yui.unzip" value="true"/>
-   
+   -->
 
 
 	<!-- always disable emma -->
@@ -138,7 +138,7 @@
 	</target>
 
 	<!-- compile the java source files -->
-    <target name="build" depends="retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
+    <target name="build" depends="clean, retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
         <mkdir dir="${build.dir}/classes"/>
         <ext:javac srcdir="${src.dir}"
 			 destdir="${build.dir}/classes"
@@ -230,7 +230,7 @@
 	     You must first tell your web-browser to look
 	     at your webapps directory 
 	-->
-   <target name="prep-run-webapp-local" depends="build, clean-run-webapp-local, move-yui">
+   <target name="prep-run-webapp-local" depends="clean, build, clean-run-webapp-local, move-yui">
         <!-- Remove the old classes -->
         <delete dir="${webapp.classes.dir}" />
 
@@ -238,7 +238,7 @@
         <delete dir="${webapp.lib.dir}"/>
    	
    	    <!-- Remove the old configuration files-->
-   	     <delete dir="${webapp.webinf.dir}"/>
+   	    <delete dir="${webapp.webinf.dir}"/>
 
    	    <!-- rebuild the folders -->
         <mkdir dir="${webapp.classes.dir}"/>
@@ -340,7 +340,7 @@
 	</target>
 	
 	<!-- create the production build -->
-	<target name="prepare-production-staging" depends="build, clean-production-staging, move-yui">
+	<target name="prepare-production-staging" depends="clean-production-staging, build, move-yui">
 		
 		<!-- re-create production stag -->
 		<mkdir dir="${production.staging.dir}"/>
