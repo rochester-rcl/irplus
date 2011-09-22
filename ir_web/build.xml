@@ -25,9 +25,9 @@
 
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-    
+     -->
  	<property name="yui.unzip" value="true"/>
- 	 -->
+ 	
 
 
 	<!-- always disable emma -->
@@ -339,7 +339,7 @@
 	</target>
 	
 	<!-- create the production build -->
-	<target name="prepare-production-staging" depends="build, clean-production-staging, move-yui">
+	<target name="prepare-production-staging" depends="clean-production-staging, build, move-yui">
 		
 		<!-- re-create production stag -->
 		<mkdir dir="${production.staging.dir}"/>
@@ -424,7 +424,7 @@
 	</target>
 	
 	<!-- delete the webapp production staging files -->
-	<target name="clean-production-staging">
+	<target name="clean-production-staging" depends="clean">
 		 <delete dir="${production.staging.dir}"/>
 	</target>
 	
