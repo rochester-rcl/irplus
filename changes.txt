@@ -61,6 +61,12 @@ their workspace
 
 - Set license to be read only so it can be scrolled in IE 
 
+- Fixed null pointer issue in collection searching when collection no longer exists
+
+- Updated link to YUI library
+
+- Moved tag library tld file to WEB-INF to fix issue with Tomcat 7
+
 IR+ 2.0.7 to 2.0.8
 ==========================
 - Updated almost all images to use css rather than hard coded sizes
