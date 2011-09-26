@@ -2032,7 +2032,7 @@ values (nextval('metadata.marc_relator_code_seq'), 0, 'Technical director', 'tcd
 
 insert into                                                         
 metadata.marc_relator_code (marc_relator_code_id, version, name, relator_code, description) 
-values (nextval('metadata.marc_relator_code_seq'), 0, 'Thesis advisor', 'ths','Use for a person under whose supervision a degree candidate develops and presents a thesis, mémoire, or text of a dissertation. ');
+values (nextval('metadata.marc_relator_code_seq'), 0, 'Thesis advisor', 'ths','Use for a person under whose supervision a degree candidate develops and presents a thesis, memoire, or text of a dissertation. ');
 
 insert into                                                         
 metadata.marc_relator_code (marc_relator_code_id, version, name, relator_code, description) 
