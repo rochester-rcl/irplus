@@ -111,6 +111,11 @@ insert into
 ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
 values (nextval('ir_item.content_type_seq'), 0, 'Form', null, 'FORM');
 
+insert into 
+ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.content_type_seq'), 0, 'Thesis', null, 'THESIS');
+
+
 -- ---------------------------------------------
 -- Default Contributor types
 -- ---------------------------------------------
@@ -6937,7 +6942,7 @@ values (nextval('metadata.marc_relator_code_seq'), 0, 'Technical director', 'tcd
 
 insert into                                                         
 metadata.marc_relator_code (marc_relator_code_id, version, name, relator_code, description) 
-values (nextval('metadata.marc_relator_code_seq'), 0, 'Thesis advisor', 'ths','Use for a person under whose supervision a degree candidate develops and presents a thesis, mémoire, or text of a dissertation. ');
+values (nextval('metadata.marc_relator_code_seq'), 0, 'Thesis advisor', 'ths','Use for a person under whose supervision a degree candidate develops and presents a thesis, memoire, or text of a dissertation. ');
 
 insert into                                                         
 metadata.marc_relator_code (marc_relator_code_id, version, name, relator_code, description) 
@@ -7138,3 +7143,4 @@ VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'),
         ' ', 
         'a', 
         0);
+ 
