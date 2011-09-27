@@ -85,6 +85,7 @@
 		                <c:if test="${!institutionalItemVersion.item.publiclyViewable && !institutionalItemVersion.item.embargoed}"><span class="errorMessage">Restricted</span></c:if>
 		                <c:if test="${institutionalItemVersion.item.publiclyViewable && institutionalItemVersion.item.embargoed}"><span class="errorMessage">Embargoed </span> / <span class="greenMessage">Publicly Viewable Following Embargo</span></c:if>
 		                <c:if test="${!institutionalItemVersion.item.publiclyViewable && institutionalItemVersion.item.embargoed}"><span class="errorMessage">Embargoed / Restricted Following Embargo</span></c:if>
+		                <br/>
 		        </c:if> 
 		        
 				<c:if test="${institutionalItemVersion.handleInfo != null}">
