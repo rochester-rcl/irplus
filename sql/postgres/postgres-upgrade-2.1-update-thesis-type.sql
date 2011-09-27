@@ -20,3 +20,6 @@
 
 UPDATE ir_item.content_type SET unique_system_code = 'THESIS' 
 where name = 'Thesis';
+
+UPDATE ir_item.content_type SET unique_system_code = 'THESIS' 
+where name = 'thesis';
