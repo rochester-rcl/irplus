@@ -39,8 +39,16 @@ and role.name = 'ROLE_ADMIN')
 and ir_user.role.name ='ROLE_IMPORTER';
 
 
+-- ---------------------------------------------
+-- Make publisher name unique
+-- ---------------------------------------------
 
+ALTER TABLE ir_item.publisher
+  ADD CONSTRAINT publisher_name_key UNIQUE(name);
+  
+ALTER TABLE ir_item.publisher ALTER COLUMN name SET NOT NULL;  
 
+  
 -- ---------------------------------------------
 -- Place of publication
 -- ---------------------------------------------
