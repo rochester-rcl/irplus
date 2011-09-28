@@ -57,7 +57,7 @@ import edu.ur.util.FileUtil;
 
 
 /**
- * Test the service methods for the default user file system services.
+ * Test the service methods for the default user services.
  * 
  * @author Nathan Sarr
  * 
@@ -374,13 +374,14 @@ public class DefaultUserFileSystemServiceTest {
 			ts = tm.getTransaction(td);
 			
 			PersonalFolder myFolder = userFileSystemService.createNewFolder(user, "myFolder1");
-			assert myFolder != null : "folder should be created";
-
 			PersonalFolder subFolder = myFolder.createChild("subFolder");
-			assert subFolder != null : "folder should be created";
 			
 			userFileSystemService.makePersonalFolderPersistent(myFolder);
-						
+			assert myFolder != null : "folder should be created";
+			
+			// create a sub folder
+			assert subFolder != null : "folder should be created";
+			
 			PersonalFile pf = userFileSystemService.addFileToUser(repo, 
 					f, 
 					myFolder, 

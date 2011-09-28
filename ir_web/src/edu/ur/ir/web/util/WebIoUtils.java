@@ -22,7 +22,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,16 +43,13 @@ import java.util.GregorianCalendar;
  * @author Nathan Sarr
  *
  */
-public class WebIoUtils implements Serializable{
+public class WebIoUtils {
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 3354749220796132623L;
-
 	/**  Service for dealing with mime information  */
 	private MimeTypeService mimeTypeService;
 	
 	/** response writer. */
-	private transient ResponseBufferedOutputWriter responseOutputWriter;
+	private ResponseBufferedOutputWriter responseOutputWriter;
 	
 	/**  Logger for class */
 	private static final Logger log = Logger.getLogger(WebIoUtils.class);
@@ -70,7 +66,7 @@ public class WebIoUtils implements Serializable{
 	 * 
 	 * @throws Exception
 	 */
-	public void streamFileInfo(String fileName, FileInfo fileInfo, 
+	public void StreamFileInfo(String fileName, FileInfo fileInfo, 
 			HttpServletResponse response, HttpServletRequest request, 
 			int bufferSize, boolean isPublic, boolean forceDownload) throws Exception
 	{
@@ -136,11 +132,6 @@ public class WebIoUtils implements Serializable{
         {
             //tell it to download only
             response.addHeader("Content-Disposition", "attachment; filename=\"" + 
-        		 fullFileName + "\"");
-        }
-        else
-        {
-        	response.addHeader("Content-Disposition", "inline; filename=\"" + 
         		 fullFileName + "\"");
         }
         

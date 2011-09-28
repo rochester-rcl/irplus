@@ -302,7 +302,7 @@ public class ManagePersonalLinks extends ActionSupport implements UserIdAware{
 		this.link = link;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -69,7 +69,6 @@ public class IrAcl extends BasePersistent implements Acl
 	/**  Set of Group access control entries */
 	private Set<IrUserGroupAccessControlEntry> groupEntries = new HashSet<IrUserGroupAccessControlEntry>();
 	
-
 	/**  Version of the irAcl */
 	private int version;
 	
@@ -404,7 +403,6 @@ public class IrAcl extends BasePersistent implements Acl
 		return gace;
 	}
 	
-	
 	/**
 	 * Return the group access control entry if found otherwise null.
 	 * 
@@ -473,7 +471,7 @@ public class IrAcl extends BasePersistent implements Acl
 	{
 		return groupEntries.remove(groupControlEntry);
 	}
-	
+
 	/**
 	 * Get the parent acl.
 	 * 
@@ -633,9 +631,9 @@ public class IrAcl extends BasePersistent implements Acl
 	public void setGroupEntries(Set<IrUserGroupAccessControlEntry> groupEntries) {
 		this.groupEntries = groupEntries;
 	}
-	
+
 	/**
-	 * Set this to true if the entries inherit the permissions of the parent.
+	 * Set this to true if the entries inherity the permissions of the parent.
 	 * 
 	 * @param entriesInheriting
 	 */
@@ -708,7 +706,6 @@ public class IrAcl extends BasePersistent implements Acl
 		}
 		return false;
 	}
-	
 	
 	/**
 	 * Check the groups for the specified user.  If the group 
@@ -801,7 +798,7 @@ public class IrAcl extends BasePersistent implements Acl
 			( objectId == null && other.getObjectId() != null ) ) return false;
 
 		if( ( classType != null && !classType.equals(other.getClassType()) ) ||
-			( classType == null && other.getClassType() != null ) ) return false;
+				( classType == null && other.getClassType() != null ) ) return false;
 
 		
 		return true;

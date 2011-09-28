@@ -17,7 +17,6 @@
 package edu.ur.ir.item.metadata.marc;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * Interface for dealing with marc data field data.
@@ -25,7 +24,7 @@ import edu.ur.dao.ListAllDAO;
  * @author Nathan Sarr
  *
  */
-public interface MarcDataFieldMapperDAO extends CrudDAO<MarcDataFieldMapper>, ListAllDAO
+public interface MarcDataFieldMapperDAO extends CrudDAO<MarcDataFieldMapper>
 {
 	/**
 	 * Get the mapper by marc data field id.

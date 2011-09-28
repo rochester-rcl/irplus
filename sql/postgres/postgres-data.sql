@@ -111,6 +111,11 @@ insert into
 ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
 values (nextval('ir_item.content_type_seq'), 0, 'Form', null, 'FORM');
 
+insert into 
+ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.content_type_seq'), 0, 'Thesis', null, 'THESIS');
+
+
 -- ---------------------------------------------
 -- Default Contributor types
 -- ---------------------------------------------
@@ -4994,11 +4999,6 @@ insert into
 ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
 values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE', 'A record is to be deleted from the index');
 
-insert into 
-ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
-values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE_INDEX', 'the index needs to be deleted and rebuilt');
-
-
 -- -----------------------------------
 --  Insert the dublin core 
 --  encoding schemes 
@@ -7143,3 +7143,4 @@ VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'),
         ' ', 
         'a', 
         0);
+ 

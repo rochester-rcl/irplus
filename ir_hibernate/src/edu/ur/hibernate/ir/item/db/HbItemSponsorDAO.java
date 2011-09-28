@@ -16,10 +16,12 @@
 
 package edu.ur.hibernate.ir.item.db;
 
-import org.hibernate.Query;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.ItemSponsor;
 import edu.ur.ir.item.ItemSponsorDAO;
 
@@ -61,8 +63,7 @@ public class HbItemSponsorDAO implements ItemSponsorDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemSponsorCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemSponsorCount"));
 	}
 
 	public ItemSponsor getById(Long id, boolean lock) {
@@ -76,4 +77,10 @@ public class HbItemSponsorDAO implements ItemSponsorDAO {
 	public void makeTransient(ItemSponsor entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

@@ -73,7 +73,8 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 			UserEmail email = userService.getUserEmailByToken(token);
 			
 			if ((email != null) && (email.getIrUser().equals(user))) {
-				email.setVerifiedTrue();
+				email.setVerified(true);
+				email.setToken(null);
 				userService.makeUserPersistent(user);
 				
 				try {
@@ -109,7 +110,7 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 		this.token = token;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

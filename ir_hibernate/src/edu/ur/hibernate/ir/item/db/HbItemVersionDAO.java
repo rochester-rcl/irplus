@@ -19,7 +19,6 @@ package edu.ur.hibernate.ir.item.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -59,8 +58,8 @@ public class HbItemVersionDAO implements ItemVersionDAO{
     }
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemVersionCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemVersionCount"));
 	}
 
 	public ItemVersion getById(Long id, boolean lock) {
@@ -75,6 +74,11 @@ public class HbItemVersionDAO implements ItemVersionDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+	
 	/**
 	 * Get the list of ItemVersions that has this specified IrFile
 	 * 	

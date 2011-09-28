@@ -72,8 +72,7 @@ public class HbNewsDAO implements NewsDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("newsCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("newsCount"));
 	}
 
 	/**
@@ -105,6 +104,16 @@ public class HbNewsDAO implements NewsDAO {
 	public NewsItem findByUniqueName(String name) {
 		return (NewsItem) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getNewsByName", name));
+	}
+
+	/**
+	 * Get all news items.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**

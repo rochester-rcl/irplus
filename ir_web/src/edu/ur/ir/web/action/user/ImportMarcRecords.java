@@ -231,7 +231,7 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	 * 
 	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

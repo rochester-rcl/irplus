@@ -37,8 +37,7 @@ import edu.ur.ir.repository.Repository;
  */
 public interface UserFileSystemService extends Serializable{
 	
-	/** Default id for the root folder for each user - this indicates get files or folders
-	 * from the user object */
+	/** Default id for the root folder for each users*/
 	public static final long ROOT_FOLDER_ID = 0L;
 
 	
@@ -73,13 +72,13 @@ public interface UserFileSystemService extends Serializable{
 	public List<PersonalFolder> getAllPersonalFoldersForUser(Long userId);
 	
 	/**
-	 * Gets the path to the folder starting from the top parent all the way
-	 * down to the specified child personal folder id.  Only includes parents of the specified 
-	 * child.  The list is ordered highest level parent to last child.  This
+	 * Gets the path to the collection starting from the top parent all the way
+	 * down to the specified child.  Only includes parents of the specified 
+	 * collection.  The list is ordered highest level parent to last child.  This
 	 * is useful for displaying the path to a given collection.
 	 * 
-	 * @param personal folder id 
-	 * @return list of parent folders.
+	 * @param collection 
+	 * @return list of parent collections.
 	 * 
 	 */
 	public List<PersonalFolder> getPersonalFolderPath(Long personalFolderId);
@@ -157,7 +156,7 @@ public interface UserFileSystemService extends Serializable{
      * 
      * @param repositoryId - the repository to add the file to.
      * @param f - file to add
-     * @param user - user to add the file to. 
+     * @param userId - Unique user id 
      * @param fileName - The name to give the file.
      * @param description - description of the file.
      * 
@@ -186,7 +185,7 @@ public interface UserFileSystemService extends Serializable{
     		String description )throws DuplicateNameException, IllegalFileSystemNameException;
     
     /**
-     * Create an empty personal versioned file in the system for the
+     * Create a personal versioned file in the system with an empty file for the
      * given user. This is created at the root level (added to the user)
      * 
      * @param Repository - the repository to add the file to.
@@ -313,6 +312,13 @@ public interface UserFileSystemService extends Serializable{
 	 */
 	public void makePersonalFilePersistent(PersonalFile personalFile);	
 
+	/**
+	 * Delete the Acess control list for the specified versioned file.
+	 * 
+	 * @param versionedFile - versioned file to remove the ACL from
+	 * @param user - user to remove the ACL from.
+	 */
+	public void deleteAclForVersionedFile(VersionedFile versionedFile, IrUser user);
 	
 	/**
 	 * Get all versioned files for the specified folder.
@@ -459,16 +465,7 @@ public interface UserFileSystemService extends Serializable{
 	 * @return all files within a folder and its sub folder
 	 */
     public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder);
-    
-	/**
-	 * This returns all folders for the specified parent folder.  This
-	 * includes all children including those within sub folders.
-	 * 
-	 * @param personalFolder - to get all children folders from
-	 * @return list of all children folders
-	 */
-	public List<PersonalFolder> getAllChildrenForFolder(PersonalFolder personalFolder);
-	
+
 	/**
 	 * Get shared inbox files for specified user and ids
 	 * 
@@ -497,27 +494,4 @@ public interface UserFileSystemService extends Serializable{
 	 * @return sum of versioned files size
 	 */
 	public Long getFileSystemSizeForUser(IrUser user);
-	
-	/**
-	 * Get a list of personal files shared witht he given user.
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results
-	 * @param ownerId - owner of the personal files.
-	 * @param sharedWithUserId - id of the user who files are shared with
-	 * 
-	 * @return list of files shared with the user.
-	 */
-	public List<PersonalFile> getFilesSharedWithUser(int rowStart,
-			int maxResults, Long ownerId, Long sharedWithUserId);
-	
-	/**
-	 * Get the count of files shared with a given user.
-	 * 
-	 * @param ownerId - owner of the personal file sto check
-	 * @param sharedWithUserId - id of the shared with user id.
-	 * 
-	 * @return count of files shared with the given shared with user id
-	 */
-	public Long getFilesSharedWithUserCount(Long ownerId, Long sharedWithUserId);
 }

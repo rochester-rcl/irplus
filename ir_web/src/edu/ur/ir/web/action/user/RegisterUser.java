@@ -41,7 +41,7 @@ import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
 import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.FileSharingException;
-import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -99,7 +99,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	private RoleService roleService;
 
 	/** Invite information */
-	private FileInviteInfo inviteInfo;
+	private InviteInfo inviteInfo;
 	
 	/** Message that can be displayed to the user. */
 	private String message;
@@ -142,6 +142,9 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	
 	/** indicates net id already exists and the net id validated against the password*/
 	private boolean externalAccountAlreadyExists = false;
+	
+
+
 
 	/** External authentication provider */
 	private ExternalAuthenticationProvider externalAuthenticationProvider;
@@ -156,7 +159,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 
 		if ((token != null) && (token.length() > 0)) {
 			inviteInfo = inviteUserService.findInviteInfoByToken(token);
-			defaultEmail = new UserEmail(inviteInfo.getInviteToken().getEmail());
+			defaultEmail = new UserEmail(inviteInfo.getEmail());
 		}
 		return SUCCESS;
 	}
@@ -407,7 +410,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 * 
 	 * @return
 	 */
-	public FileInviteInfo getInviteInfo() {
+	public InviteInfo getInviteInfo() {
 		return inviteInfo;
 	}
 
@@ -505,7 +508,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -582,7 +585,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		String phoneNumber = irUser.getPhoneNumber().trim();
 		ExternalUserAccount externalAccount = irUser.getExternalAccount();
 				
-		defaultEmail.setVerifiedFalse(TokenGenerator.getToken());
+		defaultEmail.setVerified(false);
+		defaultEmail.setToken(TokenGenerator.getToken());
 				
 		irUser = userService.createUser(irUser.getPassword().trim(), irUser.getUsername().trim(), 
 			    		defaultEmail);
@@ -641,28 +645,29 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		if ((token != null) && (token.length() > 0)) {
 			log.debug("found token ");
 			inviteInfo = inviteUserService.findInviteInfoByToken(token);
-            log.debug(" checking emails inviteInfo email = " + inviteInfo.getInviteToken().getEmail() + " default email = " + defaultEmail.getEmail());
+            log.debug(" checking emails inviteInfo email = " + inviteInfo.getEmail() + " default email = " + defaultEmail.getEmail());
 			
             
-            if (!inviteInfo.getInviteToken().getEmail().equals(defaultEmail.getEmail())) {
+            if (!inviteInfo.getEmail().equals(defaultEmail.getEmail())) {
 				log.debug("NOT EQUAL adding default email " + defaultEmail );
+				String emailToken = TokenGenerator.getToken();
 
-				UserEmail anotherEmail = new UserEmail(inviteInfo.getInviteToken().getEmail());
-				anotherEmail.setVerifiedTrue();
+				UserEmail anotherEmail = new UserEmail(inviteInfo.getEmail());
+				anotherEmail.setVerified(true);
 				irUser.addUserEmail(anotherEmail, true);
 
-				irUser.getUserEmail(defaultEmail.getEmail()).setVerifiedFalse(TokenGenerator.getToken());
+				irUser.getUserEmail(defaultEmail.getEmail()).setToken(emailToken);
 				
 				// send email With URL to verify email
-				userService.sendEmailForEmailVerification(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
+				userService.sendEmailForEmailVerification(emailToken, defaultEmail.getEmail(), irUser.getUsername());
 			} else {
 				log.debug("setting default email verified ");
-				irUser.getDefaultEmail().setVerifiedTrue();
+				irUser.getDefaultEmail().setVerified(true);
 				userService.makeUserPersistent(irUser);
 			}
 			
 			inviteUserService.shareFileForUserWithToken(irUser.getId(), token);
-			inviteUserService.sharePendingFilesForEmail(irUser.getId(), inviteInfo.getInviteToken().getEmail());
+			inviteUserService.sharePendingFilesForEmail(irUser.getId(), inviteInfo.getEmail());
 			
 			returnVal = "successInvite";
 		} 

@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.person.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -33,9 +32,6 @@ import edu.ur.ir.person.DeathDateDAO;
  *
  */
 public class HbDeathDateDAO implements DeathDateDAO{
-	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 1912799826810116895L;
 	
 	private final HbCrudDAO<DeathDate> hbCrudDAO;
 
@@ -62,8 +58,7 @@ public class HbDeathDateDAO implements DeathDateDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deathDateCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deathDateCount"));
 	}
 
 	public DeathDate getById(Long id, boolean lock) {
@@ -76,5 +71,10 @@ public class HbDeathDateDAO implements DeathDateDAO{
 
 	public void makeTransient(DeathDate entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 }

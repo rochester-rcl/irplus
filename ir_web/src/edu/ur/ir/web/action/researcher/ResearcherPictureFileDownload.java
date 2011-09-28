@@ -59,18 +59,17 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	private ResearcherService researcherService;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/** id of the ir file to download */
 	private Long irFileId;
 	
 	/** request made to the server */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility for web utils */
 	private WebIoUtils webIoUtils;
 	
-	/** id of the user accessing the file */
 	private Long userId;
 
 	/**
@@ -89,7 +88,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	    // to the files.
 		researcher = researcherService.getResearcher(researcherId, false);
 		if( researcher != null && 
-				(researcher.isPublic() || researcher.getUser().getId().equals(userId)))
+				(researcher.isPublic() || researcher.getUser().getId().equals(userId)) )
 		{
 			// causes a load form the database;
 		    IrFile irFile = researcher.getPicture(irFileId);
@@ -99,19 +98,14 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		    	    irFile = researcher.getPrimaryPicture();
 		        }
 		    }
-		    
-		    if( irFile != null )
-		    {
-                FileInfo fileInfo = irFile.getFileInfo();
+            FileInfo fileInfo = irFile.getFileInfo();
 
-                if( log.isDebugEnabled() )
-                {
-                    log.debug("Found ir File " + irFile);
-                }
+            if( log.isDebugEnabled() )
+            {
+                log.debug("Found ir File " + irFile);
+            }
            
-                webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
-		
-		    }
+            webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 		}
         
         return SUCCESS;
@@ -178,9 +172,8 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.researcherId = researcherId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
 
 }

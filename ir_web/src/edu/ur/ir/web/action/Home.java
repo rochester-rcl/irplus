@@ -205,7 +205,7 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -26,10 +26,15 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
+import edu.ur.ir.institution.InstitutionalItemSearchService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
@@ -92,6 +97,10 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 	
 	/** Institutional item to which version has to be added */
 	private InstitutionalItem institutionalItem;
+	
+	/** Service dealing with institutional item versions */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
 
 
 	/**
@@ -182,7 +191,7 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -270,5 +279,9 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
 
 }

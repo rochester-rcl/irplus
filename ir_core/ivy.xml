@@ -28,10 +28,10 @@
     
        
         <!--  file database dependency -->
-        <dependency org="file_db" name="file_db" rev="3.0" changing="true"/>
+        <dependency org="file_db" name="file_db" rev="2.1" changing="true"/>
       
         <!--  file database dependency -->
-        <dependency org="metadata" name="metadata" rev="3.0" changing="true"/>
+        <dependency org="metadata" name="metadata" rev="2.1" changing="true"/>
 
 
         <!-- javax mail libaries -->
@@ -40,23 +40,27 @@
         </dependency>
  
         <!--  POI dependencies -->
-        <dependency org="org.apache.poi" name="poi" rev="3.7" transitive="false">
+        <dependency org="org.apache.poi" name="poi" rev="3.6" transitive="false">
             <artifact name="poi" type="jar" />
+        </dependency>
+        
+        <dependency org="org.apache.poi" name="poi-contrib" rev="3.6" transitive="false">
+            <artifact name="poi-contrib" type="jar" />
         </dependency>
         
          <dependency org="org.apache.poi" name="openxml4j" rev="1.0-beta" transitive="false">
             <artifact name="openxml4j" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.7" transitive="false">
+        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.6" transitive="false">
             <artifact name="poi-scratchpad" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.7" transitive="false">
+        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.6" transitive="false">
             <artifact name="poi-ooxml" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.7" transitive="false">
+        <dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.6" transitive="false">
             <artifact name="poi-ooxml-schemas" type="jar" />
         </dependency>
         
@@ -65,37 +69,37 @@
         </dependency>
         
         <!-- pdf box jars  -->     
-         <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.6.0" transitive="false">
+         <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.2.1" transitive="false">
 	        <artifact name="pdfbox" type="jar"/> 
         </dependency>
         
-         <dependency org="org.apache.pdfbox" name="fontbox" rev="1.6.0" transitive="false">
+         <dependency org="org.apache.pdfbox" name="fontbox" rev="1.2.1" transitive="false">
 	        <artifact name="fontbox" type="jar"/> 
         </dependency>
         
-        <dependency org="org.apache.pdfbox" name="jempbox" rev="1.6.0" transitive="false">
-	        <artifact name="jempbox" type="jar"/> 
+        <dependency org="org.apache.pdfbox" name="jempbox" rev="1.2.1" transitive="false">
+	        <artifact name="jempbox" type="jar" url="http://repo1.maven.org/maven2/org/apache/pdfbox/jempbox/1.2.1/jempbox-1.2.1.jar"/> 
         </dependency>
         
           
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-context" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-context" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-context" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-beans" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-beans" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-beans" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-asm" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-asm" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-asm" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-expression" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-expression" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-expression" type="jar"/>
         </dependency>
         
@@ -107,11 +111,11 @@
 
 
         <!--  spring security libraries --> 
-        <dependency org="org.springframework.security" name="spring-security-core" rev="3.0.4.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-core" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-security-core" type="jar"/> 
         </dependency>
         
-        <dependency org="org.springframework.security" name="spring-security-ldap" rev="3.0.4.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-ldap" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-security-ldap" type="jar"/> 
         </dependency>
 
@@ -147,7 +151,7 @@
         </dependency>
         
         <!-- lucene files -->
-        <dependency org="org.apache.lucene" name="lucene-core" rev="2.9.4" transitive="false">
+        <dependency org="org.apache.lucene" name="lucene-core" rev="2.4.1" transitive="false">
             <artifact name="lucene-core" type="jar"/>
         </dependency>
         
@@ -156,11 +160,5 @@
             <artifact name="dom4j" type="jar"/>
         </dependency>
         
-        
-         <!--  digester dependency -->    
-        <dependency org="org.apache.commons" name="commons-compress" rev="1.1" transitive="false">
-            <artifact name="commons-compress" type="jar"/>
-        </dependency>
-  
     </dependencies>
 </ivy-module>

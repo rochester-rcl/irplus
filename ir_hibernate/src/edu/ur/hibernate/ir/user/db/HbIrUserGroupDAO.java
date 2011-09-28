@@ -16,13 +16,19 @@
 
 package edu.ur.hibernate.ir.user.db;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.IrUserGroupDAO;
@@ -64,21 +70,19 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("groupCount"));
 	}
 
 	/**
-	 * Get all groups in group name order ascending.
+	 * Get all groups in group name order.
 	 * 
 	 * @see edu.ur.NameListDAO#getAllNameOrder()
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrUserGroup> getAllNameOrder() {
-	    Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-	    Query  q = session.getNamedQuery("getUserGroupsOrderByNameAsc");
-	    return q.list();
-    	
+		DetachedCriteria dc = DetachedCriteria.forClass(IrUserGroup.class);
+    	dc.addOrder(Order.asc("name"));
+    	return (List<IrUserGroup>) hbCrudDAO.getHibernateTemplate().findByCriteria(dc);
 	}
 
 	/**
@@ -87,7 +91,7 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	 * @see edu.ur.NameListDAO#getAllOrderByName(int, int)
 	 */
 	public List<IrUserGroup> getAllOrderByName(int startRecord, int numRecords) {
-		return this.getUserGroups(startRecord, numRecords, "asc");
+		return hbCrudDAO.getByQuery("getAllGroupNameAsc", startRecord, numRecords);
 	}
 
 	/**
@@ -96,27 +100,19 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	 * @see edu.ur.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
 	public IrUserGroup findByUniqueName(String name) {
-		
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-	    Query  q = session.getNamedQuery("getGroupByName");
-	    q.setParameter("name", name);
-	    return (IrUserGroup)q.uniqueResult();
+		return (IrUserGroup) 
+	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getGroupByName", name));
 	}
 
-	/**
-	 * Get the user group by id.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
-	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public IrUserGroup getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-	/**
-	 * Make the user group persistent.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
-	 */
 	public void makePersistent(IrUserGroup entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
@@ -130,24 +126,27 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrUserGroup> getUserGroups(
-			int rowStart, 
-    		int numberOfResultsToShow, String sortType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-		if (sortType.equalsIgnoreCase("asc")) 
-		{
-		    q = session.getNamedQuery("getUserGroupsOrderByNameAsc");
-		} 
-		else 
-		{
-		    q = session.getNamedQuery("getUserGroupsOrderByNameDesc");
-		}
+			final int rowStart, 
+    		final int numberOfResultsToShow, final String sortType) {
+		List<IrUserGroup> userGroups = 
+			(List<IrUserGroup>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		        Query q = null;
+		        if (sortType.equalsIgnoreCase("asc")) {
+		        	q = session.getNamedQuery("getUserGroupsOrderByNameAsc");
+		        } else {
+		        	q = session.getNamedQuery("getUserGroupsOrderByNameDesc");
+		        }
 			    
-		q.setFirstResult(rowStart);
-		q.setMaxResults(numberOfResultsToShow);
-		q.setReadOnly(true);
-		q.setFetchSize(numberOfResultsToShow);
-	    return q.list();      
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(numberOfResultsToShow);
+			    q.setReadOnly(true);
+			    q.setFetchSize(numberOfResultsToShow);
+	            return q.list();            }
+        });
+
+        return userGroups;
 	}
 
 	
@@ -158,10 +157,7 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrUserGroup> getUserGroupsForUser(Long userId) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-	    Query  q = session.getNamedQuery("getGroupsForUser");
-	    q.setParameter("userId", userId);
-	    return (List<IrUserGroup>)q.list();
+		return (List<IrUserGroup>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getGroupsForUser", userId);
 	}
 
 	
@@ -171,11 +167,10 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	 * @see edu.ur.ir.user.IrUserGroupDAO#getUserForGroup(java.lang.Long, java.lang.Long)
 	 */
 	public IrUser getUserForGroup(Long groupId, Long userId) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-	    Query  q = session.getNamedQuery("getUserForGroup");
-	    q.setParameter("userId", userId);
-	    q.setParameter("userGroupId", groupId);
-	    return (IrUser)q.uniqueResult();
+		
+		String[] paramNames = {"userId", "userGroupId"};
+		Object[] values = {userId, groupId};
+		return (IrUser)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQueryAndNamedParam("getUserForGroup", paramNames, values));
 	}
 	
 

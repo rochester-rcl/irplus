@@ -32,9 +32,6 @@ import edu.ur.file.checksum.ChecksumService;
  */
 public class DefaultChecksumService implements ChecksumService{
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 1287611944328999221L;
-	
 	/** List of checksum calculators */
 	private List<ChecksumCalculator> checksumCalculators = 
 		new LinkedList<ChecksumCalculator>();

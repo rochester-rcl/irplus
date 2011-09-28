@@ -16,8 +16,6 @@
 
 package edu.ur.ir.repository;
 
-import java.io.Serializable;
-
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.user.IrUser;
 
@@ -28,7 +26,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface VersionedFileUnLockStrategy extends Serializable{
+public interface VersionedFileUnLockStrategy {
 	
 	/**
 	 * Returns true if the user can unlock the file.

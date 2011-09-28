@@ -119,7 +119,7 @@
 		                  <div class="clear">&nbsp;</div>
 
                           <c:import url="browse_researcher_pager.jsp"></c:import>
-						  <br/>
+						
 						<div class="dataTable">
 							                 
 					        <urstb:table width="100%">
@@ -185,11 +185,16 @@
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                            <c:url value="viewResearcherPage.action" var="viewResearcherPage">
-						                        	    <c:param name="researcherId" value="${researcher.id}"/>
-						                        	 </c:url>
-													<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
-													<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+						                                <c:if test="${researcher.public}">
+						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	            <c:param name="researcherId" value="${researcher.id}"/>
+						                        	        </c:url>
+														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														</c:if>
+														<c:if test="${!researcher.public}">
+														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
+													    </c:if>
 						                        </urstb:td>
 						                    </urstb:tr>
 						            </urstb:tbody>
@@ -251,7 +256,7 @@
 							                          <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                          <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                      </c:url>
-							                      <div class="hanging_indent"><a href="${departmentFilter}">${department.facetName}&nbsp;(${department.hits})</a></div>
+							                      <a href="${departmentFilter}">${department.facetName} (${department.hits}) </a><br/>
 							                   </c:if>
 							              </c:forEach>
 							          </ir:facet>
@@ -272,7 +277,7 @@
 							                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                     </c:url>
-							                    <div class="hanging_indent"><a href="${fieldFilter}">${field.facetName} (${field.hits})</a></div>
+							                     <a href="${fieldFilter}">${field.facetName} (${field.hits})</a> <br/>
 							               	 </c:if>
 							             </c:forEach>
 							        </ir:facet>	
@@ -293,7 +298,7 @@
 							                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                     </c:url>
-							                     <div class="hanging_indent"><a href="${keywordFilter}">${keyword.facetName} (${keyword.hits})</a></div>
+							                     <a href="${keywordFilter}">${keyword.facetName} (${keyword.hits})</a> <br/>
 							               	 </c:if>
 							             </c:forEach>
 							        </ir:facet>								        						          

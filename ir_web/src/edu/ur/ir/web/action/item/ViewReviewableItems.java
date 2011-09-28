@@ -202,7 +202,7 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

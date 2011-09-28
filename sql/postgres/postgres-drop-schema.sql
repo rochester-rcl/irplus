@@ -34,7 +34,6 @@ DROP TABLE ir_metadata_marc.data_field_mapper;
 DROP SEQUENCE ir_metadata_marc.data_field_mapper_seq;
 
 DROP SCHEMA ir_metadata_marc;
-
 -- ---------------------------------------------
 -- Drop Institutional Repository Metadata tables/schema
 -- ---------------------------------------------
@@ -51,9 +50,7 @@ DROP SCHEMA ir_metadata_dublin_core;
 -- ---------------------------------------------
 -- Drop security tables
 -- ---------------------------------------------
- 
-
-
+  
 DROP TABLE ir_security.role_control_entry_permission;
 DROP TABLE ir_security.role_control_entry;
 DROP TABLE ir_security.user_control_entry_permission;
@@ -61,10 +58,7 @@ DROP TABLE ir_security.user_control_entry;
 DROP TABLE ir_security.user_group_control_entry_permission;
 DROP TABLE ir_security.user_group_control_entry;
 DROP TABLE ir_security.acl;
-ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT invite_permissions_class_type_permission_id_fkey;
-ALTER TABLE ir_user.folder_invite_permissions DROP CONSTRAINT folder_invite_permissions_class_type_permission_id_fkey;
-ALTER TABLE ir_user.folder_auto_share_permissions DROP CONSTRAINT folder_auto_share_permissions_class_type_permission_id_fkey;
-
+ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT  invite_permissions_class_type_permission_id_fkey;
 DROP TABLE ir_security.class_type_permission;
 DROP TABLE ir_security.class_type;
 
@@ -76,31 +70,6 @@ DROP SEQUENCE ir_security.acl_seq;
 DROP SEQUENCE ir_security.class_type_seq;
 
 DROP SCHEMA ir_security;
-
--- ---------------------------------------------
--- Drop Group spaces tables/schema
--- ---------------------------------------------
-DROP TABLE ir_group_workspace.group_workspace_user_invite;
-DROP TABLE ir_group_workspace.group_workspace_email_invite;
-DROP TABLE ir_group_workspace.group_workspace_user;
-DROP TABLE ir_group_workspace.group_workspace_file;
-DROP TABLE ir_group_workspace.group_workspace_folder;
-DROP TABLE ir_group_workspace.group_workspace;
-DROP TABLE ir_group_workspace.group_workspace_file_delete_record;
-
-DROP SEQUENCE ir_group_workspace.group_workspace_user_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_email_invite_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_user_invite_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_file_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
-
-DROP SCHEMA ir_group_workspace;
-
-
-
-
 
 -- ---------------------------------------------
 -- Drop ir_repository information
@@ -190,14 +159,10 @@ DROP TABLE ir_user.personal_item_delete_record;
 DROP TABLE ir_user.user_workspace_index_processing_record;
 DROP TABLE ir_user.user_department;
 DROP TABLE ir_user.invite_permissions;
-DROP TABLE ir_user.folder_invite_permissions;
-DROP TABLE ir_user.folder_auto_share_permissions;
-DROP TABLE ir_user.folder_auto_share_info;
 DROP TABLE ir_user.invite_files;
 DROP TABLE ir_user.personal_item;
 DROP TABLE ir_user.personal_collection;
 DROP TABLE ir_user.personal_file;
-DROP TABLE ir_user.folder_invite_info;
 DROP TABLE ir_user.personal_folder;
 DROP TABLE ir_user.user_role;
 
@@ -228,19 +193,11 @@ DROP SEQUENCE ir_user.affiliation_seq;
 DROP SEQUENCE ir_user.department_seq;
 DROP SEQUENCE ir_user.user_email_seq;
 DROP SEQUENCE ir_user.invite_info_seq;
-DROP SEQUENCE ir_user.folder_auto_share_info_seq;
-DROP SEQUENCE ir_user.folder_invite_info_seq;
 DROP SEQUENCE ir_user.shared_inbox_file_seq;
 
 
--- ---------------------------------------------
--- Drop ir_invite information
--- ---------------------------------------------
-DROP TABLE ir_invite.invite_token;
-DROP SEQUENCE ir_invite.invite_token_seq;
 
 
-DROP SCHEMA ir_invite;
 
 -- ---------------------------------------------
 -- Drop ir_item information
@@ -410,6 +367,24 @@ DROP SEQUENCE mime.sub_type_extension_seq;
 
 DROP SCHEMA mime;
 
+-- ---------------------------------------------
+-- DROP the fedora information
+-- ---------------------------------------------
+
+DROP TABLE fedora_file_system.file;
+DROP TABLE fedora_file_system.alternate_id;
+DROP TABLE fedora_file_system.datastream_info;
+DROP TABLE fedora_file_system.file_database;
+DROP TABLE fedora_file_system.file_server;
+
+DROP SEQUENCE fedora_file_system.file_seq;
+DROP SEQUENCE fedora_file_system.alternate_id_seq;
+DROP SEQUENCE fedora_file_system.datastream_info_seq;
+DROP SEQUENCE fedora_file_system.file_database_seq;
+DROP SEQUENCE fedora_file_system.file_server_seq;
+DROP SEQUENCE fedora_file_system.file_system_name_seq;
+
+DROP SCHEMA fedora_file_system;
 
 
 -- ---------------------------------------------
@@ -474,6 +449,7 @@ DROP SEQUENCE metadata.marc_type_of_record_seq;
 
 
 DROP SCHEMA metadata;
+
 
 
 

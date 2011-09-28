@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.user.db;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -54,6 +56,15 @@ public class HbUserRepositoryLicenseDAO implements UserRepositoryLicenseDAO{
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 
+	/**
+	 * Get all user repository license information.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<UserRepositoryLicense> getAll() {
+		return hbCrudDAO.getAll();
+	}
+	
 	/**
 	 * Make the user repository license perisistent.
 	 * 

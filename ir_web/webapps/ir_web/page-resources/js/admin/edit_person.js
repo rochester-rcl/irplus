@@ -30,7 +30,7 @@ var deletePersonNameAction = basePath + 'user/deletePersonName.action';
 var updatePersonNameAction = basePath + 'user/updatePersonName.action';
 
 // actions for adding people
-var newPersonAction = basePath + 'user/userInitialCreatePerson.action';
+var newPersonAction = basePath + 'user/createPerson.action';
 
 // object to hold the specified person type data.
 var myPersonNamesTable = new YAHOO.ur.table.Table('myPersonNames', 'personNames');
@@ -174,34 +174,29 @@ YAHOO.ur.person.names = {
 		// Adds new person to a user
 		var handleNewPersonForUserFormSuccess = function(o) 
 		{
-			
 			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
-		        
-	        	var formDiv = document.getElementById('nameDialogForm');
-	        	formDiv.innerHTML = o.responseText;
-	        	var added = document.getElementById("name_added").value;
-	            alert(o.responseText);	
-		     
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
+		    
 		        //if the person type was not added then show the user the error message.
 		        // received from the server
-		        if( added == "false" )
+		        if( response.personAdded == "false" )
 		        {
-		        	YAHOO.ur.person.names.newPersonNameDialog.showDialog();
-		        	// leave the box showing
+		            var personNameError = document.getElementById('personError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.person.names.newPersonNameDialog.show();
 		        }
 		        else
 		        {
-		        	var personId = document.getElementById('newPersonNameForm_authorityId').value;
-		        	alert('personid = ' + personId);
-		        	myPersonNames.personId.value = personId;
 		            // we can clear the form if the person type was added
 		            YAHOO.ur.person.names.newPersonNameDialog.hide();
 		            YAHOO.ur.person.names.clearPersonNameForm();
-		            myPersonNamesTable.submitForm(myPersonNamesAction);
+			        document.getElementById('newPersonNameForm_personId').value = response.personId; 
+			        YAHOO.ur.person.names.getPersonNames(response.personId);
 			    }
 			}
 		};
@@ -244,7 +239,6 @@ YAHOO.ur.person.names = {
 			           action = updatePersonNameAction;
 			        }   
 	
-			        YAHOO.ur.person.names.newPersonNameDialog.hide();
 		            var cObj = YAHOO.util.Connect.asyncRequest('post',
 		            action, callback);
 		        }

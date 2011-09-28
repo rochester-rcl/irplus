@@ -19,7 +19,6 @@ package edu.ur.ir.item.metadata.marc;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * Data access for the identiifer type sub field mapper.
@@ -27,7 +26,7 @@ import edu.ur.dao.ListAllDAO;
  * @author Nathan Sarr
  *
  */
-public interface IdentifierTypeSubFieldMapperDAO extends CrudDAO<IdentifierTypeSubFieldMapper>, ListAllDAO{
+public interface IdentifierTypeSubFieldMapperDAO extends CrudDAO<IdentifierTypeSubFieldMapper>{
 	
 	/**
 	 * Get by the identifier type id.
