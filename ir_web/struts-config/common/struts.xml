@@ -70,7 +70,6 @@
              
         </interceptors>
         
-
         <!--  set the default stack for this package -->
         <default-interceptor-ref name="default"/>
         

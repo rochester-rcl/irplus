@@ -30,7 +30,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -62,7 +61,7 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.user.FileInviteInfoDAO;
+import edu.ur.ir.user.InviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
@@ -124,8 +123,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	.getBean("versionedFileDAO");
     
     /** invite information data access object */
-    FileInviteInfoDAO inviteInfoDAO= (FileInviteInfoDAO) ctx
- 	.getBean("fileInviteInfoDAO");
+    InviteInfoDAO inviteInfoDAO= (InviteInfoDAO) ctx
+ 	.getBean("inviteInfoDAO");
     
 	/** Item services */
 	ContentTypeService contentTypeService = (ContentTypeService) ctx.getBean("contentTypeService");
@@ -165,8 +164,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		IndexSearcher searcher = new IndexSearcher(dir, true);
-		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardAnalyzer(Version.LUCENE_29));
+		IndexSearcher searcher = new IndexSearcher(dir);
+		QueryParser parser = new QueryParser(field, new StandardAnalyzer());
 		Query q1 = parser.parse(queryString);
 		TopDocs hits = searcher.search(q1, 1000);
 		int hitCount = hits.totalHits;
@@ -245,7 +244,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -274,7 +273,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFileFromIndex(personalFile.getOwner(), personalFile.getId());
 		
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -363,7 +362,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -386,7 +385,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFolderFromIndex(personalFolder.getOwner(), personalFolder.getId());
 		
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -491,7 +490,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -514,7 +513,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteItemFromIndex(personalItem.getOwner(), personalItem.getId());
 		
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}

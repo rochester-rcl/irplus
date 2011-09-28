@@ -20,7 +20,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.NonUniqueNameDAO;
 import edu.ur.ir.item.GenericItem;
@@ -31,7 +30,7 @@ import edu.ur.ir.item.GenericItem;
  * @author Nathan Sarr
  */
 public interface InstitutionalCollectionDAO extends CountableDAO, 
-CrudDAO<InstitutionalCollection>, NameListDAO, NonUniqueNameDAO<InstitutionalCollection>, ListAllDAO
+CrudDAO<InstitutionalCollection>, NameListDAO, NonUniqueNameDAO<InstitutionalCollection>
 {
 	/**
 	 * Find the root collection for the specified collection name and 

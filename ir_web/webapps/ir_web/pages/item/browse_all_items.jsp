@@ -94,9 +94,6 @@
 
 	            var tab3 = myTabs.getTab(3);
 	            tab3.addListener('click', handleBrowseSponsorsClick);
-
-	            var search = document.getElementById('search');
-	            search.focus();
           }
           
           // initialize the code once the dom is ready
@@ -189,7 +186,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_all_items_pager.jsp"/>
-						 <br/>
+						
 						
 
 
@@ -385,7 +382,7 @@
 	               	    <br/>
 	               	     <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
 						<form method="GET" action="${searchRepositoryItems}">
-						    Search: <input type="text" name="query" size="50" id="search" /><br/><br/>
+						    Search: <input type="text" name="query" size="50"/><br/><br/>
 						    <button type="submit" class="ur_button" 
 		                               onmouseover="this.className='ur_buttonover';"
 	 		                           onmouseout="this.className='ur_button';">Search</button>
@@ -431,7 +428,7 @@
 						                          <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                          <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                      </c:url>
-						                      <div class="hanging_indent"><a href="${authorFilter}">${author.facetName} (${author.hits})</a></div>
+						                      <a href="${authorFilter}">${author.facetName} (${author.hits}) </a><br/>
 						                  </c:if>
 						              </c:forEach>
 						          </ir:facet>
@@ -452,7 +449,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                    <div class="hanging_indent"><a href="${collectionFilter}">${collection.facetName} (${collection.hits})</a></div> 
+						                     <a href="${collectionFilter}">${collection.facetName} (${collection.hits})</a> <br/>
 						                 </c:if>
 						             </c:forEach>
 						        </ir:facet>
@@ -473,7 +470,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                    <div class="hanging_indent"><a href="${formatFilter}"> ${format.facetName} (${format.hits})</a></div>
+						                     <a href="${formatFilter}"> ${format.facetName} (${format.hits})</a><br/>
 						                  </c:if>
 						              </c:forEach>
 						          </ir:facet>
@@ -494,7 +491,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <div class="hanging_indent"><a href="${subjectFilter}">${subject.facetName} (${subject.hits})</a></div>
+						                     <a href="${subjectFilter}">${subject.facetName} (${subject.hits})</a><br/>
 						                 </c:if>
 						             </c:forEach>
 						         </ir:facet>
@@ -515,7 +512,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <div class="hanging_indent"><a href="${languageFilter}">${language.facetName} (${language.hits})</a></div>
+						                     <a href="${languageFilter}">${language.facetName} (${language.hits})</a> <br/>
 						                 </c:if>
 						             </c:forEach>
 						        </ir:facet>
@@ -607,7 +604,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_all_person_names_pager.jsp"/>
-						<br/>
+						
 						
 						<div class="dataTable">
 							             
@@ -701,7 +698,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_all_sponsor_names_pager.jsp"/>
-						<br/>
+						
 						
 						<div class="dataTable">
 							             

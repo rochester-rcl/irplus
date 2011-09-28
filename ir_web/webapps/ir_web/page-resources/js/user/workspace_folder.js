@@ -25,7 +25,7 @@ var myFolderAction =  basePath + 'user/viewPersonalFolders.action';
 var lockFileAction = basePath + 'user/lockVersionedFile.action';
 var unLockFileAction = basePath + 'user/unLockVersionedFile.action';
 
-// actions for adding and removing folders - personal workspace
+// actions for adding and removing folders
 var updateFolderAction = basePath + 'user/updatePersonalFolder.action';
 var newFolderAction = basePath + 'user/addPersonalFolder.action';
 var deleteFolderAction = basePath + 'user/deletePersonalFileSystemObjects.action';
@@ -65,7 +65,6 @@ YAHOO.ur.folder =
      */
     personalFolderStateChangeHandler : function(folderId)
     {
-	    YAHOO.ur.user.workspace.setActiveIndex("FOLDER");
         var currentState = YAHOO.util.History.getCurrentState("personalFolderModule"); 
         var currentFolder = document.getElementById('myFolders_parentFolderId').value;
         // do not change state if we are on the current file / folder
@@ -74,9 +73,7 @@ YAHOO.ur.folder =
             document.getElementById('myFolders_parentFolderId').value = folderId;
             var folderId = document.getElementById("myFolders_parentFolderId").value;
             YAHOO.ur.folder.getFolderById(folderId, -1); 
-            YAHOO.ur.folder.clearHiddenWorkspaceInfo();
             YAHOO.ur.folder.insertHiddenParentFolderId();
-            
         }
     },
     
@@ -93,6 +90,7 @@ YAHOO.ur.folder =
 	    document.newFolderForm.folderDescription.value = "";
 	    document.newFolderForm.newFolder.value = "true";
 	    document.newFolderForm.updateFolderId.value = "";
+    
     },
     
     /**
@@ -130,16 +128,15 @@ YAHOO.ur.folder =
 	        {       	    
 	            var response = o.responseText;
 	            document.getElementById('newPersonalFolders').innerHTML = response;
-	            YAHOO.ur.folder.clearHiddenWorkspaceInfo();
 	            YAHOO.ur.folder.insertHiddenParentFolderId();
+	            
 	            // this is for capturing history
 	            // it may fail if this is not an A grade browser so we need to
 	            // catch the error.
 	            // this will store the folder Id in the URL
 	            try 
 	            {
-	            	// do not remove the string conversion on folder id otherwise an error occurs
-	                YAHOO.util.History.navigate( "personalFolderModule", folderId + "" );
+	                YAHOO.util.History.navigate( "personalFolderModule", folderId );
 	            } 
 	            catch ( e ) 
 	            {
@@ -200,7 +197,7 @@ YAHOO.ur.folder =
     
     /**
      * This creates a hidden field appends it to the form for
-     * adding new sub folders and files for a given parent folder id.
+     * adding new sub folders for a given parent folder id.
      */ 
     insertHiddenParentFolderId : function()
     {
@@ -209,18 +206,6 @@ YAHOO.ur.folder =
         document.getElementById('newFolderForm_parentFolderId').value = value;
 	    document.getElementById('file_upload_parent_folder_id').value = value;
     },
-    
-    /**
-     * This will clear the hidden workspace id if it is set in the folder form
-     * or file upload form it will indicate uploading a file to the group workspace
-     * rather than the personal file workspace
-     */
-    clearHiddenWorkspaceInfo : function()
-    {
-        document.getElementById('newFolderForm_parentFolderId').value = '';
-    },
-    
- 
     
     /**
      * Dialog to create new folders
@@ -243,8 +228,8 @@ YAHOO.ur.folder =
 	   // handle a successful return
 	   var handleSuccess = function(o) 
 	   {
-			// check for the timeout - forward user to login page if timeout
-	        // occurred
+			// check for the timeout - forward user to login page if timout
+	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       		 	   
 	            //get the response from adding a folder
@@ -270,10 +255,9 @@ YAHOO.ur.folder =
 	                // we can clear the form if the folder was added
 	                YAHOO.ur.folder.newFolderDialog.hide();
 	                YAHOO.ur.folder.clearFolderForm();
-	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId, -1); 
-	            	
 	            }
+	            var folderId = document.getElementById("myFolders_parentFolderId").value;
+                YAHOO.ur.folder.getFolderById(folderId, -1); 
 	        }
 	    };
 	
@@ -307,14 +291,13 @@ YAHOO.ur.folder =
 	        if( YAHOO.ur.folder.newFolderDialog.validate() )
 	        {
 	            //based on what we need to do (update or create a 
-	            // new folder) based on the action.  
+	            // new folder) based on the action.
                 var action = newFolderAction;
-                
-	            if( document.newFolderForm.updateFolderId.value != '' )
+	            if( document.newFolderForm.updateFolderId.value != '')
 	            {
-	               // update folder personal workspace
 	               action = updateFolderAction;
 	            }
+
                 var cObj = YAHOO.util.Connect.asyncRequest('POST',
                 action, callback);
             }
@@ -370,6 +353,7 @@ YAHOO.ur.folder =
                     document.newFolderForm.newFolder.value = "false";
                     YAHOO.ur.folder.newFolderDialog.showFolder();
                 }
+                
             },
 	
 	        failure: function(o) 
@@ -837,7 +821,10 @@ YAHOO.ur.folder =
                 var cObj = YAHOO.util.Connect.asyncRequest('post',
                       singleFileUploadAction, callback);
                 
-               
+                // clear the upload form of the file name
+                YAHOO.ur.folder.clearSingleFileUploadForm();
+                
+           
             }
 	    };
 	
@@ -850,14 +837,15 @@ YAHOO.ur.folder =
 	
 	    var handleSuccess = function(o) 
 	    {
-	    	var response = o.responseText;
+	        
 	        YAHOO.ur.folder.destroyFolderMenus();
-	       
+	        var response = o.responseText;
 	        
 	        // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
+	        
 	            var uploadForm = document.getElementById('upload_form_fields');
 	            // update the form fields with the response.  This updates
 	            // the form, if there was an issue, update the form with
@@ -878,6 +866,7 @@ YAHOO.ur.folder =
 	                else
 	                {
 	                    // we can clear the upload form and get the pictures
+	           
 	                    YAHOO.ur.folder.clearSingleFileUploadForm();
 	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
 		                YAHOO.ur.folder.getFolderById(folderId, -1); 
@@ -939,9 +928,11 @@ YAHOO.ur.folder =
 			    return true;
 		    }
 	    };
+	
 
 	    // Wire up the success and failure handlers
 	    var callback = {  upload: handleSuccess, failure: handleFailure };
+			
 			
 	    // Render the Dialog
 	    YAHOO.ur.folder.singleFileUploadDialog.render();
@@ -1190,12 +1181,14 @@ YAHOO.ur.folder =
 	    // handle the successful check for file SHARE permissions
 	    var handleSuccess = function(o) 
 	    {
+
 	        var response = o.responseText;
 	        
 	        // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
+	        
 	            var inviteForm = document.getElementById('invite_form_fields');
 
 	            // update the form fields with the response.
@@ -1260,7 +1253,10 @@ YAHOO.ur.folder =
 	    // Render the Dialog
 	    YAHOO.ur.folder.inviteErrorDialog.render();
 
-	    /*  Function to invite user to collaborate on set of files */
+
+	    /*
+	     * Function to invite user to collaborate on set of files
+	     */
 	    YAHOO.ur.folder.inviteUser = function()
 	    {
 		    YAHOO.util.Connect.setForm('myFolders');
@@ -1460,14 +1456,8 @@ YAHOO.ur.folder =
         YAHOO.ur.folder.createFileRenameDialog();
         
         // register the history system
-        YAHOO.util.History.register("personalFolderModule", personalFolderState, YAHOO.ur.folder.personalFolderStateChangeHandler);
-        
-        //un-hide the content in the tabs
-        document.getElementById("group_workspaces").className='';
-        document.getElementById("newPersonalCollections").className='';
-        document.getElementById("workspace_search").className='';
-        document.getElementById("inbox_tab").className='';
-        
+        YAHOO.util.History.register("personalFolderModule", personalFolderState, 
+        YAHOO.ur.folder.personalFolderStateChangeHandler);
     }
 };
 

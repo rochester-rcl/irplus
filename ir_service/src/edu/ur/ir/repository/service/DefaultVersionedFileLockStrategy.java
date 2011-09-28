@@ -34,9 +34,6 @@ import edu.ur.ir.user.IrUser;
  */
 public class DefaultVersionedFileLockStrategy implements VersionedFileLockStrategy{
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 8540374792343991895L;
-
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultVersionedFileLockStrategy.class);
 	

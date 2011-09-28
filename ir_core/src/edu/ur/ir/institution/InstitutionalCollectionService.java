@@ -215,6 +215,7 @@ public interface InstitutionalCollectionService extends Serializable{
 	 * Get list of ir file ids in all collection  
 	 * 
 	 * @return list of ir file ids
+	 * @return
 	 */
 	public List<Long> getItemIrFileIdsForAllCollections() ;
 	

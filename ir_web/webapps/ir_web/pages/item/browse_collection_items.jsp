@@ -205,7 +205,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_collection_items_pager.jsp"/>
-						 <br/>
+						
 						
 						<div class="dataTable">
 							                 
@@ -621,7 +621,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_collection_person_names_pager.jsp"/>
-						 <br/>
+						
 						
 						<div class="dataTable">
 							             
@@ -716,7 +716,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_collection_sponsor_names_pager.jsp"/>
-						 <br/>
+						
 						
 						<div class="dataTable">
 							             

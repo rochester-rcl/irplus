@@ -35,11 +35,11 @@ import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
-import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.FileSharingException;
-import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteUserService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
@@ -50,6 +50,7 @@ import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.util.TokenGenerator;
 
 /**
  * Action to invite user
@@ -60,7 +61,9 @@ import edu.ur.ir.web.action.UserIdAware;
  */
 public class InviteUser extends ActionSupport implements UserIdAware {
 
-	/**  Eclipse generated id */
+	/**
+	 * Eclipse generated id
+	 */
 	private static final long serialVersionUID = -30583149959913239L;
 
 	/**  Logger for invite user action */
@@ -137,6 +140,9 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	/** Indicates whether all the files have share permission */
 	private boolean hasSharePermission;
 	
+	/** Share permission */
+	private static final String SHARE = "SHARE";
+	
 	/** User index service for indexing files */
 	private UserWorkspaceIndexService userWorkspaceIndexService;
 	
@@ -197,7 +203,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 				IrAcl acl = securityService.getAcl(personalFile.getVersionedFile(), user);
 				
 				// Check if the user has SHARE permission for the file
-				if (acl.isGranted(InviteUserService.SHARE_PERMISSION, user, false)) {
+				if (acl.isGranted(SHARE, user, false)) {
 					buffer.append(fileId);
 					buffer.append(",");
 				} else {
@@ -223,7 +229,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			{
 				IrAcl acl = securityService.getAcl(file.getVersionedFile(), user);
 				
-				if (acl.isGranted(InviteUserService.SHARE_PERMISSION, user, false)) {
+				if (acl.isGranted(SHARE, user, false)) {
 					buffer.append(file.getId());
 					buffer.append(",");
 				} else {
@@ -264,7 +270,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
@@ -273,57 +279,58 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * Send Invite for a user to collaborate on a document
 	 */
 	public String sendInvite() {
-		inviteSent = true;
-		if (selectedPermissions.size() == 0) {
-			inviteErrorMessage = getText("emptyPermissions");
-			return "added";
-		}
-	
+		inviteSent = false;
+		
 		// Create invite info object
 		IrUser invitingUser = userService.getUser(userId, true);
 		
 		StringTokenizer tokenizer = new StringTokenizer(shareFileIds, ",");
+		
 		List<PersonalFile> personalFilesToShare = new LinkedList<PersonalFile>();
 
-		// Make a list of files that has to be shared
+		// Make a list of files that has to be shared - verify permissions to share
 	    while(tokenizer.hasMoreElements())
 	    {
 	    	Long fileId = new Long(tokenizer.nextToken());
+
 			PersonalFile personalFile = userFileSystemService.getPersonalFile(fileId, false);
+			IrAcl acl = securityService.getAcl(personalFile.getVersionedFile(), invitingUser);
+			if( acl == null || !acl.isGranted(SHARE, invitingUser, false))
+			{
+				return("accessDenied");
+			}
+			
 			log.debug("Inviting a user to collaborate on personal file ID = " + personalFile.toString() );
+	
 			personalFilesToShare.add(personalFile);
-	    }
-	    
-	    // no files selected
-	    if( personalFilesToShare.size() == 0)
-	    {
-	    	return "added";
+
 	    }
 		
-		// Create the list of permissions
-		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		for(Long id : selectedPermissions)
-		{
-			permissions.add(securityService.getIrClassTypePermissionById(id, false));
-		}			
+	
+		
+		if (selectedPermissions.size() == 0) {
+			inviteErrorMessage = getText("emptyPermissions");
+			return "added";
+		}
 		
 		email = email.trim();
+		
 		String[] emails = email.split(";");
 		
 		boolean errorSet = false;
 		
-		// create the list of emails
 		LinkedList<String> emailsToInvite = new LinkedList<String>();
+		
+		// do not let user share with themselves
 		for(String email : emails)
 		{
 			email = email.trim();
 			// Check if user exist in the system
 			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
-			//check if the user is sharing the file with themselves - remove their email if they are
+			//check if the user is sharing the file with themselves
 			if (invitingUser.equals(invitedUser)) {
 				if( !errorSet )
 				{
-					inviteSent = false;
 				    inviteErrorMessage = getText("sharingWithYourself") + " ";
 				    errorSet = true;
 				}
@@ -334,36 +341,89 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			}
 		}
 		
-		if( emailsToInvite.size() == 0 && !errorSet )
+		// only invite users who are not the current user
+		for(String email : emailsToInvite)
 		{
-			inviteSent = false;
-			inviteErrorMessage = "No emails entered for sharing ";
-			return "added";
+			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
+			Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
+			for(PersonalFile pf : personalFilesToShare)
+			{
+				VersionedFile versionedFile = pf.getVersionedFile();
+				
+				//check if the file is already shared with this user 
+				//AND 
+				//check if email is already sent to this Id for sharing and the user has not created the account yet
+				if ((versionedFile.getCollaborator(invitedUser) == null) && (!versionedFile.getInviteeEmails().contains(email))) {
+					versionedFiles.add(versionedFile);
+				}
+			}
+
+		
+			InviteInfo inviteInfo
+			= new InviteInfo(invitingUser, versionedFiles);
+		
+			inviteInfo.setEmail(email);
+			inviteInfo.setInviteMessage(inviteMessage);
+		    
+			// Create the list of permissions
+			Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+			
+			for(Long id : selectedPermissions)
+			{
+				permissions.add(securityService.getIrClassTypePermissionById(id, false));
+			}			
+
+			
+			/* If user exist in the system then share the file and send email*/
+			if (invitedUser != null) {
+				
+				// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
+				if (!invitedUser.hasRole(IrRole.AUTHOR_ROLE) && !invitedUser.hasRole(IrRole.COLLABORATOR_ROLE) 
+						&& !invitedUser.hasRole(IrRole.RESEARCHER_ROLE) && !invitedUser.hasRole(IrRole.ADMIN_ROLE)) {
+					
+					invitedUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
+					userService.makeUserPersistent(invitedUser);
+				}
+
+				for (VersionedFile file : versionedFiles) {
+					try {
+						
+						SharedInboxFile sif = inviteUserService.shareFile(invitingUser, invitedUser, file);
+						userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
+				    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+					} catch (FileSharingException e1) {
+						throw new RuntimeException("This should never happen", e1);
+					}
+					
+					// Create permissions for the file that is being shared
+					securityService.createPermissions(file, invitedUser, permissions);
+				}
+
+				try {
+					inviteUserService.sendEmailToExistingUser(inviteInfo);
+					inviteSent = true;
+				} catch(IllegalStateException e) {
+					inviteErrorMessage += getText("emailNotSent", new String[]{email}) +" ";
+				}
+					
+			} else {
+				
+				/* If user does not exist in the system then get a token and send email with the token */
+				inviteInfo.setToken(TokenGenerator.getToken());
+				inviteInfo.setPermissions(permissions);
+
+				try {
+					inviteUserService.sendEmailToNotExistingUser(inviteInfo);
+					inviteUserService.makeInviteInfoPersistent(inviteInfo);
+					inviteSent = true;
+				} catch(IllegalStateException e) {
+					inviteErrorMessage += getText("emailIncorrect", new String[]{email}) + " ";
+				}
+			}
 		}
 		
-	    try 
-	    {
-			List<String> badEmails = inviteUserService.inviteUsers(invitingUser, emailsToInvite, permissions, personalFilesToShare, inviteMessage);
-			
-			for(String email : badEmails)
-			{
-				inviteSent = false;
-				inviteErrorMessage += getText("emailNotSent", new String[]{email}) +" ";
-			}
-		} 
-	    catch (FileSharingException e2) 
-	    {
-			if( !errorSet )
-			{
-				inviteSent = false;
-			    inviteErrorMessage = getText("sharingWithYourself") + " ";
-			    errorSet = true;
-			}
-		} 
-	    catch (PermissionNotGrantedException e2) 
-	    {
-			return("accessDenied");
-		}
+
+		
         return "added";
 	}
 
@@ -379,7 +439,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		IrUser unInvitingUser = userService.getUser(userId, true);
 		
 		IrAcl acl = securityService.getAcl(fileCollaborator.getVersionedFile(), unInvitingUser);
-		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
+		if( acl == null || !acl.isGranted(SHARE, unInvitingUser, false))
 		{
 		    return("accessDenied");
 		}
@@ -431,7 +491,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		    IrUser unInvitingUser = userService.getUser(userId, true);
 		
 		    IrAcl acl = securityService.getAcl(unsharingUserPersonalFile.getVersionedFile(), unInvitingUser);
-		    if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
+		    if( acl == null || !acl.isGranted(SHARE, unInvitingUser, false))
 		    {
 			    return("accessDenied");
 		    }
@@ -441,19 +501,11 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			return("accessDenied");
 		}
 
-		FileInviteInfo inviteInfo = inviteUserService.getInviteInfoById(inviteInfoId, false);
+		InviteInfo inviteInfo = inviteUserService.getInviteInfoById(inviteInfoId, false);
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		inviteInfo.removeFile(personalFile.getVersionedFile());
+		inviteUserService.makeInviteInfoPersistent(inviteInfo);
 		
-		// there are no files being shared anymore
-		if( inviteInfo.getFiles().size() <= 0 )
-		{
-			inviteUserService.delete(inviteInfo);
-		}
-		else
-		{
-		    inviteUserService.makeInviteInfoPersistent(inviteInfo);
-		}
 		return SUCCESS;
 	}
 	
@@ -505,7 +557,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		IrUser changingPermissionsUser = userService.getUser(userId, true);
 		
 		IrAcl acl = securityService.getAcl(versionedFile, changingPermissionsUser);
-		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, changingPermissionsUser, false))
+		if( acl == null || !acl.isGranted(SHARE, changingPermissionsUser, false))
 		{
 		    return("accessDenied");
 		}

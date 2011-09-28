@@ -193,7 +193,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	
 	
 	/**
-	 * Get the personal folders within the parent folder. This only returns the first level of children.
+	 * Get the personal folders within the parent folder.
 	 * 
 	 * @see edu.ur.ir.user.UserFileSystemService#getPersonalFolders(java.util.List, java.lang.Long, java.lang.Long, int, int)
 	 */
@@ -462,7 +462,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 				inviteUserService.unshareFile(fileCollaborator, deletingUser);
 			}
 
-			securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
+			deleteAclForVersionedFile(versionedFile, pf.getOwner());
 			repositoryService.deleteVersionedFile(versionedFile);
 			
 		} else {
@@ -493,7 +493,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	}
 	
 	/**
-	 * Get sub folders within parent folder for a user. This only returns the first level of children. 
+	 * Get sub folders within parent folder for a user 
 	 * 
 	 * @see edu.ur.ir.user.UserFileSystemService#getPersonalFoldersForUser(java.util.Long, java.lang.Long)
 	 */
@@ -774,6 +774,17 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		return personalFolderDAO.getFolders(userId, folderIds);
 	}
 
+	/**
+	 * Remove all access to collaborators for a versioned file.
+	 * 
+	 * @param versionedFile - versioned file that has an acl
+	 * @param user - user to remove the access to.
+	 */
+	public void deleteAclForVersionedFile(VersionedFile versionedFile, IrUser user) {
+		// Delete ACL for this file
+		securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
+	}
+
 
 	/**
 	 * Save personal file
@@ -1035,17 +1046,6 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder) {
 		return personalFolderDAO.getAllFilesForFolder(personalFolder);
 	}
-	
-	/**
-	 * This returns all folders for the specified parent folder.  This
-	 * includes all children including those within sub folders.
-	 * 
-	 * @param personalFolder - to get all children folders from
-	 * @return list of all children folders
-	 */
-	public List<PersonalFolder> getAllChildrenForFolder(PersonalFolder personalFolder){
-		return personalFolderDAO.getAllChildrenForFolder(personalFolder);
-	}
 
 	/**
 	 * Return the personal file found for the user.
@@ -1103,35 +1103,6 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	public void setPersonalFileDeleteRecordDAO(
 			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
 		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
-	}
-
-	/**
-	 * Get a list of personal files shared witht he given user.
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results
-	 * @param ownerId - owner of the personal files.
-	 * @param sharedWithUserId - id of the user who files are shared with
-	 * 
-	 * @return list of files shared with the user.
-	 */
-	public List<PersonalFile> getFilesSharedWithUser(int rowStart,
-			int maxResults, Long ownerId, Long sharedWithUserId)
-	{
-		return personalFileDAO.getFilesSharedWithUser(rowStart, maxResults, ownerId, sharedWithUserId);
-	}
-	
-	/**
-	 * Get the count of files shared with a given user.
-	 * 
-	 * @param ownerId - owner of the personal file sto check
-	 * @param sharedWithUserId - id of the shared with user id.
-	 * 
-	 * @return count of files shared with the given shared with user id
-	 */
-	public Long getFilesSharedWithUserCount(Long ownerId, Long sharedWithUserId)
-	{
-		return personalFileDAO.getFilesSharedWithUserCount(ownerId, sharedWithUserId);
 	}
 
 }

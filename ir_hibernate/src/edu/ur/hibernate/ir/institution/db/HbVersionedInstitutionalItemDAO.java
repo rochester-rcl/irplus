@@ -16,10 +16,12 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import org.hibernate.Query;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.VersionedInstitutionalItem;
 import edu.ur.ir.institution.VersionedInstitutionalItemDAO;
 
@@ -57,8 +59,8 @@ public class HbVersionedInstitutionalItemDAO implements VersionedInstitutionalIt
 
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("versionedItemCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionedItemCount"));
 	}
 
 	public VersionedInstitutionalItem getById(Long id, boolean lock) {
@@ -72,4 +74,10 @@ public class HbVersionedInstitutionalItemDAO implements VersionedInstitutionalIt
 	public void makeTransient(VersionedInstitutionalItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

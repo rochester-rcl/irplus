@@ -19,7 +19,6 @@ package edu.ur.ir.user;
 import org.testng.annotations.Test;
 
 import edu.ur.ir.file.VersionedFile;
-import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.security.IrClassType;
 import edu.ur.ir.security.IrClassTypePermission;
 
@@ -36,9 +35,8 @@ public class InviteInfoTest {
 	 * Test basic set and get methods
 	 * 
 	 * @param description
-	 * @throws ClassNotFoundException 
 	 */
-	public void testBasics() throws ClassNotFoundException 
+	public void testBasics() 
 	{
 		IrUser user = new IrUser();
 		user.setId(4L);
@@ -46,41 +44,44 @@ public class InviteInfoTest {
 		user.setVersion(5);
 		
 		IrClassType classType = null;
-		classType = new IrClassType(VersionedFile.class);
+		try {
+			classType = new IrClassType(VersionedFile.class);
+		} catch (ClassNotFoundException e) {
+			
+		}
 		
 		IrClassTypePermission permission = new IrClassTypePermission(classType);
 		permission.setName("read");
 		
+		InviteInfo token = new  InviteInfo();
+		token.setEmail("test@ufr.com");
+		token.setToken("qwerty12345");
+		token.addPermission(permission);
+		token.setUser(user);
+		token.setInviteMessage("invite message!");
 		
-		InviteToken inviteToken = new InviteToken("test@ufr.com", "qwerty12345", user );
-		inviteToken.setInviteMessage("invite message!");
-		FileInviteInfo info = new FileInviteInfo ();
-		info.setInviteToken(inviteToken);
-		info.addPermission(permission);
 		
-		
-		assert info.getInviteToken().getEmail().equals("test@ufr.com") : "Should equal test@ufr.com";
-		assert info.getInviteToken().getToken().equals("qwerty12345") : "Shoud equal qwerty12345";
-		assert info.getPermissions().contains(permission) : "Shoud contain the permission";
-		assert info.getInviteToken().getInvitingUser().equals(user) : "User should be equal";
-		assert info.getInviteToken().getInviteMessage().equals("invite message!") : "Message should be equal";
+		assert token.getEmail().equals("test@ufr.com") : "Should equal test@ufr.com";
+		assert token.getToken().equals("qwerty12345") : "Shoud equal qwerty12345";
+		assert token.getPermissions().contains(permission) : "Shoud contain the permission";
+		assert token.getUser().equals(user) : "User should be equal";
+		assert token.getInviteMessage().equals("invite message!") : "Message should be equal";
 
 	}
 	
 	
 	/**
 	 * Test equals and hash code methods.
-	 * @throws ClassNotFoundException 
 	 */
-	public void testEquals() throws ClassNotFoundException
+	public void testEquals()
 	{
-		IrUser user = new IrUser();
-		user.setId(4L);
-		user.setUsername("username");
-		user.setVersion(5);
-		
+
 		IrClassType classType = null;
-		classType = new IrClassType(VersionedFile.class);
+		try {
+			classType = new IrClassType(VersionedFile.class);
+		} catch (ClassNotFoundException e) {
+			
+		}
 		
 		IrClassTypePermission permission = new IrClassTypePermission(classType);
 		permission.setName("read");
@@ -88,24 +89,31 @@ public class InviteInfoTest {
 		IrClassTypePermission permission1 = new IrClassTypePermission(classType);
 		permission1.setName("write");
 
-		InviteToken inviteToken = new InviteToken("test@ufr.com", "qwerty12345", user );
-		FileInviteInfo inviteInfo1 = new FileInviteInfo();
-		inviteInfo1.setInviteToken(inviteToken);
-
-		InviteToken inviteToken2 = new InviteToken("test2@ufr.com", "2qwerty12345", user );
-		FileInviteInfo inviteInfo2 = new FileInviteInfo();
-		inviteInfo2.setInviteToken(inviteToken2);
-
-		InviteToken inviteToken3 = new InviteToken("test@ufr.com", "qwerty12345", user );
-		FileInviteInfo inviteInfo3 = new FileInviteInfo();
-		inviteInfo3.setInviteToken(inviteToken3);
-	
 		
-		assert inviteInfo1.equals(inviteInfo3) : "InviteInfo should be equal";
-		assert !inviteInfo1.equals(inviteInfo2) : "InviteInfo should not be equal";
+		InviteInfo token1 = new InviteInfo();
+		token1.setEmail("test@ufr.com");
+		token1.setToken("qwerty12345");
+		token1.addPermission(permission);
+		token1.setInviteMessage("invite message1");
+
 		
-		assert inviteInfo1.hashCode() == inviteInfo3.hashCode() : "Hash codes should be the same";
-		assert inviteInfo2.hashCode() != inviteInfo3.hashCode() : "Hash codes should not be the same";
+		InviteInfo token2 = new InviteInfo();
+		token2.setEmail("test2@ufr.com");
+		token2.setToken("2qwerty12345");
+		token2.addPermission(permission1);
+		token2.setInviteMessage("invite message2");
+
+		InviteInfo token3 = new InviteInfo();
+		token3.setEmail("test@ufr.com");
+		token3.setToken("qwerty12345");
+		token3.addPermission(permission);
+		token3.setInviteMessage("invite message1");
+		
+		assert token1.equals(token3) : "InviteInfo should be equal";
+		assert !token1.equals(token2) : "InviteInfo should not be equal";
+		
+		assert token1.hashCode() == token3.hashCode() : "Hash codes should be the same";
+		assert token2.hashCode() != token3.hashCode() : "Hash codes should not be the same";
 	}
 	
 	

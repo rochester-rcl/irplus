@@ -64,7 +64,7 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<p>Sorry, the file could not be found if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> </p> 
+				<h3> <div class="errorMessage"> File does not exist for download! </div> </h3> 
 		    </div>
 		    <!--  end the body tag --> 
 		

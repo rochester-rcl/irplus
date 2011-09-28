@@ -96,7 +96,7 @@
                        <div class="contentBoxContent">
                            <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
                            <form method="get" action="${searchRepositoryItems}">
-                                <p>Search: <input type="text" name="query" id="search" size="50" />
+                                <p>Search: <input type="text" name="query" size="50"/>
                                  <br/>
                                  <br/>
                                     <button type="submit" class="ur_button" 

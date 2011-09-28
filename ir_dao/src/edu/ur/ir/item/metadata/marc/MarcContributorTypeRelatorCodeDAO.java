@@ -19,7 +19,6 @@ package edu.ur.ir.item.metadata.marc;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * Data access for the mapping between a contributor type and relator code.
@@ -27,7 +26,7 @@ import edu.ur.dao.ListAllDAO;
  * @author Nathan Sarr
  *
  */
-public interface MarcContributorTypeRelatorCodeDAO extends CrudDAO<MarcContributorTypeRelatorCode>, ListAllDAO
+public interface MarcContributorTypeRelatorCodeDAO extends CrudDAO<MarcContributorTypeRelatorCode>
 {
 	/**
 	 * Get the mapping by contributor id.

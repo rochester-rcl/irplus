@@ -103,16 +103,12 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 			
 			if( user != null )
 			{
-				log.debug("injecting user id");
-	            ((UserIdAware) action).injectUserId(user.getId());
+	            ((UserIdAware) action).setUserId(user.getId());
 			}
 			else
 			{
-				log.debug("setting user id to null");
-				// make sure user id is cleared out
-				((UserIdAware) action).injectUserId(null);
+				((UserIdAware) action).setUserId(null);
 			}
-
 	    }
 		
 		// put the user in the session
@@ -129,9 +125,15 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 		if(  (user != null) && (action instanceof ViewWorkspace) )
 		{	   
 	 	    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		    if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		    
+	 	    // this can happen when setting up the repository
+	 	    // all other times the repository should not be null
+	 	    if( repository != null )
 		    {
-			    return "acceptLicense";
+	 	        if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		        {
+			        return "acceptLicense";
+		        }
 		    }
 		}
 		
@@ -139,9 +141,8 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	}
 
 
-
 	/**
-	 * Set the user service to access information.
+	 * Set the user service.
 	 * 
 	 * @param userService
 	 */

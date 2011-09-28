@@ -25,10 +25,9 @@
 
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
- 	
- 
+     -->
  	<property name="yui.unzip" value="true"/>
-   -->
+ 	
 
 
 	<!-- always disable emma -->
@@ -230,7 +229,7 @@
 	     You must first tell your web-browser to look
 	     at your webapps directory 
 	-->
-   <target name="prep-run-webapp-local" depends="clean, build, clean-run-webapp-local, move-yui">
+   <target name="prep-run-webapp-local" depends="build, clean-run-webapp-local, move-yui">
         <!-- Remove the old classes -->
         <delete dir="${webapp.classes.dir}" />
 
@@ -238,7 +237,7 @@
         <delete dir="${webapp.lib.dir}"/>
    	
    	    <!-- Remove the old configuration files-->
-   	    <delete dir="${webapp.webinf.dir}"/>
+   	     <delete dir="${webapp.webinf.dir}"/>
 
    	    <!-- rebuild the folders -->
         <mkdir dir="${webapp.classes.dir}"/>
@@ -278,7 +277,7 @@
 	<!-- unzip the YUI files  -->
 	<target name="prep-yui"  if="yui.unzip" description="--> unzips the yui libraries">
 		<mkdir dir="${basedir}/yui-unzip"/>
-		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.9.0.zip"/>
+		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.7.0.zip"/>
 	</target>
 	
 	<!-- copy the YUI files  -->

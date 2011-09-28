@@ -25,8 +25,7 @@
 		   		               
 <input type="hidden" id="newFolderForm_new"
        name="newFolder" value="true"/>
-
-<!--  indicates the folder that is too be updated -->      
+      
 <input type="hidden" id="newfolderForm_folderId"
     name="updateFolderId" value="${updateFolderId}"/>
 

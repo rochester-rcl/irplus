@@ -16,7 +16,6 @@
 
 package edu.ur.ir;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,10 +32,7 @@ import edu.ur.ir.search.FacetResult;
  * @author Nathan Sarr
  *
  */
-public class FacetSearchHelper implements Serializable{
-
-	/** eclipse generated id.*/
-	private static final long serialVersionUID = -3758633706897516873L;
+public class FacetSearchHelper {
 
 	/** Hits found */
 	private Set<Long> hitIds;

@@ -38,7 +38,7 @@ var moveContributorUpAction = basePath + 'user/moveContributorUp.action';
 // Action to goto other screens
 var viewAddMetadataAction = basePath + 'user/viewItemMetadata.action';
 var viewAddFilesAction = basePath + 'user/viewEditItem.action';
-var publicationWorkspaceAction = basePath + 'user/workspace.action?tabName=COLLECTION';
+var publicationWorkspaceAction = basePath + 'user/workspace.action?showCollectionTab=true';
 var viewInstitutionalItemAction = basePath + 'institutionalPublicationPublicView.action';
 var previewPublicationAction = basePath + 'user/previewPublication.action';
 

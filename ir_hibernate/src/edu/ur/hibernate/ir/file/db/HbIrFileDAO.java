@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.file.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -60,8 +59,8 @@ public class HbIrFileDAO implements IrFileDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileCount"));
 	}
 
 	/**
@@ -93,6 +92,14 @@ public class HbIrFileDAO implements IrFileDAO{
 	@SuppressWarnings("unchecked")
 	public List<IrFile> findByName(String name) {
 	  	return (List<IrFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIrFileByName", name);
+	}
+
+
+	/**
+	 * Return all IrFile
+	 */
+	public List<IrFile> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**
