@@ -14,6 +14,7 @@ The following should be checked prior to release:
 
 7.  Check build file(s) 
   - turn off test running (base.xml)
+  - turn off custom build (base.xml)
   - Set web.xml file to be non-ssl file (ir_web/build.xml)
   - Set yui to download and unzip (ir_web/build.xml)
   - Set zip version number (build.xml)
@@ -23,6 +24,9 @@ The following should be checked prior to release:
    - into web app pages/help
       (admin-help.pdf)
       (user-help.pdf)
+
+10.  Delete drop script 
+   sql/postgres/postgres-drop-schema.sql
 
 9.  Copy ir_plus.properties file from test into production folder
 
