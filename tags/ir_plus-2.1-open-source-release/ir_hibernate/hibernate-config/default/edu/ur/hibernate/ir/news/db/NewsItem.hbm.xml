@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for NewsItem.
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.news">
+	<class name="NewsItem" table="ir_news.news_item"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="news_item_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_news.news_item_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" access="field" />
+
+		<property name="dateAvailable" column="dateAvailable" type="date"
+			not-null="false" />
+
+		<property name="dateRemoved" column="dateRemoved" type="date"
+			not-null="false" />
+		
+	    <!-- Article for the news item -->
+        <many-to-one name="article" 
+              class="edu.ur.file.db.DefaultFileInfo" 
+              unique="true" 
+              column="article_file_id" 
+              cascade="save-update"
+              access="field"/>
+		
+		<!-- Primary picture for the news item -->
+		<many-to-one class="edu.ur.ir.file.IrFile" 
+		    cascade="save-update"
+			name="primaryPicture" 
+			column="primary_picture_id" 
+			insert="true"
+			update="true" 
+			unique="true"
+			access="field"/>
+			
+	    <!--  set of images for this news item -->
+		<set name="pictures" 
+		     optimistic-lock="false"
+		     cascade="save-update"
+		     access="field"
+		     table="news_item_picture"
+		     schema="ir_news"
+		     fetch="subselect">
+            <key column="news_item_id"/>
+            <many-to-many column="ir_file_id"
+                         unique="true"
+                         class="edu.ur.ir.file.IrFile"/>
+        </set>
+
+
+
+	 </class>
+		
+	<!--  Get a count of roles in the system -->
+	
+	<query name="newsCount">
+	    select count(*) from NewsItem
+	</query>
+	
+	<!-- named query for getting all roles ordered by name -->
+     <query name="getAllNewsNameAsc">from NewsItem order by name </query>
+    	
+    <!-- named query for getting a news item-->
+	<query name="getNewsByName">
+		from NewsItem as NewsItem where
+		NewsItem.name = ?
+	</query>
+	
+	<!-- named query for getting news items availabe for a given date-->
+	<query name="getAvailableNewsItemsForDate">
+		from NewsItem as newsItem where
+		newsItem.dateAvailable &lt;= ?
+		and newsItem.dateRemoved &gt; ?
+		order by newsItem.dateAvailable desc
+	</query>
+	
+	<!-- named query for getting a count of news items avialble for a given date-->
+	<query name="countAvailableNewsItemsForDate">
+		select count(*) from NewsItem as newsItem where
+		newsItem.dateAvailable &lt;= ?
+		and newsItem.dateRemoved &gt; ?
+	</query>
+	
+	<!-- named query for getting a news item order by name asc -->
+	<query name="getNewsItemsOrderByNameAsc">
+		from NewsItem order by name asc
+	</query>
+	
+	<!-- named query for getting a news item order by name desc -->
+	<query name="getNewsItemsOrderByNameDesc">
+		from NewsItem order by name desc
+	</query>
+	
+</hibernate-mapping>

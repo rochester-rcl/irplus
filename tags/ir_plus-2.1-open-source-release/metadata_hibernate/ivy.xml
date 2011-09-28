@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+<!--
+    Document   : ivy.xml
+    Created on : November 22, 2008, 3:52 PM
+    Author     : Nathan Sarr
+    Description:
+        Purpose of the document follows.
+-->
+
+<ivy-module version="2.0">
+    <info organisation="metadata_hibernate" module="metadata_hibernate"/>
+    <dependencies>
+
+        <dependency org="metadata_dao" name="metadata_dao" rev="2.1" changing="true"/>
+        
+        <!-- commons dbcp files -->
+        <dependency org="commons-dbcp" name="commons-dbcp" rev="1.2.2" transitive="false">
+            <artifact name="commons-dbcp" type="jar"/>
+        </dependency>
+
+        <!-- commons pool files -->
+        <dependency org="commons-pool" name="commons-pool" rev="1.5.1" transitive="false">
+            <artifact name="commons-pool" type="jar"/>
+        </dependency>
+        
+        <!-- commons logging -->
+        <dependency org="commons-logging" name="commons-logging" rev="1.1.1" transitive="false">
+            <artifact name="commons-logging" type="jar"/>
+        </dependency>
+        
+        <!-- commons logging -->
+        <dependency org="commons-collections" name="commons-collections" rev="3.2.1" transitive="false">
+            <artifact name="commons-collections" type="jar"/>
+        </dependency>
+
+
+        <!-- hibernate files -->
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.5.3-Final" transitive="false">
+            <artifact name="hibernate-core" type="jar"/>
+        </dependency>
+
+         <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" transitive="false">
+            <artifact name="slf4j-api" type="jar"/>
+        </dependency>
+
+        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.8" transitive="false">
+            <artifact name="slf4j-log4j12" type="jar"/>
+        </dependency>
+        
+        <dependency org="dom4j" name="dom4j" rev="1.6.1" transitive="false">
+            <artifact name="dom4j" type="jar"/>
+        </dependency>
+        
+        <dependency org="javax.transaction" name="jta" rev="1.1" transitive="false">
+            <artifact name="jta" type="jar"/>
+        </dependency>
+        
+        <dependency org="javassist" name="javassist" rev="3.11.0.GA" transitive="false">
+            <artifact name="javassist" type="jar"/>
+        </dependency>
+        
+        <dependency org="antlr" name="antlr" rev="2.7.7" transitive="false">
+            <artifact name="antlr" type="jar"/>
+        </dependency>
+        
+        
+        
+        <!-- spring files -->
+                <!-- spring files -->
+        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-core" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.springframework" name="spring-tx" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-tx" type="jar"/>
+        </dependency>
+
+        <dependency org="org.springframework" name="spring-beans" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-beans" type="jar"/>
+        </dependency>
+
+        <dependency org="org.springframework" name="spring-context" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-context" type="jar"/>
+        </dependency>
+
+        <dependency org="org.springframework" name="spring-expression" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-expression" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.springframework" name="spring-orm" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-orm" type="jar"/>
+        </dependency>
+        
+         <dependency org="org.springframework" name="spring-asm" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-asm" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.springframework" name="spring-jdbc" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-jdbc" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.springframework" name="spring-aop" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-aop" type="jar"/>
+        </dependency>
+        
+        <dependency org="aopalliance" name="aopalliance" rev="1.0" transitive="false">
+            <artifact name="aopalliance" type="jar"/>
+        </dependency>
+
+
+         <!-- postgresql jar files -->
+	    <dependency org="postgresql" name="postgresql" rev="8.3-604.jdbc3" transitive="false">
+	        <artifact name="postgresql" type="jar"/>
+ 	    </dependency>
+        
+    </dependencies>
+</ivy-module>
