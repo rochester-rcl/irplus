@@ -1322,8 +1322,9 @@ CREATE TABLE ir_item.publisher
 (
     publisher_id BIGINT PRIMARY KEY,
     version INTEGER,
-    name TEXT,
-    description TEXT
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
 );
 ALTER TABLE ir_item.publisher OWNER TO ir_plus;
 
