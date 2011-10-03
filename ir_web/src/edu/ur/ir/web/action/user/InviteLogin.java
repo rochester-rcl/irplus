@@ -22,6 +22,10 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
+import edu.ur.ir.invite.InviteToken;
+import edu.ur.ir.invite.InviteTokenService;
 import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 
@@ -33,21 +37,33 @@ import edu.ur.ir.user.InviteUserService;
  */
 public class InviteLogin extends ActionSupport implements Preparable {
 
-	/** Eclipse generated Id */
+	/* Eclipse generated Id */
 	private static final long serialVersionUID = 3356945932175988498L;	
 
-	/**  Logger for add user action */
+	/*  Logger for add user action */
 	private static final Logger log = Logger.getLogger(InviteLogin.class);
 
-	/** Token to identify the invited user */
+	/* Token to identify the invited user */
 	private String token;
 
-	/** Invite information */
-	private FileInviteInfo inviteInfo;
+	/* check to see if the invite */
+	private InviteToken inviteToken;
 
-	/** Invite service */
+	/* invite token service */
+	private InviteTokenService inviteTokenService;
+
+	/* invite info information */
+	private FileInviteInfo inviteInfo;
+	
+	/* invite user service */
 	private InviteUserService inviteUserService;
 	
+	/* group workspace invite service */
+	private GroupWorkspaceInviteService groupWorkspaceInviteService;
+	
+	private GroupWorkspaceEmailInvite groupWorkspaceEmailInvite;
+	
+
 	/** Message that can be displayed to the user. */
 	private String message;
 
@@ -62,11 +78,23 @@ public class InviteLogin extends ActionSupport implements Preparable {
 		
 		if( token != null )
 		{	
-		    inviteInfo = inviteUserService.findInviteInfoByToken(token); 
+		    inviteToken = inviteTokenService.getInviteToken(token);
+		    if( inviteToken != null )
+		    {
+		    	groupWorkspaceEmailInvite = groupWorkspaceInviteService.getByToken(token);
+		    	inviteInfo = inviteUserService.findInviteInfoByToken(token);
+		    	
+		    	// delete the token if it is not attached to an invite 
+		    	if(groupWorkspaceEmailInvite == null && inviteInfo == null)
+		    	{
+		    		inviteTokenService.delete(inviteToken);
+		    		inviteToken = null;
+		    		token = null;
+		    	}
+		    }
 		}
 		
-		
-		if (inviteInfo == null)
+		if (inviteToken == null)
 		{
 			token = null;
 			addFieldError("tokenDoesnotExist", 
@@ -74,37 +102,72 @@ public class InviteLogin extends ActionSupport implements Preparable {
 		}
 	}
 
-	public String getToken() {
-		return token;
-	}
-
+	/**
+	 * @param token
+	 */
 	public void setToken(String token) {
 		this.token = token;
 	}
 
-	public FileInviteInfo getInviteInfo() {
-		return inviteInfo;
-	}
-
-	public void setInviteInfo(FileInviteInfo inviteInfo) {
-		this.inviteInfo = inviteInfo;
-	}
-
-	public InviteUserService getInviteUserService() {
-		return inviteUserService;
-	}
-
-	public void setInviteUserService(InviteUserService inviteUserService) {
-		this.inviteUserService = inviteUserService;
-	}
 
 	public String getMessage() {
 		return message;
 	}
-
-	public void setMessage(String message) {
-		this.message = message;
+	
+	/**
+	 * Set the invite token 
+	 * 
+	 * @param inviteTokenService
+	 */
+	public void setInviteTokenService(InviteTokenService inviteTokenService) {
+		this.inviteTokenService = inviteTokenService;
+	}
+	
+	/**
+	 * Get the invite info.
+	 * 
+	 * @return
+	 */
+	public FileInviteInfo getInviteInfo() {
+		return inviteInfo;
 	}
 
+	/**
+	 * Set the user invite service.
+	 * 
+	 * @param inviteUserService
+	 */
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
+	}
+
+	/**
+	 * Get the group workspace email invite.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspaceEmailInvite getGroupWorkspaceEmailInvite() {
+		return groupWorkspaceEmailInvite;
+	}
+
+
+	/**
+	 * Set the group workspace invite service.
+	 * 
+	 * @param groupWorkspaceInviteService
+	 */
+	public void setGroupWorkspaceInviteService(
+			GroupWorkspaceInviteService groupWorkspaceInviteService) {
+		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
+	}
+
+	/**
+	 * Get the token.
+	 * 
+	 * @return
+	 */
+	public String getToken() {
+		return token;
+	}
 
 }

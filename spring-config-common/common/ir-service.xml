@@ -906,9 +906,12 @@
 	   <property name="groupWorkspaceEmailInviteDAO" ref="groupWorkspaceEmailInviteDAO"/>
 	   <property name="groupWorkspaceUserInviteDAO" ref="groupWorkspaceUserInviteDAO"/>
        <property name="mailSender" ref="mailSender"/>
+       <property name="userService" ref="userService"/>
        <property name="userWorkspaceInviteUserExists" ref="userWorkspaceInviteUserExists"/>
        <property name="userWorkspaceInviteUserNotExistsMessage" ref="userWorkspaceInviteUserNotExistsMessage"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
    </bean>
    <!-- ****************************************** --> 
    <!-- Service that deals with Marc Conntent type -->
@@ -968,6 +971,14 @@
    <bean id="extentTypeSubFieldMapperService" 
        class="edu.ur.ir.item.metadata.marc.service.DefaultExtentTypeSubFieldMapperService">
        <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Invite token service  -->
+   <!-- ****************************************** --> 
+    <bean id="inviteTokenService" 
+       class="edu.ur.ir.invite.service.DefaultInviteTokenService">
+       <property name="inviteTokenDAO" ref="inviteTokenDAO"/>
    </bean>
    
    <!-- ****************************************** --> 

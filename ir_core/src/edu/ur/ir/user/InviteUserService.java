@@ -209,7 +209,7 @@ public interface InviteUserService extends Serializable{
 	 * @param email Email used to invite the user
 	 * @throws FileSharingException - if the user tries to share a file with themselves
 	 */
-	public Set<SharedInboxFile> sharePendingFilesForEmail(Long userId, String email) throws FileSharingException ;
+	public Set<SharedInboxFile> sharePendingFilesForEmail(Long userId, String email) throws UnVerifiedEmailException, FileSharingException ;
 
 	/**
 	 * Delete shared inbox file

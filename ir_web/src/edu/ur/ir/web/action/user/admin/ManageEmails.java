@@ -32,6 +32,7 @@ import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
@@ -182,8 +183,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	 * 
 	 * @return
 	 * @throws FileSharingException 
+	 * @throws UnVerifiedEmailException 
 	 */
-	public String setVerified() throws FileSharingException
+	public String setVerified() throws FileSharingException, UnVerifiedEmailException
 	{
 		log.debug("verifing email with id = " + emailId);
 

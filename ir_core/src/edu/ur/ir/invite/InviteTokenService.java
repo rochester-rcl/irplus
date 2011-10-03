@@ -17,13 +17,28 @@
 
 package edu.ur.ir.invite;
 
+import java.io.Serializable;
+
 /**
  * Service to deal with inviting users to the system.
  * 
  * @author Nathan Sarr
  *
  */
-public interface TokenInviteService 
+public interface InviteTokenService extends Serializable
 {
-
+    /**
+     * Get the invite token by it's token value.
+     * 
+     * @param token
+     */
+    public InviteToken getInviteToken(String token);
+    
+    
+    /**
+     * Delete the invite token.
+     * 
+     * @param entity
+     */
+    public void delete(InviteToken entity);
 }

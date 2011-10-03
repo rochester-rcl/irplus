@@ -48,6 +48,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.RoleService;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserGroupService;
@@ -76,8 +77,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** Service for accessing role information */
 	private RoleService roleService;
-
-
 
 	/** Service for accessing department information */
 	private DepartmentService departmentService;
@@ -332,8 +331,14 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		try {
 		    // Share files -  If there are any invitations sent to this email address 
 			inviteUserService.sharePendingFilesForEmail(irUser.getId(), defaultEmail.getEmail());
-		} catch (FileSharingException e) {
+		} 
+		catch (FileSharingException e) 
+		{
 		    log.error("File cannot be shared with themselves" + e.getMessage());
+		}
+		catch(UnVerifiedEmailException uvef)
+		{
+			log.error("email not verified " + defaultEmail.getEmail() + " " + uvef.getMessage());
 		}
 					
 		added = true;

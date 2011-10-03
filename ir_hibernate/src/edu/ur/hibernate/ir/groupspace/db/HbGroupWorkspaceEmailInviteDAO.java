@@ -65,7 +65,7 @@ public class HbGroupWorkspaceEmailInviteDAO implements GroupWorkspaceEmailInvite
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceEmailInvite findInviteInfoForToken(String token)
+	public GroupWorkspaceEmailInvite getInviteInfoForToken(String token)
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findGroupWorkspaceEmailInviteForToken");
 		q.setParameter("token", token);
