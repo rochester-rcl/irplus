@@ -63,6 +63,7 @@ import edu.ur.ir.user.PersonalFileDAO;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
@@ -320,8 +321,9 @@ public class DefaultInviteUserServiceTest {
      * The File1.doc should be shared with User2 after adding new email "a@b.com".
      * @throws UserHasPublishedDeleteException 
      * @throws LocationAlreadyExistsException 
+     * @throws UnVerifiedEmailException 
      */
-	public void sharePendingFilesForEmailTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
+	public void sharePendingFilesForEmailTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, UnVerifiedEmailException {
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
