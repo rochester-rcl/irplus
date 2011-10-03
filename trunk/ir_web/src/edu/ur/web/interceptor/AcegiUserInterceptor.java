@@ -129,9 +129,15 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 		if(  (user != null) && (action instanceof ViewWorkspace) )
 		{	   
 	 	    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		    if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		    
+	 	    // this can happen when setting up the repository
+	 	    // all other times the repository should not be null
+	 	    if( repository != null )
 		    {
-			    return "acceptLicense";
+	 	        if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		        {
+			        return "acceptLicense";
+		        }
 		    }
 		}
 		

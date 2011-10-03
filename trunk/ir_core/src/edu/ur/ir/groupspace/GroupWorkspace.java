@@ -66,8 +66,6 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 
 	/* users who are not yet registered or have an email that is not yet registered */
 	private Set<GroupWorkspaceEmailInvite> emailInvites = new HashSet<GroupWorkspaceEmailInvite>();
-	
-
 
 	/* date this record was created */
 	private Timestamp createdDate;
@@ -614,7 +612,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 		
 		if(  invite == null )
 		{
-			InviteToken inviteToken = new InviteToken(email, token + email, invitingUser);
+			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
 			invite = new GroupWorkspaceEmailInvite(this, inviteToken); 
 			emailInvites.add(invite);
 		}

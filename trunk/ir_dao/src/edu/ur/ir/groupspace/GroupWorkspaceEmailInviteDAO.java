@@ -36,7 +36,7 @@ extends CrudDAO<GroupWorkspaceEmailInvite>, CountableDAO {
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceEmailInvite findInviteInfoForToken(String token);
+	public GroupWorkspaceEmailInvite getInviteInfoForToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email

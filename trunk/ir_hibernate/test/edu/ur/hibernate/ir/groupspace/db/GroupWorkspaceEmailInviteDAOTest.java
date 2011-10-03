@@ -88,7 +88,7 @@ public class GroupWorkspaceEmailInviteDAOTest
 	 * @throws GroupWorkspaceInviteException 
 	 */
 	@Test
-	public void basegroupWorkspaceEmailInviteDAOTest() throws DuplicateNameException, GroupWorkspaceInviteException{
+	public void baseGroupWorkspaceEmailInviteDAOTest() throws DuplicateNameException, GroupWorkspaceInviteException{
 
 		TransactionStatus ts = tm.getTransaction(td);
 
@@ -112,7 +112,7 @@ public class GroupWorkspaceEmailInviteDAOTest
 		ts = tm.getTransaction(td);
 		
 	   
-        GroupWorkspaceEmailInvite invite = groupSpace.addInviteUser("test@mail.com", user, "123");
+        GroupWorkspaceEmailInvite invite = groupSpace.addInviteUser("test@mail.com", user, "123test@mail.com");
         invite.getInviteToken().setInviteMessage("invite message");
 		groupWorkspaceEmailInviteDAO.makePersistent(invite);
 		
@@ -126,7 +126,7 @@ public class GroupWorkspaceEmailInviteDAOTest
 		assert other.getInviteToken().getInviteMessage().equals("invite message") : "Message should be equal";
 		assert other.getInviteToken().getToken().equals("123test@mail.com") : "inviteInfo should be equal but is " + other.getInviteToken().getToken();
 		assert other.getInviteToken().getInvitingUser().equals(user) : "User should be equal user = " + user + " invitingUser = " + other.getInviteToken().getInvitingUser();
-		assert (groupWorkspaceEmailInviteDAO.findInviteInfoForToken("123test@mail.com")).equals(other) : "The user inviteInfo should be equal";
+		assert (groupWorkspaceEmailInviteDAO.getInviteInfoForToken("123test@mail.com")).equals(other) : "The user inviteInfo should be equal";
 		List<GroupWorkspaceEmailInvite> invites = groupWorkspaceEmailInviteDAO.getInviteInfoByEmail("TeSt@Mail.com");
 		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
 		assert invites.get(0).equals(invite) : "invite " + invites.get(0) + " should equal " + invite;

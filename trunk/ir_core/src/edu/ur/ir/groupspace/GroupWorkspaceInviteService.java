@@ -17,6 +17,12 @@
 package edu.ur.ir.groupspace;
 
 import java.util.List;
+import java.util.Set;
+
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UnVerifiedEmailException;
 
 
 
@@ -37,7 +43,7 @@ public interface GroupWorkspaceInviteService
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceEmailInvite findByToken(String token);
+	public GroupWorkspaceEmailInvite getByToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email
@@ -67,6 +73,28 @@ public interface GroupWorkspaceInviteService
 	 * @return the invite if found.
 	 */
 	public GroupWorkspaceUserInvite getUserInviteById(Long id, boolean lock);
+	
+	/**
+	 * Invite the specified users with the given emails.  This will determine if the emails
+	 * already exist for a user in the system.  If the user already exists in the system a
+	 * group workspace invite will be added to the users group display for approval
+	 * 
+	 * @param invitingUser - user doing the inviting
+	 * @param emails - list of emails of users to invite to join the group.
+	 * @param setAsOwner - set the users as owners of the group
+	 * @param permissions - permissions to give the group
+	 * @param groupWorkspace - group workspaces to add the user to
+	 * @param inviteMessage - message to send to users
+	 * 
+	 * @return list of emails that were found to be invalid or could not be sent a message
+	 * @throws PermissionNotGrantedException - if the user does not have permissions to invite users into a group
+	 */
+	public List<String> inviteUsers(IrUser invitingUser, 
+			List<String> emails, 
+			boolean setAsOwner,
+			Set<IrClassTypePermission> permissions, 
+			GroupWorkspace groupWorkspace, 
+			String inviteMessage) throws PermissionNotGrantedException;
 
 	
 	/**
@@ -125,6 +153,20 @@ public interface GroupWorkspaceInviteService
 	 * @param invite
 	 */
 	public void sendEmailInvite(GroupWorkspaceEmailInvite invite);
+	
+	/**
+	 * Create group invites for user with the specified email.  This will remove any email
+	 * invites and make them user invites.
+	 * 
+	 * @param user - user invited
+	 * @param email - email for user
+	 * 
+	 * @throws UnVerifiedEmailException - if the email has not yet been verified or does
+	 * not exist
+	 * @throws GroupWorkspaceInviteException 
+	 */
+	public void createGroupInvitesForUser(IrUser user, String email) throws UnVerifiedEmailException, GroupWorkspaceInviteException;
+	
 	
 	
 }

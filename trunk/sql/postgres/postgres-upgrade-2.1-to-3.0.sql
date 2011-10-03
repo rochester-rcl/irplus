@@ -30,7 +30,8 @@ UPDATE  ir_user.invite_info set created_date = date(now());
 
 ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
 
-
+-- add message column
+ALTER TABLE ir_invite.invite_token ADD COLUMN invite_message TEXT;
 
 -- ---------------------------------------------
 -- Invite info for folder data

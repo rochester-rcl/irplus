@@ -1,3 +1,25 @@
+-- ----------------------------------------------
+-- **********************************************
+       
+--   Copyright 2008 University of Rochester
+--
+--   Licensed under the Apache License, Version 2.0 (the "License");
+--   you may not use this file except in compliance with the License.
+--   You may obtain a copy of the License at
+
+--       http://www.apache.org/licenses/LICENSE-2.0
+
+--   Unless required by applicable law or agreed to in writing, software
+--   distributed under the License is distributed on an "AS IS" BASIS,
+--   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+--   See the License for the specific language governing permissions and
+--   limitations under the License.
+
+-- **********************************************
+-- ----------------------------------------------
+
+
+
 -- ---------------------------------------------
 -- insert a role for import abilities
 -- give all admins the importer role
@@ -17,8 +39,16 @@ and role.name = 'ROLE_ADMIN')
 and ir_user.role.name ='ROLE_IMPORTER';
 
 
+-- ---------------------------------------------
+-- Make publisher name unique
+-- ---------------------------------------------
 
+ALTER TABLE ir_item.publisher
+  ADD CONSTRAINT publisher_name_key UNIQUE(name);
+  
+ALTER TABLE ir_item.publisher ALTER COLUMN name SET NOT NULL;  
 
+  
 -- ---------------------------------------------
 -- Place of publication
 -- ---------------------------------------------
