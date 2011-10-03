@@ -577,7 +577,7 @@ YAHOO.ur.invite =
 	    YAHOO.ur.invite.createUnshareFileConfirmDialog();
 	    YAHOO.ur.invite.createUnsharePendingInviteeConfirmDialog();
 	    YAHOO.ur.invite.createRemoveFileConfirmDialog();
-	    YAHOO.ur.invite. createWaitDialog();
+	    YAHOO.ur.invite.createWaitDialog();
     }
     
 };
