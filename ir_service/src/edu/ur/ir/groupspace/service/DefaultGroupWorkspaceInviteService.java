@@ -16,18 +16,32 @@
 
 package edu.ur.ir.groupspace.service;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
+import edu.ur.ir.ErrorEmailService;
+import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.GroupWorkspaceUserInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceEmailInviteDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.groupspace.GroupWorkspaceUserInviteDAO;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UnVerifiedEmailException;
+import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserService;
+import edu.ur.util.TokenGenerator;
 
 /**
  * Default implementation of the group workspace group invite service.
@@ -40,7 +54,8 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	/* Data access for the group workspace group invite  */
 	private GroupWorkspaceEmailInviteDAO groupWorkspaceEmailInviteDAO;
 	
-
+	/* service to deal with user information */
+    private UserService userService;
 
 	/* Data access for the group workspace group invite  */
 	private GroupWorkspaceUserInviteDAO groupWorkspaceUserInviteDAO;
@@ -59,7 +74,12 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	
 	/* Mail sender */
 	private transient MailSender mailSender;
-
+	
+	/* send emails when an error occurs */
+	private ErrorEmailService errorEmailService;
+	
+	/* deal with group workspace information */
+	private GroupWorkspaceService groupWorkspaceService;
 
 
 	/**
@@ -68,9 +88,9 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	 * @param token user token
 	 * @return User token information
 	 */
-	public GroupWorkspaceEmailInvite findByToken(String token)
+	public GroupWorkspaceEmailInvite getByToken(String token)
 	{
-		return  groupWorkspaceEmailInviteDAO.findInviteInfoForToken(token);
+		return  groupWorkspaceEmailInviteDAO.getInviteInfoForToken(token);
 	}
 	
 	/**
@@ -104,7 +124,6 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	{
 		sendExistingUserEmail(invite);
 	}
-	
 	
 	/**
 	 * Set the group workspace group invite data access object.
@@ -200,6 +219,139 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		}
 		message.setText(text);
 		sendEmail(message);
+	}
+	
+	/**
+	 * Invite the specified users with the given emails.  This will determine if the emails
+	 * already exist for a user in the system.  If the user already exists in the system a
+	 * group workspace invite will be added to the users group display for approval
+	 * 
+	 * @param invitingUser - user doing the inviting
+	 * @param emails - list of emails of users to invite to join the group.
+	 * @param setAsOwner - set the users as owners of the group
+	 * @param permissions - permissions to give the group
+	 * @param groupWorkspace - group workspaces to add the user to
+	 * @param inviteMessage - message to send to users
+	 * 
+	 * @return list of emails that were found to be invalid or could not be sent a message
+	 * @throws PermissionNotGrantedException - if the user does not have permissions to invite users into a group
+	 * @throws GroupWorkspaceInviteException 
+	 */
+	public List<String> inviteUsers(IrUser invitingUser, 
+			List<String> emails, 
+			boolean setAsOwner,
+			Set<IrClassTypePermission> permissions, 
+			GroupWorkspace groupWorkspace, 
+			String inviteMessage) throws PermissionNotGrantedException
+	{
+		log.debug("invite users called");
+		List<String> emailsNotSent = new LinkedList<String>();
+		GroupWorkspaceUser groupWorkspaceUser = groupWorkspace.getUser(invitingUser);
+		if( groupWorkspaceUser == null || !groupWorkspaceUser.getOwner())
+		{
+			throw new PermissionNotGrantedException("Only an owner can add new members");
+		}
+		
+		for(String email : emails)
+		{
+			email = email.trim();
+			// Check if user exist in the system
+			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
+			
+			if( invitedUser != null )
+			{
+			    //check if the user is sharing the file with themselves
+			    if (invitingUser.equals(invitedUser)) {
+				    //do nothing
+			    }
+			
+			    // only invite the user if they have not yet been invited.
+			    if( groupWorkspace.getUser(invitedUser) == null && 
+			    	groupWorkspace.getInvite(invitedUser) == null )
+			    {
+			    	GroupWorkspaceUserInvite invite;
+					try {
+						invite = groupWorkspace.addInviteUser(invitedUser, invitingUser, setAsOwner, email);
+						try
+				    	{
+				    	    sendEmailInvite(invite);
+				    	    groupWorkspaceUserInviteDAO.makePersistent(invite);
+				    	}
+				    	catch(IllegalStateException e)
+				    	{
+				    		emailsNotSent.add(email);
+				    	}
+					
+					} catch (GroupWorkspaceInviteException e1) {
+						//user already exists
+						log.error("this should not happen - user already extists", e1);
+						errorEmailService.sendError(e1);
+					}
+			    }
+			}
+			else
+			{
+				GroupWorkspaceEmailInvite invite = groupWorkspace.getInvite(email);
+				if( invite == null )
+				{
+					try {
+						invite = groupWorkspace.addInviteUser(email, invitingUser, TokenGenerator.getToken() + email);
+						 try
+						 {
+						     sendEmailInvite(invite);
+						     groupWorkspaceEmailInviteDAO.makePersistent(invite);
+						 }
+						 catch(IllegalStateException e)
+						 {
+						     emailsNotSent.add(email);
+						 }
+					} catch (GroupWorkspaceInviteException e1) {
+						//user already exists
+						log.error("this should not happen - user already extists", e1);
+						errorEmailService.sendError(e1);
+					}
+				}
+			}
+		}
+			
+		return emailsNotSent;
+	}
+	
+	/**
+	 * Create group invites for user.
+	 * 
+	 * @param user - user invited
+	 * @param email - email for user
+	 * 
+	 * @throws UnVerifiedEmailException - if the email has not yet been verified or does
+	 * not exist
+	 * @throws GroupWorkspaceInviteException 
+	 */
+	public void createGroupInvitesForUser(IrUser user, String email) throws UnVerifiedEmailException, GroupWorkspaceInviteException
+	{
+		UserEmail userEmail = user.getUserEmail(email);
+		if( userEmail == null || !userEmail.isVerified())
+		{
+			UnVerifiedEmailException e = new UnVerifiedEmailException("user email has not yet been verified");
+			errorEmailService.sendError(e);
+			throw e;
+		}
+		
+		List<GroupWorkspaceEmailInvite> emailInvites = groupWorkspaceEmailInviteDAO.getInviteInfoByEmail(email);
+		
+		for(GroupWorkspaceEmailInvite emailInvite : emailInvites )
+		{
+			GroupWorkspace groupWorkspace = emailInvite.getGroupWorkspace();
+			if( !groupWorkspace.deleteEmailInvite(email) )
+			{
+				throw new IllegalStateException("could not delete email invite " 
+						+ email + " for workspace " + groupWorkspace.getName());
+			}
+			groupWorkspace.addInviteUser(user, emailInvite.getInviteToken().getInvitingUser(), 
+					emailInvite.isSetAsOwner(), email);
+			
+			groupWorkspaceService.save(groupWorkspace);
+		}
 	}
 	
 	/**
@@ -357,5 +509,50 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	 */
 	public void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
+	}
+	
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	/**
+	 * Service to deal with errors.
+	 * 
+	 * @return
+	 */
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+	/**
+	 * Service to deal with errors.
+	 * 
+	 * @param errorEmailService
+	 */
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+	
+	/**
+	 * Get the group workspace service.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspaceService getGroupWorkspaceService() {
+		return groupWorkspaceService;
+	}
+
+	/**
+	 * Set the group workspace service.
+	 * 
+	 * @param groupWorkspaceService
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
 	}
 }

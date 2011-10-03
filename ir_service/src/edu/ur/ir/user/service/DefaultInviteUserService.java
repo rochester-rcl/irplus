@@ -57,6 +57,7 @@ import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
@@ -558,18 +559,19 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 * @param UserId Id of the invited user
 	 * @param email Email used to invite the user
+	 * @throws FileSharingException 
 	 * 
 	 * @throws FileSharingException - if the user tries to share a file with themselves or the email has 
 	 * not yet been verified.
 	 */
-	public Set<SharedInboxFile> sharePendingFilesForEmail(Long userId, String email) throws FileSharingException {
+	public Set<SharedInboxFile> sharePendingFilesForEmail(Long userId, String email) throws UnVerifiedEmailException, FileSharingException {
 		
 		IrUser invitedUser = userService.getUser(userId, true);
 		
 		UserEmail userEmail = invitedUser.getUserEmail(email);
 		if( userEmail == null || !userEmail.isVerified())
 		{
-			FileSharingException e = new FileSharingException("user email has not yet been verified");
+			UnVerifiedEmailException e = new UnVerifiedEmailException("user email has not yet been verified");
 			errorEmailService.sendError(e);
 			throw e;
 		}
