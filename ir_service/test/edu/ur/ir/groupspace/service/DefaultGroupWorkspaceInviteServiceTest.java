@@ -75,9 +75,6 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 	/* Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
 	
-
-    
-	
 	/**
 	 * Test inviting user into the workspace.
 	 * 
