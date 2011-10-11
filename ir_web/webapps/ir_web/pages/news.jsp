@@ -47,10 +47,10 @@
         
         <!-- Source File -->
         <ur:js src="page-resources/js/menu/main_menu.js"/>
-        <ur:js src="pages/js/base_path.js"/>
+        <ur:js src="page-resources/js/util/base_path.jsp"/>
         
         <!--  base path information -->
- 	    <ur:js src="pages/js/base_path.js"/>
+ 	    <ur:js src="page-resources/js/util/base_path.jsp"/>
  	    
     </head>
     

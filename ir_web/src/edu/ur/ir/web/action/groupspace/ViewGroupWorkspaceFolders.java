@@ -55,8 +55,6 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	/* The folder that owns the listed files and folders */
 	private Long parentFolderId;	
 
-
-
 	/* type of sort [ ascending | descending ] 
 	 *  this is for incoming requests */
 	private String sortType = "desc";
@@ -88,8 +86,6 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	
 	/* list of folder ids to perform actions on*/
 	private Long[] groupFolderIds;
-	
-
 
 	/* list of file ids to perform actions on*/
 	private Long[] groupFileIds;
@@ -105,12 +101,10 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 		log.debug("parent folder id = " + parentFolderId);
 		if(parentFolderId != null && parentFolderId > 0)
 		{
-			
-		    GroupWorkspaceFolder parent = groupWorkspaceFileSystemService.getFolder(parentFolderId, false);
-		    //if( !parent.getOwner().getId().equals(userId))
-		    //{
-		    //	return "accessDenied";
-		    //}
+		    if( !groupWorkspaceService.userIsGroupWorkspaceMember(user.getId(), parentFolder.getGroupWorkspace().getId()) )
+		    {
+		    	return "accessDenied";
+		    }
 		}
 		
 		log.debug("getTableCalled");

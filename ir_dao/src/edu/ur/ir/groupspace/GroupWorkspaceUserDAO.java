@@ -25,4 +25,15 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceUserDAO extends CrudDAO<GroupWorkspaceUser> {}
+public interface GroupWorkspaceUserDAO extends CrudDAO<GroupWorkspaceUser> 
+{
+    /**
+     * Get the group workspace user for the given user id and group workspace id.
+     * 
+     * @param userId - user id
+     * @param groupWorkspaceId - group workspace id
+     * 
+     * @return the group workspace user or null if the group workspace user is not found.
+     */
+    public GroupWorkspaceUser getGroupWorkspaceUser(Long userId, Long groupWorkspaceId);	
+}

@@ -64,15 +64,6 @@ public interface GroupWorkspaceInviteService
 	 */
 	public GroupWorkspaceEmailInvite getEmailInviteById(Long id, boolean lock);
 	
-	/**
-	 * Get the invited group workspace user invite by id.
-	 * 
-	 * @param id - id of the invite id
-	 * @param lock - upgrade the lock.
-	 * 
-	 * @return the invite if found.
-	 */
-	public GroupWorkspaceUserInvite getUserInviteById(Long id, boolean lock);
 	
 	/**
 	 * Invite the specified users with the given emails.  This will determine if the emails
@@ -95,21 +86,6 @@ public interface GroupWorkspaceInviteService
 			Set<IrClassTypePermission> permissions, 
 			GroupWorkspace groupWorkspace, 
 			String inviteMessage) throws PermissionNotGrantedException;
-
-	
-	/**
-	 * Make the invite record persistent.
-	 * 
-	 * @param entity
-	 */
-	public void save(GroupWorkspaceUserInvite entity);
-
-	/**
-	 * Delete the invite 
-	 * 
-	 * @param entity
-	 */
-	public void delete(GroupWorkspaceUserInvite entity);
 	
 	/**
 	 * Make the invite record persistent.
@@ -117,6 +93,18 @@ public interface GroupWorkspaceInviteService
 	 * @param entity
 	 */
 	public void save(GroupWorkspaceEmailInvite entity);
+	
+	/**
+	 * Sends an email notifying the specified user that  they have been add
+	 * to a group workspace.  This should only be used for existing users of
+	 * the IR+ system.  If they are not yet users use sendEmailInvite(GroupWorkspaceEmailInvite invite)
+	 *
+	 * @param invitingUser - user doing the inviting
+	 * @param groupWorkspace - group workspace the user has been invited to
+	 * @param email - email used by the inviting user to invite the other user
+	 * @param inviteMessage - message to the user.
+	 */
+	public void sendEmailInvite(IrUser invitingUser, GroupWorkspace groupWorkspace, String email, String inviteMessage);
 
 	/**
 	 * Delete the invite 
@@ -125,25 +113,12 @@ public interface GroupWorkspaceInviteService
 	 */
 	public void delete(GroupWorkspaceEmailInvite entity);
 
-	/**
-	 * Get a count of the number of invite records.
-	 * 
-	 */
-	public Long getUserInviteCount();
 	
 	/**
 	 * Get a count of the number of invite records.
 	 * 
 	 */
 	public Long getEmailInviteCount();
-	
-	/**
-	 * Sends an email notifying the specified user that  they have been invited
-	 * to join a group workspace.
-	 * 
-	 * @param invite
-	 */
-	public void sendEmailInvite(GroupWorkspaceUserInvite invite);
 	
 	/**
 	 * Sends an email notifying the specified user that  they have been invited
@@ -155,18 +130,12 @@ public interface GroupWorkspaceInviteService
 	public void sendEmailInvite(GroupWorkspaceEmailInvite invite);
 	
 	/**
-	 * Create group invites for user with the specified email.  This will remove any email
-	 * invites and make them user invites.
+	 * Add users to all invited groups for a given email.  This email must be verified as
+	 * valid.
 	 * 
-	 * @param user - user invited
-	 * @param email - email for user
-	 * 
-	 * @throws UnVerifiedEmailException - if the email has not yet been verified or does
-	 * not exist
-	 * @throws GroupWorkspaceInviteException 
+	 * @param email - email for user to be verified
+	 * @throws UnVerifiedEmailException - if the email has not yet been verified.
 	 */
-	public void createGroupInvitesForUser(IrUser user, String email) throws UnVerifiedEmailException, GroupWorkspaceInviteException;
-	
-	
+	public void addUserToGroupsForEmail(String email) throws UnVerifiedEmailException;
 	
 }

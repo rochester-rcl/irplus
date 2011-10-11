@@ -29,7 +29,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.invite.InviteTokenService;
@@ -723,9 +722,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 			}
             
             
-            GroupWorkspaceEmailInvite groupWorkspaceEmailInvite = groupWorkspaceInviteService.getByToken(token);
-			inviteUserService.sharePendingFilesForEmail(irUser.getId(),inviteToken.getEmail());
-            
+        	inviteUserService.sharePendingFilesForEmail(irUser.getId(),inviteToken.getEmail());
+        	groupWorkspaceInviteService.addUserToGroupsForEmail(inviteToken.getEmail());
             
 			
 			returnVal = "successInvite";

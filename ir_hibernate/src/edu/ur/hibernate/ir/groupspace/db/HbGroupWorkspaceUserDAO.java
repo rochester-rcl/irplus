@@ -16,7 +16,6 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
-import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -25,8 +24,6 @@ import org.hibernate.SessionFactory;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
-import edu.ur.ir.user.IrUser;
-import edu.ur.order.OrderType;
 
 /**
  * Hibernate implementation of group space group persistence
@@ -58,71 +55,7 @@ public class HbGroupWorkspaceUserDAO implements GroupWorkspaceUserDAO {
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
-
-	/**
-	 * Get the list of user groups for a group workspace.
-	 * 
-	 * 
-	 * @param groupWorkspaceId - id of the group workspace
-	 * @param rowStart - start position
-	 * @param numberOfResultsToShow - number of rows to grab.
-	 * @param orderType - sort order(Asc/desc)
-	 * 
-	 * @return list of user groups.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceUser> getGroupsByName(Long groupWorkspaceId, int rowStart,
-			int numberOfResultsToShow, OrderType orderType) 
-	{
-		Query q = null;
-	    Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-	    if(orderType.equals(OrderType.ASCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getGroupWorkspaceGroupsOrderByNameAsc");
-	    } 
-	    else
-	    {
-	        q = session.getNamedQuery("getGroupWorkspaceGroupsOrderByNameDesc");
-	    } 
-	    q.setParameter("groupWorkspaceId", groupWorkspaceId);
-	    q.setFirstResult(rowStart);
-	    q.setMaxResults(numberOfResultsToShow);
-		q.setFetchSize(numberOfResultsToShow);
-	    return q.list();
-	}
-
-	/**
-	 * Get all the user groups for a given group space and a given user.
-	 *
-	 * @param groupSpaceId - groupSpace
-	 * @param userId - id of the user to get the groups for
-	 * @return - list of groups the user is in.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceUser> getGroups(Long groupWorkspaceId, Long userId) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("getGroupWorkspaceGroupsForUser");
-		q.setParameter("groupWorkspaceId", groupWorkspaceId);
-		q.setParameter("userId", userId);
-		return (List<GroupWorkspaceUser>)q.list();
-	}
-
-	/**
-	 * Get a user for the specified group 
-	 * 
-	 * @param groupId - id of the group
-	 * @param userId - id of the user
-	 * 
-	 * @return the user if found - otherwise null.
-	 */
-	public IrUser getUserForGroup(Long groupId, Long userId) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("getUserForGroupWorkspaceGroup");
-		q.setParameter("userId", userId);
-		q.setParameter("groupId", groupId);
-		return (IrUser)q.uniqueResult();
-	}
-
+	
 	/**
 	 * Get the group workspace by id.
 	 *  
@@ -148,6 +81,24 @@ public class HbGroupWorkspaceUserDAO implements GroupWorkspaceUserDAO {
 	 */
 	public void makeTransient(GroupWorkspaceUser entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	/**
+     * Get the group workspace user for the given user id and group workspace id.
+     * 
+     * @param userId - user id
+     * @param groupWorkspaceId - group workspace id
+     * 
+     * @return the group workspace user or null if the group workspace user is not found.
+     */
+	public GroupWorkspaceUser getGroupWorkspaceUser(Long userId,
+			Long groupWorkspaceId) {
+		
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = session.getNamedQuery("getUserForGroupWorkspaceGroup");
+		q.setParameter("userId", userId);
+		q.setParameter("workspaceId", groupWorkspaceId);
+		return (GroupWorkspaceUser)q.uniqueResult();
 	}
 
 }

@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonService;
@@ -223,6 +224,11 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	/** list of groups the user belongs to */
 	private List<IrUserGroup> userGroups;
 	
+	/* service to deal with inviting users to group workspaces */
+	private GroupWorkspaceInviteService groupWorkspaceInviteService;
+	
+
+
 
 	/**
 	 * Set the user group service.
@@ -330,7 +336,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 		try {
 		    // Share files -  If there are any invitations sent to this email address 
+			groupWorkspaceInviteService.addUserToGroupsForEmail(defaultEmail.getEmail());
 			inviteUserService.sharePendingFilesForEmail(irUser.getId(), defaultEmail.getEmail());
+		
 		} 
 		catch (FileSharingException e) 
 		{
@@ -1278,6 +1286,16 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
+	}
+	
+	/**
+	 * Set the group workspace invite service.
+	 * 
+	 * @param groupWorkspaceInviteService
+	 */
+	public void setGroupWorkspaceInviteService(
+			GroupWorkspaceInviteService groupWorkspaceInviteService) {
+		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
 	}
 
 }

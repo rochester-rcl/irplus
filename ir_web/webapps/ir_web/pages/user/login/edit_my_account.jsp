@@ -46,12 +46,12 @@
  	    <ur:js src="page-resources/yui/menu/menu-min.js"/>
         <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
-	    <ur:js src="pages/js/base_path.js"/>
+	    <ur:js src="page-resources/js/util/base_path.jsp"/>
 	    <ur:js src="page-resources/js/util/ur_util.js"/>
 	    <ur:js src="page-resources/js/util/wait_dialog.js" />
 	    <ur:js src="page-resources/js/menu/main_menu.js"/>
 	 	
-	 	<ur:js src="pages/js/ur_table.js"/>
+	 	<ur:js src="page-resources/js/util/ur_table.js"/>
  	    <ur:js src="page-resources/js/admin/edit_user.js"/>
         <ur:js src="page-resources/js/user/edit_my_account.js"/>
         <ur:js src="page-resources/js/admin/edit_person.js"/>

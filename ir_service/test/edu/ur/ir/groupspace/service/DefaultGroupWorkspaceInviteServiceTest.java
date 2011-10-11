@@ -33,7 +33,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
-import edu.ur.ir.groupspace.GroupWorkspaceUserInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.user.FileSharingException;
@@ -111,24 +111,15 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 		// create the group workspace
 		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
 		groupWorkspaceService.save(groupWorkspace);
+
 		
-		GroupWorkspaceUserInvite userInvite = groupWorkspace.addInviteUser(user1, user, false, email1.getEmail());
-		groupWorkspaceInviteService.save(userInvite);
 		
 		if( sendEmail )
 		{
-		    groupWorkspaceInviteService.sendEmailInvite(userInvite);
+		    groupWorkspaceInviteService.sendEmailInvite(user, groupWorkspace, email1.getEmail(), "test email inviteExistingUserToGroupTest");
 		}
 		
         tm.commit(ts);
-
-		
-		
-		// Start a transaction 
-		ts = tm.getTransaction(td);
-		groupWorkspaceInviteService.delete(groupWorkspaceInviteService.getUserInviteById(userInvite.getId(), false));
-
-		tm.commit(ts);
 
 		
 		// Start a transaction 

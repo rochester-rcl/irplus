@@ -19,6 +19,8 @@
  */
 YAHOO.namespace("ur.group_workspace_invite");
 
+var removeGroupWorkspaceUserAction = basePath + 'user/removeGroupWorkspaceUser.action';
+
 YAHOO.ur.group_workspace_invite = 
 {
 		/**
@@ -69,5 +71,55 @@ YAHOO.ur.group_workspace_invite =
     	        }
             }
             return  true;	
-		}
+		},
+		
+		
+	    /**
+	      * Dialog to confirm unsharing of the files
+	      */
+	    createRemoveUserConfirmDialog : function() 
+	    {
+	            // Define various event handlers for Dialog
+	            var handleSubmit = function() 
+	            {
+	                
+	            };
+
+	            var handleCancel = function() 
+	            {
+		            this.hide();
+	            };
+
+	            // Instantiate the Dialog
+	            YAHOO.ur.group_workspace_invite.removeUserConfirmDialog = 
+	                 new YAHOO.widget.Dialog("removeUserConfirmDialog", 
+									     { width: "500px",
+										   visible: false,
+										   modal: true,
+										   buttons: [ { text:"Yes", handler:handleSubmit, isDefault:true },
+													  { text:"No",  handler:handleCancel } ]
+										} );
+	            YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.showDialog = function()
+	            {
+	            	YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.center();
+	            	YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.show();
+	            };
+	     
+	            YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.setHeader("Remove user from Group?");
+	            
+	            // Render the Dialog
+	            YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.render();
+	    },
+	        
+	        
+	        // initialize the page
+			// this is called once the dom has
+			// been created
+			init : function() 
+			{
+		        YAHOO.ur.group_workspace_invite.createRemoveUserConfirmDialog();
+			}
 }
+
+//initialize the code once the dom is ready
+YAHOO.util.Event.onDOMReady(YAHOO.ur.group_workspace_invite.init);

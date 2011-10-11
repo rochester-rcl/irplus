@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.FileSharingException;
@@ -62,6 +63,11 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 	
 	/** repository object */
 	private Repository repository;
+	
+	/* service to deal with invitations to a group workspace */
+	private GroupWorkspaceInviteService groupWorkspaceInviteService;
+
+
 
 	/**
 	 * Execute method to verify email
@@ -79,7 +85,9 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 				
 				try {
 					// Share files -  If there are any invitations sent to this email address 
+					groupWorkspaceInviteService.addUserToGroupsForEmail(email.getEmail());
 					inviteUserService.sharePendingFilesForEmail(userId, email.getEmail());
+					
 				} catch (UnVerifiedEmailException e) {
 					log.error("Email has not yet ben verified " + e.getMessage());
 				}
@@ -109,36 +117,86 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 		return SUCCESS;
 	}
 
+	/**
+	 * Set the token.
+	 * 
+	 * @param token
+	 */
 	public void setToken(String token) {
 		this.token = token;
 	}
 
+	/**
+	 * Inject the user id.
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 */
 	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
+	/**
+	 * Set teh invite suer service.
+	 * 
+	 * @param inviteUserService
+	 */
 	public void setInviteUserService(InviteUserService inviteUserService) {
 		this.inviteUserService = inviteUserService;
 	}
 
+	/**
+	 * Get the repository service.
+	 * 
+	 * @return
+	 */
 	public RepositoryService getRepositoryService() {
 		return repositoryService;
 	}
 
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
 
+	/**
+	 * Get the repository.
+	 * 
+	 * @return
+	 */
 	public Repository getRepository() {
 		return repository;
 	}
 
+	/**
+	 * Set the repository.
+	 * 
+	 * @param repository
+	 */
 	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+	
+	/**
+	 * Set the group workspace invite service.
+	 * 
+	 * @param groupWorkspaceInviteService
+	 */
+	public void setGroupWorkspaceInviteService(
+			GroupWorkspaceInviteService groupWorkspaceInviteService) {
+		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
 	}
 
 }

@@ -63,11 +63,11 @@
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
     
  	<!--  base path information -->
- 	<ur:js src="pages/js/base_path.js"/>
+ 	<ur:js src="page-resources/js/util/base_path.jsp"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
     <ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-    <ur:js src="pages/js/ur_table.js"/>
+    <ur:js src="page-resources/js/util/ur_table.js"/>
     <ur:js src="page-resources/js/user/workspace.js"/>
     <ur:js src="page-resources/js/user/workspace_shared_file_inbox.js"/>
     <ur:js src="page-resources/js/user/workspace_collection.js"/>
