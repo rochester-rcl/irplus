@@ -25,21 +25,20 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
+import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
-import edu.ur.ir.groupspace.GroupWorkspaceUserInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceEmailInviteDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
-import edu.ur.ir.groupspace.GroupWorkspaceUserInviteDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UnVerifiedEmailException;
-import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserService;
 import edu.ur.util.TokenGenerator;
 
@@ -56,9 +55,6 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	
 	/* service to deal with user information */
     private UserService userService;
-
-	/* Data access for the group workspace group invite  */
-	private GroupWorkspaceUserInviteDAO groupWorkspaceUserInviteDAO;
 
 	/*  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceInviteService.class);
@@ -80,6 +76,9 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	
 	/* deal with group workspace information */
 	private GroupWorkspaceService groupWorkspaceService;
+	
+	/* service to deal with group workspace users */
+	private GroupWorkspaceUserDAO groupWorkspaceUserDAO;
 
 
 	/**
@@ -114,16 +113,7 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		return  groupWorkspaceEmailInviteDAO.getCount();
 	}
 	
-	/**
-	 * Sends an email notifying the specified user that  they have been invited
-	 * to join a group workspace.
-	 * 
-	 * @param invite
-	 */
-	public void sendEmailInvite(GroupWorkspaceUserInvite invite)
-	{
-		sendExistingUserEmail(invite);
-	}
+
 	
 	/**
 	 * Set the group workspace group invite data access object.
@@ -169,23 +159,22 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	 * 
 	 * @param invite
 	 */
-	private void sendExistingUserEmail(GroupWorkspaceUserInvite invite)
-	{
+	 public void sendEmailInvite(IrUser invitingUser, GroupWorkspace groupWorkspace, String email, String inviteMessage)	{
 		SimpleMailMessage message = new SimpleMailMessage(userWorkspaceInviteUserExists);
-		message.setTo(invite.getEmail());
+		message.setTo(email);
 		
 		String subject = message.getSubject();
-		subject = StringUtils.replace(subject, "%FIRST_NAME%", invite.getInvitingUser().getFirstName());
-		subject = StringUtils.replace(subject, "%LAST_NAME%",  invite.getInvitingUser().getLastName());
+		subject = StringUtils.replace(subject, "%FIRST_NAME%", invitingUser.getFirstName());
+		subject = StringUtils.replace(subject, "%LAST_NAME%",  invitingUser.getLastName());
 		message.setSubject(subject);
 		
 		String text = message.getText();
 		
-		text = StringUtils.replace(text, "%NAME%", invite.getGroupWorkspace().getName());
+		text = StringUtils.replace(text, "%NAME%", groupWorkspace.getName());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		if( invite.getInviteMessage() != null )
+		if( inviteMessage != null && !inviteMessage.trim().equals(""))
 		{
-		    text = text.concat(invite.getInviteMessage());
+		    text = text.concat(inviteMessage);
 		}
 		message.setText(text);
 		sendEmail(message);
@@ -266,27 +255,18 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 			    }
 			
 			    // only invite the user if they have not yet been invited.
-			    if( groupWorkspace.getUser(invitedUser) == null && 
-			    	groupWorkspace.getInvite(invitedUser) == null )
+			    if( groupWorkspace.getUser(invitedUser) == null )
 			    {
-			    	GroupWorkspaceUserInvite invite;
-					try {
-						invite = groupWorkspace.addInviteUser(invitedUser, invitingUser, setAsOwner, email);
-						try
-				    	{
-				    	    sendEmailInvite(invite);
-				    	    groupWorkspaceUserInviteDAO.makePersistent(invite);
-				    	}
-				    	catch(IllegalStateException e)
-				    	{
-				    		emailsNotSent.add(email);
-				    	}
-					
-					} catch (GroupWorkspaceInviteException e1) {
-						//user already exists
-						log.error("this should not happen - user already extists", e1);
-						errorEmailService.sendError(e1);
-					}
+						GroupWorkspaceUser user = null;
+						try {
+							user = groupWorkspace.add(invitedUser, setAsOwner);
+						    groupWorkspaceUserDAO.makePersistent(user);
+						    sendEmailInvite(invitingUser, groupWorkspace, email, inviteMessage);
+						} catch (DuplicateNameException e) {
+							//user already exists
+							log.error("this should not happen - user already extists", e);
+							errorEmailService.sendError(e);
+						}
 			    }
 			}
 			else
@@ -318,40 +298,33 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	}
 	
 	/**
-	 * Create group invites for user.
+	 * Add users to all invited groups for a given email.  This email must be verified as
+	 * valid.
 	 * 
-	 * @param user - user invited
-	 * @param email - email for user
-	 * 
-	 * @throws UnVerifiedEmailException - if the email has not yet been verified or does
-	 * not exist
-	 * @throws GroupWorkspaceInviteException 
+	 * @param email - email for user to be verified
+	 * @throws UnVerifiedEmailException - if the email has not yet been verified.
 	 */
-	public void createGroupInvitesForUser(IrUser user, String email) throws UnVerifiedEmailException, GroupWorkspaceInviteException
+	public void addUserToGroupsForEmail(String email) throws UnVerifiedEmailException
 	{
-		UserEmail userEmail = user.getUserEmail(email);
-		if( userEmail == null || !userEmail.isVerified())
+		IrUser user = userService.getUserForVerifiedEmail(email);
+		if( user == null )
 		{
-			UnVerifiedEmailException e = new UnVerifiedEmailException("user email has not yet been verified");
-			errorEmailService.sendError(e);
-			throw e;
+			throw new UnVerifiedEmailException("email " + email + " has not been verified ");
 		}
 		
-		List<GroupWorkspaceEmailInvite> emailInvites = groupWorkspaceEmailInviteDAO.getInviteInfoByEmail(email);
-		
-		for(GroupWorkspaceEmailInvite emailInvite : emailInvites )
-		{
-			GroupWorkspace groupWorkspace = emailInvite.getGroupWorkspace();
-			if( !groupWorkspace.deleteEmailInvite(email) )
-			{
-				throw new IllegalStateException("could not delete email invite " 
-						+ email + " for workspace " + groupWorkspace.getName());
+		List<GroupWorkspaceEmailInvite> invites = groupWorkspaceEmailInviteDAO.getInviteInfoByEmail(email);
+        for(GroupWorkspaceEmailInvite invite : invites)
+        {
+        	GroupWorkspace groupWorkspace = invite.getGroupWorkspace();
+        	try {
+				groupWorkspace.add(user,invite.isSetAsOwner());
+				groupWorkspace.deleteEmailInvite(email);
+				groupWorkspaceService.save(groupWorkspace);
+			} catch (DuplicateNameException e) {
+				log.error("this should not happen - user already extists", e);
+				errorEmailService.sendError(e);
 			}
-			groupWorkspace.addInviteUser(user, emailInvite.getInviteToken().getInvitingUser(), 
-					emailInvite.isSetAsOwner(), email);
-			
-			groupWorkspaceService.save(groupWorkspace);
-		}
+        }
 	}
 	
 	/**
@@ -401,23 +374,6 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		return groupWorkspaceEmailInviteDAO.getCount();
 	}
 
-	/**
-	 * Get the user invite by id.
-	 * 
-	 * @see edu.ur.ir.groupspace.GroupWorkspaceInviteService#getUserInviteById(java.lang.Long, boolean)
-	 */
-	public GroupWorkspaceUserInvite getUserInviteById(Long id, boolean lock) {
-		return groupWorkspaceUserInviteDAO.getById(id, lock);
-	}
-
-	/**
-	 * Get the user invite count.
-	 * 
-	 * @see edu.ur.ir.groupspace.GroupWorkspaceInviteService#getUserInviteCount()
-	 */
-	public Long getUserInviteCount() {
-		return groupWorkspaceUserInviteDAO.getCount();
-	}
 
 	/**
 	 * Save the group workspace email invite.
@@ -437,42 +393,7 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		sendEmailToNotExistingUser(invite);
 	}
 
-	/**
-	 * Save the groupw orkspace user invite.
-	 * 
-	 * @see edu.ur.ir.groupspace.GroupWorkspaceInviteService#save(edu.ur.ir.groupspace.GroupWorkspaceUserInvite)
-	 */
-	public void save(GroupWorkspaceUserInvite entity) {
-		groupWorkspaceUserInviteDAO.makePersistent(entity);
-	}
 
-	/**
-	 * Delete the group workspace user invite.
-	 * 
-	 * @see edu.ur.ir.groupspace.GroupWorkspaceInviteService#delete(edu.ur.ir.groupspace.GroupWorkspaceUserInvite)
-	 */
-	public void delete(GroupWorkspaceUserInvite entity) {
-		groupWorkspaceUserInviteDAO.makeTransient(entity);
-	}
-	
-	/**
-	 * Get the group workspace user invite data access object.
-	 * 
-	 * @return
-	 */
-	public GroupWorkspaceUserInviteDAO getGroupWorkspaceUserInviteDAO() {
-		return groupWorkspaceUserInviteDAO;
-	}
-
-	/**
-	 * Set the group workspace user invite data access object.
-	 * 
-	 * @param groupWorkspaceUserInviteDAO
-	 */
-	public void setGroupWorkspaceUserInviteDAO(
-			GroupWorkspaceUserInviteDAO groupWorkspaceUserInviteDAO) {
-		this.groupWorkspaceUserInviteDAO = groupWorkspaceUserInviteDAO;
-	}
 	
 	/**
 	 * Get the group workspace email invite data access object.
@@ -554,5 +475,13 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	 */
 	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
 		this.groupWorkspaceService = groupWorkspaceService;
+	}
+	
+	public GroupWorkspaceUserDAO getGroupWorkspaceUserDAO() {
+		return groupWorkspaceUserDAO;
+	}
+
+	public void setGroupWorkspaceUserDAO(GroupWorkspaceUserDAO groupWorkspaceUserDAO) {
+		this.groupWorkspaceUserDAO = groupWorkspaceUserDAO;
 	}
 }

@@ -55,7 +55,7 @@
     <!-- Source File -->
     <ur:js src="page-resources/js/menu/main_menu.js"/>
  	
- 	<ur:js src="pages/js/base_path.js"/>
+ 	<ur:js src="page-resources/js/util/base_path.jsp"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/user/invite_group_workspace_users.js"/>
  
@@ -106,6 +106,13 @@
 							                     <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="52" rows="8"></textarea>
 							                </td>
 							            </tr>
+							            <c:forEach var="classTypePermission" items="${classTypePermissions}">
+										    <tr>
+												  <td>  <input type="checkbox" name="selectedPermissions" id="${classTypePermission.name}" value="${classTypePermission.id}" 
+												      onclick="YAHOO.ur.invite.autoCheckPermission(this, selectedPermissions);"/> </td>
+										          <td> ${classTypePermission.description}</td>
+											</tr>
+			           				    </c:forEach>
 							            <tr>
 							                <td colspan="2" align="center"> 
 								                <button class="ur_button" id="inviteUser" type="button"
@@ -133,22 +140,13 @@
 			                       <c:forEach var="member" items="${groupWorkspace.users}">
 			                           ${member.user.firstName}&nbsp;${member.user.lastName}
 			                           <c:if test="${member.owner}">
-			                               [owner]
+			                               [owner] 
 			                           </c:if>
+			                           <a href="javascript:YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.showDialog();">Remove</a>
 			                           <br/>
 			                       </c:forEach>
 			                       
-			                       <h3> Invited Repository Members </h3>
-			                       
-			                       <c:forEach var="invite" items="${groupWorkspace.existingUserInvites}">
-			                           ${invite.invitedUser.firstName}&nbsp;${invite.invitedUser.lastName}
-			                           <c:if test="${invite.setAsOwner}">
-			                               [owner]
-			                           </c:if>
-			                            <br/>
-			                       </c:forEach>
-			                       
-			                       <h3> Invited Non-Repository Members </h3>
+			                       <h3> Invited </h3>
 			                       <c:forEach var="invite" items="${groupWorkspace.emailInvites}">
 			                           ${invite.inviteToken.email}
 			                           <c:if test="${invite.setAsOwner}">
@@ -164,6 +162,23 @@
 			                	            
 	   </div>
 	   <!-- end body tag -->
+	   
+	   <!--  start unshare dialog -->
+	   <div id="removeUserConfirmDialog" class="hidden">
+			     <div class="hd">Remove user?</div>
+			     <div class="bd">
+			        <form id="unshareConfirmationForm" name="unshareForm" 
+		                    method="post" action="<c:url value="/user/deleteCollaborator.action"/>">
+		            	<input type="hidden" id="unshareForm_fileCollaboratorId" name="fileCollaboratorId">
+		            	<input type="hidden" id="unshareForm_personalFileId" name="personalFileId">
+		            	<input type="hidden" id="unshareForm_parentFolderId" name="parentFolderId" value="${parentFolderId}" >
+                        <input type="hidden" id="unshareForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
+		            </form>	
+			        <p>Do you want to remove the user from the group?</p>
+			     </div>
+			</div>
+			<!--  end unshare dialog -->
+	   
 	   
 	   <!--  this is the footer of the page -->
        <c:import url="/inc/footer.jsp"/>

@@ -904,7 +904,6 @@
    <bean id="groupWorkspaceInviteService" 
        class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceInviteService">
 	   <property name="groupWorkspaceEmailInviteDAO" ref="groupWorkspaceEmailInviteDAO"/>
-	   <property name="groupWorkspaceUserInviteDAO" ref="groupWorkspaceUserInviteDAO"/>
        <property name="mailSender" ref="mailSender"/>
        <property name="userService" ref="userService"/>
        <property name="userWorkspaceInviteUserExists" ref="userWorkspaceInviteUserExists"/>
@@ -912,6 +911,7 @@
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
+       <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>
    </bean>
    <!-- ****************************************** --> 
    <!-- Service that deals with Marc Conntent type -->

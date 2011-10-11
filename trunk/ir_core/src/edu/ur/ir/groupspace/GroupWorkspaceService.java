@@ -94,5 +94,26 @@ public interface GroupWorkspaceService extends Serializable{
 	 * @return - list of all groups the user belongs to.
 	 */
 	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId);
+	
+    /**
+     * Get the group workspace user for the given user id and group workspace id.
+     * 
+     * @param userId - user id
+     * @param groupWorkspaceId - group workspace id
+     * 
+     * @return the group workspace user or null if the group workspace user is not found.
+     */
+    public GroupWorkspaceUser getGroupWorkspaceUser(Long userId, Long groupWorkspaceId);
+	
+	
+	/**
+	 * Determine if a user is a group workspace member.
+	 * 
+	 * @param userId - id of the user
+	 * @param groupWorkspaceId - group workspace id
+	 * 
+	 * @return true if the user is a group workspace member.
+	 */
+	public boolean userIsGroupWorkspaceMember(Long userId, Long groupWorkspaceId);
 
 }

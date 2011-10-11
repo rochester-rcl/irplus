@@ -131,28 +131,7 @@
        </property>
    </bean>
    
-   <!-- ****************************************** --> 
-   <!-- Invited Group workspace User information  -->
-   <!-- ****************************************** --> 
-   
-   <bean id="groupWorkspaceUserInviteDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceUserInviteDAO">
-       <property name="sessionFactory" ref="sessionFactory"/>
-   </bean>
-     
-   <bean id="groupWorkspaceUserInviteDAO" 
-       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-       <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupWorkspaceUserInviteDAOTarget"/>
-       <property name="transactionAttributes">
-           <props>
-               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
-               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
-               <prop key="make*">PROPAGATION_REQUIRED</prop>
-           </props>
-       </property>
-   </bean>
-   
+ 
    <!-- ****************************************** --> 
    <!-- Group workspce file delete records  -->
    <!-- ****************************************** --> 

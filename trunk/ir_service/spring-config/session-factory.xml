@@ -125,7 +125,6 @@
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFolder.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceUser.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceUserInvite.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceEmailInvite.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFileDeleteRecord.hbm.xml</value>
                                 

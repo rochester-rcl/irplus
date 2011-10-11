@@ -80,19 +80,6 @@
 			<one-to-many class="GroupWorkspaceEmailInvite" />
 		</set>
 		
-	   <!-- Users who have been invited into the system -->
-		<set name="existingUserInvites" 
-		     inverse="true" 
-		     optimistic-lock="false"
-		     cascade="all, delete-orphan" 
-		     schema="ir_group_workspace"
-		     access="field" 
-			 lazy="true"
-			 fetch="subselect">
-			<key column="group_workspace_id" not-null="true"/>
-			<one-to-many class="GroupWorkspaceUserInvite" />
-		</set>
-		
 		<!--  Root Group Folders -->
 		<set name="rootFolders" inverse="true" 
 		     optimistic-lock="false"

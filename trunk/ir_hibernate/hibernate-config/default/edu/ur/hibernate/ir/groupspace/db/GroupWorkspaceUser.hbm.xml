@@ -71,6 +71,12 @@
 	    where user.groupWorkspace.id = :groupWorkspaceId  
 	</query>
 	
+	<query name="groupWorkspaceUserByUserIdWorkspaceId">
+	    select groupWorkspaceUser from GroupWorkspaceUser as groupWorkspaceUser
+	    where groupWorkspaceUser.user.id = :userId
+		and groupWorkspaceUser.groupWorkspace.id = :workspaceId
+	</query>
+	
 	
 
 	

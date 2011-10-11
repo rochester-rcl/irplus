@@ -642,6 +642,7 @@ public class DefaultUserService implements UserService {
 	 */
 	public String savePasswordToken(IrUser user) {
 		String token = TokenGenerator.getToken();
+		token = token + user.getDefaultEmail().getEmail();
 		user.setPasswordToken(token);
 		irUserDAO.makePersistent(user);
 		

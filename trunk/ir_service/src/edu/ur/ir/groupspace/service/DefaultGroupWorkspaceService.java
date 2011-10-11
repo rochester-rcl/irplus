@@ -28,6 +28,8 @@ import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -45,6 +47,12 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	/* group space data access object  */
 	private GroupWorkspaceDAO groupWorkspaceDAO;
 	
+	/* group workspace user data access */
+	private GroupWorkspaceUserDAO groupWorkspaceUserDAO;
+	
+
+
+
 	/* service to deal with group workspace file system information */
 	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 
@@ -183,5 +191,50 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	       
 		}
 		log.debug("DONE deleting root files");
+	}
+	
+	   /**
+     * Get the group workspace user for the given user id and group workspace id.
+     * 
+     * @param userId - user id
+     * @param groupWorkspaceId - group workspace id
+     * 
+     * @return the group workspace user or null if the group workspace user is not found.
+     */
+    public GroupWorkspaceUser getGroupWorkspaceUser(Long userId, Long groupWorkspaceId)
+    {
+    	return groupWorkspaceUserDAO.getGroupWorkspaceUser(userId, groupWorkspaceId);
+    }
+	
+	
+	/**
+	 * Determine if a user is a group workspace member.
+	 * 
+	 * @param userId - id of the user
+	 * @param groupWorkspaceId - group workspace id
+	 * 
+	 * @return true if the user is a group workspace member.
+	 */
+	public boolean userIsGroupWorkspaceMember(Long userId, Long groupWorkspaceId)
+	{
+		boolean isMember = false;
+		GroupWorkspaceUser user = this.getGroupWorkspaceUser(userId, groupWorkspaceId);
+		if( user != null )
+		{
+			isMember = true;
+		}
+		
+		return isMember;
+		
+	}
+	
+	
+	/**
+	 * Set the group workspace user data access object.
+	 * 
+	 * @param groupWorkspaceUserDAO
+	 */
+	public void setGroupWorkspaceUserDAO(GroupWorkspaceUserDAO groupWorkspaceUserDAO) {
+		this.groupWorkspaceUserDAO = groupWorkspaceUserDAO;
 	}
 }

@@ -67,7 +67,11 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		log.debug("Execute called");
 
 		validToken = true;
-		userToChangePassword = userService.getUserByToken(token); 
+		
+		if( token != null && !token.trim().equals(""))
+		{
+		    userToChangePassword = userService.getUserByToken(token); 
+		}
 		
 		if (userToChangePassword == null)
 		{

@@ -48,7 +48,7 @@
         <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/js/menu/main_menu.js"/>
         
         <!--  base path information -->
- 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/pages/js/base_path.js"/>
+ 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/js/util/base_path.jsp"/>
  	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/js/util/ur_util.js"/>
    
     </head>
