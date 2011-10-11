@@ -71,24 +71,28 @@
             class="edu.ur.ir.web.action.institution.RepositoryInstitutionalItemBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_all_items.jsp</result>
+            <result name="input">/pages/item/bad_browse_url.jsp</result>
         </action>
         
         
         <action name="startSearchCollectionItems" 
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
+             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="searchCollectionItems" 
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch"
              method="searchCollectionInstitutionalItems">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
+             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="filterSearchCollectionItems" 
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch"
              method="filteredSearchCollectionInstitutionalItems">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
+             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="browseCollectionItems" 
@@ -97,6 +101,7 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_collection_items.jsp</result>
             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+            <result name="input">/pages/item/bad_browse_url.jsp</result>
         </action>
         
        <!--  ***************************************************** -->
@@ -107,6 +112,7 @@
             class="edu.ur.ir.web.action.person.RepositoryPersonNameBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_all_items.jsp</result>
+            <result name="input">/pages/item/bad_browse_url.jsp</result>
         </action>
   
         <action name="browseCollectionPersonNames" 
@@ -124,6 +130,7 @@
             class="edu.ur.ir.web.action.sponsor.RepositorySponsorNameBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_all_items.jsp</result>
+            <result name="input">/pages/item/bad_browse_url.jsp</result>
         </action>
         
         <action name="browseCollectionSponsorNames" 
@@ -131,6 +138,7 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_collection_items.jsp</result>
             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+            <result name="input">/pages/item/bad_browse_url.jsp</result>
         </action>
         
        <!--  ***************************************************** -->
