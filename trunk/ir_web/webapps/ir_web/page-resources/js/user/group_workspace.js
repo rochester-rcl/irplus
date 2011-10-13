@@ -51,9 +51,8 @@ YAHOO.ur.user.group_workspace = {
 	  */
     groupWorkspaceStateChangeHandler : function(workspaceId)
 	{
-	    var currentState = YAHOO.util.History.getCurrentState("groupWorkspaceFolderModule"); 
+	    var currentState = YAHOO.util.History.getCurrentState("groupWorkspaceModule"); 
 	    YAHOO.ur.user.workspace.setActiveIndex("GROUP_WORKSPACE");
-	    
 	    if( workspaceId == 0 )
 	    {
 	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
@@ -88,10 +87,11 @@ YAHOO.ur.user.group_workspace = {
                 try 
                 {
             	    // do not remove the string conversion on folder id otherwise an error occurs
-                    YAHOO.util.History.navigate( "groupWorkspaceFolderModule", "0" );
+                    YAHOO.util.History.navigate( "groupWorkspaceModule", "0" );
                 } 
                 catch ( e ) 
                 {
+                	alert('fail');
                     // history failed
                 }
             
@@ -348,8 +348,9 @@ YAHOO.ur.user.group_workspace = {
                 // this will store the folder Id in the URL
                 try 
                 {
+                	alert("going to module workspace id = " + workspaceId);
             	    // do not remove the string conversion on folder id otherwise an error occurs
-                    YAHOO.util.History.navigate( "groupWorkspaceModule", workspaceId );
+                    YAHOO.util.History.navigate( "groupWorkspaceModule", workspaceId +"" );
                 } 
                 catch ( e ) 
                 {
@@ -674,7 +675,7 @@ YAHOO.ur.user.group_workspace = {
 	            try 
 	            {
 	            	// do not remove the string conversion on folder id otherwise an error occurs
-	                //YAHOO.util.History.navigate( "groupWorkspaceFolderModule", folderId + "" );
+	                //YAHOO.util.History.navigate( "groupWorkspaceModule", folderId + "" );
 	            } 
 	            catch ( e ) 
 	            {
@@ -860,10 +861,19 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.createFolderDeleteConfirmDialog();
 	    YAHOO.ur.user.group_workspace.singleFileUpload();
 	    
-        // register the history system
-        YAHOO.util.History.register("groupWorkspaceFolderModule", 
+	    groupWorkspaceId = document.getElementById("groupWorkspaceFormGroupWorkspaceId").value;
+	    
+	    // register the history system
+        YAHOO.util.History.register("groupWorkspaceModule", 
         		groupWorkspaceFolderState, 
         		YAHOO.ur.user.group_workspace.groupWorkspaceStateChangeHandler);
+        
+     
+	    if( groupWorkspaceId != null && groupWorkspaceId > 0 )
+	    {
+	    	 YAHOO.ur.user.group_workspace.getGroupWorkspaceById(groupWorkspaceId);
+	    }
+        
   	}
 	
 }	

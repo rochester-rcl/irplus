@@ -101,6 +101,7 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 		log.debug("parent folder id = " + parentFolderId);
 		if(parentFolderId != null && parentFolderId > 0)
 		{
+			parentFolder = groupWorkspaceFileSystemService.getFolder(parentFolderId, false);
 		    if( !groupWorkspaceService.userIsGroupWorkspaceMember(user.getId(), parentFolder.getGroupWorkspace().getId()) )
 		    {
 		    	return "accessDenied";

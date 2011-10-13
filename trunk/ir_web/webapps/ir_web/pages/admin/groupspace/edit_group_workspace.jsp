@@ -120,7 +120,7 @@
                      <!--  second tab -->
                      <div id="tab2">
                          <h3>Owners</h3>
-                         <c:import url="group_workspace_owners_table.jsp"/>
+                        
                      </div>
                      <!--  end second tab -->
                      

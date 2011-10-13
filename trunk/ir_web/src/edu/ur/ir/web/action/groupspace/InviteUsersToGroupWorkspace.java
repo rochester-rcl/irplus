@@ -23,9 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
@@ -74,22 +77,24 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
 	/* Message that is sent to the user in the email. */
 	private String inviteMessage;
 
-	/* Permission types for the file */
-	private List<IrClassTypePermission> classTypePermissions;
-
 	/* ACL service */
 	private  SecurityService securityService;
     
     /* list of bad emails */
 	private List<String> badEmails;
 	
-	/* Permissions to be assigned while sharing the file */
+	/* Permissions to be assigned for the group */
 	private List<Long> selectedPermissions = new ArrayList<Long>();	
 	
 	/* remove the user id */
 	private Long removeUserId;
+	
+	/* id of an invite for a user */
+	private Long inviteId;
 
 
+	/*  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(InviteUsersToGroupWorkspace.class);
 
 
 	/**
@@ -120,9 +125,7 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
         {
         	return "accessDenied";
         }
-        
-        classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
-		return SUCCESS;
+ 		return SUCCESS;
 	}
 	
 	/**
@@ -150,6 +153,7 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 		for(Long id : selectedPermissions)
 		{
+			log.debug("adding permission " + securityService.getIrClassTypePermissionById(id, false));
 			permissions.add(securityService.getIrClassTypePermissionById(id, false));
 		}			
 		
@@ -198,16 +202,47 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
         
         IrUser removeUser = userService.getUser(removeUserId, false);
         
-        if( removeUser != null )
+        if( removeUser != null && !removeUser.equals(user))
         {
-            GroupWorkspaceUser removeGroupWorkspaceUser = groupWorkspace.getUser(removeUser);
-            if(removeGroupWorkspaceUser != null )
-            {
-            	groupWorkspace.remove(removeGroupWorkspaceUser);
-            	groupWorkspaceService.save(groupWorkspace);
-            }
+            groupWorkspaceInviteService.removeUserFromGroup(groupWorkspace, removeUser);
         }
+
 		return SUCCESS;	
+	}
+	
+	/**
+	 * Remove the invite from the group workspace.
+	 * 
+	 * @return
+	 */
+	public String removeInvite()
+	{
+		IrUser user = userService.getUser(userId, false);
+			
+		if( groupWorkspaceId == null )
+		{
+			return "notFound";
+		}
+			
+		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+			
+		if( groupWorkspace == null )
+		{
+			return "notFound";
+		}
+			
+		GroupWorkspaceUser groupWorkspaceUser = groupWorkspace.getUser(user);
+		    
+		//User must be owner to remove others
+	    if( groupWorkspaceUser == null || !groupWorkspaceUser.isOwner())
+	    {
+	        return "accessDenied";
+	    }
+		
+		GroupWorkspaceEmailInvite invite = groupWorkspaceInviteService.getEmailInviteById(inviteId, false);
+		groupWorkspace.deleteEmailInvite(invite.getInviteToken().getEmail());
+		groupWorkspaceService.save(groupWorkspace);
+		return SUCCESS;
 	}
 	
 	/**
@@ -398,6 +433,8 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
 	 * @return class type permissions
 	 */
 	public List<IrClassTypePermission> getClassTypePermissions() {
+		List<IrClassTypePermission> classTypePermissions;
+		classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
 		return classTypePermissions;
 	}
 	
@@ -435,6 +472,24 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
 	 */
 	public void setRemoveUserId(Long removeUserId) {
 		this.removeUserId = removeUserId;
+	}
+
+	/**
+	 * Get the invite id.
+	 * 
+	 * @return
+	 */
+	public Long getInviteId() {
+		return inviteId;
+	}
+
+	/**
+	 * Set the invite id.
+	 * 
+	 * @param inviteId
+	 */
+	public void setInviteId(Long inviteId) {
+		this.inviteId = inviteId;
 	}
 
 

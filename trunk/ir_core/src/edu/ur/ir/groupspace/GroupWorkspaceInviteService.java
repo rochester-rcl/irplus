@@ -138,4 +138,12 @@ public interface GroupWorkspaceInviteService
 	 */
 	public void addUserToGroupsForEmail(String email) throws UnVerifiedEmailException;
 	
+	/**
+	 * Remove the user from the group.  This also removes all permissions for the user.
+	 * 
+	 * @param groupWorkspace - group workspace user
+	 * @param user - user to remove from the group workspace
+	 */
+	public void removeUserFromGroup(GroupWorkspace groupWorkspace, IrUser user);
+	
 }

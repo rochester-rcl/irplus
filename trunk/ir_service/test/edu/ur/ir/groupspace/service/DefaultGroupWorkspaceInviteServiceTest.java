@@ -174,7 +174,7 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
 		groupWorkspaceService.save(groupWorkspace);
 		
-		GroupWorkspaceEmailInvite emailInvite = groupWorkspace.addInviteUser(userEmail2, user, "token");
+		GroupWorkspaceEmailInvite emailInvite = groupWorkspace.addInviteUser(userEmail2, null, user, "token");
 		groupWorkspaceInviteService.save(emailInvite);
 		
 		if( sendEmail )

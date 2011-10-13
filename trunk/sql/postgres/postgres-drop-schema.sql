@@ -78,8 +78,10 @@ DROP SEQUENCE ir_security.class_type_seq;
 DROP SCHEMA ir_security;
 
 -- ---------------------------------------------
--- Drop Group spaces tables/schema
+-- Drop Group workspaces tables/schema
 -- ---------------------------------------------
+
+DROP TABLE  ir_group_workspace.group_workspace_email_invite_permissions;
 DROP TABLE ir_group_workspace.group_workspace_email_invite;
 DROP TABLE ir_group_workspace.group_workspace_user;
 DROP TABLE ir_group_workspace.group_workspace_file;
