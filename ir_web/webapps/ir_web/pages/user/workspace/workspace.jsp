@@ -148,7 +148,11 @@
 	                  
 	                  <!--  group workspaces -->
 	                  <div id="tab2">
+	                      <form id="groupWorkspaceForm">
+	                          <input type="hidden" id="groupWorkspaceFormGroupWorkspaceId" name="groupWorkspaceId" value="${groupWorkspaceId}"/>
+	                      </form>
 	                      <div id="group_workspaces" class="hidden">
+	                           
 	                           <c:import url="group_workspace/group_workspace_table.jsp"/>
 	                      </div>
 	                  </div>
@@ -161,7 +165,6 @@
 	                              <input type="hidden" id="myCollections_parentCollectionId" 
 	                                   name="parentCollectionId" 
 	                                   value="${parentCollectionId}"/>
-	                               
 	                          </form>
 	                      </div>
 	                 </div>                
