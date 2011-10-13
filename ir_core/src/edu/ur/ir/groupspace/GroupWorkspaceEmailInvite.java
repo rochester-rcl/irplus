@@ -16,7 +16,11 @@
 
 package edu.ur.ir.groupspace;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.ur.ir.invite.InviteToken;
+import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -39,6 +43,10 @@ public class GroupWorkspaceEmailInvite extends BasePersistent{
 
 	/* indicates the user is an owner of the group workspace */
 	private boolean setAsOwner = false;
+	
+	/* Permissions given to the user */
+	private Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+
 
 	/**
 	 * Package protected constructor
@@ -50,12 +58,15 @@ public class GroupWorkspaceEmailInvite extends BasePersistent{
 	 * exist in the system.
 	 * 
 	 * @param groupWorkspace - workspace the user is being invited to
+	 * @param permissions - permissions to be given to the user on the group
 	 * @param invite token - token for the invite
 	 */
-	public GroupWorkspaceEmailInvite( GroupWorkspace groupWorkspace, InviteToken inviteToken)
+	public GroupWorkspaceEmailInvite( GroupWorkspace groupWorkspace, 
+			Set<IrClassTypePermission> permissions, InviteToken inviteToken)
 	{
 		this.groupWorkspace = groupWorkspace;
 		this.inviteToken = inviteToken;
+		this.permissions = permissions;
 	}
 	
 	/**
@@ -63,13 +74,14 @@ public class GroupWorkspaceEmailInvite extends BasePersistent{
 	 * exist in the system.
 	 * 
 	 * @param groupWorkspace - workspace the user is being invited to
+	 * @param permissions - permissions to be given to the user on the group
 	 * @param invite token - token for the invite
 	 * @param setAsOwner - true indicates this user will be an owner of the group workspace
 	 */
-	public GroupWorkspaceEmailInvite( GroupWorkspace groupWorkspace, 
+	public GroupWorkspaceEmailInvite( GroupWorkspace groupWorkspace, Set<IrClassTypePermission> permissions, 
 			InviteToken inviteToken, boolean setAsOwner)
 	{
-		this(groupWorkspace, inviteToken);
+		this(groupWorkspace, permissions, inviteToken);
 		setSetAsOwner(setAsOwner);
 	}
 	
@@ -156,6 +168,25 @@ public class GroupWorkspaceEmailInvite extends BasePersistent{
 	public void setSetAsOwner(boolean setAsOwner) {
 		this.setAsOwner = setAsOwner;
 	}
+	
+	/**
+	 * Permissions to give to the user.
+	 * 
+	 * @return
+	 */
+	public Set<IrClassTypePermission> getPermissions() {
+		return permissions;
+	}
+
+	/**
+	 * Permissions to give to the user.
+	 * 
+	 * @param permissions
+	 */
+	public void setPermissions(Set<IrClassTypePermission> permissions) {
+		this.permissions = permissions;
+	}
+
 
 
 }

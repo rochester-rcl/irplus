@@ -26,6 +26,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.invite.InviteToken;
+import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.simple.type.DescriptionAware;
@@ -574,13 +575,15 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * Create an invite for a user who does not yet exist in the system
 	 * 
 	 * @param email - email 
+	 * @param permissions - permissions to be given
 	 * @param inviteingUser - user doing the invite
 	 * @param token - token for the invite
 	 * 
 	 * @return - the created invite
 	 * @throws GroupWorkspaceInviteException 
 	 */
-	public GroupWorkspaceEmailInvite addInviteUser(String email,
+	public GroupWorkspaceEmailInvite addInviteUser(String email, 
+			Set<IrClassTypePermission> permissions,
 			IrUser invitingUser, 
 			String token ) throws GroupWorkspaceInviteException
 	{
@@ -594,7 +597,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 		if(  invite == null )
 		{
 			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
-			invite = new GroupWorkspaceEmailInvite(this, inviteToken); 
+			invite = new GroupWorkspaceEmailInvite(this, permissions, inviteToken); 
 			emailInvites.add(invite);
 		}
 		return invite;

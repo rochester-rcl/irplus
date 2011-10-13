@@ -114,6 +114,10 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	{
 		log.debug("deleting a group space with id = " +  id);
 		IrUser user = userService.getUser(userId, false);
+		
+		// get the group workspace
+		groupWorkspace = groupWorkspaceService.get(id, false);
+		
 		// only owners and admins can delete  group workspaces
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
 		log.debug("workspace user = " + workspaceUser);

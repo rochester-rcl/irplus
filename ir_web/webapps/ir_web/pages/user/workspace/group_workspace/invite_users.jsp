@@ -72,7 +72,14 @@
         <c:import url="/inc/header.jsp"/>
       
         <div id="bd">
-			<h3><a href="">Group Workspaces</a> &gt; <a href="">${groupWorkspace.name}</a></h3>
+            <c:url var="viewAllWorkspacesUrl" value="/user/workspace.action">
+                <c:param name="tabName" value="GROUP_WORKSPACE"/>
+            </c:url>
+             <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
+                <c:param name="tabName" value="GROUP_WORKSPACE"/>
+                <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
+            </c:url>
+			<h3><a href="${viewAllWorkspacesUrl}">Group Workspaces</a> &gt; <a href="${groupWorkspaceUrl}">${groupWorkspace.name}</a></h3>
 			<h3> Invite user(s) to Group Workspace: ${groupWorkspace.name} </h3>
 			
 			
@@ -109,7 +116,7 @@
 							            <c:forEach var="classTypePermission" items="${classTypePermissions}">
 										    <tr>
 												  <td>  <input type="checkbox" name="selectedPermissions" id="${classTypePermission.name}" value="${classTypePermission.id}" 
-												      onclick="YAHOO.ur.invite.autoCheckPermission(this, selectedPermissions);"/> </td>
+												      onclick="YAHOO.ur.group_workspace_invite.autoCheckPermission(this, selectedPermissions);"/> </td>
 										          <td> ${classTypePermission.description}</td>
 											</tr>
 			           				    </c:forEach>
@@ -136,25 +143,28 @@
 			            </div>
 			             <div class="contentBoxContent">
 			                    
-			                       <h3> Current Group Members </h3>
+			                       <h3>&nbsp;Current Group Members </h3>
 			                       <c:forEach var="member" items="${groupWorkspace.users}">
-			                           ${member.user.firstName}&nbsp;${member.user.lastName}
+			                           &nbsp;${member.user.firstName}&nbsp;${member.user.lastName}
 			                           <c:if test="${member.owner}">
 			                               [owner] 
 			                           </c:if>
-			                           <a href="javascript:YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.showDialog();">Remove</a>
+			                           <c:if test="${member.user.id != user.id}">
+			                           &nbsp;<a href="javascript:YAHOO.ur.group_workspace_invite.removeUser(${member.user.id});">&nbsp;Remove</a>
+			                           </c:if>
 			                           <br/>
 			                       </c:forEach>
 			                       
-			                       <h3> Invited </h3>
+			                       <h3>&nbsp;Invited </h3>
 			                       <c:forEach var="invite" items="${groupWorkspace.emailInvites}">
-			                           ${invite.inviteToken.email}
+			                           &nbsp;${invite.inviteToken.email}
 			                           <c:if test="${invite.setAsOwner}">
-			                               [owner]
+			                               [owner] 
 			                           </c:if>
+			                           &nbsp;<a href="javascript:YAHOO.ur.group_workspace_invite.removeInvite(${invite.id});">Remove</a>
 			                            <br/>
 			                       </c:forEach>
-			                    
+			                       <br/>
 			             </div>
 			         </div>
 			    </div>
@@ -163,22 +173,36 @@
 	   </div>
 	   <!-- end body tag -->
 	   
-	   <!--  start unshare dialog -->
+	   <form id="removeUserConfirmationForm" name="removeUserForm" 
+		     method="post" action="<c:url value="/user/removeGroupWorkspaceUser.action"/>">
+		     <input type="hidden" id="removeUserFormUserId" name="removeUserId" value="">
+		     <input type="hidden" id="removeUserFormGroupWorkspaceId" name="groupWorkspaceId" value="${groupWorkspaceId}">
+	   </form>	
+	   
+	   <!--  start remove user dialog -->
 	   <div id="removeUserConfirmDialog" class="hidden">
 			     <div class="hd">Remove user?</div>
 			     <div class="bd">
-			        <form id="unshareConfirmationForm" name="unshareForm" 
-		                    method="post" action="<c:url value="/user/deleteCollaborator.action"/>">
-		            	<input type="hidden" id="unshareForm_fileCollaboratorId" name="fileCollaboratorId">
-		            	<input type="hidden" id="unshareForm_personalFileId" name="personalFileId">
-		            	<input type="hidden" id="unshareForm_parentFolderId" name="parentFolderId" value="${parentFolderId}" >
-                        <input type="hidden" id="unshareForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
-		            </form>	
 			        <p>Do you want to remove the user from the group?</p>
 			     </div>
-			</div>
-			<!--  end unshare dialog -->
+		</div>
+		<!--  end remove user dialog -->
 	   
+	   
+	   <form id="removeInviteConfirmationForm" name="removeInviteForm" 
+		     method="post" action="<c:url value="/user/removeGroupWorkspaceInvite.action"/>">
+		     <input type="hidden" id="removeInviteFormInviteId" name="inviteId" value="">
+		     <input type="hidden" id="removeInviteFormGroupWorkspaceId" name="groupWorkspaceId" value="${groupWorkspaceId}">
+	   </form>	
+	   
+	   <!--  start remove invite dialog -->
+	   <div id="removeInviteConfirmDialog" class="hidden">
+			     <div class="hd">Remove invite?</div>
+			     <div class="bd">
+			        <p>Do you want to remove the invite to the group?</p>
+			     </div>
+		</div>
+		<!--  end remove invite dialog -->
 	   
 	   <!--  this is the footer of the page -->
        <c:import url="/inc/footer.jsp"/>

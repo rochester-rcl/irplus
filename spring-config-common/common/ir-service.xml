@@ -882,6 +882,7 @@
    <bean id="groupWorkspaceService"
          class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceService">
          <property name="groupWorkspaceDAO" ref="groupWorkspaceDAO"/>
+         <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>
          <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
    </bean>
    
@@ -910,6 +911,7 @@
        <property name="userWorkspaceInviteUserNotExistsMessage" ref="userWorkspaceInviteUserNotExistsMessage"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="securityService" ref="securityService"/>
        <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
        <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>
    </bean>

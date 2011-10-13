@@ -95,7 +95,7 @@ public class HbGroupWorkspaceUserDAO implements GroupWorkspaceUserDAO {
 			Long groupWorkspaceId) {
 		
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("getUserForGroupWorkspaceGroup");
+		Query q = session.getNamedQuery("groupWorkspaceUserByUserIdWorkspaceId");
 		q.setParameter("userId", userId);
 		q.setParameter("workspaceId", groupWorkspaceId);
 		return (GroupWorkspaceUser)q.uniqueResult();

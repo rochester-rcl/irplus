@@ -73,6 +73,51 @@ YAHOO.ur.group_workspace_invite =
             return  true;	
 		},
 		
+		/**
+		 * Remove the user from the group.
+		 */
+		removeUser : function(userId)
+		{
+			 document.getElementById('removeUserFormUserId').value = userId;
+			 YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.showDialog();
+		},
+		
+		
+	    /**
+	     * Make sure the permissions are set correctly
+	     */
+	    autoCheckPermission : function(permission, permissions) 
+	    {
+		    if (permission.id == 'GROUP_WORKSPACE_READ') 
+		    {
+			    if (!permission.checked) 
+			    {
+				    urUtil.setCheckboxes(permissions, false);
+			    }
+		    }
+		
+		    if (permission.id == 'GROUP_WORKSPACE_ADD_FILE') 
+		    {
+			    if (permission.checked) 
+			    {
+				    permissions[0].checked=true;
+			    } 
+			    else 
+			    {
+				    permissions[2].checked=false;
+			    }
+		    }
+
+		    if (permission.id == 'GROUP_WORKSPACE_EDIT') 
+		    {
+			    if (permission.checked) 
+			    {
+				    permissions[0].checked=true;
+				    permissions[1].checked=true;
+			    } 
+		    }
+		    return true;
+	    },
 		
 	    /**
 	      * Dialog to confirm unsharing of the files
@@ -82,7 +127,8 @@ YAHOO.ur.group_workspace_invite =
 	            // Define various event handlers for Dialog
 	            var handleSubmit = function() 
 	            {
-	                
+	            	 document.removeUserForm.submit();
+	            	 this.hide();
 	            };
 
 	            var handleCancel = function() 
@@ -110,15 +156,64 @@ YAHOO.ur.group_workspace_invite =
 	            // Render the Dialog
 	            YAHOO.ur.group_workspace_invite.removeUserConfirmDialog.render();
 	    },
+	    
+		/**
+		 * Remove the user from the group.
+		 */
+		removeInvite : function(inviteId)
+		{
+			 document.getElementById('removeInviteFormInviteId').value = inviteId;
+			 YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog.showDialog();
+		},
+		
+	    
+	    /**
+	      * Dialog to confirm unsharing of invite to group
+	      */
+	    createRemoveInviteConfirmDialog : function() 
+	    {
+	            // Define various event handlers for Dialog
+	            var handleSubmit = function() 
+	            {
+	            	 document.removeInviteForm.submit();
+	            	 this.hide();
+	            };
+
+	            var handleCancel = function() 
+	            {
+		            this.hide();
+	            };
+
+	            // Instantiate the Dialog
+	            YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog = 
+	                 new YAHOO.widget.Dialog("removeInviteConfirmDialog", 
+									     { width: "500px",
+										   visible: false,
+										   modal: true,
+										   buttons: [ { text:"Yes", handler:handleSubmit, isDefault:true },
+													  { text:"No",  handler:handleCancel } ]
+										} );
+	            YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog.showDialog = function()
+	            {
+	            	YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog.center();
+	            	YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog.show();
+	            };
+	     
+	            YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog.setHeader("Remove invite from Group?");
+	            
+	            // Render the Dialog
+	            YAHOO.ur.group_workspace_invite.removeInviteConfirmDialog.render();
+	    },
 	        
 	        
-	        // initialize the page
-			// this is called once the dom has
-			// been created
-			init : function() 
-			{
-		        YAHOO.ur.group_workspace_invite.createRemoveUserConfirmDialog();
-			}
+	    // initialize the page
+		// this is called once the dom has
+		// been created
+		init : function() 
+		{
+		     YAHOO.ur.group_workspace_invite.createRemoveUserConfirmDialog();
+		     YAHOO.ur.group_workspace_invite.createRemoveInviteConfirmDialog();
+		}
 }
 
 //initialize the code once the dom is ready

@@ -112,7 +112,7 @@ public class GroupWorkspaceEmailInviteDAOTest
 		ts = tm.getTransaction(td);
 		
 	   
-        GroupWorkspaceEmailInvite invite = groupSpace.addInviteUser("test@mail.com", user, "123test@mail.com");
+        GroupWorkspaceEmailInvite invite = groupSpace.addInviteUser("test@mail.com", null, user, "123test@mail.com");
         invite.getInviteToken().setInviteMessage("invite message");
 		groupWorkspaceEmailInviteDAO.makePersistent(invite);
 		

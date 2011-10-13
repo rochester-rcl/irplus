@@ -457,6 +457,20 @@ ALTER TABLE ir_group_workspace.group_workspace_user_invite_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
+-- Invite permission
+-- ---------------------------------------------
+
+CREATE TABLE  ir_group_workspace.group_workspace_email_invite_permissions
+(
+    group_workspace_email_invite_id BIGINT NOT NULL, 
+    class_type_permission_id BIGINT NOT NULL,
+    PRIMARY KEY (group_workspace_email_invite_id, class_type_permission_id),
+    FOREIGN KEY (group_workspace_email_invite_id) REFERENCES ir_group_workspace.group_workspace_email_invite(group_workspace_email_invite_id),
+    FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_email_invite_permissions OWNER TO ir_plus;
+
+-- ---------------------------------------------
 -- group workspace file delete record
 -- ---------------------------------------------
 

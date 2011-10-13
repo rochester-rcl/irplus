@@ -57,6 +57,14 @@
 			update="false" 
 			unique="true" 
 			access="field"/>
+	
+	    <!-- permissions on group for user-->
+		<set name="permissions" 
+		     table="ir_group_workspace.group_workspace_email_invite_permissions" 
+		     access="field" >
+			<key column="group_workspace_email_invite_id" />
+			<many-to-many column="class_type_permission_id" class="edu.ur.ir.security.IrClassTypePermission"/>
+		</set>
 
     </class>
 		

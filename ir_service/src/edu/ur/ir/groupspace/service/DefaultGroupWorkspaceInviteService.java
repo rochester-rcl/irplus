@@ -25,6 +25,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
+import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.groupspace.GroupWorkspace;
@@ -37,6 +38,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserService;
@@ -79,6 +81,11 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	
 	/* service to deal with group workspace users */
 	private GroupWorkspaceUserDAO groupWorkspaceUserDAO;
+	
+	/* Data access for ACL */
+	private SecurityService securityService;
+
+
 
 
 	/**
@@ -246,21 +253,23 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 			email = email.trim();
 			// Check if user exist in the system
 			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
-			
+			log.debug("invited user = " + invitedUser);
 			if( invitedUser != null )
 			{
 			    //check if the user is sharing the file with themselves
 			    if (invitingUser.equals(invitedUser)) {
 				    //do nothing
 			    }
-			
-			    // only invite the user if they have not yet been invited.
-			    if( groupWorkspace.getUser(invitedUser) == null )
+			    else if( groupWorkspace.getUser(invitedUser) == null )
 			    {
+			    	    log.debug("group workspace user is null adding new");
 						GroupWorkspaceUser user = null;
 						try {
 							user = groupWorkspace.add(invitedUser, setAsOwner);
+							log.debug("created group workspace user " + user);
 						    groupWorkspaceUserDAO.makePersistent(user);
+						    // Create permissions for the group that is being shared
+							securityService.createPermissions(groupWorkspace, invitedUser, permissions);
 						    sendEmailInvite(invitingUser, groupWorkspace, email, inviteMessage);
 						} catch (DuplicateNameException e) {
 							//user already exists
@@ -271,11 +280,12 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 			}
 			else
 			{
+				log.debug("user does not exist in system creating invite");
 				GroupWorkspaceEmailInvite invite = groupWorkspace.getInvite(email);
 				if( invite == null )
 				{
 					try {
-						invite = groupWorkspace.addInviteUser(email, invitingUser, TokenGenerator.getToken() + email);
+						invite = groupWorkspace.addInviteUser(email, permissions, invitingUser, TokenGenerator.getToken() + email);
 						 try
 						 {
 						     sendEmailInvite(invite);
@@ -295,6 +305,23 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		}
 			
 		return emailsNotSent;
+	}
+	
+	/**
+	 * Remove the user from the group.  This also removes all permissions for the user.
+	 * 
+	 * @param groupWorkspace - group workspace user
+	 * @param user - user to remove from the group workspace
+	 */
+	public void removeUserFromGroup(GroupWorkspace groupWorkspace, IrUser user)
+	{
+		GroupWorkspaceUser removeGroupWorkspaceUser = groupWorkspace.getUser(user);
+        if(removeGroupWorkspaceUser != null )
+        {
+        	groupWorkspace.remove(removeGroupWorkspaceUser);
+        	groupWorkspaceService.save(groupWorkspace);
+        }
+		securityService.deletePermissions(groupWorkspace.getId(), CgLibHelper.cleanClassName(groupWorkspace.getClass().getName()), user);
 	}
 	
 	/**
@@ -477,11 +504,39 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		this.groupWorkspaceService = groupWorkspaceService;
 	}
 	
+	/**
+	 * Group workspace user data access.
+	 * 
+	 * @return
+	 */
 	public GroupWorkspaceUserDAO getGroupWorkspaceUserDAO() {
 		return groupWorkspaceUserDAO;
 	}
 
+	/**
+	 * Set the group workspace user data access.
+	 * 
+	 * @param groupWorkspaceUserDAO
+	 */
 	public void setGroupWorkspaceUserDAO(GroupWorkspaceUserDAO groupWorkspaceUserDAO) {
 		this.groupWorkspaceUserDAO = groupWorkspaceUserDAO;
+	}
+	
+	/**
+	 * Get the security service.
+	 * 
+	 * @return
+	 */
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

@@ -49,9 +49,6 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	
 	/* group workspace user data access */
 	private GroupWorkspaceUserDAO groupWorkspaceUserDAO;
-	
-
-
 
 	/* service to deal with group workspace file system information */
 	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;

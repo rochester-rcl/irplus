@@ -92,7 +92,10 @@ UserIdAware {
 	/* Service to help deal with group workspace information */
 	private GroupWorkspaceService groupWorkspaceService;
 
-	
+	/* group workspace id */
+	private Long groupWorkspaceId;
+
+
 
 
 	/**
@@ -309,5 +312,21 @@ UserIdAware {
 	}
 
 
+	/**
+	 * Get the group workspace id.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
 
+	/**
+	 * Set the group workspace id.
+	 * 
+	 * @param groupWorkspaceId
+	 */
+	public void setGroupWorkspaceId(Long groupWorkspaceId) {
+		this.groupWorkspaceId = groupWorkspaceId;
+	}
 }
