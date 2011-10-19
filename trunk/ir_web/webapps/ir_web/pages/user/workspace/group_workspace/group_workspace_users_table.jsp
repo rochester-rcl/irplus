@@ -52,7 +52,7 @@
                     ${workspaceUser.user.defaultEmail.email}
                 </urstb:td>
                 <urstb:td>
-                    <a href="">Add</a> / <a href="">Edit</a>
+                    <a href="">Edit</a> / <a href="">Remove</a>
                 </urstb:td>                        
 
             </urstb:tr>
