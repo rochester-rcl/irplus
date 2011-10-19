@@ -19,7 +19,8 @@
 <suite name="ir hibernate test single">
 	<test name="Test Single">
 		<classes>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDeleteRecordDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.security.db.IrUserAccessControlEntryDAOTest"/>
+	
 		</classes>
 	</test>
 </suite>

@@ -41,6 +41,14 @@ public class GroupWorkspaceFile extends BasePersistent implements FileSystem{
 	/* Group space this file belongs to */
 	private GroupWorkspace groupWorkspace;
  
+	/** user can read the specified file */
+	public static String FILE_READ_PERMISSION = "GROUP_WORKSPACE_FILE_READ";
+	
+	/** user can read/add new versions to file */
+	public static String FILE_EDIT_PERMISSION = "GROUP_WORKSPACE_FILE_EDIT";
+	
+	/** user can read/add new versions/delete file */
+	public static String FILE_MANAGE_PERMISSION = "GROUP_WORKSPACE_FILE_MANAGE";
 
 	/**
      * Package protected constructor

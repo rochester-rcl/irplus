@@ -7,6 +7,7 @@ import java.util.List;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -61,6 +62,14 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @return List of sub folders within the parent folder
 	 */
 	public List<GroupWorkspaceFolder> getFolders(Long workspaceId, Long parentFolderId );
+	
+	/**
+	 * Get all the folders for a group workspace
+	 * @param workspaceId - id of the group workspace.
+	 * 
+	 * @return list of group workspace folders
+	 */
+	public List<GroupWorkspaceFolder> getAllFolders(Long workspaceId);
 
 	/**
 	 * Get personal files for a group workspace in the specified folder
@@ -71,6 +80,15 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @return List of files in the folder
 	 */
 	public List<GroupWorkspaceFile> getFiles(Long workspaceId, Long parentFolderId);
+	
+	/**
+	 * Get all files for the workspace.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @return all the files within the group workspace
+	 */
+	public List<GroupWorkspaceFile> getAllFiles(Long groupWorkspaceId);
+	
 	
 	/**
 	 * Save the group workspace folder into persistent storage.
@@ -173,4 +191,21 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @param deleteReason - reason for deleting the group workspace file
 	 */
 	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason);
+	
+	/**
+	 * Gives the user permissions for the given group file system.
+	 * 
+	 * @param users - list of users to give permissions for the group to
+	 * @param groupWorkspace - group workspace
+	 * @param permissions - set of permissions to give
+	 */
+	public void giveUsersPermissionsToGroupFileSystem(List<IrUser> users, GroupWorkspace groupWorkspace, List<IrClassTypePermission> permissions);
+
+	/**
+	 * Remove all permissions from the group file system for the given user.
+	 * 
+	 * @param user - user to remove all permissions from
+	 * @param groupWorkspace - group workspace to remove all permissions from.
+	 */
+	public void removeUserPermissionsFromGroupFileSystem(IrUser user, GroupWorkspace groupWorkspace);
 }

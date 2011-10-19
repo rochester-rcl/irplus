@@ -884,6 +884,7 @@
          <property name="groupWorkspaceDAO" ref="groupWorkspaceDAO"/>
          <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>
          <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
+         <property name="securityService" ref="securityService"/>
    </bean>
    
    
@@ -913,7 +914,7 @@
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="securityService" ref="securityService"/>
        <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
-       <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>
+       <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>      
    </bean>
    <!-- ****************************************** --> 
    <!-- Service that deals with Marc Conntent type -->

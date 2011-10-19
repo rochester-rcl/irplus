@@ -16,14 +16,50 @@
 
 package edu.ur.ir.security;
 
+import java.util.List;
+
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.user.IrUser;
 
 /**
- * Persistance for a user access control entry.
+ * Persistence for a user access control entry.
  * 
  * @author Nathan Sarr
  *
  */
 public interface IrUserAccessControlEntryDAO extends CountableDAO, 
-CrudDAO<IrUserAccessControlEntry>{}
+CrudDAO<IrUserAccessControlEntry>{
+	
+	/**
+	 * Create user control entries for the list of users for the
+	 * specified acls.  This is a bulk operation
+	 * 
+	 * @param users - list of users to create the entries for
+	 * @param acl - acl to add the entries to
+	 * 
+	 * @return number of entries created
+	 */
+	public int createUserControlEntriesForUsers(List<IrUser> users, List<IrAcl> acls );
+	
+	/**
+	 * Create the permissions for user control entries.
+	 * 
+	 * @param entries - list of entries
+	 * @param permissions - list of permissions to give to each entry
+	 * 
+	 * @return
+	 */
+	public int createPermissionsForUserControlEntries(List<IrUserAccessControlEntry> entries,
+			List<IrClassTypePermission> permissions);
+	
+	/**
+	 * Get the list of users for the given access control list.
+	 * 
+	 * @param acl - acl to the the access control entries for
+	 * @param users - list of users to get for the acl
+	 * 
+	 * @return - list of users found.
+	 */
+	public List<IrUserAccessControlEntry> getUserControlEntriesForUsers(IrAcl acl, List<IrUser> users);
+}

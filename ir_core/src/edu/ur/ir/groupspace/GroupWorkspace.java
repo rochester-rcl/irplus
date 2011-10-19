@@ -68,6 +68,15 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	/* date this record was created */
 	private Timestamp createdDate;
 
+	/**  User will be assigned read all files and folders within the workspace  */
+	public static String GROUP_WORKSPACE_READ_PERMISSION = "GROUP_WORKSPACE_READ";
+	
+	/**  Users will be assigned file add to all folders in the workspace */
+	public static String GROUP_WORKSPACE_ADD_FILE_PERMISSION = "GROUP_WORKSPACE_ADD_FILE";
+	
+	/**  Users will be assigned add/edit/delete to all files and folders within the workspace  */
+	public static String GROUP_WORKSPACE_EDIT_PERMISSION = "GROUP_WORKSPACE_EDIT";
+
 	/**  Package protected workspace  */
 	GroupWorkspace(){}
 	

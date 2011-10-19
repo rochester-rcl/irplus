@@ -17,6 +17,7 @@
 package edu.ur.ir.groupspace.service;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.ur.cgLib.CgLibHelper;
@@ -33,6 +34,9 @@ import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.IrAcl;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.IrUserAccessControlEntry;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 
@@ -121,6 +125,28 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		{
 		    return groupWorkspaceFolderDAO.getFolders(workspaceId, parentFolderId);
 		}
+	}
+	
+	/**
+	 * Get all the folders for a group workspace
+	 * @param workspaceId - id of the group workspace.
+	 * 
+	 * @return list of group workspace folders
+	 */
+	public List<GroupWorkspaceFolder> getAllFolders(Long workspaceId)
+	{
+		return groupWorkspaceFolderDAO.getAllFolders(workspaceId);
+	}
+	
+	/**
+	 * Get all files for the workspace.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @return all the files within the group workspace
+	 */
+	public List<GroupWorkspaceFile> getAllFiles(Long groupWorkspaceId)
+	{
+		return groupWorkspaceFileDAO.getAllFiles(groupWorkspaceId);
 	}
 
 	/**
@@ -451,14 +477,82 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		
 		// delete the personal file
 		groupWorkspaceFileDAO.makeTransient(gf);
-		
 		groupWorkspaceFileDeleteRecordDAO.makePersistent(groupWorkspaceFileDeleteRecord);
-		
-	
 		securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
 		repositoryService.deleteVersionedFile(versionedFile);
-			
+	}
 	
+	/**
+	 * Gives the user permissions for the given group - to all files and folders within the group workspace.
+	 * 
+	 * @param users - list of users to give permissions for the group to
+	 * @param groupWorkspace - group workspace
+	 * @param permissions - set of permissions to give
+	 */
+	public void giveUsersPermissionsToGroupFileSystem(List<IrUser> users, GroupWorkspace groupWorkspace, List<IrClassTypePermission> permissions)
+	{
+		List<GroupWorkspaceFile> files = getAllFiles(groupWorkspace.getId());
+		List<GroupWorkspaceFolder> folders = getAllFolders(groupWorkspace.getId());
+		
+		List<IrAcl> acls = new LinkedList<IrAcl>();
+		
+		// get all acls for files and folders within group workspace
+		for(GroupWorkspaceFile f : files )
+		{
+			IrAcl acl = securityService.getAcl(f);
+			if( acl == null )
+			{
+				acl = securityService.createAclForObject(f);
+			}
+			acls.add(acl);
+		}
+		
+		for( GroupWorkspaceFolder f : folders)
+		{
+			IrAcl acl = securityService.getAcl(f);
+			if( acl == null )
+			{
+				acl = securityService.createAclForObject(f);
+			}
+			acls.add(acl);
+		}
+		
+		if( acls.size() > 0 )
+		{
+		    securityService.createUserControlEntriesForUsers(users, acls);
+			List<IrUserAccessControlEntry> entries = new LinkedList<IrUserAccessControlEntry>();
+		    
+		    for( IrAcl acl : acls)
+			{
+				entries.addAll(securityService.getUserControlEntriesForUsers(acl, users));
+			}
+		    
+		    securityService.createPermissionsForUserControlEntries(entries, permissions);
+		}
+		
+	}
+	
+	/**
+	 * Remove all permissions from the group file system for the given user.
+	 * 
+	 * @param user - user to remove all permissions from
+	 * @param groupWorkspace - group workspace to remove all permissions from.
+	 */
+	public void removeUserPermissionsFromGroupFileSystem(IrUser user, GroupWorkspace groupWorkspace)
+	{
+		List<GroupWorkspaceFile> files = getAllFiles(groupWorkspace.getId());
+		List<GroupWorkspaceFolder> folders = getAllFolders(groupWorkspace.getId());
+		// get all acls for files and folders within group workspace
+		for(GroupWorkspaceFile f : files )
+		{
+			securityService.deletePermissions(f.getId(), CgLibHelper.cleanClassName(f.getClass().getName()), user);
+		}
+		
+		for( GroupWorkspaceFolder f : folders)
+		{
+			securityService.deletePermissions(f.getId(), CgLibHelper.cleanClassName(f.getClass().getName()), user);
+		}
+		
 	}
     
 	/**
