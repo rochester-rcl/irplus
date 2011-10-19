@@ -123,13 +123,7 @@
                      
                      <!--  second tab -->
                      <div id="tab2">
-                           <c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
-	                            <form method="GET" id="admin_search_form" name="adminSearchForm" 
-	                                         action="javascript:YAHOO.ur.usergroup.edit.adminSearch(0, 1, 1);">
-	                                         Search: <input type="text" size="50" id="admin_query" name="query" value=""/>
-	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
-	                                     </form>
-                             </c:if>
+                          
                              <br/>
                              <br/>
                              

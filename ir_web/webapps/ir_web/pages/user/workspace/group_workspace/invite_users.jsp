@@ -120,6 +120,15 @@
 										          <td> ${classTypePermission.description}</td>
 											</tr>
 			           				    </c:forEach>
+			           				    <tr>
+			           				        <td>
+			           				            <input type="checkbox" name="setAsOwner" id="owner" value="true" 
+			           				                onclick="YAHOO.ur.group_workspace_invite.setOwner(this, selectedPermissions);"/>
+			           				        </td>
+			           				        <td>
+			           				            Add as group workspace owner
+			           				        </td>
+			           				    </tr>
 							            <tr>
 							                <td colspan="2" align="center"> 
 								                <button class="ur_button" id="inviteUser" type="button"
