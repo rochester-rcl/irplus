@@ -152,17 +152,18 @@ public class IrUserGroupAccessControlEntryDAOTest {
 		// commit the transaction
 		tm.commit(ts);
 		
+		// start a new transaction
+		ts = tm.getTransaction(td);
 		// clean up the database
 		irAclDAO.makeTransient(irAclDAO.getById(irAcl.getId(), false));
 		assert uaceDAO.getById(uace.getId(), false) == null : "Should not be able to find the access control entry";
 		
- 	    classTypePermissionDAO.makeTransient(classTypePermission);
- 	    classTypePermissionDAO.makeTransient(classTypePermission1);
+ 	    classTypePermissionDAO.makeTransient(classTypePermissionDAO.getById(classTypePermission.getId(),false));
+ 	    classTypePermissionDAO.makeTransient(classTypePermissionDAO.getById(classTypePermission1.getId(),false));
  	    
- 	    irClassTypeDAO.makeTransient(languageClassType);
+ 	    irClassTypeDAO.makeTransient(irClassTypeDAO.getById(languageClassType.getId(), false));
  	    
-		// start a new transaction
-		ts = tm.getTransaction(td);
+		
  		userGroupDAO.makeTransient(userGroupDAO.getById(userGroup.getId(), false));
 		languageTypeDAO.makeTransient(languageTypeDAO.getById(lt.getId(), false));
         //commit the transaction

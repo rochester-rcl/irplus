@@ -269,13 +269,13 @@ nextval('ir_security.class_type_permission_seq'),
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_EDIT','The user can read and add new versions to the file',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_EDIT','The user can read and add new versions of the file',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspaceFile';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_MANAGE','The user can delete, read and add new versions to the file',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_MANAGE','The user can delete, read and add new versions of the file',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspaceFile';
 -- ---------------------------------------------
@@ -313,7 +313,7 @@ nextval('ir_security.class_type_permission_seq'),
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_ADD_FILE','The user(s) can read and add files to the group and only delete files they own',0
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_ADD_FILE','The user(s) can read all files in the group, add files to the group and only delete files they own',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
 

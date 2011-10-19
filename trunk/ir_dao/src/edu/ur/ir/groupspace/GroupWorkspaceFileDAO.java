@@ -45,4 +45,12 @@ public interface GroupWorkspaceFileDAO extends CrudDAO<GroupWorkspaceFile>
 	  * @return the found files
 	  */
 	 public List<GroupWorkspaceFile> getRootFiles(Long workspaceId);
+	 
+	/**
+	  * Get all files for the workspace.
+	  * 
+	  * @param groupWorkspaceId - id of the group workspace
+	  * @return all the files within the group workspace
+	  */
+	public List<GroupWorkspaceFile> getAllFiles(Long groupWorkspaceId);
 }

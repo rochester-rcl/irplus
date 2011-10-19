@@ -136,13 +136,18 @@
 	    and folder.parent.id = :parentId
 	</query>
 	
-		<!-- Get root folders -->
+	<!-- Get root folders -->
 	<query name="getRootWorkspaceFolders">
 	    from GroupWorkspaceFolder as folder	    
 	    where folder.groupWorkspace.id = :workspaceId
 	    and folder.id = folder.treeRoot.id
 	</query>
 	
+	<!-- Get all files in group workspace -->
+	<query name="getAllWorkspaceFolders">
+	    from GroupWorkspaceFolder as folder	    
+	    where folder.groupWorkspace.id = :workspaceId
+	</query>
 			
 	<!--  All files for the specified folder including files in sub folders -->
 	<query name="getAllGroupWorkspaceFilesForFolder">

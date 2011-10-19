@@ -17,19 +17,24 @@
 package edu.ur.ir.groupspace.service;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -52,6 +57,9 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 
 	/* service to deal with group workspace file system information */
 	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
+	
+	/* Data access for ACL */
+	private SecurityService securityService;
 
 	/*  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceService.class);
@@ -185,7 +193,6 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		{
 			workspace.removeRootFile(wf);
 			groupWorkspaceFileSystemService.delete(wf, deletingUser, "DELETING USER");
-	       
 		}
 		log.debug("DONE deleting root files");
 	}
@@ -203,7 +210,6 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
     	return groupWorkspaceUserDAO.getGroupWorkspaceUser(userId, groupWorkspaceId);
     }
 	
-	
 	/**
 	 * Determine if a user is a group workspace member.
 	 * 
@@ -220,11 +226,87 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		{
 			isMember = true;
 		}
-		
 		return isMember;
+	}
+	
+	/**
+	 * Remove the user from the group.  This will also remove all permissions for the user
+	 * to the group.
+	 * 
+	 * @param user - user to remove the group from
+	 * @param groupWorkspace - group workspace to remove the user from
+	 */
+	public void removeUserFromGroup(IrUser user, GroupWorkspace groupWorkspace)
+	{
+		GroupWorkspaceUser removeGroupWorkspaceUser = groupWorkspace.getUser(user);
+        if(removeGroupWorkspaceUser != null )
+        {
+        	securityService.deletePermissions(groupWorkspace.getId(), CgLibHelper.cleanClassName(groupWorkspace.getClass().getName()), user);
+        	groupWorkspaceFileSystemService.removeUserPermissionsFromGroupFileSystem(user, groupWorkspace);
+        	groupWorkspace.remove(removeGroupWorkspaceUser);
+        	save(groupWorkspace);
+        }
 		
 	}
 	
+	/**
+	 * Add a user to the group workspace with the given permissions.
+	 * 
+	 * @param user - user to give the permissions to 
+	 * @param groupWorkspace - workspace to give the permissions to
+	 * @param permissions - list of permissions
+	 * @param setAsOwner - set the user as an owner of the group workspace
+	 * @throws DuplicateNameException - if the user already exists in the group.
+	 */
+	public GroupWorkspaceUser addUserToGroup(IrUser user, 
+			GroupWorkspace groupWorkspace, Set<IrClassTypePermission> permissions, boolean setAsOwner)
+	    throws DuplicateNameException
+	{
+		GroupWorkspaceUser workspaceUser = groupWorkspace.add(user, setAsOwner);
+		groupWorkspaceUserDAO.makePersistent(workspaceUser);
+	    // Create permissions for the group that is being shared
+		securityService.createPermissions(groupWorkspace, user, permissions);
+		List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+		List<IrUser> users = new LinkedList<IrUser>();
+		users.add(user);
+		
+		if( setAsOwner)
+		{
+			fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFile.class.getName()));
+			fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+		}
+		else
+		{
+			boolean workspaceEdit = false;
+			
+			boolean workspaceRead = false;
+		    for(IrClassTypePermission permission : permissions)
+		    {
+			    if( permission.getName().equals("GROUP_WORKSPACE_EDIT"))
+			    {
+				    workspaceEdit = true;
+			    }			   
+			    else if( permission.getName().equals("GROUP_WORKSPACE_READ"))
+			    {
+				     workspaceRead = true;
+			    }
+		    }
+		    
+		    if( workspaceEdit )
+		    {
+		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFile.class.getName()));
+		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+		    }
+		    else if( workspaceRead )
+		    {
+		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFile.class.getName(), GroupWorkspaceFile.FILE_READ_PERMISSION));
+		    }
+		    
+		}
+		
+		groupWorkspaceFileSystemService.giveUsersPermissionsToGroupFileSystem(users, groupWorkspace, fileSystemPermissions);
+		return workspaceUser;
+	}
 	
 	/**
 	 * Set the group workspace user data access object.
@@ -234,4 +316,23 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	public void setGroupWorkspaceUserDAO(GroupWorkspaceUserDAO groupWorkspaceUserDAO) {
 		this.groupWorkspaceUserDAO = groupWorkspaceUserDAO;
 	}
+	
+	/**
+	 * Get the security service.
+	 * 
+	 * @return
+	 */
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
+
 }

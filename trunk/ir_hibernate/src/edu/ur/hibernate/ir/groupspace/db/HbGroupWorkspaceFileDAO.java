@@ -82,6 +82,20 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 		 return q.list();
 	}
 	 
+    /**
+	  * Get all files for the workspace.
+	  * 
+	  * @param groupWorkspaceId - id of the group workspace
+	  * @return all the files within the group workspace
+	  */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFile> getAllFiles(Long groupWorkspaceId)
+	{
+		 Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllFilesInGroupWorkspace");
+		 q.setParameter("workspaceId", groupWorkspaceId);
+		 return q.list();
+	}
+	
 	/**
 	  * Get the root files at the top workspace level
 	  * 

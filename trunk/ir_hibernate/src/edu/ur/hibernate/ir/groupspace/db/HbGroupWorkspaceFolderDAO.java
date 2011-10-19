@@ -102,6 +102,21 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 	}
 	
 	/**
+	 * Get all the folders for a group workspace 
+	 * @param workspaceId - id of the group workspace.
+	 * 
+	 * @return list of group workspace folders
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getAllFolders(Long workspaceId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllWorkspaceFolders");
+		q.setParameter("workspaceId", workspaceId);
+		return q.list();
+	}
+	
+	
+	/**
 	 * Get the root folders for a given workspace.
 	 * 
 	 * @param workspaceId - id of the workspace

@@ -91,6 +91,8 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
 	
 	/* id of an invite for a user */
 	private Long inviteId;
+	
+	
 
 
 	/*  Get the logger for this class */
@@ -159,6 +161,7 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
 		
         if(emails != null )
         {
+        	log.debug("set as owner = " + setAsOwner);
 	 	    String[] emailArray = emails.trim().split(";");
 	 	    List<String> emailList = Arrays.asList(emailArray);
 	 	    try {
@@ -204,7 +207,7 @@ public class InviteUsersToGroupWorkspace extends ActionSupport implements UserId
         
         if( removeUser != null && !removeUser.equals(user))
         {
-            groupWorkspaceInviteService.removeUserFromGroup(groupWorkspace, removeUser);
+            groupWorkspaceService.removeUserFromGroup(removeUser, groupWorkspace);
         }
 
 		return SUCCESS;	

@@ -48,6 +48,14 @@ public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
 	 */
 	public List<GroupWorkspaceFolder> getFolders(Long workspaceId, Long parentFolderId );
 	
+	/**
+	 * Get all the folders for a group workspace
+	 * @param workspaceId - id of the group workspace.
+	 * 
+	 * @return list of group workspace folders
+	 */
+	public List<GroupWorkspaceFolder> getAllFolders(Long workspaceId);
+	
 	
 	/**
 	 * Get the root folders for a given workspace.
@@ -65,4 +73,6 @@ public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
 	 * @return all group files found.
 	 */
 	public List<GroupWorkspaceFile> getAllFilesForFolder(GroupWorkspaceFolder groupFolder);
+	
+
 }

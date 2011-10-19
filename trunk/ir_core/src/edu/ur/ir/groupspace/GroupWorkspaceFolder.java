@@ -97,6 +97,15 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceFolder>, FileSystem{
 	/*  Version of the database data read from the database. */
 	private int version;
 	
+	/**  user will be given read permission on all files/folders within folder as they are added */
+	public static String FOLDER_READ_PERMISSION = "GROUP_WORKSPACE_FOLDER_READ";
+	
+	/**  user can add/edit/delete files and folders within the folder and the specified folder */
+	public static String FOLDER_EDIT_PERMISSION = "GROUP_WORKSPACE_FOLDER_EDIT";
+	
+	/** user can add/modifiy files they add but cannot modify files they did not add */
+	public static String FOLDER_ADD_FILE_PERMISSION = "GROUP_WORKSPACE_FOLDER_ADD_FILE";
+	
 	/**
 	 * Package protected constructor
 	 */

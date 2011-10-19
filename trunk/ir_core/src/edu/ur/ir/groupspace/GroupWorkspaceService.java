@@ -18,8 +18,10 @@ package edu.ur.ir.groupspace;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -115,5 +117,27 @@ public interface GroupWorkspaceService extends Serializable{
 	 * @return true if the user is a group workspace member.
 	 */
 	public boolean userIsGroupWorkspaceMember(Long userId, Long groupWorkspaceId);
+	
+	/**
+	 * Remove the user from the group.  This will also remove all permissions for the user
+	 * to the group.
+	 * 
+	 * @param user - user to remove the group from
+	 * @param groupWorkspace - group workspace to remove the user from
+	 */
+	public void removeUserFromGroup(IrUser user, GroupWorkspace groupWorkspace);
+	
+	/**
+	 * Add a user to the group workspace with the given permissions.
+	 * 
+	 * @param user - user to give the permissions to 
+	 * @param groupWorkspace - workspace to give the permissions to
+	 * @param permissions - list of permissions
+	 * @param setAsOwner - set the user as an owner of the group workspace
+	 * @throws DuplicateNameException - if the user already exists in the group.
+	 */
+	public GroupWorkspaceUser addUserToGroup(IrUser user, 
+			GroupWorkspace groupWorkspace, Set<IrClassTypePermission> permissions, boolean setAsOwner)
+	    throws DuplicateNameException;
 
 }

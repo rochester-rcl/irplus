@@ -64,6 +64,7 @@ DROP TABLE ir_security.acl;
 ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT invite_permissions_class_type_permission_id_fkey;
 ALTER TABLE ir_user.folder_invite_permissions DROP CONSTRAINT folder_invite_permissions_class_type_permission_id_fkey;
 ALTER TABLE ir_user.folder_auto_share_permissions DROP CONSTRAINT folder_auto_share_permissions_class_type_permission_id_fkey;
+ALTER TABLE ir_group_workspace.group_workspace_email_invite_permissions DROP CONSTRAINT group_workspace_email_invite_perm_class_type_permission_id_fkey;
 
 DROP TABLE ir_security.class_type_permission;
 DROP TABLE ir_security.class_type;

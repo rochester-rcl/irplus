@@ -25,11 +25,11 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
-import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
@@ -79,13 +79,14 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	/* deal with group workspace information */
 	private GroupWorkspaceService groupWorkspaceService;
 	
+	/* group workspace file system service */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
+
 	/* service to deal with group workspace users */
 	private GroupWorkspaceUserDAO groupWorkspaceUserDAO;
 	
 	/* Data access for ACL */
 	private SecurityService securityService;
-
-
 
 
 	/**
@@ -109,7 +110,6 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	{
 		return  groupWorkspaceEmailInviteDAO.getInviteInfoByEmail(email);
 	}
-		
 
 	/**
 	 * Get a count of the number of invite records.
@@ -119,8 +119,6 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	{
 		return  groupWorkspaceEmailInviteDAO.getCount();
 	}
-	
-
 	
 	/**
 	 * Set the group workspace group invite data access object.
@@ -203,8 +201,6 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		message.setSubject(subject);
 
 		String text = message.getText();
-
-		
 		
 		text = StringUtils.replace(text, "%NAME%", invite.getGroupWorkspace().getName());
 		text = StringUtils.replace(text, "%TOKEN%", invite.getInviteToken().getToken());
@@ -265,11 +261,8 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 			    	    log.debug("group workspace user is null adding new");
 						GroupWorkspaceUser user = null;
 						try {
-							user = groupWorkspace.add(invitedUser, setAsOwner);
+							user = groupWorkspaceService.addUserToGroup(invitedUser, groupWorkspace, permissions, setAsOwner);
 							log.debug("created group workspace user " + user);
-						    groupWorkspaceUserDAO.makePersistent(user);
-						    // Create permissions for the group that is being shared
-							securityService.createPermissions(groupWorkspace, invitedUser, permissions);
 						    sendEmailInvite(invitingUser, groupWorkspace, email, inviteMessage);
 						} catch (DuplicateNameException e) {
 							//user already exists
@@ -307,22 +300,7 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		return emailsNotSent;
 	}
 	
-	/**
-	 * Remove the user from the group.  This also removes all permissions for the user.
-	 * 
-	 * @param groupWorkspace - group workspace user
-	 * @param user - user to remove from the group workspace
-	 */
-	public void removeUserFromGroup(GroupWorkspace groupWorkspace, IrUser user)
-	{
-		GroupWorkspaceUser removeGroupWorkspaceUser = groupWorkspace.getUser(user);
-        if(removeGroupWorkspaceUser != null )
-        {
-        	groupWorkspace.remove(removeGroupWorkspaceUser);
-        	groupWorkspaceService.save(groupWorkspace);
-        }
-		securityService.deletePermissions(groupWorkspace.getId(), CgLibHelper.cleanClassName(groupWorkspace.getClass().getName()), user);
-	}
+
 	
 	/**
 	 * Add users to all invited groups for a given email.  This email must be verified as
@@ -538,5 +516,24 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 	 */
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	/**
+	 * Get the group workspace file system service.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspaceFileSystemService getGroupWorkspaceFileSystemService() {
+		return groupWorkspaceFileSystemService;
+	}
+
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
 	}
 }

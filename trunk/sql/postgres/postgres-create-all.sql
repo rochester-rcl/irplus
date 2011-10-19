@@ -2810,19 +2810,7 @@ ALTER TABLE ir_group_workspace.group_workspace_email_invite OWNER TO ir_plus;
 CREATE SEQUENCE ir_group_workspace.group_workspace_email_invite_seq;
 ALTER TABLE ir_group_workspace.group_workspace_email_invite_seq OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Invite permission
--- ---------------------------------------------
 
-CREATE TABLE  ir_group_workspace.group_workspace_email_invite_permissions
-(
-    group_workspace_email_invite_id BIGINT NOT NULL, 
-    class_type_permission_id BIGINT NOT NULL,
-    PRIMARY KEY (group_workspace_email_invite_id, class_type_permission_id),
-    FOREIGN KEY (group_workspace_email_invite_id) REFERENCES ir_group_workspace.group_workspace_email_invite(group_workspace_email_invite_id),
-    FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_email_invite_permissions OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- group workspace file delete record
@@ -2995,6 +2983,20 @@ ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
+-- Email Invite permission
+-- ---------------------------------------------
+
+CREATE TABLE  ir_group_workspace.group_workspace_email_invite_permissions
+(
+    group_workspace_email_invite_id BIGINT NOT NULL, 
+    class_type_permission_id BIGINT NOT NULL,
+    PRIMARY KEY (group_workspace_email_invite_id, class_type_permission_id),
+    FOREIGN KEY (group_workspace_email_invite_id) REFERENCES ir_group_workspace.group_workspace_email_invite(group_workspace_email_invite_id),
+    FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_email_invite_permissions OWNER TO ir_plus;
+
+-- ---------------------------------------------
 -- Insert values for Class type permission
 -- ---------------------------------------------
 
@@ -3047,6 +3049,48 @@ nextval('ir_security.class_type_permission_seq'),
   ir_security.class_type.class_type_id, 'GROUP_READ','The user(s) can view all files and folders within the group',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
+
+-- ---------------------------------------------
+-- New permission types for workspace files
+-- ---------------------------------------------
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_READ','The user can read the file',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFile';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_EDIT','The user can read and add new versions of the file',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFile';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_MANAGE','The user can delete, read and add new versions of the file',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFile';
+-- ---------------------------------------------
+-- New permission types for workspace folders
+-- ---------------------------------------------
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_EDIT','The user can add and delete any files and folders from the specified folder including child files and folders',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFolder';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_ADD_FILE','The user can add files to the specified folder and only delete files they own',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFolder';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_READ','The user can view the folder and read all of the files and folders within the folder',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFolder';
 
 -- ------------------------------------
 -- institutional colleciton permissions
