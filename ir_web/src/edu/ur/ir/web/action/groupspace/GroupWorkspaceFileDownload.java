@@ -29,13 +29,14 @@ import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
- * Allows users to download workspace files.
+ * Allows users to download group workspace files.
  * 
  * @author Nathan Sarr
  *
@@ -55,25 +56,27 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	/** id of the user **/
 	private Long userId;
 	
-	/**  Version of the file to download */
+	/*  Version of the file to download */
 	private int versionNumber;
 	
-	/** Service for accessing user information */
+	/* Service for accessing user information */
 	private UserService userService;
 	
-	/** group workpsace file services */
+	/* group workpsace file services */
 	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 	
-
-
-	/**  Servlet response to write to */
+	/*  Servlet response to write to */
 	private transient HttpServletResponse response;
 	
-	/**  Servlet request made */
+	/*  Servlet request made */
 	private transient HttpServletRequest request;
 	
-	/** Utility for streaming files */
+	/* Utility for streaming files */
 	private WebIoUtils webIoUtils;
+	
+	/* Service to check and see if user can access the file */
+	private SecurityService securityService;
+
 
 	/**
      * Allows a file to be downloaded
@@ -92,7 +95,8 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         IrUser user = userService.getUser(userId, false);
         
         //FIX this deal with permissions
-        if( !workspaceFile.getVersionedFile().getOwner().equals(user))
+        
+        if( securityService.hasPermission(workspaceFile, user, GroupWorkspaceFile.FILE_READ_PERMISSION) <= 0 )
         {
         	return "accessDenied";
         }
@@ -190,5 +194,14 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	public void setGroupWorkspaceFileSystemService(
 			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
 		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+	
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

@@ -94,12 +94,10 @@
                         <urstb:td>
                              <c:if test="${ir:isGroupWorkspaceOwner(groupWorkspace)}">
                                  <c:url value="/user/getGroupWorkspace.action" var="editGroupWorkspaceUrl">
-						            <c:param name="id" value="${groupWorkspace.id}"/>
-						         </c:url>
-						         <c:url value="/user/viewInviteGroupWorkspaceUsers.action" var="inviteGroupWorkspaceUsersUrl">
 						            <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
 						         </c:url>
-						        <a href="${inviteGroupWorkspaceUsersUrl}">Invite User(s)</a>&nbsp;/&nbsp;<a href="${editGroupWorkspaceUrl}">Edit</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.group_workspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
+						         
+						        <a href="${editGroupWorkspaceUrl}">Edit or Invite users</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.group_workspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
                              </c:if>
                         </urstb:td>
                     </urstb:tr>

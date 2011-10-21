@@ -348,7 +348,6 @@ YAHOO.ur.user.group_workspace = {
                 // this will store the folder Id in the URL
                 try 
                 {
-                	alert("going to module workspace id = " + workspaceId);
             	    // do not remove the string conversion on folder id otherwise an error occurs
                     YAHOO.util.History.navigate( "groupWorkspaceModule", workspaceId +"" );
                 } 

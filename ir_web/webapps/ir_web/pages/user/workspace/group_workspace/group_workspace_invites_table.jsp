@@ -26,33 +26,29 @@
     <urstb:table width="100%">
         <urstb:thead>
             <urstb:tr>
-                <urstb:td> Name </urstb:td>
-                <urstb:td> Owner </urstb:td>
                 <urstb:td> Email </urstb:td>
+                <urstb:td> Owner </urstb:td>
                 <urstb:td> Action </urstb:td>
             </urstb:tr>
         </urstb:thead>
         <urstb:tbody
-            var="workspaceUser" 
+            var="invite" 
             oddRowClass="odd"
             evenRowClass="even"
             currentRowClassVar="rowClass"
-            collection="${groupWorkspace.users}">
+            collection="${groupWorkspace.emailInvites}">
             <urstb:tr 
                 cssClass="${rowClass}"
                 onMouseOver="this.className='highlight'"
                 onMouseOut="this.className='${rowClass}'">
                 <urstb:td>
-                    ${workspaceUser.user.firstName}&nbsp;${workspaceUser.user.lastName}
-                </urstb:td>
-                  <urstb:td>
-                    ${workspaceUser.owner}
-                </urstb:td>      
-                <urstb:td>
-                    ${workspaceUser.user.defaultEmail.email}
+                    ${invite.inviteToken.email}
                 </urstb:td>
                 <urstb:td>
-                    <a href="">Edit</a> / <a href="javascript:YAHOO.ur.group_workspace_invite.removeUser(${workspaceUser.user.id});">Remove</a>
+                    ${invite.setAsOwner}
+                </urstb:td>                     
+                <urstb:td>
+                    <a href="">Edit</a> / <a href="javascript:YAHOO.ur.group_workspace_invite.removeInvite(${invite.id});">Remove</a>
                 </urstb:td>                        
 
             </urstb:tr>

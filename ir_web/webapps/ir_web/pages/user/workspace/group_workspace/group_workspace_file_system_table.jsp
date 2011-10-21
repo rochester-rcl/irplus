@@ -24,7 +24,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <fmt:setBundle basename="messages"/>
-
+   <c:url value="/user/getGroupWorkspace.action" var="editGroupWorkspaceUrl">
+	      <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
+	  </c:url>
+	  
+	  
    <br/>
 
    <table width="100%">
@@ -56,8 +60,10 @@
    </tr>
    </table>
    
-   
   <div align="right">
+      <div align="left">
+          <a href="${editGroupWorkspaceUrl}">Invite users</a>
+      </div>
 	           <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
