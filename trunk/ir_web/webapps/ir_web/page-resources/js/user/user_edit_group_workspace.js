@@ -21,17 +21,47 @@ YAHOO.namespace("ur.user.edit.groupspace");
 
 //actions for adding,updating and removing content types
 var getGroupSpaceAction = basePath + 'user/getGroupWorkspace.action';
+
+var myTabs;
 /**
  * content type namespace
  */
 YAHOO.ur.user.edit.groupspace = 
 {
+	     /*
+	      * This loads the tab based on the needs of the system
+	      * and what to display to the user.
+	      */
+	     setActiveIndex : function(tabName)
+	     {
+	 
+	         if( tabName == "WORKSPACE")
+	         {
+	             myTabs.set('activeIndex', 0);
+	         }
+	         else if( tabName == "INVITE")
+	         {
+	             myTabs.set('activeIndex', 1);
+	         }
+	         else if( tabName == "USERS" )
+	         {
+	             myTabs.set('activeIndex', 2);
+	         }
+	         else
+	         {
+	        	 //default to workspace
+	        	 myTabs.set('activeIndex', 0);
+	         }
+	     },
+	     
 		// initialize the page
 		// this is called once the dom has
 		// been created
 		init : function() 
 		{
-	        var myTabs = new YAHOO.widget.TabView("groupWorkspacePropertiesTabs");
+	        myTabs = new YAHOO.widget.TabView("groupWorkspacePropertiesTabs");
+	        var tabName = document.getElementById('set_tab_name').value;
+	        YAHOO.ur.user.edit.groupspace.setActiveIndex(tabName);
 		}
 }
 

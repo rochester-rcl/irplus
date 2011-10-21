@@ -88,11 +88,13 @@ YAHOO.ur.group_workspace_invite =
 	     */
 	    autoCheckPermission : function(permission, permissions) 
 	    {
+			owner = document.getElementById('owner');
 		    if (permission.id == 'GROUP_WORKSPACE_READ') 
 		    {
 			    if (!permission.checked) 
 			    {
 				    urUtil.setCheckboxes(permissions, false);
+				    owner.checked = false;
 			    }
 		    }
 		
@@ -101,10 +103,12 @@ YAHOO.ur.group_workspace_invite =
 			    if (permission.checked) 
 			    {
 				    permissions[0].checked=true;
+				    
 			    } 
 			    else 
 			    {
 				    permissions[2].checked=false;
+				    owner.checked = false;
 			    }
 		    }
 
@@ -115,8 +119,26 @@ YAHOO.ur.group_workspace_invite =
 				    permissions[0].checked=true;
 				    permissions[1].checked=true;
 			    } 
+			    else
+			    {
+			    	owner.checked = false;
+			    }
 		    }
 		    return true;
+	    },
+	    
+	    /**
+	     *  If setting the owner flag
+	     *  set all other permissions
+	     */
+	    setOwner : function (owner, permissions)
+	    {
+	    	if( owner.checked )
+	    	{
+	    		permissions[0].checked=true;
+			    permissions[1].checked=true;
+			    permissions[2].checked=true;
+	    	}
 	    },
 		
 	    /**
