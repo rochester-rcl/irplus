@@ -61,12 +61,12 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	
 	/* Personal Folder the user will be adding files to */
 	GroupWorkspaceFolder groupWorkspaceFolder;
-	
+
 	/* The id of the user to add files to  */
 	private Long userId;
 	
 	/* the users folder to add the files to */
-	private Long folderId;
+	private Long folderId = 0l;
 	
 	/* Service for dealing with user information  */
 	private UserService userService;
@@ -89,7 +89,6 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	/* Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
-	
 	/* Files not added due to errors */
 	LinkedList<FileUploadInfo> filesNotAdded = new LinkedList<FileUploadInfo>();
 
@@ -108,13 +107,16 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	/* Service to deal with group workspace information. */
 	private GroupWorkspaceService groupWorkspaceService;
 
-    /* Group workspace being worked in */
+ 
+	/* Group workspace being worked in */
     private GroupWorkspace groupWorkspace;
     
-    /* id of the group workspace */
+  
+	/* id of the group workspace */
     private Long groupWorkspaceId;
     
  
+
 	/**
 	 * Set the user id.
 	 * 
@@ -131,6 +133,16 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 		if( !user.hasRole(IrRole.AUTHOR_ROLE))
 		{
 			return("accessDenied");
+		}
+		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+		
+		if( folderId != null )
+		{
+			groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(folderId, false);
+		}
+		else
+		{
+			folderId = 0l;
 		}
 		return SUCCESS;
 	}
@@ -302,9 +314,6 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	public void setFolderId(Long folderId) {
 		this.folderId = folderId;
 	}
-
-
-
 	
 	public String[] getFileFileName() {
 		return fileFileName;
@@ -427,6 +436,60 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	public void setThumbnailTransformerService(
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;
+	}
+
+	/**
+	 * Get the group workspace id.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
+
+	/**
+	 * Set the group workspace id.
+	 * 
+	 * @param groupWorkspaceId
+	 */
+	public void setGroupWorkspaceId(Long groupWorkspaceId) {
+		this.groupWorkspaceId = groupWorkspaceId;
+	}
+
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+	
+	/**
+	 * Set the group workspace service.
+	 * 
+	 * @param groupWorkspaceService
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+	    this.groupWorkspaceService = groupWorkspaceService;
+	}
+	
+	/**
+	 * Get the group workspace.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspace getGroupWorkspace() {
+	    return groupWorkspace;
+	}
+	
+	/**
+	 * Get the group workspace folder
+	 * @return
+	 */
+	public GroupWorkspaceFolder getGroupWorkspaceFolder() {
+		return groupWorkspaceFolder;
 	}
 
 

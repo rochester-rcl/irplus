@@ -49,7 +49,7 @@
                <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span>
                    <c:if test="${folder.id != parentFolderId}">
-                       <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${folder.id},-1)">${folder.name}</a>&nbsp;/
+                       <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${folder.id},${groupWorkspace.id} ,-1)">${folder.name}</a>&nbsp;/
                    </c:if>
                    <c:if test="${folder.id == parentFolderId}">
                        ${folder.name}&nbsp;/
@@ -75,7 +75,7 @@
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="addSingleFileButton"><span class="pageAddBtnImg">&nbsp;</span>Add File</button>
-	               <button class="ur_button" onclick="javascript:document.addFilesForm.submit();"
+	               <button class="ur_button" onclick="javascript:document.addGroupWorkspaceFilesForm.submit();"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
@@ -107,7 +107,12 @@
  
                
 <div class="dataTable">
+	<c:url var="uploadFiles" value="/user/viewGroupWorkspaceUploadFilesPage.action"/>
 	
+	<form method="get" action="${uploadFiles}" name="addGroupWorkspaceFilesForm">
+	    <input type="hidden" value="${parentFolderId}" name="folderId"/>
+	    <input type="hidden" value="${groupWorkspace.id}" name="groupWorkspaceId"/>
+	</form>
 	
     <c:url var="myGroupWorkspaceFoldersUrl" value="/user/workspace.action"/>
 	<form method="post" id="groupFolders" name="groupFolders" action="${myFoldersUrl}">
@@ -181,7 +186,7 @@
                         
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
-	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id}, -1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id},${groupWorkspace.id},-1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
 		                        <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
@@ -214,7 +219,12 @@
                         </urstb:td>
                             
                         <urstb:td>
-                            <a href="">Properties</a>
+                             <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+                              <c:url var="groupWorkspaceFolderPropertiesUrl" value="/user/viewGroupWorkspaceFolderProperties.action">
+		                            <c:param name="groupWorkspaceFolderId" value="${fileSystemObject.id}"/>
+		                        </c:url>
+                                 <a href="${groupWorkspaceFolderPropertiesUrl}">Properties</a>
+                             </c:if>
                         </urstb:td>
                             
                         <urstb:td>

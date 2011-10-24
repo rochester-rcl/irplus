@@ -50,6 +50,8 @@ public class AddWorkspaceFiles extends ActionSupport implements UserIdAware, Pre
 	/* group workspace the user will be adding the files to */
 	private GroupWorkspace groupWorkspace;
 	
+
+
 	/* The id of the user to add files to  */
 	private Long userId;
 	
@@ -148,6 +150,8 @@ public class AddWorkspaceFiles extends ActionSupport implements UserIdAware, Pre
     		return("accessDenied");
     		
     	}
+		
+		groupWorkspace = groupWorkspaceFolder.getGroupWorkspace();
 		
 		LinkedList<GroupWorkspaceFile> addedFiles = new LinkedList<GroupWorkspaceFile>();
 		
@@ -484,4 +488,12 @@ public class AddWorkspaceFiles extends ActionSupport implements UserIdAware, Pre
 		this.groupWorkspaceId = groupWorkspaceId;
 	}
 
+	/**
+	 * Get the group workspace.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
+	}
 }

@@ -88,14 +88,14 @@ UserIdAware {
 	/* list of group workspaces */
 	private List<GroupWorkspace> groupWorkspaces = new LinkedList<GroupWorkspace>();
 	
-	
 	/* Service to help deal with group workspace information */
 	private GroupWorkspaceService groupWorkspaceService;
 
 	/* group workspace id */
 	private Long groupWorkspaceId;
 
-
+    /* id of the group workspace folder id*/
+    private Long groupWorkspaceFolderId;
 
 
 	/**
@@ -311,7 +311,6 @@ UserIdAware {
 		this.groupWorkspaceService = groupWorkspaceService;
 	}
 
-
 	/**
 	 * Get the group workspace id.
 	 * 
@@ -328,5 +327,23 @@ UserIdAware {
 	 */
 	public void setGroupWorkspaceId(Long groupWorkspaceId) {
 		this.groupWorkspaceId = groupWorkspaceId;
+	}
+	
+	/**
+	 * Id of the group workspace folder.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceFolderId() {
+		return groupWorkspaceFolderId;
+	}
+
+	/**
+	 * Id of the group workspace folder.
+	 * 
+	 * @param groupWorkspaceFolderId
+	 */
+	public void setGroupWorkspaceFolderId(Long groupWorkspaceFolderId) {
+		this.groupWorkspaceFolderId = groupWorkspaceFolderId;
 	}
 }

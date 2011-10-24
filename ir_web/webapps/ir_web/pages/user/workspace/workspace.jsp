@@ -150,6 +150,7 @@
 	                  <div id="tab2">
 	                      <form id="groupWorkspaceForm">
 	                          <input type="hidden" id="groupWorkspaceFormGroupWorkspaceId" name="groupWorkspaceId" value="${groupWorkspaceId}"/>
+	                          <input type="hidden" id="groupWorkspaceFormGroupWorkspaceFolderId" name="groupWorkspaceFolderId" value="${groupWorkspaceFolderId}"/>
 	                      </form>
 	                      <div id="group_workspaces" class="hidden">
 	                           
