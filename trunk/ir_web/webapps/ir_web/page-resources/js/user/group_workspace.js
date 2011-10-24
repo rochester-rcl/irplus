@@ -30,6 +30,7 @@ var viewGroupWorkspaceFolderAction =  basePath + 'user/viewGroupWorkspaceFolders
 var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
 
 //If there is no bookmarked state, assign the default state:
+var groupWorkspaceState = "0";
 var groupWorkspaceFolderState = "0";
 
 
@@ -53,13 +54,59 @@ YAHOO.ur.user.group_workspace = {
 	{
 	    var currentState = YAHOO.util.History.getCurrentState("groupWorkspaceModule"); 
 	    YAHOO.ur.user.workspace.setActiveIndex("GROUP_WORKSPACE");
+	    
+	    var currentWorkspaceId = 0;
+	    if( document.getElementById('groupFolderForm_workspaceId') != null )
+	    {
+	    	currentWorkspaceId = document.getElementById('groupFolderForm_workspaceId').value;
+	    }
+	    
 	    if( workspaceId == 0 )
 	    {
 	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
 	    }
 	    else
 	    {
-	    	YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	    	if( currentWorkspaceId != workspaceId)
+	    	{
+	    	    YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	    	}
+	    }
+	    
+	},	
+	
+	/**
+	  * function to handle state changes for folders
+	  */
+    groupWorkspaceFolderStateChangeHandler : function(folderId)
+	{
+	    var currentState = YAHOO.util.History.getCurrentState("groupWorkspaceFolderModule"); 
+	    YAHOO.ur.user.workspace.setActiveIndex("GROUP_WORKSPACE");
+	   
+	    // get the current folder id
+	    var currentFolderId = 0;
+	    if( document.getElementById('groupFolderForm_parentFolderId') != null )
+	    {
+	    	currentFolderId = document.getElementById('groupFolderForm_parentFolderId').value;
+	    }
+	   
+	    if( folderId == 0 )
+	    {
+	    	var workspaceId = 0;
+	    	if( document.getElementById('groupFolderForm_workspaceId') != null )
+	    	{
+	    		workspaceId = document.getElementById('groupFolderForm_workspaceId').value;
+	    		YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	    	}
+	    	
+	    }
+	    else
+	    {
+	    	if( currentFolderId != folderId )
+	    	{
+	    		workspaceId = document.getElementById('groupFolderForm_workspaceId').value;
+	    	    YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId, -1);
+	    	}
 	    }
 	    
 	},	
@@ -472,7 +519,7 @@ YAHOO.ur.user.group_workspace = {
 	            	}
 	            	else
 	            	{
-	            		YAHOO.ur.user.group_workspace.getFolderById(parentFolderId, -1);
+	            		YAHOO.ur.user.group_workspace.getFolderById(parentFolderId, workspaceId, -1);
 	            	}
 	            }
 	           
@@ -649,9 +696,8 @@ YAHOO.ur.user.group_workspace = {
      *  folderId - The folder id used to get the folder.
      *  fileId - id of the file a -1 indicates no file id 
      */
-    getFolderById : function(folderId, fileId)
+    getFolderById : function(folderId, workspaceId,  fileId)
     {
-    	
 		// handle a successful return
 	    var handleSuccess = function(o) 
 	    {
@@ -674,7 +720,7 @@ YAHOO.ur.user.group_workspace = {
 	            try 
 	            {
 	            	// do not remove the string conversion on folder id otherwise an error occurs
-	                //YAHOO.util.History.navigate( "groupWorkspaceModule", folderId + "" );
+	                YAHOO.util.History.navigate( "groupWorkspaceFolderModule", folderId + "" );
 	            } 
 	            catch ( e ) 
 	            {
@@ -708,12 +754,20 @@ YAHOO.ur.user.group_workspace = {
     
       
         //set the folder id
-        document.getElementById('groupFoldersParentFolderId').value = folderId;
+        //document.getElementById('groupFoldersParentFolderId').value = folderId;
 	    
-	    YAHOO.util.Connect.setForm('groupFolders');
-    
-        YAHOO.util.Connect.asyncRequest('POST', viewGroupWorkspaceFolderAction,
-          {success: handleSuccess, failure: handleFailure});
+	   // YAHOO.util.Connect.setForm('groupFolders');
+	   
+	    // execute the transaction
+        //var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+        //        viewSharedInboxFiles +'?bustcache='+new Date().getTime(), 
+        //        callback, null);
+	    
+       var getFoldersAction = viewGroupWorkspaceFolderAction + 
+           '?parentFolderId=' + folderId + "&groupWorkspaceId=" + workspaceId + 
+           '&bustcache='+new Date().getTime();
+        YAHOO.util.Connect.asyncRequest('GET', getFoldersAction, 
+          {success: handleSuccess, failure: handleFailure}, null);
     },
     
     /**
@@ -781,7 +835,8 @@ YAHOO.ur.user.group_workspace = {
 	                	//FIX THIS
 	                	//YAHOO.ur.user.group_workspace.clearSingleFileUploadForm();
 	                    var folderId = document.getElementById("groupFolderForm_parentFolderId").value;
-	                    YAHOO.ur.user.group_workspace.getFolderById(folderId, -1); 
+	                    var workspaceId = document.getElementById("groupFolderForm_workspaceId").value;
+	                    YAHOO.ur.user.group_workspace.getFolderById(folderId,workspaceId, -1); 
 	        	    	YAHOO.ur.util.wait.waitDialog.hide();
 	                }
 	            }
@@ -861,16 +916,29 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.singleFileUpload();
 	    
 	    groupWorkspaceId = document.getElementById("groupWorkspaceFormGroupWorkspaceId").value;
+	    groupWorkspaceFolderId = document.getElementById("groupWorkspaceFormGroupWorkspaceFolderId").value;
 	    
 	    // register the history system
         YAHOO.util.History.register("groupWorkspaceModule", 
-        		groupWorkspaceFolderState, 
+        		groupWorkspaceState, 
         		YAHOO.ur.user.group_workspace.groupWorkspaceStateChangeHandler);
+        
+        // register the history system
+        YAHOO.util.History.register("groupWorkspaceFolderModule", 
+        		groupWorkspaceFolderState, 
+        		YAHOO.ur.user.group_workspace.groupWorkspaceFolderStateChangeHandler);
         
      
 	    if( groupWorkspaceId != null && groupWorkspaceId > 0 )
 	    {
-	    	 YAHOO.ur.user.group_workspace.getGroupWorkspaceById(groupWorkspaceId);
+	    	 if( groupWorkspaceFolderId == null && groupWorkspaceFolderId < 0 )
+	    	 { 
+	    	     YAHOO.ur.user.group_workspace.getGroupWorkspaceById(groupWorkspaceId);
+	    	 }
+	    	 else
+	    	 {
+	    		 YAHOO.ur.user.group_workspace.getFolderById(groupWorkspaceFolderId, groupWorkspaceId, -1);
+	    	 }
 	    }
         
   	}

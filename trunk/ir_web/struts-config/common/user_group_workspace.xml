@@ -70,6 +70,20 @@
             <result name="input">/pages/user/workspace/group_workspace/group_workspace_single_file_upload_frag.jsp</result>
         </action>
         
+         <action name="uploadGroupWorkspaceFiles" method="uploadFiles"
+               class="edu.ur.ir.web.action.groupspace.AddWorkspaceFiles">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+             <result type="redirectAction" name="success">
+        	      <param name="actionName">workspace.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="groupWorkspaceFolderId">${groupWorkspaceFolder.id}</param>
+        	      <param name="groupWorkspaceId">${groupWorkspace.id}</param>
+        	      <param name="tabName">GROUP_WORKSPACE</param>
+        	 </result>
+            <result name="input">/pages/user/workspace/upload_files.jsp</result>
+        </action>
+        
         <!-- download a group workspace file -->
         <action name="groupWorkspaceFileDownload" 
             class="edu.ur.ir.web.action.groupspace.GroupWorkspaceFileDownload">
@@ -79,34 +93,54 @@
             <result name="success" type="no-op"/>
         </action> 
         
-        <!-- invite users to group workspace -->
-        <action name="viewInviteGroupWorkspaceUsers" 
-            class="edu.ur.ir.web.action.groupspace.InviteUsersToGroupWorkspace">
-            <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
-            <result name="success">/pages/user/workspace/group_workspace/invite_users.jsp</result>
-        </action> 
-        
+  
         <!-- invite users to group workspace -->
         <action name="inviteGroupWorkspaceUsers"
             method="inviteUsers" 
-            class="edu.ur.ir.web.action.groupspace.InviteUsersToGroupWorkspace">
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
-            <result name="success">/pages/user/workspace/group_workspace/invite_users.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action> 
         
-         <!-- remove invite from group workspace -->
-        <action name="removeGroupWorkspaceInvite"
-            method="removeInvite" 
-            class="edu.ur.ir.web.action.groupspace.InviteUsersToGroupWorkspace">
+        
+        <!-- remove user from group workspace -->
+        <action name="removeGroupWorkspaceUser"
+            method="removeUser" 
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
-            <result name="success">/pages/user/workspace/group_workspace/invite_users.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action> 
+        
+        <!-- remove invite from group workspace -->
+        <action name="removeGroupWorkspaceInvite"
+            method="removeInvite" 
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
+        </action> 
+        
+        <!--  View the group workspace folder properties -->
+        <action name="viewGroupWorkspaceFolderProperties"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_folder_properties.jsp</result>
+        </action>
+        
+        
+        <!--  ************************************ -->
+        <!--  Pages and action to upload files     -->
+        <!--  ************************************ -->
+        <action name="viewGroupWorkspaceUploadFilesPage" class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceFiles">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/upload_files.jsp</result>
+        </action>
+        
         
     
         
