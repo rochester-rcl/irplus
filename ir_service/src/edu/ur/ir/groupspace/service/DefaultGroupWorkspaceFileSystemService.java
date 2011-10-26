@@ -19,6 +19,7 @@ package edu.ur.ir.groupspace.service;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
@@ -530,6 +531,76 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		    securityService.createPermissionsForUserControlEntries(entries, permissions);
 		}
 		
+	}
+	
+	/**
+	 * Add the root folder to the group workspace.  This will set up all security permissions as needed
+	 * based on the group workspace settings
+	 * 
+	 * @param groupWorkspace - group workspace to add the folder to
+	 * @param folderName - name of the folder
+	 * @param description - folder description
+	 * @param user - user who is adding the folder
+	 * 
+	 * @return GroupWorkspaceFolder - folder created 
+	 * 
+	 * @throws DuplicateNameException - if the name already exists in the group workspace
+	 * @throws IllegalFileSystemNameException - if there are illegal characters in the file name
+	 */
+	public GroupWorkspaceFolder addRootFolder(GroupWorkspace groupWorkspace, 
+			String folderName, 
+			String description, 
+			IrUser user) throws DuplicateNameException, IllegalFileSystemNameException
+	{
+		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
+		GroupWorkspaceFolder folder = null;
+		// make sure user has permission
+		if( securityService.hasPermission(groupWorkspace, user, editPermission) >= 0 )
+		{
+			folder = groupWorkspace.createRootFolder(user, folderName);
+			folder.setDescription(description);
+			save(folder);
+			
+			// get the list of permissions for each user in the workspace
+			IrAcl acl = securityService.getAcl(groupWorkspace);
+			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
+			for(IrUserAccessControlEntry entry : userEntries)
+			{
+				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
+				IrUser entryUser = entry.getIrUser();
+				
+				// set of permissions to give each user for the folder
+				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+			    for(IrClassTypePermission permission : groupPermissions)
+			    {
+				    if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION))
+				    {
+				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+				    }
+				    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION))
+				    {
+				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
+				    }
+				    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION))
+				    {
+				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+				    }
+			    }
+			    
+			    if( fileSystemPermissions.size() > 0 )
+			    {
+			        securityService.createPermissions(folder, entryUser, fileSystemPermissions);
+			    }
+			    
+			}
+		}
+		else
+		{
+			throw new IllegalStateException("User does not have permission to add root folder");
+		}
+		
+		return folder;
 	}
 	
 	/**

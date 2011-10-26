@@ -24,9 +24,11 @@ import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.groupspace.GroupWorkspace;
@@ -51,29 +53,34 @@ import edu.ur.ir.web.util.FileUploadInfo;
  * @author Nathan Sarr
  *
  */
-public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware{
+public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware, Preparable{
 
-	/* eclipse generated id  */
-	private static final long serialVersionUID = -1222831812927650995L;
+	/** Eclipse generated id */
+	private static final long serialVersionUID = 8046524638321276009L;
 
-	/*  Logger for add personal folder action */
+	/**  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(AddGroupWorkspaceFiles.class);
 	
-	/* Personal Folder the user will be adding files to */
-	GroupWorkspaceFolder groupWorkspaceFolder;
+	/* Group Folder the user will be adding files to */
+	private GroupWorkspaceFolder groupWorkspaceFolder;
+
+	/* group workspace the user will be adding the files to */
+	private GroupWorkspace groupWorkspace;
+	
+
 
 	/* The id of the user to add files to  */
 	private Long userId;
 	
 	/* the users folder to add the files to */
-	private Long folderId = 0l;
+	private Long folderId;
 	
+	/* id of the group workspace */
+	private Long groupWorkspaceId;
+
 	/* Service for dealing with user information  */
 	private UserService userService;
 	
-	/*  Service for dealing with user file systems */
-	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
-
 	/* description of the file  */
 	private String[] userFileDescription;
 	
@@ -103,19 +110,15 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	
 	/* service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
+	
+	/* service to deal with group workspace file system */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 
-	/* Service to deal with group workspace information. */
+	/* service to deal with group workspaces */
 	private GroupWorkspaceService groupWorkspaceService;
-
- 
-	/* Group workspace being worked in */
-    private GroupWorkspace groupWorkspace;
-    
-  
-	/* id of the group workspace */
-    private Long groupWorkspaceId;
-    
- 
+	
+	/* service to send emails when an error occurs */
+	private ErrorEmailService errorEmailService;
 
 	/**
 	 * Set the user id.
@@ -129,20 +132,10 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	public String execute()
 	{
 		IrUser user = userService.getUser(userId, false);
-		//only authoring roles can add personal files
+		//only authoring roles can add group workspace files
 		if( !user.hasRole(IrRole.AUTHOR_ROLE))
 		{
 			return("accessDenied");
-		}
-		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
-		
-		if( folderId != null )
-		{
-			groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(folderId, false);
-		}
-		else
-		{
-			folderId = 0l;
 		}
 		return SUCCESS;
 	}
@@ -159,15 +152,14 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 		log.debug("Upload files called");
 		IrUser user = userService.getUser(userId, false);
 		
-		
 		//only authoring roles can add personal files
 		if( !user.hasRole(IrRole.AUTHOR_ROLE))
 		{
 			return("accessDenied");
 		}
 		
-		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		
+		// THIS WILL NEED to change to see if the user has add file privileges
 		if( groupWorkspaceFolder != null && !groupWorkspaceFolder.getOwner().getId().equals(userId))
     	{
 			//destination does not belong to user
@@ -215,11 +207,12 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 				    else
 				    {
 					    log.debug( "Creating EMPTY file " + fileFileName[index]);
-					    if( groupWorkspaceFolder == null)
+					    // add to root level
+					    if( groupWorkspaceFolder == null && groupWorkspace != null)
 					    {
 					        try
 					        {
-					            gf = groupWorkspaceFileSystemService.addFile(repository,
+					            gf = groupWorkspaceFileSystemService.addFile(repository, 
 					            groupWorkspace,
 						        user, 
 						        fileFileName[index],
@@ -233,7 +226,7 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 					    	    illegalFileNames.add(fileUploadInfo);
 					        }
 					    }
-					    else
+					    else if(groupWorkspaceFolder != null)
 					    {
 					    	try
 					    	{
@@ -257,15 +250,18 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 				}
 			}
 			
-			for( GroupWorkspaceFile groupFile : addedFiles)
+			for( GroupWorkspaceFile workspaceFile : addedFiles)
 			{
-				userWorkspaceIndexProcessingRecordService.saveAll(groupFile, 
+				userWorkspaceIndexProcessingRecordService.saveAll(workspaceFile, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			}
+			
+			
 		}
 		
 		if( this.getAllFilesAdded() )
 		{
+			log.debug("returning SUCCESS");
 		    return SUCCESS;
 		}
 		else
@@ -278,10 +274,19 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 				    illegalFileNameCharacters = illegalFileNameCharacters + " " + ch;
 			    }
 			}
+			log.debug("returning INPUT");
 			return INPUT;
 		}
 	}
 	
+	/**
+	 * Get the group workspace folder.
+	 * 
+	 * @return group workspace folder
+	 */
+	public GroupWorkspaceFolder getGroupWorkspaceFolder() {
+		return groupWorkspaceFolder;
+	}
 
 	public String[] getUserFileDescription() {
 		return userFileDescription;
@@ -314,6 +319,21 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	public void setFolderId(Long folderId) {
 		this.folderId = folderId;
 	}
+
+	public void prepare() throws Exception {
+		log.debug("prepare called folder id = " + folderId + " group workspace id = " + groupWorkspaceId);
+		if( folderId != null && folderId > 0 )
+		{
+		    groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(folderId, false);
+		    groupWorkspace = groupWorkspaceFolder.getGroupWorkspace();
+		}
+		else if( groupWorkspaceId != null )
+		{
+			groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+		}
+		
+	}
+
 	
 	public String[] getFileFileName() {
 		return fileFileName;
@@ -336,18 +356,18 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 			String description) throws DuplicateNameException, IllegalFileSystemNameException
 	{
 		GroupWorkspaceFile gf = null;
-		if( groupWorkspaceFolder != null)
+		if(groupWorkspaceFolder != null)
 		{
 		    gf = groupWorkspaceFileSystemService.addFile(repository, 
-		    	groupWorkspaceFolder,
-		    	user,
+		        groupWorkspaceFolder,
+		        user,
 			    file, 
 			    fileName,
 			    description);
 		}
 		else
 		{
-			gf = groupWorkspaceFileSystemService.addFile(repository,
+			gf = groupWorkspaceFileSystemService.addFile(repository, 
 				groupWorkspace,
 				user,
 				file, 
@@ -437,25 +457,16 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
-
+	
 	/**
-	 * Get the group workspace id.
+	 * Set the error email service.
 	 * 
-	 * @return
+	 * @param errorEmailService
 	 */
-	public Long getGroupWorkspaceId() {
-		return groupWorkspaceId;
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
-
-	/**
-	 * Set the group workspace id.
-	 * 
-	 * @param groupWorkspaceId
-	 */
-	public void setGroupWorkspaceId(Long groupWorkspaceId) {
-		this.groupWorkspaceId = groupWorkspaceId;
-	}
-
+	
 	/**
 	 * Set the group workspace file system service.
 	 * 
@@ -465,32 +476,40 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
 		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
 	}
-	
+
 	/**
-	 * Set the group workspace service.
+	 * Set the group workspace.
 	 * 
 	 * @param groupWorkspaceService
 	 */
 	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
-	    this.groupWorkspaceService = groupWorkspaceService;
+		this.groupWorkspaceService = groupWorkspaceService;
 	}
 	
+	/**
+	 * Id of the group workspace.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
+
+	/**
+	 * Set the id of the group workspace.
+	 * 
+	 * @param groupWorkspaceId
+	 */
+	public void setGroupWorkspaceId(Long groupWorkspaceId) {
+		this.groupWorkspaceId = groupWorkspaceId;
+	}
+
 	/**
 	 * Get the group workspace.
 	 * 
 	 * @return
 	 */
 	public GroupWorkspace getGroupWorkspace() {
-	    return groupWorkspace;
+		return groupWorkspace;
 	}
-	
-	/**
-	 * Get the group workspace folder
-	 * @return
-	 */
-	public GroupWorkspaceFolder getGroupWorkspaceFolder() {
-		return groupWorkspaceFolder;
-	}
-
-
 }

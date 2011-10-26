@@ -56,7 +56,6 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	<ur:js src="page-resources/js/user/user_edit_group_workspace.js"/>
- 	<ur:js src="page-resources/js/user/workspace_group.js"/>
  	<ur:js src="page-resources/js/user/invite_group_workspace_users.js"/>
 </head>
 

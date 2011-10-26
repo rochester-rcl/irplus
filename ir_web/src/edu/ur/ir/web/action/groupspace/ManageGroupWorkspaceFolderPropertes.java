@@ -1,4 +1,23 @@
+/**  
+   Copyright 2008 - 2011 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+
 package edu.ur.ir.web.action.groupspace;
+
+import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -6,7 +25,10 @@ import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.SecurityService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.group.ManageUserGroups;
 
 /**
  * Allows a user to view and edit group workspace folder properties.
@@ -32,21 +54,40 @@ implements  UserIdAware{
 	/* group workspace file system service */
 	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 
-
 	/* security information */
 	private SecurityService securityService;
 
-	IrAcl folderAcl;
+	/* access control list for the folder */
+	private IrAcl folderAcl;
+	
+	/* service to deal with user information */
+	private UserService userService;
 
+	/*  Logger for managing content types*/
+	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFolderPropertes.class);
 
 	public String execute()
 	{
+		IrUser user = userService.getUser(userId, false);
+		
 		if( groupWorkspaceFolderId != null )
 		{
 			groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(groupWorkspaceFolderId, false);
 		}
 		
 		folderAcl = securityService.getAcl(groupWorkspaceFolder);
+		
+		String readPermission = GroupWorkspaceFolder.FOLDER_READ_PERMISSION;
+		securityService.getPermissionForClass(groupWorkspaceFolder, readPermission);
+		
+		log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFolder, user, readPermission));
+		
+		if( user == null || 
+				securityService.hasPermission(groupWorkspaceFolder, user, readPermission) <= 0)
+		{
+			return "accessDenied";
+		}
+		
 		
 		if( groupWorkspaceFolder != null )
 		{
@@ -128,6 +169,15 @@ implements  UserIdAware{
 	public void setGroupWorkspaceFileSystemService(
 			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
 		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+	
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 }
