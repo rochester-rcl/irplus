@@ -227,7 +227,7 @@ YAHOO.ur.user.group_workspace = {
 		        else
 		        {
 		        	var id = document.newGroupWorkspaceForm.id.value;
-		        	window.location = getGroupWorkspaceAction+ '?id=' + id + '&bustcache=' + new Date().getTime();
+		        	window.location = getGroupWorkspaceAction+ '?groupWorkspaceId=' + id + '&bustcache=' + new Date().getTime();
 		        }
 		    }
 	        
@@ -363,7 +363,7 @@ YAHOO.ur.user.group_workspace = {
 	// delete the group space with the given id
 	deleteGroupWorkspace : function(id)
 	{
-		document.getElementById('deleteId').value=id;
+		document.getElementById('groupWorkspaceDeleteId').value=id;
 		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.showDialog();
 	},
 	

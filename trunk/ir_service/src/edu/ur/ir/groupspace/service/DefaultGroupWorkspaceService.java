@@ -299,6 +299,7 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		    }
 		    else if( workspaceRead )
 		    {
+		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
 		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFile.class.getName(), GroupWorkspaceFile.FILE_READ_PERMISSION));
 		    }
 		    

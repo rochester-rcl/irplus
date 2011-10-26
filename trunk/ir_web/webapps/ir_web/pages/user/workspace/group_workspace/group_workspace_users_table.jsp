@@ -52,7 +52,7 @@
                     ${workspaceUser.user.defaultEmail.email}
                 </urstb:td>
                 <urstb:td>
-                    <a href="">Edit</a> / <a href="javascript:YAHOO.ur.group_workspace_invite.removeUser(${workspaceUser.user.id});">Remove</a>
+                    <a href="">Edit Permissions</a> / <a href="javascript:YAHOO.ur.group_workspace_invite.removeUser(${workspaceUser.user.id});">Remove</a>
                 </urstb:td>                        
 
             </urstb:tr>

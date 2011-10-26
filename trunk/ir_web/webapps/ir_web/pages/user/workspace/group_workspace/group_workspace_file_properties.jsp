@@ -66,16 +66,14 @@
         <c:import url="/inc/header.jsp"/>
   
         <div id="bd">
-            Folder Properties <br/><br/>
+            File Properties <br/><br/>
             
-            <c:forEach var="entry" items="${folderAcl.userEntries}" >
+            <c:forEach var="entry" items="${fileAcl.userEntries}" >
                 User: ${entry.sid.firstName} &nbsp; ${entry.sid.lastName} <br/><br/>
                 Permissions: <br/>
                 <c:forEach var="permission" items="${entry.irClassTypePermissions}" >
                 ${permission.name} <br/>
                 </c:forEach>
-                <br/>
-                <br/>
             </c:forEach>
         </div>
         <!--  end body div -->

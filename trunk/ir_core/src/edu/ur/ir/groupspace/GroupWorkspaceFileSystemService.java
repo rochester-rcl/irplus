@@ -208,4 +208,23 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @param groupWorkspace - group workspace to remove all permissions from.
 	 */
 	public void removeUserPermissionsFromGroupFileSystem(IrUser user, GroupWorkspace groupWorkspace);
+	
+	/**
+	 * Add the root folder to the group workspace.  This will set up all security permissions as needed
+	 * based on the group workspace settings
+	 * 
+	 * @param groupWorkspace - group workspace to add the folder to
+	 * @param folderName - name of the folder
+	 * @param description - folder description
+	 * @param user - user who is adding the folder
+	 * 
+	 * @return GroupWorkspaceFolder - folder created 
+	 * 
+	 * @throws DuplicateNameException - if the name already exists in the group workspace
+	 * @throws IllegalFileSystemNameException - if there are illegal characters in the file name
+	 */
+	public GroupWorkspaceFolder addRootFolder(GroupWorkspace groupWorkspace, 
+			String folderName, 
+			String description, 
+			IrUser user) throws DuplicateNameException, IllegalFileSystemNameException;
 }

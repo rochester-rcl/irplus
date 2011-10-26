@@ -107,14 +107,7 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 		     {
 				 GroupWorkspaceFolder folder = null;
 				 try {
-					 
-					
-					folder = groupWorkspace.createRootFolder(thisUser, folderName);
-					folder.setDescription(folderDescription);
-					log.debug("adding root workspace folder " + folder);
-					groupWorkspaceFileSystemService.save(folder);
-					
-					
+					folder = groupWorkspaceFileSystemService.addRootFolder(groupWorkspace, folderName, folderDescription, thisUser);
 					userWorkspaceIndexProcessingRecordService.save(folder.getOwner().getId(), folder, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 					
