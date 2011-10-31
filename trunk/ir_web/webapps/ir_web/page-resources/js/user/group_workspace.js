@@ -227,7 +227,9 @@ YAHOO.ur.user.group_workspace = {
 		        else
 		        {
 		        	var id = document.newGroupWorkspaceForm.id.value;
-		        	window.location = getGroupWorkspaceAction+ '?groupWorkspaceId=' + id + '&bustcache=' + new Date().getTime();
+		        	YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.hide();
+		        	YAHOO.ur.user.group_workspace.clearGroupWorkspaceForm();
+		        	YAHOO.ur.user.group_workspace.getGroupWorkspaceById(id);
 		        }
 		    }
 	        
