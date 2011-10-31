@@ -141,6 +141,40 @@ YAHOO.ur.shared.file.inbox =
     },
     
     /**
+     * Delete the shared files
+     */
+    deleteSharedFiles : function()
+    {
+    
+        // success when getting the file properties
+        var handleSuccess = function(o) 
+        {
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		         
+	        	YAHOO.ur.shared.file.inbox.getSharedFiles();
+	        }	        
+        };
+   
+        // success when getting the file properties
+        var handleFailure = function(o) 
+        {
+	        alert('Get Shared inbox files failed:  ' + o.status + ' status text ' + o.statusText);
+        };
+   
+        // Wire up the success and failure handlers
+        var callback = { success: handleSuccess, failure: handleFailure };
+    
+        var deleteFolderAction = basePath + 'user/deleteInboxFile.action';
+	    YAHOO.util.Connect.setForm('mySharedInboxFiles');
+	    
+        YAHOO.util.Connect.asyncRequest('POST', deleteFolderAction, callback);
+        
+      
+    },
+    
+    /**
 	 * Dialog to confirm delete of files
 	 */
 	createInboxFileDeleteConfirmDialog : function() 
@@ -148,9 +182,8 @@ YAHOO.ur.shared.file.inbox =
         // Define various event handlers for Dialog
 	    var handleYes = function() 
 	    {
-	    	var deleteFolderAction = basePath + 'user/deleteInboxFile.action';
-		    inboxFilesTable.submitForm(deleteFolderAction);
 		    this.hide();
+		    YAHOO.ur.shared.file.inbox.deleteSharedFiles();
 	    };
 	    
 	    var handleNo = function() 
