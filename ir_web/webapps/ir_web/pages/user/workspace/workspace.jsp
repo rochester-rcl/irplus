@@ -514,7 +514,7 @@
 		    <form id="deleteGroupWorkspaceForm" name="deleteGroupWorkspace" method="post" 
 		                action="/user/deleteGroupWorkspace.action">
 			   <p>Are you sure you wish to delete the selected group workspace?</p>
-			   <input type="hidden" id="deleteId" name="id" value=""/>
+			   <input type="hidden" id="groupWorkspaceDeleteId" name="groupWorkspaceId" value=""/>
 		    </form>
 		</div>
      </div>

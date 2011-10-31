@@ -27,6 +27,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.FileVersion;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.security.SecurityService;
@@ -96,7 +97,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         
         //FIX this deal with permissions
         
-        if( securityService.hasPermission(workspaceFile, user, GroupWorkspaceFile.FILE_READ_PERMISSION) <= 0 )
+        if( securityService.hasPermission(workspaceFile, user, VersionedFile.VIEW_PERMISSION) <= 0 )
         {
         	return "accessDenied";
         }

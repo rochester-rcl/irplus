@@ -39,6 +39,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.PermissionNotGrantedException;
 
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -203,6 +204,10 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 						} catch (IllegalFileSystemNameException ifsne) {
 							illegalFileNames.add(fileUploadInfo);
 				    	}
+						catch(PermissionNotGrantedException pnge)
+						{
+							return("accessDenied");
+						}
 				    }
 				    else
 				    {
@@ -225,6 +230,10 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 					        } catch (IllegalFileSystemNameException ifsne) {
 					    	    illegalFileNames.add(fileUploadInfo);
 					        }
+					        catch(PermissionNotGrantedException pnge)
+							{
+								return("accessDenied");
+							}
 					    }
 					    else if(groupWorkspaceFolder != null)
 					    {
@@ -245,6 +254,10 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 					    	} catch (IllegalFileSystemNameException ifsne) {
 					    		illegalFileNames.add(fileUploadInfo);
 					    	}
+					    	catch(PermissionNotGrantedException pnge)
+							{
+								return("accessDenied");
+							}
 					    }
 				    }
 				}
@@ -353,7 +366,7 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 			File file, 
 			IrUser user, 
 			String fileName, 
-			String description) throws DuplicateNameException, IllegalFileSystemNameException
+			String description) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException
 	{
 		GroupWorkspaceFile gf = null;
 		if(groupWorkspaceFolder != null)

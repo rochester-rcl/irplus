@@ -91,6 +91,7 @@
 	            action="${fileUpload}" onsubmit="javascript:YAHOO.ur.file.upload.waitDialog.showDialog();">
 	                 <input type="hidden" id="file_upload_table_id" value="1"/>
 	                 <input type="hidden" name="folderId" value="${folderId}"/>
+	                 <input type="hidden" value="${groupWorkspace.id}" name="groupWorkspaceId"/>
 	          
 	          
 	          <div class="upload_buttons">

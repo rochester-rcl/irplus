@@ -8,6 +8,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -109,13 +110,15 @@ public interface GroupWorkspaceFileSystemService extends Serializable
      * @param description - description of the file.
      * 
      * @return the created group workspace file
+     * 
+     * @throws PermissionNotGrantedException - if the user does not have permission to add the file
      */
 	public GroupWorkspaceFile addFile(Repository repository, 
 			                          GroupWorkspace workspace, 
 			                          IrUser user, 
 			                          File f,
 			                          String name,
-			                          String description) throws DuplicateNameException, IllegalFileSystemNameException;
+			                          String description) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
 	
     /**
      * Create a group workspace versioned file in the system with an empty file for the
@@ -128,12 +131,13 @@ public interface GroupWorkspaceFileSystemService extends Serializable
      * @param description - description of the file.
      * 
      * @return the created workspace file
+     * @throws PermissionNotGrantedException - if the user does not have permission to add the file
      */
     public GroupWorkspaceFile addFile(Repository repository, 
             GroupWorkspace workspace, 
     		IrUser user, 
     		String fileName, 
-    		String description )throws DuplicateNameException, IllegalFileSystemNameException;
+    		String description )throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
     
     /**
      * Create a group workspace versioned file in the system with the specified file for the
@@ -147,13 +151,14 @@ public interface GroupWorkspaceFileSystemService extends Serializable
      * @param description - description of the file.
      * 
      * @return the created personal file
+     * @throws PermissionNotGrantedException  - user does not have permission to add files to the folder
      */
     public GroupWorkspaceFile addFile(Repository repository, 
     		GroupWorkspaceFolder folder, 	
             IrUser user,
     		File f, 
     		String fileName, 
-    		String description ) throws DuplicateNameException, IllegalFileSystemNameException;
+    		String description ) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
     
     
     /**
@@ -167,12 +172,13 @@ public interface GroupWorkspaceFileSystemService extends Serializable
      * @param description - description of the file.
      * 
      * @return the created group workspace file
+     * @throws PermissionNotGrantedException - user does not have permission to add files to the folder
      */
     public GroupWorkspaceFile addFile(Repository repository, 
     		GroupWorkspaceFolder folder, 
     		IrUser user,
     		String fileName, 
-    		String description )throws DuplicateNameException, IllegalFileSystemNameException;
+    		String description )throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
 	
     /**
      * Delete the group workspace folder. 
@@ -222,9 +228,26 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * 
 	 * @throws DuplicateNameException - if the name already exists in the group workspace
 	 * @throws IllegalFileSystemNameException - if there are illegal characters in the file name
+	 * @throws PermissionNotGrantedException - if the user does not have permission to add a folder to the group workspace
 	 */
-	public GroupWorkspaceFolder addRootFolder(GroupWorkspace groupWorkspace, 
+	public GroupWorkspaceFolder addFolder(GroupWorkspace groupWorkspace, 
 			String folderName, 
 			String description, 
-			IrUser user) throws DuplicateNameException, IllegalFileSystemNameException;
+			IrUser user) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
+
+	/**
+	 * Create a folder in the given parent folder.  This will set up all security permissions as needed
+	 * based on the group workspace settings.
+	 * 
+	 * @param parentFolder - parent folder to add the folder to
+	 * @param name - name to give the folder 
+	 * @param description
+	 * @param user
+	 * 
+	 * @throws IllegalFileSystemNameException  - name contains illegal characters
+	 * @throws DuplicateNameException  - name already exists in the folder
+	 * @throws PermissionNotGrantedException  - user does not have permission to edit the parent folder
+	 */
+	public GroupWorkspaceFolder addFolder(GroupWorkspaceFolder parentFolder, String name, String description, IrUser user) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
+
 }

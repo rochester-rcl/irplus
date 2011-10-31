@@ -37,9 +37,11 @@
 <div id="group_folder_error_div">       
     <!--  get the error messages from fieldErrors -->
     <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-       key="groupFolderAlreadyExists"/></p>
+       key="personalFolderAlreadyExists"/></p>
     <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
         key="illegalGroupFolderName"/></p> 
+     <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+        key="permissionDenied"/></p>
 </div>
           
  <table class="formTable">

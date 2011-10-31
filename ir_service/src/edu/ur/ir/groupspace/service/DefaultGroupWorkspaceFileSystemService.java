@@ -38,6 +38,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.IrUserAccessControlEntry;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 
@@ -128,6 +129,8 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		}
 	}
 	
+	
+	
 	/**
 	 * Get all the folders for a group workspace
 	 * @param workspaceId - id of the group workspace.
@@ -213,44 +216,54 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      * @return the created group workspace file
      * @throws DuplicateNameException 
      * @throws IllegalFileSystemNameException 
+ * @throws PermissionNotGrantedException 
      */
 	public GroupWorkspaceFile addFile(Repository repository,
 			GroupWorkspace workspace, 
 			IrUser user,
 			File f, 
 			String name, 
-			String description) throws DuplicateNameException, IllegalFileSystemNameException {
+			String description) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException {
 		if( name == null || name.trim().equals("") )
 		{
 			throw new IllegalStateException("File name is null");
 		}
-		
-		GroupWorkspaceFile workspaceFile = workspace.getRootFile(name);
-		
-		if(  workspaceFile != null )
+		GroupWorkspaceFile workspaceFile = null;
+		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
+		if( securityService.hasPermission(workspace, user, editPermission) > 0 )
 		{
-			throw new DuplicateNameException("File with the name " + 
-					name + " already exists ", name);
-		}
 		
-		VersionedFile versionedFile = 
-	    	repositoryService.createVersionedFile(user, repository, 
-	    			f, name, description);
+		    workspaceFile = workspace.getRootFile(name);
 		
-		try
-		{
+		    if(  workspaceFile != null )
+		    {
+			    throw new DuplicateNameException("File with the name " + 
+					    name + " already exists ", name);
+		    }
+		
+		    VersionedFile versionedFile = 
+	    	    repositoryService.createVersionedFile(user, repository, 
+	    			    f, name, description);
+		
+		    try
+		    {
 		   
-	       workspaceFile = workspace.createRootFile(versionedFile);
-		}
-		catch(DuplicateNameException dne)
-		{
-			repositoryService.deleteVersionedFile(versionedFile);
-			throw dne;
-		}
-	    groupWorkspaceFileDAO.makePersistent(workspaceFile);
+	            workspaceFile = workspace.createRootFile(versionedFile);
+		    }
+		    catch(DuplicateNameException dne)
+		    {
+			    repositoryService.deleteVersionedFile(versionedFile);
+			    throw dne;
+		    }
+	        groupWorkspaceFileDAO.makePersistent(workspaceFile);
 	    
-	    securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
-        		user);
+	        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
+        		    user);
+		}
+		else
+		{
+			throw new PermissionNotGrantedException("User does not have permissions to add the file");
+		}
 	    
 	    return workspaceFile;
 	}
@@ -275,39 +288,49 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      * @param description - description of the file.
      * 
      * @return the created workspace file
+ * @throws PermissionNotGrantedException 
      */
     public GroupWorkspaceFile addFile(Repository repository, 
             GroupWorkspace workspace, 
     		IrUser user, 
     		String fileName, 
-    		String description )throws DuplicateNameException, IllegalFileSystemNameException
+    		String description )throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException
     {
-		if( fileName == null || fileName.trim().equals("") )
+    	GroupWorkspaceFile workspaceFile = null;
+		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
+		if( securityService.hasPermission(workspace, user, editPermission) > 0 )
 		{
-			throw new IllegalStateException("File name is null");
-		}
+		    if( fileName == null || fileName.trim().equals("") )
+		    {
+			    throw new IllegalStateException("File name is null");
+		    }
 		
-		GroupWorkspaceFile workspaceFile = workspace.getRootFile(fileName);
+		    workspaceFile = workspace.getRootFile(fileName);
 		
-		if(  workspaceFile != null )
-		{
-			throw new DuplicateNameException("File with the name " + 
+		    if(  workspaceFile != null )
+		    {
+			    throw new DuplicateNameException("File with the name " + 
 					fileName + " already exists ", fileName);
-		}
-		VersionedFile versionedFile = 
-	    	repositoryService.createVersionedFile(user, repository, 
+		    }
+		    VersionedFile versionedFile = 
+	    	    repositoryService.createVersionedFile(user, repository, 
 	    			fileName, description);
-		try
-		{
-	        workspaceFile = workspace.createRootFile(versionedFile);
-		}
-		catch(DuplicateNameException dne)
-		{
-				repositoryService.deleteVersionedFile(versionedFile);
+		    try
+		    {
+	            workspaceFile = workspace.createRootFile(versionedFile);
+		    }
+		    catch(DuplicateNameException dne)
+		    {
+		  		repositoryService.deleteVersionedFile(versionedFile);
 				throw dne;
+		    }
+	        groupWorkspaceFileDAO.makePersistent(workspaceFile);
+	        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), user);
 		}
-	    groupWorkspaceFileDAO.makePersistent(workspaceFile);
-	    securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), user);
+		else
+		{
+			throw new PermissionNotGrantedException("User does not have permissions to add the file");
+		}
 		
 	    return workspaceFile;	
     }
@@ -324,44 +347,59 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      * @param description - description of the file.
      * 
      * @return the created personal file
+     * @throws PermissionNotGrantedException 
      */
     public GroupWorkspaceFile addFile(Repository repository, 
     		GroupWorkspaceFolder folder, 	
             IrUser user,
     		File f, 
     		String fileName, 
-    		String description ) throws DuplicateNameException, IllegalFileSystemNameException
+    		String description ) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException
     {
-		if( fileName == null || fileName.trim().equals("") )
+    	GroupWorkspaceFile workspaceFile = null;
+		String addPermission = GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION;
+		String editPermission = GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION;
+		if( securityService.hasPermission(folder, user, addPermission) > 0 ||
+				securityService.hasPermission(folder, user, editPermission) > 0	)
 		{
-			throw new IllegalStateException("file name is null");
-		}
+		    if( fileName == null || fileName.trim().equals("") )
+		    {
+			    throw new IllegalStateException("file name is null");
+		    }
 		
-		GroupWorkspaceFile workspaceFile = folder.getFile(fileName);
-		if(  workspaceFile != null )
-		{
-			throw new DuplicateNameException("File with the name " + 
+		    workspaceFile = folder.getFile(fileName);
+		    if(  workspaceFile != null )
+		    {
+			    throw new DuplicateNameException("File with the name " + 
 					fileName + " already exists ", fileName);
-		}
+		    }
 		
-        VersionedFile versionedFile = 
-           repositoryService.createVersionedFile(user, 
+            VersionedFile versionedFile = 
+               repositoryService.createVersionedFile(user, 
         		        repository, 
             			f, 
             			fileName, 
             			description);
        
-        try {
-			workspaceFile = folder.addVersionedFile(versionedFile);
-		} catch (DuplicateNameException e) {
-			repositoryService.deleteVersionedFile(versionedFile);
-			throw e;
-		}
+           try 
+           {
+			    workspaceFile = folder.addVersionedFile(versionedFile);
+		   }
+           catch (DuplicateNameException e)
+           {
+			    repositoryService.deleteVersionedFile(versionedFile);
+			    throw e;
+		   }
         
-		save(folder);
+		    save(folder);
        
-        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
+            securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
         		user);
+		}
+		else
+		{
+			throw new PermissionNotGrantedException("User does not have permissions to add the file");
+		}
         
 		return workspaceFile;
     }
@@ -378,44 +416,55 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      * @param description - description of the file.
      * 
      * @return the created group workspace file
+     * @throws PermissionNotGrantedException 
      */
     public GroupWorkspaceFile addFile(Repository repository, 
     		GroupWorkspaceFolder folder, 
     		IrUser user,
     		String fileName, 
-    		String description )throws DuplicateNameException, IllegalFileSystemNameException
+    		String description )throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException
     {
-		if( fileName == null ||fileName.trim().equals("") )
+    	GroupWorkspaceFile workspaceFile = null;
+		String addPermission = GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION;
+		String editPermission = GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION;
+		if( securityService.hasPermission(folder, user, addPermission) > 0 ||
+				securityService.hasPermission(folder, user, editPermission) > 0	)
 		{
-			throw new IllegalStateException("file name is null");
-		}
+		    if( fileName == null ||fileName.trim().equals("") )
+		    {
+			    throw new IllegalStateException("file name is null");
+		    }
 		
-		GroupWorkspaceFile workspaceFile = folder.getFile(fileName);
+		    workspaceFile = folder.getFile(fileName);
 		
-		if(  workspaceFile != null )
-		{
-			throw new DuplicateNameException("File with the name " + 
+		    if(  workspaceFile != null )
+		    {
+			    throw new DuplicateNameException("File with the name " + 
 					fileName + " already exists ", fileName);
-		}
+		    }
 		
-        VersionedFile versionedFile = 
+            VersionedFile versionedFile = 
             	repositoryService.createVersionedFile(user, 
             			repository, 
             			fileName, 
             			description);
         
-        // this is still needed 
-        try {
+            // this is still needed 
+            try {
 				workspaceFile = folder.addVersionedFile(versionedFile);
-		} catch (DuplicateNameException e) {
+		    } catch (DuplicateNameException e) {
 				repositoryService.deleteVersionedFile(versionedFile);
 				throw e;
-		}
-        save(folder);
+		    }
+            save(folder);
      
-        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
-        		user);
-        
+            securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
+        		    user);
+		}
+		else
+		{
+			throw new PermissionNotGrantedException("User does not have permissions to add the file");
+		}
         return workspaceFile;	
     }
     
@@ -428,11 +477,19 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      */
 	public void delete(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason) {
 		List<GroupWorkspaceFile> files = groupWorkspaceFolderDAO.getAllFilesForFolder(folder);
+		List<GroupWorkspaceFolder> folders = groupWorkspaceFolderDAO.getAllFoldersForFolder(folder);
 
 		// delete all the files within folder and sub folders
 		for( GroupWorkspaceFile aFile :files)
 		{
 		    delete(aFile, deletingUser, deleteReason);
+		}
+		
+		//delete all acls for the child folders
+		for( GroupWorkspaceFolder childFolder : folders)
+		{
+			IrAcl acl = securityService.getAcl(childFolder);
+			securityService.deleteAcl(acl);
 		}
 		
 		if( folder.getIsRoot())
@@ -446,6 +503,11 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 			parent.removeChild(folder);
 		}
 
+		IrAcl fileAcl = securityService.getAcl(folder);
+		if( fileAcl != null )
+		{
+			securityService.deleteAcl(fileAcl);
+		}
 		groupWorkspaceFolderDAO.makeTransient(folder);
 
 	}
@@ -500,10 +562,10 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		// get all acls for files and folders within group workspace
 		for(GroupWorkspaceFile f : files )
 		{
-			IrAcl acl = securityService.getAcl(f);
+			IrAcl acl = securityService.getAcl(f.getVersionedFile());
 			if( acl == null )
 			{
-				acl = securityService.createAclForObject(f);
+				acl = securityService.createAclForObject(f.getVersionedFile());
 			}
 			acls.add(acl);
 		}
@@ -546,16 +608,17 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	 * 
 	 * @throws DuplicateNameException - if the name already exists in the group workspace
 	 * @throws IllegalFileSystemNameException - if there are illegal characters in the file name
+	 * @throws PermissionNotGrantedException - if the user does not have permission to edit the group workspace
 	 */
-	public GroupWorkspaceFolder addRootFolder(GroupWorkspace groupWorkspace, 
+	public GroupWorkspaceFolder addFolder(GroupWorkspace groupWorkspace, 
 			String folderName, 
 			String description, 
-			IrUser user) throws DuplicateNameException, IllegalFileSystemNameException
+			IrUser user) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException
 	{
 		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
 		GroupWorkspaceFolder folder = null;
 		// make sure user has permission
-		if( securityService.hasPermission(groupWorkspace, user, editPermission) >= 0 )
+		if( securityService.hasPermission(groupWorkspace, user, editPermission) > 0 )
 		{
 			folder = groupWorkspace.createRootFolder(user, folderName);
 			folder.setDescription(description);
@@ -597,7 +660,73 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		}
 		else
 		{
-			throw new IllegalStateException("User does not have permission to add root folder");
+			throw new PermissionNotGrantedException(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		}
+		
+		return folder;
+	}
+	
+	/**
+	 * Create a folder in the given parent folder.  This will set up all security permissions as needed
+	 * based on the group workspace settings.
+	 * 
+	 * @param parentFolder - parent folder to add the folder to
+	 * @param name - name to give the folder 
+	 * @param description
+	 * @param user
+	 * 
+	 * @throws IllegalFileSystemNameException  - name contains illegal characters
+	 * @throws DuplicateNameException  - name already exists in the folder
+	 * @throws PermissionNotGrantedException  - user does not have permission to edit the parent folder
+	 */
+	public GroupWorkspaceFolder addFolder(GroupWorkspaceFolder parentFolder, String name, String description, IrUser user) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException
+	{
+		String editPermission = GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION;
+		GroupWorkspaceFolder folder = null;
+		// make sure user has permission
+		if( securityService.hasPermission(parentFolder, user, editPermission) > 0 )
+		{
+			folder = parentFolder.createChild(name, user);
+			folder.setDescription(description);
+			save(folder);
+			
+			// get the list of permissions for each user in the parent folder
+			IrAcl acl = securityService.getAcl(parentFolder);
+			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
+			for(IrUserAccessControlEntry entry : userEntries)
+			{
+				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
+				IrUser entryUser = entry.getIrUser();
+				
+				// set of permissions to give each user for the folder
+				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+			    for(IrClassTypePermission permission : groupPermissions)
+			    {
+				    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
+				    {
+				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+				    }
+				    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION))
+				    {
+				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
+				    }
+				    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION))
+				    {
+				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+				    }
+			    }
+			    
+			    if( fileSystemPermissions.size() > 0 )
+			    {
+			        securityService.createPermissions(folder, entryUser, fileSystemPermissions);
+			    }
+			    
+			}
+		}
+		else
+		{
+			throw new PermissionNotGrantedException(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
 		}
 		
 		return folder;
