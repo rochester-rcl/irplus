@@ -245,9 +245,7 @@ ALTER TABLE ir_repository.deleted_institutional_item
 -- ---------------------------------------------
 -- Security class types for permissions
 -- ---------------------------------------------
-insert into ir_security.class_type(class_type_id, name , description , version) 
-values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspaceFile', 
-'Group Workspace File',1);
+
   
 insert into ir_security.class_type(class_type_id, name , description , version) 
 values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspaceFolder', 
@@ -258,26 +256,7 @@ values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorksp
 'Group Workspace',1);
 
 
--- ---------------------------------------------
--- New permission types for workspace files
--- ---------------------------------------------
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_READ','The user can read the file',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFile';
 
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_EDIT','The user can read and add new versions of the file',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFile';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_MANAGE','The user can delete, read and add new versions of the file',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFile';
 -- ---------------------------------------------
 -- New permission types for workspace folders
 -- ---------------------------------------------

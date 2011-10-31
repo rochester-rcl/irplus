@@ -29,6 +29,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
 import edu.ur.ir.user.UserService;
@@ -91,7 +92,7 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 	/**
 	 * Create the new folder
 	 */
-	public String add() throws Exception
+	public String add() 
 	{
 		log.debug("creating a group folder parent folderId = " + parentFolderId);
 		IrUser thisUser = userService.getUser(userId, true);
@@ -107,12 +108,17 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 		     {
 				 GroupWorkspaceFolder folder = null;
 				 try {
-					folder = groupWorkspaceFileSystemService.addRootFolder(groupWorkspace, folderName, folderDescription, thisUser);
+					folder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, folderName, folderDescription, thisUser);
 					userWorkspaceIndexProcessingRecordService.save(folder.getOwner().getId(), folder, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 					
 			        folderAdded = true;
-				 } catch (DuplicateNameException e) {
+				 }
+				 catch(PermissionNotGrantedException pnge )
+				 {
+					 addFieldError("permissionDenied", "You do not have permission to add a folder to this group");
+				 }
+				 catch (DuplicateNameException e) {
 					folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
 					addFieldError("personalFolderAlreadyExists", folderMessage);
 				 }

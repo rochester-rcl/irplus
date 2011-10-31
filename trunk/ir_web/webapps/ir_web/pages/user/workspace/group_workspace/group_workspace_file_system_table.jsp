@@ -225,6 +225,12 @@
 		                        </c:url>
                                  <a href="${groupWorkspaceFolderPropertiesUrl}">Properties</a>
                              </c:if>
+                              <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+                              <c:url var="groupWorkspaceFilePropertiesUrl" value="/user/viewGroupWorkspaceFileProperties.action">
+		                            <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
+		                        </c:url>
+                                 <a href="${groupWorkspaceFilePropertiesUrl}">Properties</a>
+                             </c:if>
                         </urstb:td>
                             
                         <urstb:td>

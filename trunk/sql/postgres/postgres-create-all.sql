@@ -3026,51 +3026,6 @@ versions as well as share/unshare the file with other users and give those users
 
  
 -- ---------------------------------------------
---  permission types for group workspace
--- ---------------------------------------------
-
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_EDIT','The user(s) can read, add and delete any files and folders from the 
-specified group',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspace';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_ADD_FILE','The user(s) can read all files and add files to group folders  
-and only delete files they own',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspace';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_READ','The user(s) can view all files and folders within the group',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspace';
-
--- ---------------------------------------------
--- New permission types for workspace files
--- ---------------------------------------------
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_READ','The user can read the file',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFile';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_EDIT','The user can read and add new versions of the file',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFile';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FILE_MANAGE','The user can delete, read and add new versions of the file',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFile';
--- ---------------------------------------------
 -- New permission types for workspace folders
 -- ---------------------------------------------
 
@@ -3091,6 +3046,29 @@ nextval('ir_security.class_type_permission_seq'),
   ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_READ','The user can view the folder and read all of the files and folders within the folder',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspaceFolder';
+
+-- ---------------------------------------------
+-- New permission types for workspace
+-- ---------------------------------------------
+
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_EDIT','The user(s) can read, add and delete any files and folders from the specified group',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_ADD_FILE','The user(s) can read all files in the group, add files to the group and only delete files they own',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_READ','The user(s) can read and open all files and folders within the group',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
 
 -- ------------------------------------
 -- institutional colleciton permissions

@@ -150,7 +150,7 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 	
 	
 	/**
-	 * This returns all personal files for the specified parent folder.  This
+	 * This returns all group workspace files for the specified parent folder.  This
 	 * includes all files in sub folders.
 	 * 
 	 * @param groupFolder - group workspace folder to find all files in (including sub folders)
@@ -164,6 +164,23 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 		q.setParameter("rightValue", groupFolder.getRightValue());
 		q.setParameter("rootId", groupFolder.getTreeRoot().getId());
 		return (List<GroupWorkspaceFile>) q.list();
+	}
+	
+	/**
+	 * This returns all group workspace folders for the specified parent folder.  This
+	 * includes all folders in sub folders.
+	 * 
+	 * @param groupFolder - group workspace folder to find all folders in (including sub folders)
+	 * @return all group folders found.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getAllFoldersForFolder(GroupWorkspaceFolder groupFolder) {
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllGroupWorkspaceFoldersForFolder");
+		q.setParameter("leftValue", groupFolder.getLeftValue());
+		q.setParameter("rightValue", groupFolder.getRightValue());
+		q.setParameter("rootId", groupFolder.getTreeRoot().getId());
+		return (List<GroupWorkspaceFolder>) q.list();
 	}
 
 }

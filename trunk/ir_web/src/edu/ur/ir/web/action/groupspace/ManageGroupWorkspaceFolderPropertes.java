@@ -28,7 +28,6 @@ import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.action.group.ManageUserGroups;
 
 /**
  * Allows a user to view and edit group workspace folder properties.

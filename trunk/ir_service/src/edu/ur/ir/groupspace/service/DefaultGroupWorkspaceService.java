@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
@@ -33,6 +34,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
+import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
@@ -92,11 +94,26 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
      * 
      * @param groupSpace
      */
-    public void delete(GroupWorkspace groupSpace, IrUser user)
+    public void delete(GroupWorkspace groupWorkspace, IrUser user)
     {
     	// delete all files within the group workspace
-        deleteRootFiles(groupSpace, user);
-    	groupWorkspaceDAO.makeTransient(groupSpace);
+        deleteRootFiles(groupWorkspace, user);
+        
+        List<GroupWorkspaceFolder> rootFolders = groupWorkspaceFileSystemService.getFolders(groupWorkspace.getId(), null);
+       
+        // delete all of the access controls for the folders.
+        for(GroupWorkspaceFolder folder : rootFolders)
+        {
+        	groupWorkspaceFileSystemService.delete(folder, user, "delete group workspace");
+        }
+        
+        IrAcl groupWorkspaceAcl = securityService.getAcl(groupWorkspace);
+        if( groupWorkspaceAcl != null )
+        {
+        	securityService.deleteAcl(groupWorkspaceAcl);
+        }
+       
+    	groupWorkspaceDAO.makeTransient(groupWorkspace);
     }
     
     /**
@@ -272,7 +289,7 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		
 		if( setAsOwner)
 		{
-			fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFile.class.getName()));
+			fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
 			fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
 		}
 		else
@@ -294,13 +311,13 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		    
 		    if( workspaceEdit )
 		    {
-		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFile.class.getName()));
+		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
 		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
 		    }
 		    else if( workspaceRead )
 		    {
 		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
-		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFile.class.getName(), GroupWorkspaceFile.FILE_READ_PERMISSION));
+		    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
 		    }
 		    
 		}
