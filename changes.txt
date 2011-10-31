@@ -39,6 +39,7 @@ IR+ changes 2.1 to 3.0
 - Updated to now properly use the default interceptor stack
 - Updated to correctly forward to action not found if user tries to enter an action that does not exist
 - Updated user admin to view all groups a user belongs to
+- Fixed issue realted to deleting a file in shared file inbox
 
 [ur_persistence_util]
 =============================
