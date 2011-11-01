@@ -76,6 +76,22 @@ YAHOO.ur.user.group_workspace = {
 	},	
 	
 	/**
+     *  Check all check boxes for files and folders
+     */
+    setCheckboxes : function()
+    {
+         checked = document.groupFolders.checkAllSetting.checked;
+     
+         // since the number of folders can be 0 or more
+         // first make sure there are folder id's
+         var folderIds = document.getElementsByName('groupFolderIds');
+         urUtil.setCheckboxes(folderIds, checked);
+     
+         var fileIds = document.getElementsByName('groupFileIds');
+         urUtil.setCheckboxes(fileIds, checked);
+    },
+	
+	/**
 	  * function to handle state changes for folders
 	  */
     groupWorkspaceFolderStateChangeHandler : function(folderId)
