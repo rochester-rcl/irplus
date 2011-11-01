@@ -97,7 +97,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         
         //FIX this deal with permissions
         
-        if( securityService.hasPermission(workspaceFile, user, VersionedFile.VIEW_PERMISSION) <= 0 )
+        if( securityService.hasPermission(workspaceFile.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) <= 0 )
         {
         	return "accessDenied";
         }
