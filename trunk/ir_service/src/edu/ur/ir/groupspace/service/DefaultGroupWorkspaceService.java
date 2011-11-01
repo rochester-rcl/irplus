@@ -295,17 +295,22 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		else
 		{
 			boolean workspaceEdit = false;
-			
 			boolean workspaceRead = false;
+			boolean workspaceAddFile = false;
+			
 		    for(IrClassTypePermission permission : permissions)
 		    {
-			    if( permission.getName().equals("GROUP_WORKSPACE_EDIT"))
+			    if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION))
 			    {
 				    workspaceEdit = true;
 			    }			   
-			    else if( permission.getName().equals("GROUP_WORKSPACE_READ"))
+			    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION) )
 			    {
-				     workspaceRead = true;
+				    workspaceRead = true;
+			    }
+			    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION) )
+			    {
+			        workspaceAddFile = true;	
 			    }
 		    }
 		    
@@ -314,6 +319,12 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
 		    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
 		    }
+		    else if ( workspaceAddFile )
+		    {
+		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
+		    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));	
+		    }
 		    else if( workspaceRead )
 		    {
 		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
@@ -321,6 +332,7 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		    }
 		    
 		}
+		
 		
 		groupWorkspaceFileSystemService.giveUsersPermissionsToGroupFileSystem(users, groupWorkspace, fileSystemPermissions);
 		return workspaceUser;

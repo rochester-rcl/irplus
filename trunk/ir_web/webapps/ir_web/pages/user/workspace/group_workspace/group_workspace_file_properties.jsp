@@ -74,6 +74,8 @@
                 <c:forEach var="permission" items="${entry.irClassTypePermissions}" >
                 ${permission.name} <br/>
                 </c:forEach>
+                <br/>
+                <br/>
             </c:forEach>
         </div>
         <!--  end body div -->
