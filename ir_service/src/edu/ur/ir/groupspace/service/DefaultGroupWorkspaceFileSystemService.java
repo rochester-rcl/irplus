@@ -21,6 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
@@ -68,6 +70,9 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		
 	// Service class for dealing with the (A)cess (C)ontrol (L)ists 
 	private SecurityService securityService;
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceFileSystemService.class);
 
 
 	/**

@@ -245,7 +245,7 @@
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             
+	                             ${fileSystemObject.versionedFile.owner.firstName}&nbsp;${fileSystemObject.versionedFile.owner.lastName}
 	                         </c:if>
                         </urstb:td>
                             
