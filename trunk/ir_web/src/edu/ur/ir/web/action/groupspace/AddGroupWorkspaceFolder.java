@@ -136,23 +136,18 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 		{
 		    // add sub folder	
 			GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.getFolder(parentFolderId, true);
-			
-			// user must be owner of folder
-			if( !folder.getOwner().getId().equals(thisUser.getId()))
-			{
-				return "accessDenied";
-			}
-			
 			try
 			{
-			    GroupWorkspaceFolder personalFolder = folder.createChild(folderName, thisUser);
-			    personalFolder.setDescription(folderDescription);
-			    groupWorkspaceFileSystemService.save(folder);
+			    GroupWorkspaceFolder personalFolder = groupWorkspaceFileSystemService.addFolder(folder, folderName, folderDescription, thisUser);
 			    
 			    userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			    
 			    folderAdded = true;
+			}
+			catch(PermissionNotGrantedException pnge )
+			{
+				 addFieldError("permissionDenied", "You do not have permission to add a folder to this group");
 			}
 			catch(DuplicateNameException e)
 			{

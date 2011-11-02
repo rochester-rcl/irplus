@@ -494,7 +494,10 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		for( GroupWorkspaceFolder childFolder : folders)
 		{
 			IrAcl acl = securityService.getAcl(childFolder);
-			securityService.deleteAcl(acl);
+			if( acl != null )
+			{
+			    securityService.deleteAcl(acl);
+			}
 		}
 		
 		if( folder.getIsRoot())
