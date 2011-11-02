@@ -17,6 +17,8 @@
 
 package edu.ur.ir.web.action.groupspace;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -24,6 +26,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
@@ -62,6 +65,11 @@ implements  UserIdAware{
 	
 	/* service to deal with user information */
 	private UserService userService;
+	
+	/* set of folders that are the path for the current folder */
+    private Collection <GroupWorkspaceFolder> folderPath;
+
+
 
 	/*  Logger */
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFileProperties.class);
@@ -73,24 +81,27 @@ implements  UserIdAware{
 		if( groupWorkspaceFileId != null )
 		{
 			groupWorkspaceFile = groupWorkspaceFileSystemService.getFile(groupWorkspaceFileId, false);
+			
 		}
-		
-		fileAcl = securityService.getAcl(groupWorkspaceFile.getVersionedFile());
-		
-		String readPermission = VersionedFile.VIEW_PERMISSION;
-		securityService.getPermissionForClass(groupWorkspaceFile.getVersionedFile(), readPermission);
-		
-		log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission));
-		
-		if( user == null || 
-				securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission) <= 0)
-		{
-			return "accessDenied";
-		}
-		
 		
 		if( groupWorkspaceFile != null )
 		{
+			fileAcl = securityService.getAcl(groupWorkspaceFile.getVersionedFile());
+			
+			String readPermission = VersionedFile.VIEW_PERMISSION;
+			securityService.getPermissionForClass(groupWorkspaceFile.getVersionedFile(), readPermission);
+			
+			log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission));
+			
+			if( user == null || 
+					securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission) <= 0)
+			{
+				return "accessDenied";
+			}
+			if( groupWorkspaceFile.getGroupWorkspaceFolder() != null )
+			{
+			    folderPath = groupWorkspaceFileSystemService.getFolderPath(groupWorkspaceFile.getGroupWorkspaceFolder());
+			}
 		    return SUCCESS;
 	    }
 		else
@@ -153,15 +164,6 @@ implements  UserIdAware{
 	}
 
 	/**
-	 * Set the group workspace folder.
-	 * 
-	 * @param groupWorkspaceFolder
-	 */
-	public void setGroupWorkspaceFile(GroupWorkspaceFile groupWorkspaceFile) {
-		this.groupWorkspaceFile = groupWorkspaceFile;
-	}
-
-	/**
 	 * Set the group workspace file system service.
 	 * 
 	 * @param groupWorkspaceFileSystemService
@@ -178,6 +180,15 @@ implements  UserIdAware{
 	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	/**
+	 * Get the folder path to the file.
+	 * 
+	 * @return
+	 */
+	public Collection<GroupWorkspaceFolder> getFolderPath() {
+		return folderPath;
 	}
 
 }

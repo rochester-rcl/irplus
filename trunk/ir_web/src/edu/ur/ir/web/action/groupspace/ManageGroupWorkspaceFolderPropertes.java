@@ -17,6 +17,8 @@
 
 package edu.ur.ir.web.action.groupspace;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -61,6 +63,10 @@ implements  UserIdAware{
 	
 	/* service to deal with user information */
 	private UserService userService;
+	
+	/* set of folders that are the path for the current folder */
+    private Collection <GroupWorkspaceFolder> folderPath;
+
 
 	/*  Logger for managing content types*/
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFolderPropertes.class);
@@ -74,22 +80,19 @@ implements  UserIdAware{
 			groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(groupWorkspaceFolderId, false);
 		}
 		
-		folderAcl = securityService.getAcl(groupWorkspaceFolder);
-		
-		String readPermission = GroupWorkspaceFolder.FOLDER_READ_PERMISSION;
-		securityService.getPermissionForClass(groupWorkspaceFolder, readPermission);
-		
-		log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFolder, user, readPermission));
-		
-		if( user == null || 
-				securityService.hasPermission(groupWorkspaceFolder, user, readPermission) <= 0)
-		{
-			return "accessDenied";
-		}
-		
-		
 		if( groupWorkspaceFolder != null )
 		{
+			String readPermission = GroupWorkspaceFolder.FOLDER_READ_PERMISSION;
+			securityService.getPermissionForClass(groupWorkspaceFolder, readPermission);
+			
+			log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFolder, user, readPermission));
+			if( user == null || 
+				securityService.hasPermission(groupWorkspaceFolder, user, readPermission) <= 0)
+			{
+				return "accessDenied";
+			}
+			folderAcl = securityService.getAcl(groupWorkspaceFolder);
+			folderPath = groupWorkspaceFileSystemService.getFolderPath(groupWorkspaceFolder);
 		    return SUCCESS;
 	    }
 		else
@@ -152,15 +155,6 @@ implements  UserIdAware{
 	}
 
 	/**
-	 * Set the group workspace folder.
-	 * 
-	 * @param groupWorkspaceFolder
-	 */
-	public void setGroupWorkspaceFolder(GroupWorkspaceFolder groupWorkspaceFolder) {
-		this.groupWorkspaceFolder = groupWorkspaceFolder;
-	}
-
-	/**
 	 * Set the group workspace file system service.
 	 * 
 	 * @param groupWorkspaceFileSystemService
@@ -177,6 +171,16 @@ implements  UserIdAware{
 	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+
+	/**
+	 * Get the folder path.
+	 * 
+	 * @return the folder path
+	 */
+	public Collection<GroupWorkspaceFolder> getFolderPath() {
+		return folderPath;
 	}
 
 }

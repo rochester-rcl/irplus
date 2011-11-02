@@ -73,9 +73,9 @@
             <c:param name="tabName" value="GROUP_WORKSPACE"/>
         </c:url>
         <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
-                <c:param name="tabName" value="GROUP_WORKSPACE"/>
-                <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
-            </c:url>
+            <c:param name="tabName" value="GROUP_WORKSPACE"/>
+            <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
+       </c:url>
         <h3><a href="${workspace}">Group Workspaces</a> &gt; <a href="${groupWorkspaceUrl}">${groupWorkspace.name}</a></h3>
   
         <div id="bd">
