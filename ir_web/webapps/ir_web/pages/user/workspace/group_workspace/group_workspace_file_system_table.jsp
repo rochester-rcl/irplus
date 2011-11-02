@@ -125,7 +125,7 @@
                 <urstb:tr>
                     <urstb:td><input type="checkbox" name="checkAllSetting" 
 	                    value="off" 
-	                    onClick="alert('clicked')"/>
+	                    onClick="YAHOO.ur.user.group_workspace.setCheckboxes()"/>
 	                </urstb:td>
                     <urstb:td>Type</urstb:td>
                     <urstb:td>Name</urstb:td>

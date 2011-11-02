@@ -65,7 +65,35 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
   
+        <c:url var="workspaceUrl" value="/user/workspace.action">
+            <c:param name="tabName" value="GROUP_WORKSPACE"/>
+        </c:url>
+        <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
+            <c:param name="tabName" value="GROUP_WORKSPACE"/>
+            <c:param name="groupWorkspaceId" value="${groupWorkspaceFolder.groupWorkspace.id}"/>
+        </c:url>
+  
         <div id="bd">
+            <strong>Path:&nbsp;/
+	            <span class="groupImg">&nbsp;</span>
+	            <a href="${workspaceUrl}">Group Workspaces</a> /
+	           
+	            <span class="groupImg">&nbsp;</span>
+                <a href="${groupWorkspaceUrl}">${groupWorkspaceFolder.groupWorkspace.name}</a>&nbsp;/
+              
+	    
+                 <c:forEach var="currentFolder" items="${folderPath}">
+                      <c:url var="folderUrl" value="/user/workspace.action">
+                          <c:param name="tabName" value="GROUP_WORKSPACE"/>
+                          <c:param name="groupWorkspaceId" value="${groupWorkspaceFolder.groupWorkspace.id}"/>
+                          <c:param name="groupWorkspaceFolderId" value="${currentFolder.id}"/>
+                      </c:url>
+                      <span class="folderBtnImg">&nbsp;</span>
+                           <a href="${folderUrl}">${currentFolder.name}</a>&nbsp;/
+                 </c:forEach>
+            </strong>
+            <br/><br/>
+           
             Folder Properties <br/><br/>
             
             <c:forEach var="entry" items="${folderAcl.userEntries}" >
