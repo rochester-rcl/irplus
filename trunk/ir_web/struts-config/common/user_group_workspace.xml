@@ -63,7 +63,7 @@
         
         <!-- upload a single file -->
         <action name="groupWorkspaceSingleFileUpload" method="uploadFiles" 
-            class="edu.ur.ir.web.action.groupspace.AddWorkspaceFiles">
+            class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceFiles">
             <interceptor-ref name="urUploadStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_single_file_upload_frag.jsp</result>
@@ -71,7 +71,7 @@
         </action>
         
          <action name="uploadGroupWorkspaceFiles" method="uploadFiles"
-               class="edu.ur.ir.web.action.groupspace.AddWorkspaceFiles">
+               class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceFiles">
             <interceptor-ref name="urUploadStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
              <result type="redirectAction" name="success">
@@ -130,6 +130,15 @@
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_folder_properties.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action>
+        
+        <!--  View the group workspace folder properties -->
+        <action name="viewGroupWorkspaceFileProperties"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFileProperties">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_properties.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
         </action>
         
         
