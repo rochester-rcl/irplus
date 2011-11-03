@@ -227,15 +227,13 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
 		
 		log.debug("workspace user = " + workspaceUser);
-		if( !user.hasRole(IrRole.ADMIN_ROLE) )
-		{
-		    if( workspaceUser == null || !workspaceUser.isOwner() )	
-		    {
-		    	return "accessDenied";
-		    }
-		}
+		
 	    
-	    groupWorkspaceService.delete(groupWorkspace, user);
+	    try {
+			groupWorkspaceService.delete(groupWorkspace, user);
+		} catch (PermissionNotGrantedException e) {
+			return "accessDenied";
+		}
 	    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 
 		return "deleted";

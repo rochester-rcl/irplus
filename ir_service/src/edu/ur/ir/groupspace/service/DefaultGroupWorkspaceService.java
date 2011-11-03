@@ -36,8 +36,11 @@ import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.RoleService;
 import edu.ur.order.OrderType;
 
 /**
@@ -65,6 +68,7 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 
 	/*  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceService.class);
+	
 
 	/**
 	 * Save the group space to the system.
@@ -93,9 +97,19 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
      * Delete the group space from the system.
      * 
      * @param groupSpace
+     * @throws PermissionNotGrantedException 
      */
-    public void delete(GroupWorkspace groupWorkspace, IrUser user)
+    public void delete(GroupWorkspace groupWorkspace, IrUser user) throws PermissionNotGrantedException
     {
+    	GroupWorkspaceUser groupWorkspaceUser = groupWorkspace.getUser(user);
+    	if( !user.hasRole(IrRole.ADMIN_ROLE) )
+    	{
+    		if( groupWorkspaceUser == null || !groupWorkspaceUser.isOwner())
+    		{
+    			throw new PermissionNotGrantedException("User does not have permission to delete workspace");
+    		}
+    	}
+    	
     	// delete all files within the group workspace
         deleteRootFiles(groupWorkspace, user);
         

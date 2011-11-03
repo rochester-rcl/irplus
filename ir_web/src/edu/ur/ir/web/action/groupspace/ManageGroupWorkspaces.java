@@ -23,6 +23,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -122,16 +123,12 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
 		log.debug("workspace user = " + workspaceUser);
 		
-		if( !user.hasRole(IrRole.ADMIN_ROLE) )
-		{
-		    if( workspaceUser == null || !workspaceUser.isOwner() )	
-		    {
-		    	return "accessDenied";
-		    }
-		}
-		
 	    groupWorkspace = groupWorkspaceService.get(id,false);
-	    groupWorkspaceService.delete(groupWorkspace, user);
+	    try {
+			groupWorkspaceService.delete(groupWorkspace, user);
+		} catch (PermissionNotGrantedException e) {
+			return "accessDenied";
+		}
 	    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 
 		return "deleted";

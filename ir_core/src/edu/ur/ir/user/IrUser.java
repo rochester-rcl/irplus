@@ -644,13 +644,19 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	}
 	
 	/**
-	 * Determine if the user has the specified role.
+	 * Determine if the user has the specified role.  If the
+	 * role passed in is null false is returned.
 	 * 
 	 * @param irRole
-	 * @return
+	 * @return the found role
 	 */
 	public boolean hasRole(IrRole irRole)
 	{
+		if( irRole == null )
+		{
+			return false;
+		}
+		
 		return roles.contains(irRole);
 	}
 	

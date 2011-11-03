@@ -39,6 +39,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserService;
@@ -239,9 +240,12 @@ public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteS
 		log.debug("invite users called");
 		List<String> emailsNotSent = new LinkedList<String>();
 		GroupWorkspaceUser groupWorkspaceUser = groupWorkspace.getUser(invitingUser);
-		if( groupWorkspaceUser == null || !groupWorkspaceUser.getOwner())
+		if( !invitingUser.hasRole(IrRole.ADMIN_ROLE))
 		{
-			throw new PermissionNotGrantedException("Only an owner can add new members");
+		    if( groupWorkspaceUser == null || !groupWorkspaceUser.getOwner())
+		    {
+			    throw new PermissionNotGrantedException("Only an owner can add new members");
+		    }
 		}
 		
 		for(String email : emails)
