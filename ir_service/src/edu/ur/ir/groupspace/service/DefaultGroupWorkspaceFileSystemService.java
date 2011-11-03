@@ -894,7 +894,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		// get all acls for files and folders within group workspace
 		for(GroupWorkspaceFile f : files )
 		{
-			securityService.deletePermissions(f.getVersionedFile().getId(), CgLibHelper.cleanClassName(f.getClass().getName()), user);
+			securityService.deletePermissions(f.getVersionedFile().getId(), CgLibHelper.cleanClassName(f.getVersionedFile().getClass().getName()), user);
 		}
 		
 		for( GroupWorkspaceFolder f : folders)
