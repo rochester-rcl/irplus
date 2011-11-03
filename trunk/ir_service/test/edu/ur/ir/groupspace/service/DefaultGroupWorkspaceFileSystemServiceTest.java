@@ -103,8 +103,9 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
 	 * @throws DuplicateNameException 
+	 * @throws PermissionNotGrantedException 
 	 */
-	public void createFileTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException
+	public void createFileTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException, PermissionNotGrantedException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -271,6 +272,8 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
         File f1 = new File(fullPath);
         assert f1.exists() : "File " + f1.getAbsolutePath() + " should exist";
         
+        // reload user for transaction
+        user = userService.getUser(user.getId(), false);
         groupWorkspaceFileSystemService.delete(subFolder, user, "test");
         assert !f1.exists() : "File " + f1.getAbsolutePath() + " should NOT exist";
        

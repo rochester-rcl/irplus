@@ -33,9 +33,9 @@ import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteException;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
-import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserDeletedPublicationException;
@@ -85,20 +85,16 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 	 * @throws UserDeletedPublicationException
 	 * @throws LocationAlreadyExistsException
 	 * @throws GroupWorkspaceInviteException 
+	 * @throws PermissionNotGrantedException 
 	 */
-	public void inviteExistingUserToGroupTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, GroupWorkspaceInviteException {
+	public void inviteExistingUserToGroupTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, GroupWorkspaceInviteException, PermissionNotGrantedException {
 		// determine if we should be sending emails 
 		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
 
-		// save the repository
-		tm.commit(ts);
 		
-        // Start the transaction 
-		ts = tm.getTransaction(td);
-
 		String userEmail1 = properties.getProperty("user_1_email").trim();
 		UserEmail email = new UserEmail(userEmail1);
 		IrUser user = userService.createUser("password", "username", email);
@@ -110,6 +106,7 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 
 		// create the group workspace
 		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspace.add(user, true);
 		groupWorkspaceService.save(groupWorkspace);
 
 		
@@ -151,8 +148,9 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 	 * @throws UserDeletedPublicationException
 	 * @throws LocationAlreadyExistsException
 	 * @throws GroupWorkspaceInviteException 
+	 * @throws PermissionNotGrantedException 
 	 */
-	public void inviteNewUserToGroupTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, GroupWorkspaceInviteException {
+	public void inviteNewUserToGroupTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, GroupWorkspaceInviteException, PermissionNotGrantedException {
 		// determine if we should be sending emails 
 		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
 
@@ -172,6 +170,7 @@ public class DefaultGroupWorkspaceInviteServiceTest {
 
 		// create the group workspace
 		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspace.add(user, true);
 		groupWorkspaceService.save(groupWorkspace);
 		
 		GroupWorkspaceEmailInvite emailInvite = groupWorkspace.addInviteUser(userEmail2, null, user, "token");

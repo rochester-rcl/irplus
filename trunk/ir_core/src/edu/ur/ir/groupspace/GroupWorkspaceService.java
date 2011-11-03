@@ -22,6 +22,7 @@ import java.util.Set;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -55,8 +56,11 @@ public interface GroupWorkspaceService extends Serializable{
      * 
      * @param groupWorkspace  - workspace to delete
      * @param user - user performing the delete
+     * 
+     * @throws PermissionNotGrantedException - if the user does not have permission to delete the 
+     * workpsace.
      */
-    public void delete(GroupWorkspace groupWorkspace, IrUser user);
+    public void delete(GroupWorkspace groupWorkspace, IrUser user) throws PermissionNotGrantedException;
     
     /**
      * Get a count of the group spaces in the system.

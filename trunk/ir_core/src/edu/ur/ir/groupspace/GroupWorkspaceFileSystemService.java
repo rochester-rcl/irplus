@@ -186,8 +186,10 @@ public interface GroupWorkspaceFileSystemService extends Serializable
      * @param folder - folder to delete
      * @param deletingUser - user performing the delete
      * @param deleteReason - reason for the delete.
+     * 
+     * @throws PermissionNotGrantedException - if the user does not have permissions to delete 
      */
-    public void delete(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason);
+    public void delete(GroupWorkspaceFolder folder, IrUser deletingUser, String deleteReason) throws PermissionNotGrantedException;
     
 	/**
 	 * Delete a group workspace file.

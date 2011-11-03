@@ -14,6 +14,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
 
@@ -132,12 +133,6 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			    GroupWorkspaceFolder gf = groupWorkspaceFileSystemService.getFolder(groupFolderIds[index], false);
 			    
 			    
-			    //THIS WILL have to change to check for permission to delete folder
-			    if( !gf.getOwner().getId().equals(userId))
-			    {
-			    	return "accessDenied";
-			    }
-			    
 			    //un-index all the files
 			    //List<PersonalFile> allFiles =  userFileSystemService.getAllFilesForFolder(pf);
 			    
@@ -146,7 +141,11 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			    //	deleteFileFromIndex(aFile, user);
 			    //}
 			    
-			    groupWorkspaceFileSystemService.delete(gf, user, "OWNER DELETING FOLDER - " + gf.getFullPath());
+			    try {
+					groupWorkspaceFileSystemService.delete(gf, user, "OWNER DELETING FOLDER - " + gf.getFullPath());
+				} catch (PermissionNotGrantedException e) {
+					return "accessDenied";
+				}
 		    }
 		}
 		
