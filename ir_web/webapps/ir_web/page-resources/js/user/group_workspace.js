@@ -75,6 +75,11 @@ YAHOO.ur.user.group_workspace = {
 	    
 	},	
 	
+	manageUsers : function(groupWorkspaceId)
+	{
+		window.location = getGroupWorkspaceAction + "?groupWorkspaceId=" + groupWorkspaceId + "&tabName=USERS";
+	},
+	
 	/**
      *  Check all check boxes for files and folders
      */
