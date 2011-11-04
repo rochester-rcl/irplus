@@ -61,10 +61,7 @@
    </table>
    
   <div align="right">
-      <div align="left">
-          <a href="${editGroupWorkspaceUrl}">Invite users</a>
-      </div>
-	           <button class="ur_button" 
+ 	           <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
  		                   onClick="YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder();"
@@ -93,10 +90,10 @@
 	                       
 	          <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
-	                       onclick="YAHOO.ur.folder.inviteUser();"
+	                       onclick="YAHOO.ur.user.group_workspace.manageUsers(${groupWorkspace.id});"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
-	                       id="shareButton"><span class="groupAddBtnImg">&nbsp;</span>Share</button>
+	                       id="shareButton"><span class="groupAddBtnImg">&nbsp;</span>Manage Users</button>
 	               <button class="ur_button" id="showPublishItem" 
 	                   onclick="javascript:YAHOO.ur.personal.collection.newItemDialog.createFromFilesFolders();"
 	                   onmouseover="this.className='ur_buttonover';"
