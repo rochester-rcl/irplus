@@ -19,6 +19,7 @@
 
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -92,17 +93,186 @@
                  </c:forEach>
             </strong>
             <br/><br/>
-            File Properties <br/><br/>
+            <h3>File Properties: ${groupWorkspaceFile.versionedFile.nameWithExtension}</h3>
             
-            <c:forEach var="entry" items="${fileAcl.userEntries}" >
-                User: ${entry.sid.firstName} &nbsp; ${entry.sid.lastName} <br/><br/>
-                Permissions: <br/>
-                <c:forEach var="permission" items="${entry.irClassTypePermissions}" >
-                ${permission.name} <br/>
-                </c:forEach>
-                <br/>
-                <br/>
-            </c:forEach>
+            <h3>Current Version Information</h3>
+              <table class="table">
+                  <tr>
+                      <td><strong>Editing Status:&nbsp;&nbsp;&nbsp;</strong></td>
+                      <td><c:if test="${groupWorkspaceFile.versionedFile.locked}">
+                              <span class="lockBtnImg">&nbsp;</span> File Locked by ${groupWorkspaceFile.versionedFile.lockedBy.username}
+                          </c:if>
+                          <c:if test="${!groupWorkspaceFile.versionedFile.locked}">
+                              <span class="unlockBtnImg">&nbsp;</span> File Unlocked 
+                          </c:if>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td><strong>Name:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.nameWithExtension}</td>
+                  </tr>
+                  <tr>
+                      <td><strong>Version:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.currentVersion.versionNumber}</td>
+                  </tr>
+                  <tr>
+                      <td><strong>Created Date:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.currentVersion.irFile.fileInfo.createdDate}</td>
+                  </tr>
+                  <tr>
+                      <td><strong>File Owner:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.owner.firstName}&nbsp;${groupWorkspaceFile.versionedFile.owner.lastName}</td>
+                  </tr>
+                  <tr>
+                      <td><strong>Created By:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.currentVersion.versionCreator.username}</td>
+                  </tr>
+                   <tr>
+                      <td><strong>Size:&nbsp;</strong></td>
+                      <td><ir:fileSizeDisplay sizeInBytes="${groupWorkspaceFile.versionedFile.currentVersion.irFile.fileInfo.size}"/></td>
+                  </tr>
+                  <tr>
+                      <td><strong>Size on Disk:&nbsp;</strong></td>
+                      <td><ir:fileSizeDisplay sizeInBytes="${ir:infoSizeOnDisk(groupWorkspaceFile.versionedFile.currentVersion.irFile.fileInfo)}"/></td>
+                  </tr>
+                  <tr>
+                      <td><strong>Path:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.currentVersion.irFile.fileInfo.fullPath}</td>
+                  </tr>
+                  <tr>
+                      <td><strong>File Info Id:&nbsp;</strong></td>
+                      <td>${groupWorkspaceFile.versionedFile.currentVersion.irFile.fileInfo.id}</td>
+                  </tr>
+                  <tr>
+                      <td><strong>Checksums:&nbsp;</strong></td>
+                      <td>
+                          <c:forEach var="fileInfoChecksum"
+                              items="${groupWorkspaceFile.versionedFile.currentVersion.irFile.fileInfo.fileInfoChecksums}">
+                                  ${fileInfoChecksum.checksum} - ${fileInfoChecksum.algorithmType}
+                          </c:forEach>
+                      </td>
+                  </tr>
+              </table>
+            
+            <div class="dataTable">
+            <urstb:table width="100%">
+                <urstb:thead>
+                    <urstb:tr>
+                        <urstb:td>User</urstb:td>
+                        <urstb:td>Owner</urstb:td>
+                        <urstb:td>Edit</urstb:td>
+                        <urstb:td>Read</urstb:td>
+                    </urstb:tr>
+                </urstb:thead>
+                <urstb:tbody
+                    var="entry" 
+                    oddRowClass="odd"
+                    evenRowClass="even"
+                    currentRowClassVar="rowClass"
+                    collection="${fileAcl.userEntries}">
+                    <urstb:tr 
+                            cssClass="${rowClass}"
+                            onMouseOver="this.className='highlight'"
+                            onMouseOut="this.className='${rowClass}'">
+                            
+                            <urstb:td>
+                                ${entry.sid.firstName}&nbsp;${entry.sid.lastName}
+                            </urstb:td>
+
+                            <urstb:td>
+                                <c:if test="${ entry.sid.id == groupWorkspaceFile.versionedFile.owner.id}"> Yes </c:if>
+                                <c:if test="${ entry.sid.id != groupWorkspaceFile.versionedFile.owner.id}"> No </c:if>
+                            </urstb:td>
+                            
+                            <urstb:td>
+                                <c:if test='${ir:entryHasPermission(entry, "EDIT")}'>Yes</c:if>
+                                <c:if test='${ !ir:entryHasPermission(entry, "EDIT")}'>No</c:if>
+                            </urstb:td>
+
+                            <urstb:td>
+                               <c:if test='${ir:entryHasPermission(entry, "VIEW")}'>Yes</c:if>
+                               <c:if test='${ !ir:entryHasPermission(entry, "VIEW")}'>No</c:if>
+                            </urstb:td>
+
+                          
+                        
+                    </urstb:tr>
+                </urstb:tbody>
+            </urstb:table>
+            </div>    
+            
+            
+            	          <h3>All File Versions</h3>
+	     
+	          <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Thumbnail</urstb:td>
+                          <urstb:td>Name</urstb:td>
+                          <urstb:td>Description</urstb:td>
+                          <urstb:td>File Version</urstb:td>
+                          <urstb:td>Checksum</urstb:td>
+                          <urstb:td>Created Date</urstb:td>
+                          <urstb:td>Created By</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="version" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${groupWorkspaceFile.versionedFile.versions}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                             <c:if test='${ir:hasThumbnail(version.irFile)}'>
+                                  <c:url var="url" value="/user/groupWorkspaceFileThumbnailDownloader.action">
+                                      <c:param name="groupWorkspaceFileId" value="${groupWorkspaceFile.id}"/>
+                                      <c:param name="versionNumber" value="${version.versionNumber}"/>
+                                  </c:url>
+                                  <img class="basic_thumbnail" src="${url}"/>
+                             </c:if>
+                          </urstb:td>
+                        
+                          <urstb:td>
+                              <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
+	                              <c:param name="groupWorkspaceFileId" value="${groupWorkspaceFile.id}"/>
+	                              <c:param name="versionNumber" value="${version.versionNumber}"/>
+	                          </c:url>
+	                          <a href="${groupWorkspaceFileDownloadUrl}">${version.irFile.nameWithExtension}</a>
+                          </urstb:td>
+
+                          <urstb:td>
+                              ${version.irFile.description}
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              ${version.versionNumber}
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              <c:forEach var="fileInfoChecksum"
+                                  items="${version.irFile.fileInfo.fileInfoChecksums}">
+                                      ${fileInfoChecksum.checksum} - ${fileInfoChecksum.algorithmType}
+                              </c:forEach>
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              ${version.irFile.fileInfo.createdDate}
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              ${version.versionCreator.firstName} &nbsp; ${version.versionCreator.lastName}
+                          </urstb:td>                        
+
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
+            
         </div>
         <!--  end body div -->
       

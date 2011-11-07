@@ -19,6 +19,7 @@
 
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -42,7 +43,7 @@
     <ur:styleSheet href="page-resources/css/main_menu.css"/>
     <ur:styleSheet href="page-resources/css/global.css"/>
     <ur:styleSheet href="page-resources/css/tables.css"/>
-    <ur:styleSheet href="page-resources/css/home_page_content_area.css"/> 
+   
     
     <!--  Style for dialog boxes -->
     <ur:js src="page-resources/yui/utilities/utilities.js"/>
@@ -94,17 +95,61 @@
             </strong>
             <br/><br/>
            
-            Folder Properties <br/><br/>
+            <h3> Folder Properties </h3>
             
-            <c:forEach var="entry" items="${folderAcl.userEntries}" >
-                User: ${entry.sid.firstName} &nbsp; ${entry.sid.lastName} <br/><br/>
-                Permissions: <br/>
-                <c:forEach var="permission" items="${entry.irClassTypePermissions}" >
-                ${permission.name} <br/>
-                </c:forEach>
-                <br/>
-                <br/>
-            </c:forEach>
+           
+            
+            <div class="dataTable">
+            <urstb:table width="100%">
+                <urstb:thead>
+                    <urstb:tr>
+                        <urstb:td>User</urstb:td>
+                        <urstb:td>Owner</urstb:td>
+                        <urstb:td>Edit</urstb:td>
+                        <urstb:td>Add File</urstb:td>
+                        <urstb:td>Read</urstb:td>
+                    </urstb:tr>
+                </urstb:thead>
+                <urstb:tbody
+                    var="entry" 
+                    oddRowClass="odd"
+                    evenRowClass="even"
+                    currentRowClassVar="rowClass"
+                    collection="${folderAcl.userEntries}">
+                    <urstb:tr 
+                            cssClass="${rowClass}"
+                            onMouseOver="this.className='highlight'"
+                            onMouseOut="this.className='${rowClass}'">
+                            
+                            <urstb:td>
+                                ${entry.sid.firstName}&nbsp;${entry.sid.lastName}
+                            </urstb:td>
+
+                            <urstb:td>
+                                <c:if test="${ entry.sid.id == groupWorkspaceFolder.owner.id}"> Yes </c:if>
+                                <c:if test="${ entry.sid.id != groupWorkspaceFolder.owner.id}"> No </c:if>
+                            </urstb:td>
+                            
+                            <urstb:td>
+                                <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_EDIT")}'>Yes</c:if>
+                                <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_EDIT")}'>No</c:if>
+                            </urstb:td>
+
+                            <urstb:td>
+                               <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>Yes</c:if>
+                               <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>No</c:if>
+                            </urstb:td>
+
+                            <urstb:td>
+                               <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_READ")}'>Yes</c:if>
+                               <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_READ")}'>No</c:if>
+                            </urstb:td>
+                        
+                        
+                    </urstb:tr>
+                </urstb:tbody>
+            </urstb:table>
+            </div>    
         </div>
         <!--  end body div -->
       
