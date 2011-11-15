@@ -211,7 +211,7 @@
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             
+	                             ${fileSystemObject.versionedFile.largestVersion}
 	                         </c:if>
                         </urstb:td>
                         
@@ -220,7 +220,7 @@
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             
+	                              <ir:fileSizeDisplay sizeInBytes="${fileSystemObject.versionedFile.currentFileSizeBytes}"/>
 	                         </c:if>
                         </urstb:td>
                             
