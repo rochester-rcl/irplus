@@ -147,7 +147,7 @@
 	                          folders get an id of the folder_checkbox_{id} 
 	                          where id  is the id of the folder -->
 	                          <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
-	                              <input type="checkbox" name="groupFolderIds" id="folder_checkbox_${fileSystemObject.id}" 
+	                              <input type="checkbox" name="groupFolderIds" id="group_folder_checkbox_${fileSystemObject.id}" 
 	                                     value="${fileSystemObject.id}"/>
 	                         </c:if>
 	                     
@@ -155,7 +155,7 @@
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             <input type="checkbox" name="groupFileIds" id="file_checkbox_${fileSystemObject.id}" 
+	                             <input type="checkbox" name="groupFileIds" id="group_file_checkbox_${fileSystemObject.id}" 
 	                                 value="${fileSystemObject.id}"/>
 	                         </c:if>
                         </urstb:td>
