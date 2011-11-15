@@ -91,6 +91,7 @@
                       <span class="folderBtnImg">&nbsp;</span>
                            <a href="${folderUrl}">${currentFolder.name}</a>&nbsp;/
                  </c:forEach>
+                  ${groupWorkspaceFile.versionedFile.nameWithExtension}
             </strong>
             <br/><br/>
             <h3>File Properties: ${groupWorkspaceFile.versionedFile.nameWithExtension}</h3>
