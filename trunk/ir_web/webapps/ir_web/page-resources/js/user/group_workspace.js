@@ -507,7 +507,7 @@ YAHOO.ur.user.group_workspace = {
                   { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:alert('Publish')" },             
                   { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" },
                   { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: "javascript:alert('Properties')" },
-                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:alert('Delete')" }
+                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url:  "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_file_checkbox_"+ fileId +"')"}
               ]);
           
               dropMenu.showEvent.subscribe(function () {
@@ -728,8 +728,7 @@ YAHOO.ur.user.group_workspace = {
 	        //uncheck all the ones that have been checked
 	        checked = document.groupFolders.checkAllSetting.checked = false;
 	        
-	        //ADD THIS FUNCTION
-	        //YAHOO.ur.user.group_workspace.setCheckboxes();
+	        YAHOO.ur.user.group_workspace.setCheckboxes();
 		    this.hide();
 	    };
 
@@ -1040,7 +1039,7 @@ YAHOO.ur.user.group_workspace = {
              dropMenu.addItems([
                  { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:alert('edit')" },
                  { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('move')" },
-                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:alert('delete')" }
+                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_folder_checkbox_"+ folderId +"')" }
              ]);
                
              dropMenu.showEvent.subscribe(function () {
@@ -1245,6 +1244,22 @@ YAHOO.ur.user.group_workspace = {
 	    document.getElementById('group_workspace_file_description').value = "";
 	    var uploadError = document.getElementById('group_workspace_locked_by_user_error');
    },
+   
+   
+   /**
+    * Select and delete the folder or file 
+    */
+   deleteSingleConfirm : function(elementId)
+   {
+      //uncheck all the ones that have been checked
+      checked = document.groupFolders.checkAllSetting.checked = false;
+      YAHOO.ur.user.group_workspace.setCheckboxes();
+  
+      element = document.getElementById(elementId);
+      element.checked=true;
+      YAHOO.ur.user.group_workspace.showDialog();
+   },
+   
   	
 	// initialize the page
 	// this is called once the dom has
