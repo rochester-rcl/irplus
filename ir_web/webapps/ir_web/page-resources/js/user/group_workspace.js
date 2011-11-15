@@ -546,6 +546,10 @@ YAHOO.ur.user.group_workspace = {
         var parentFolderId = document.getElementById('groupFoldersParentFolderId').value;
         var groupWorkspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
         
+        // set top level variables
+        document.getElementById("groupWorkspaceFormGroupWorkspaceId").value = groupWorkspaceId;
+	    document.getElementById("groupWorkspaceFormGroupWorkspaceFolderId").value = parentFolderId;
+        
         // update the values
         document.getElementById('groupFolderForm_parentFolderId').value = parentFolderId;
         document.getElementById('groupFolderForm_workspaceId').value = groupWorkspaceId;
@@ -1092,7 +1096,6 @@ YAHOO.ur.user.group_workspace = {
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {   
-	            	alert(o.responseText);
                     var divToUpdate = document.getElementById('group_workspace_version_upload_form_fields');
                     divToUpdate.innerHTML = o.responseText; 
                     
@@ -1173,9 +1176,9 @@ YAHOO.ur.user.group_workspace = {
 	            else
 	            {
 	                // we can clear the upload form and get the pictures
-	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                var workspaceId = document.getElementById('groupFolderForm_workspaceId').value;
-	              
+	                var folderId = document.getElementById("groupFoldersParentFolderId").value;
+	                var workspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+	                alert('folderId = ' + folderId + ' workspaceId = ' + workspaceId);
 	                YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,-1); 
 	               
 	    	    	YAHOO.ur.util.wait.waitDialog.hide();
