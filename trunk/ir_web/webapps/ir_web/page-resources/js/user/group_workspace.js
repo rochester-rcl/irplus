@@ -1257,7 +1257,7 @@ YAHOO.ur.user.group_workspace = {
   
       element = document.getElementById(elementId);
       element.checked=true;
-      YAHOO.ur.user.group_workspace.showDialog();
+      YAHOO.ur.user.group_workspace.deleteFolder.showDialog();
    },
    
   	
