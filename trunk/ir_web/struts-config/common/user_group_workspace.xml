@@ -151,5 +151,18 @@
         </action>
         
         
+         <action name="viewGroupWorkspaceNewFileVersionUpload" class="edu.ur.ir.web.action.groupspace.AddNewGroupFileVersion">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/upload_new_file_version.jsp</result>
+        </action>
+        
+        
+         <!--  Allows a user to upload a new version of one of their files -->
+        <action name="uploadNewGroupFileVersion" method="addNewFileVersion" 
+            class="edu.ur.ir.web.action.groupspace.AddNewGroupFileVersion">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/upload_new_file_version.jsp</result>
+            <result name="input">/pages/user/workspace/group_workspace/upload_new_file_version.jsp</result>
+        </action>
     
         
