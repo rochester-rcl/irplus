@@ -165,19 +165,28 @@
 	                          folders get an id of the folder_checkbox_{id} 
 	                          where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                            <div id="group_folder_${fileSystemObject.id}">
 	                            <button type="button"  class="table_button" 
 	                                onmouseover="this.className='table_buttonover';"
  		                            onmouseout="this.className='table_button';"
-	                                ><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+	                                onclick="javascript:YAHOO.ur.user.group_workspace.buildFolderMenu(${fileSystemObject.id}, 
+	                                this,'group_folder_'+ ${fileSystemObject.id}, 
+	                                'group_folder_menu_' + ${fileSystemObject.id});"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+	                         
+	                             </div>
 	                         </c:if>
 	                     
 	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                             <div id="group_file_${fileSystemObject.id}">    	
 	                              <button type="button" class="table_button"
 	                                 onmouseover="this.className='table_buttonover';"
- 		                             onmouseout="this.className='table_button';"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
+ 		                             onmouseout="this.className='table_button';"
+ 		                             onclick="javascript:YAHOO.ur.user.group_workspace.buildFileMenu(this, 'group_file_'+ ${fileSystemObject.id}, 
+ 			                                 'group_file_menu_' + ${fileSystemObject.id}, ${fileSystemObject.id});"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
+	                             </div>
 	                         </c:if>
                         </urstb:td>
                         

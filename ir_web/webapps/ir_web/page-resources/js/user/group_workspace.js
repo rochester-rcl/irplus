@@ -33,12 +33,21 @@ var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
 var groupWorkspaceState = "0";
 var groupWorkspaceFolderState = "0";
 
+//view the version of a file
+var viewGroupWorkspaceFileVersion = basePath + 'user/viewGroupWorkspaceNewFileVersionUpload.action';
+
 
 //actions for adding and removing folders - group workspace
 var updateGroupWorkspaceFolderAction = basePath + 'user/updateGroupWorkspaceFolder.action';
 var newGroupWorkspaceFolderAction = basePath + 'user/addGroupWorkspaceFolder.action';
 var deleteGroupWorkspaceFolderAction = basePath + 'user/deleteGroupWorkspaceFileSystemObjects.action';
 var getGroupWorkspaceFolderAction = basePath + 'user/getGroupWorkspaceFolder.action';
+
+//array to hold drop down menus created
+//this will be needed to later destroy the menus
+//otherwise the menus will not render correctly
+//in subsequent ajax calls.
+var groupFolderMenuArray = new Array();
 
 
 /**
@@ -434,11 +443,87 @@ YAHOO.ur.user.group_workspace = {
 	        alert('get group workspace by id failure '  + o.status + ' status text ' + o.statusText);
 	    };
 
-    
+	    YAHOO.ur.user.group_workspace.destroyFolderMenus();
         YAHOO.util.Connect.asyncRequest('GET', viewGroupWorkspaceFolderAction + 
         		'?groupWorkspaceId=' + workspaceId +  '&bustcache=' + new Date().getTime(),
           {success: handleSuccess, failure: handleFailure});
     },
+    
+    /** 
+     * causes the button
+     * to attach the menu to 
+     * unique menu id
+     * id of the file 
+     */
+     buildFileMenu : function(element, div, 
+         menuName, 
+         fileId){
+        
+
+         var buttonMenu = document.getElementById(div);
+         var xVal = YAHOO.util.Dom.getX(div);
+         var yVal = YAHOO.util.Dom.getY(div);
+     
+         // get the menu
+         var other = document.getElementById(menuName);
+    
+         // we only want to initialize once  first time the menu
+         // has been clicked
+         if( other == null )
+         {
+             //path to look at properties for a file
+             filePropertiesUrl = basePath + 'user/viewPersonalFile.action?personalFileId='+ fileId;
+                
+             /*
+                Instantiate the menu.  The first argument passed to the 
+                constructor is the id of the DOM element to be created for the 
+                menu; the second is an object literal representing a set of 
+                configuration properties for the menu.
+             */
+             var dropMenu = new YAHOO.widget.Menu(menuName, {x:xVal, y:yVal });
+          
+              //place the menus in an array to be destroyed later
+              //this is for ajax rendering
+              groupFolderMenuArray.push(dropMenu);
+
+              dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download', url: "javascript:alert('download')" });
+          
+              dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: "javascript:alert('edit')" });
+          
+              /*
+                Add items to the menu by passing an array of object literals 
+                (each of which represents a set of YAHOO.widget.MenuItem 
+                 configuration properties) to the "addItems" method.
+               */
+             
+              dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: "javascript:alert('lock')" });
+              
+              
+              dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: "javascript:alert('unlock')" });
+              dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: "javascript:YAHOO.ur.user.group_workspace.dropDownVersionedFileUpload(" + fileId + ")" });
+              dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: "javascript:alert('Override Lock')" });
+              dropMenu.addItem({text: '<span class="groupAddBtnImg">&nbsp;</span> Share', url: "javascript:alert('Share')" });
+              dropMenu.addItems([
+                  { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:alert('Publish')" },             
+                  { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" },
+                  { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: "javascript:alert('Properties')" },
+                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:alert('Delete')" }
+              ]);
+          
+              dropMenu.showEvent.subscribe(function () {
+                  this.focus();
+              });
+
+              /*
+                 Since this menu is built completely from script, call the "render" 
+                 method passing in the id of the DOM element that the menu's 
+                 root element should be appended to.
+               */
+               dropMenu.render(buttonMenu);
+               YAHOO.util.Event.addListener(element, "click", dropMenu.show, null, dropMenu);
+               dropMenu.show();
+         }
+     },
     
     
 	/**
@@ -574,8 +659,7 @@ YAHOO.ur.user.group_workspace = {
 	    {
 	    	YAHOO.ur.user.group_workspace.groupFolderDialog.hide();
 	    	YAHOO.ur.util.wait.waitDialog.showDialog();
-	    	//THIS WILL NEED TO BE UPDATED Once folder menus are created
-	    	//YAHOO.ur.user.group_workspace.destroyFolderMenus();
+	    	YAHOO.ur.user.group_workspace.destroyFolderMenus();
 	        YAHOO.util.Connect.setForm('groupFolderForm');
 	        if( YAHOO.ur.user.group_workspace.groupFolderDialog.validate() )
 	        {
@@ -630,8 +714,7 @@ YAHOO.ur.user.group_workspace = {
 	    var handleYes = function() 
 	    {
 	    	YAHOO.ur.util.wait.waitDialog.showDialog();
-	    	//ADD THIS FUNCTION
-        	//YAHOO.ur.user.group_workspace.destroyFolderMenus();
+        	YAHOO.ur.user.group_workspace.destroyFolderMenus();
 		    this.hide();
 		    YAHOO.ur.user.group_workspace.deleteFilesFolders();
 	    };
@@ -773,19 +856,11 @@ YAHOO.ur.user.group_workspace = {
 	    };
 
 	    //destroy the folder menus
-        //YAHOO.ur.folder.destroyFolderMenus();
+	    YAHOO.ur.user.group_workspace.destroyFolderMenus();
     
       
-        //set the folder id
-        //document.getElementById('groupFoldersParentFolderId').value = folderId;
-	    
-	   // YAHOO.util.Connect.setForm('groupFolders');
-	   
 	    // execute the transaction
-        //var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-        //        viewSharedInboxFiles +'?bustcache='+new Date().getTime(), 
-        //        callback, null);
-	    
+ 	    
        var getFoldersAction = viewGroupWorkspaceFolderAction + 
            '?parentFolderId=' + folderId + "&groupWorkspaceId=" + workspaceId + 
            '&bustcache='+new Date().getTime();
@@ -926,6 +1001,247 @@ YAHOO.ur.user.group_workspace = {
 
     },
     
+    /**
+     * function to build the folder menu
+     */
+    buildFolderMenu : function(folderId, element, div, menuName)
+    {
+     
+        var buttonMenu = document.getElementById(div);
+        var xVal = YAHOO.util.Dom.getX(div);
+        var yVal = YAHOO.util.Dom.getY(div);
+    
+        // get the menu
+        var other = document.getElementById(menuName);
+
+       // we only want to initialize once  first time the menu
+       // has been clicked
+       if( other == null )
+       {
+              
+            /*
+              Instantiate the menu.  The first argument passed to the 
+              constructor is the id of the DOM element to be created for the 
+              menu; the second is an object literal representing a set of 
+              configuration properties for the menu.
+            */
+            var dropMenu = new YAHOO.widget.Menu(menuName, {x:xVal, y:yVal});
+            groupFolderMenuArray.push(dropMenu);
+        
+            /*
+              Add items to the menu by passing an array of object literals 
+              (each of which represents a set of YAHOO.widget.MenuItem 
+              configuration properties) to the "addItems" method.
+             */
+             dropMenu.addItems([
+                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:alert('edit')" },
+                 { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('move')" },
+                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:alert('delete')" }
+             ]);
+               
+             dropMenu.showEvent.subscribe(function () {
+                 this.focus();
+             });
+
+             /*
+                Since this menu is built completely from script, call the "render" 
+                method passing in the id of the DOM element that the menu's 
+                root element should be appended to.
+              */
+              dropMenu.render(buttonMenu);
+              YAHOO.util.Event.addListener(element, "click", dropMenu.show, null, dropMenu);
+              dropMenu.show();
+        }
+        
+        
+    },
+    
+    /*
+     * Destroys all of the drop down menues in the table
+     * this is needed for ajax calls and re-rendering the table drop down menus
+     */
+    destroyFolderMenus : function()
+    {
+        for( var i = 0; i < groupFolderMenuArray.length; i++ )
+        {
+        	groupFolderMenuArray[i].destroy();
+        	groupFolderMenuArray[i] = null;
+        }
+    
+        var size = groupFolderMenuArray.length;
+    
+        for( var i = 0; i < size; i++ )
+        {
+        	groupFolderMenuArray.pop();
+        }
+    },
+    
+    /**
+     * Versioned file upload
+     */
+   dropDownVersionedFileUpload : function(fileId)
+    {	    
+	    /*
+         * This call back updates the html when a adding a new versioned file
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {   
+	            	alert(o.responseText);
+                    var divToUpdate = document.getElementById('group_workspace_version_upload_form_fields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    
+                    YAHOO.ur.user.group_workspace.versionedFileUploadDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get new versioned info file failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        var workspaceId = document.getElementById('groupFolderForm_workspaceId').value;
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+        		viewGroupWorkspaceFileVersion + '?groupWorkspaceFileId=' + fileId +  '&groupWorkspaceId=' + workspaceId + '&bustcache='+new Date().getTime(), 
+            callback, null);
+    },
+    
+    /**
+     * Function to deal with uploading a versioned file
+     */
+    versionedFileUpload : function()
+    {
+      // Define various event handlers for Dialog
+	    var handleSubmit = function() 
+	    {
+	       
+	        // action to perform when submitting the news items.
+            var versionedFileUploadAction = basePath + 'user/uploadNewGroupFileVersion.action';
+	        YAHOO.util.Connect.setForm('groupWorkspaceVersionedFileUploadForm', true, true);
+	    
+	        if( YAHOO.ur.user.group_workspace.versionedFileUploadDialog.validate() )
+	        {
+	        	YAHOO.ur.user.group_workspace.versionedFileUploadDialog.hide()
+	            	    	YAHOO.ur.util.wait.waitDialog.showDialog();
+	            //based on what we need to do (update or create a 
+	            // new news item) based on the action.
+                var cObj = YAHOO.util.Connect.asyncRequest('post',
+                 versionedFileUploadAction, callback);
+                YAHOO.ur.user.group_workspace.clearVersionedFileUploadForm();
+            }
+	    };
+	
+	    // handle a cancel of the adding a new version
+	    var handleCancel = function() 
+	    {
+	    	YAHOO.ur.user.group_workspace.versionedFileUploadDialog.hide();
+	    	YAHOO.ur.user.group_workspace.clearVersionedFileUploadForm();
+	    };
+	
+	    //handle the sucessful upload
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.user.group_workspace.destroyFolderMenus();
+	        var response = o.responseText;
+	        
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	        
+	            var uploadForm = document.getElementById('group_workspace_version_upload_form_fields');
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("version_added").value;
+	           
+	            //if the content type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+	    	    	YAHOO.ur.util.wait.waitDialog.hide();
+	    	    	YAHOO.ur.user.group_workspace.versionedFileUploadDialog.show();
+	            }
+	            else
+	            {
+	                // we can clear the upload form and get the pictures
+	                var folderId = document.getElementById("myFolders_parentFolderId").value;
+	                var workspaceId = document.getElementById('groupFolderForm_workspaceId').value;
+	              
+	                YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,-1); 
+	               
+	    	    	YAHOO.ur.util.wait.waitDialog.hide();
+	            }
+	        }
+	    };
+	
+	    // handle form sbumission failure
+	    var handleFailure = function(o)
+	    {
+	        alert('Single file upload submission failed ' + o.status);
+	    };
+
+	    // Instantiate the Dialog
+	    // make it modal - 
+	    // it should not start out as visible - it should not be shown until 
+	    // new news item button is clicked.
+	    YAHOO.ur.user.group_workspace.versionedFileUploadDialog = new YAHOO.widget.Dialog('groupWorkspaceVersionedFileUploadDialog', 
+        { width : "850px",
+		  visible : false, 
+		  modal : true,
+		  buttons : [ { text:'Submit', handler:handleSubmit, isDefault:true },
+					  { text:'Cancel', handler:handleCancel } ]
+		} );
+	
+	    // center and show the dialog
+	    YAHOO.ur.user.group_workspace.versionedFileUploadDialog.showDialog = function()
+        {
+	    	YAHOO.ur.user.group_workspace.versionedFileUploadDialog.center();
+	    	YAHOO.ur.user.group_workspace.versionedFileUploadDialog.show();
+        }
+    
+ 	    // Validate the entries in the form to require that a name is entered
+	    YAHOO.ur.user.group_workspace.versionedFileUploadDialog.validate = function() 
+	    {
+	        var fileName = document.getElementById('group_workspace_new_version_file').value;
+	    
+		    if (fileName == "" || fileName == null) {
+		        alert('A File name must be entered');
+			    return false;
+		    } 
+		    else 
+		    {
+			    return true;
+		    }
+	    };
+	
+
+	    // Wire up the success and failure handlers
+	    var callback = { upload: handleSuccess, failure: handleFailure };
+			
+	    // Render the Dialog
+	    YAHOO.ur.user.group_workspace.versionedFileUploadDialog.render();
+    },
+    
+    /** 
+     * clear out any form data messages or input
+     * in the upload single file form
+     */
+   clearVersionedFileUploadForm : function()
+   {
+	    document.getElementById('group_workspace_file_id').value = "";
+	    document.getElementById('group_workspace_new_version_file').value = "";
+	    document.getElementById('group_workspace_file_description').value = "";
+	    var uploadError = document.getElementById('group_workspace_locked_by_user_error');
+   },
   	
 	// initialize the page
 	// this is called once the dom has
@@ -937,6 +1253,7 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.createFolderDialog();	
 	    YAHOO.ur.user.group_workspace.createFolderDeleteConfirmDialog();
 	    YAHOO.ur.user.group_workspace.singleFileUpload();
+	    YAHOO.ur.user.group_workspace.versionedFileUpload();
 	    
 	    groupWorkspaceId = document.getElementById("groupWorkspaceFormGroupWorkspaceId").value;
 	    groupWorkspaceFolderId = document.getElementById("groupWorkspaceFormGroupWorkspaceFolderId").value;

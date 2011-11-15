@@ -154,6 +154,8 @@
                   </tr>
               </table>
             
+            
+             <h3>User Permissions</h3>
             <div class="dataTable">
             <urstb:table width="100%">
                 <urstb:thead>
@@ -176,6 +178,19 @@
                             onMouseOut="this.className='${rowClass}'">
                             
                             <urstb:td>
+                                <c:if test="${entry.sid.researcher.primaryPicture != null }">
+                                    <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                        <c:param name="irFileId" value="${entry.sid.researcher.primaryPicture.id}"/>
+                                        <c:param name="researcherId" value="${entry.sid.researcher.id}"/>
+                                    </c:url>
+                                    <img class="basic_thumbnail" src="${url}"/>
+                                   
+                                </c:if>
+                                
+                                 <c:if test="${entry.sid.researcher.primaryPicture == null}">
+                	                 <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+                                 </c:if>	
+                                  <br/> 
                                 ${entry.sid.firstName}&nbsp;${entry.sid.lastName}
                             </urstb:td>
 

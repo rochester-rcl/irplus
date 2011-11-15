@@ -420,6 +420,23 @@
 		</div>
 	</div>
 	<!--  end file upload dialog -->  
+	
+	<!-- Dialog box for uploading a file -->
+    <div id="groupWorkspaceVersionedFileUploadDialog" class="hidden">
+	    <div class="hd">New Version Upload</div>
+		<div class="bd">
+		           
+		<form id="groupWorkspaceVersionedFileUploadForm" name="groupWorkspaceVersionedFileUploadForm" 
+		    method="post" enctype="multipart/form-data"
+		    action="user/uploadNewGroupFileVersion.action">
+		                 
+		    <div id="group_workspace_version_upload_form_fields">
+		        <c:import url="group_workspace/upload_new_file_version.jsp"/>
+		    </div>
+		</form>
+		</div>
+	</div>
+	<!--  end file upload dialog -->  
 	          
 	<div id="error_dialog_box" class="hidden">
 	    <div class="hd">Error</div>
@@ -519,6 +536,8 @@
 		</div>
      </div>
 	 <!-- Dialog box for deleting a group workspace -->
+	 
+	 
 
 </body>
 </html>
