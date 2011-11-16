@@ -489,8 +489,9 @@ YAHOO.ur.user.group_workspace = {
               //this is for ajax rendering
               groupFolderMenuArray.push(dropMenu);
 
-              dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download', url: "javascript:alert('download')" });
-          
+              dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download',url: basePath + 'user/groupWorkspaceFileDownload.action' + '?groupWorkspaceFileId=' +fileId + '&bustcache='+new Date().getTime() });
+              dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.user.group_workspace.getLockOnFileId('+ fileId + ')' });
+              dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')' });
               dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: "javascript:alert('edit')" });
           
               /*
@@ -510,8 +511,7 @@ YAHOO.ur.user.group_workspace = {
                   { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url:  "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_file_checkbox_"+ fileId +"')"}
               ]);
           
-              dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.user.group_workspace.getLockOnFileId('+ fileId + ')' });
-              dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')' });
+             
               
               dropMenu.showEvent.subscribe(function () {
                   this.focus();
@@ -847,8 +847,7 @@ YAHOO.ur.user.group_workspace = {
 	            }
 	            else
 	            {
-	            	alert('download file');
-	            	//window.location.href= basePath + 'user/personalFileDownload.action' + '?personalFileId=' +fileId;
+	            	window.location.href= basePath + 'user/groupWorkspaceFileDownload.action' + '?groupWorkspaceFileId=' +fileId;
 	            }
 	            YAHOO.ur.util.wait.waitDialog.hide();
 	        }
