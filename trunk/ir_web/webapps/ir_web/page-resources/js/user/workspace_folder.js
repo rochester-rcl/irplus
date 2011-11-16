@@ -611,7 +611,6 @@ YAHOO.ur.folder =
     buildFileMenu : function(element, div, 
         menuName, 
         fileId, 
-        userId, 
         locked, 
         canUnLock, 
         canLock, 
@@ -659,12 +658,12 @@ YAHOO.ur.folder =
               */
              if( !locked && canLock)
              {
-                 dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.folder.getLockOnFileId('+ fileId + ', ' + userId + ')' });
+                 dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.folder.getLockOnFileId('+ fileId + ')' });
              }
               
              if( canUnLock )
              {
-                 dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.folder.unLockFile(' + fileId +', ' + userId + ')' });
+                 dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.folder.unLockFile(' + fileId +')' });
              }
          
              if( canEdit )
@@ -674,7 +673,7 @@ YAHOO.ur.folder =
          
              if( canBreakLock )
              {
-                 dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: 'javascript:YAHOO.ur.folder.unLockFile(' + fileId +', ' + userId + ')' });
+                 dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: 'javascript:YAHOO.ur.folder.unLockFile(' + fileId +')' });
              }  
          
              if( canShare )
@@ -709,9 +708,9 @@ YAHOO.ur.folder =
     /**
      *  Function requests a lock on a specified file
      *
-     *  The id of the file to lock and the user id
+     *  The id of the file to lock
      */
-    getLockOnFileId : function (fileId, userId)
+    getLockOnFileId : function (fileId)
     {
         var callback =
         {
@@ -734,10 +733,7 @@ YAHOO.ur.folder =
 	            if( response.lockStatus == 'LOCK_OBTAINED')
 	            {
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId, response.personalFileId); 
-	            	
-
-	                
+	                YAHOO.ur.folder.getFolderById(folderId, fileId); 
 	            }
 	            else if( response.lockStatus == 'LOCKED_BY_USER')
 	            {
@@ -762,14 +758,14 @@ YAHOO.ur.folder =
         };
         
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            lockFileAction + '?personalFileId=' + fileId + '&userId=' + userId + 
+            lockFileAction + '?personalFileId=' + fileId + 
             '&bustcache='+new Date().getTime(), callback, null);
     },
     
     /**
      * make a call to un-lock the specified id
      */
-    unLockFile : function(fileId, userId)
+    unLockFile : function(fileId)
     {
     	
         var callback =
@@ -811,7 +807,7 @@ YAHOO.ur.folder =
         };
         
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-        unLockFileAction + '?personalFileId=' + fileId + '&userId=' + userId + 
+        unLockFileAction + '?personalFileId=' + fileId + 
         '&bustcache='+new Date().getTime(), callback, null);
     }, 
     
