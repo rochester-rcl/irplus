@@ -209,7 +209,6 @@
 	                                 onclick="javascript:YAHOO.ur.folder.buildFileMenu(this, 'file_'+ ${fileSystemObject.id}, 
 	                                 'file_menu_' + ${fileSystemObject.id}, 
 	                                 ${fileSystemObject.id}, 
-	                                 ${user.id}, 
 	                                 ${fileSystemObject.versionedFile.locked}, 
 	                                 ${ir:isLocker(user,fileSystemObject.versionedFile)}, 
 	                                 ${ir:canLockFile(user,fileSystemObject.versionedFile)},

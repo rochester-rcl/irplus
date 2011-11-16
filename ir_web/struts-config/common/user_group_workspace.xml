@@ -164,5 +164,20 @@
             <result name="success">/pages/user/workspace/group_workspace/upload_new_file_version.jsp</result>
             <result name="input">/pages/user/workspace/group_workspace/upload_new_file_version.jsp</result>
         </action>
+        
+        
+        <!--  lock a file so that no other user can upload changes -->
+        <action name="lockGroupWorkspaceVersionedFile" class="edu.ur.ir.web.action.groupspace.LockVersionedFile" >
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/lock_file_response.jsp</result>
+        </action>
+        
+        <!--  un lock a file so that other users can upload changes -->
+        <action name="unLockGroupWorkspaceVersionedFile" class="edu.ur.ir.web.action.groupspace.UnLockVersionedFile" >
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/unlock_file_response.jsp</result>
+        </action>
     
         

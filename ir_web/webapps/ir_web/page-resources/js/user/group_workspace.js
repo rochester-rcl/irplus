@@ -49,6 +49,9 @@ var getGroupWorkspaceFolderAction = basePath + 'user/getGroupWorkspaceFolder.act
 //in subsequent ajax calls.
 var groupFolderMenuArray = new Array();
 
+var lockGroupWorkspaceFileAction = basePath + 'user/lockGroupWorkspaceVersionedFile.action';
+var unLockGroupWorkspaceFileAction = basePath + 'user/unLockGroupWorkspaceVersionedFile.action';
+
 
 /**
  * content type namespace
@@ -496,10 +499,7 @@ YAHOO.ur.user.group_workspace = {
                  configuration properties) to the "addItems" method.
                */
              
-              dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: "javascript:alert('lock')" });
               
-              
-              dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: "javascript:alert('unlock')" });
               dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: "javascript:YAHOO.ur.user.group_workspace.dropDownVersionedFileUpload(" + fileId + ")" });
               dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: "javascript:alert('Override Lock')" });
               dropMenu.addItem({text: '<span class="groupAddBtnImg">&nbsp;</span> Share', url: "javascript:alert('Share')" });
@@ -510,6 +510,9 @@ YAHOO.ur.user.group_workspace = {
                   { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url:  "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_file_checkbox_"+ fileId +"')"}
               ]);
           
+              dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.user.group_workspace.getLockOnFileId('+ fileId + ')' });
+              dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')' });
+              
               dropMenu.showEvent.subscribe(function () {
                   this.focus();
               });
@@ -1259,6 +1262,115 @@ YAHOO.ur.user.group_workspace = {
       element.checked=true;
       YAHOO.ur.user.group_workspace.deleteFolder.showDialog();
    },
+   
+   /**
+    *  Function requests a lock on a specified file
+    *
+    *  The id of the file to lock and the user id
+    */
+   getLockOnFileId : function (fileId)
+   {
+       var callback =
+       {
+           success: function(o) 
+           {
+               /* evaluate the response */
+               if( o != null )
+               {
+                   if( o.responseText != null )
+                   {   
+	                     // check for the timeout - forward user to login page if timout
+	                     // occured
+	                     if( !urUtil.checkTimeOut(o.responseText) )
+	                     {
+	                         var response = eval("("+o.responseText+")");
+	                     }
+	                 }
+	            }
+	    
+	            if( response.lockStatus == 'LOCK_OBTAINED')
+	            {
+	            	 var folderId = document.getElementById("groupFoldersParentFolderId").value;
+		             var workspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+		             YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,fileId); 
+	            }
+	            else if( response.lockStatus == 'LOCKED_BY_USER')
+	            {
+	                alert('Folder already locked by ' + response.lockUsername);
+	                var folderId = document.getElementById("groupFoldersParentFolderId").value;
+		            var workspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+		            YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,-1); 
+	            }
+	            else if( response.lockStatus == 'LOCK_NOT_ALLOWED')
+	            {
+	                alert('You are not allowed to lock the specified file');
+	            }
+	            else
+	            {
+	                alert( 'Lock status ' + response.lockStatus + ' is not understood' );
+	            }
+           },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get lock on file failure status: ' + o.status + ' status text ' + o.statusText );
+	        }
+       };
+       
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+           lockGroupWorkspaceFileAction + '?groupWorkspaceFileId=' + fileId + 
+           '&bustcache='+new Date().getTime(), callback, null);
+   },
+   
+   /**
+    * make a call to un-lock the specified id
+    */
+   unLockFile : function(fileId)
+   {
+   	
+       var callback =
+       {
+           success: function(o) 
+           {
+               if( o != null )
+               {
+                   if( o.responseText != null )
+                   {
+	                     // check for the timeout - forward user to login page if timout
+	                     // occured
+	                     if( !urUtil.checkTimeOut(o.responseText) )
+	                     {
+	                         var response = eval("("+o.responseText+")");
+	                     }
+	                }
+	            }
+	    
+	            if( response.unLockStatus == 'UN_LOCKED_BY_USER')
+	            {
+	            	var folderId = document.getElementById("groupFoldersParentFolderId").value;
+		            var workspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+		            YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,-1); 
+	            }
+	            else if( response.unLockStatus == 'UN_LOCK_NOT_ALLOWED')
+	            {
+	                alert('You do not have permission to unlock the specified file');
+	            }
+	            else
+	            {
+	                alert( 'Un lock status ' + response.lockStatus + ' is not understood' );
+	            }
+           },
+	
+	        failure: function(o) 
+	        {
+	            alert('Unlock file failure status: ' + o.status + ' status text ' + o.statusText );
+	        }
+       };
+       
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+       unLockGroupWorkspaceFileAction + '?groupWorkspaceFileId=' + fileId +
+       '&bustcache='+new Date().getTime(), callback, null);
+   }, 
    
   	
 	// initialize the page
