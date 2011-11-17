@@ -181,7 +181,7 @@ public class IrAcl extends BasePersistent implements Acl
 	{
 		for(IrUserAccessControlEntry uac : userEntries)
 		{
-			if( uac.getSid().getId().equals(id) )
+			if( uac.getSid().getId().equals(userId) )
 			{
 				return uac;
 			}
