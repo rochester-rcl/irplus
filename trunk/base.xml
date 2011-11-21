@@ -187,6 +187,7 @@
     </target>
 
 
+	
     <!--   =================================
            target: clean-ivy
            =================================
@@ -213,6 +214,7 @@
     <target name="resolve"
         depends="install-ivy"
         description="--> places the files in the ivy repository">
+    	<ivy:settings file="../ivysettings.xml"/>
         <ivy:resolve />
     </target>
 
