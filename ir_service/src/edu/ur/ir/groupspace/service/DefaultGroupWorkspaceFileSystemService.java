@@ -36,6 +36,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.groupspace.UserHasParentFolderPermissionsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
@@ -73,7 +74,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	// Service class for dealing with the (A)cess (C)ontrol (L)ists 
 	private SecurityService securityService;
 	
-	/**  Get the logger for this class */
+	//  Get the logger for this class 
 	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceFileSystemService.class);
 
 
@@ -661,6 +662,256 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 
 	}
 	
+	/**
+	 * Change the permission on a given folder and it's children folders and files.  If
+	 * the permissions contain edit permissions for the folder, all child folders and files
+	 * will be updated with the edit permission Regardless of the applyToChildren flag.
+	 * 
+	 * @param user - user to change the permissions for
+	 * @param groupWorkspaceFolder - folder to change the permissions ons
+	 * @param permissions - permissions to give
+	 * @param applyToChildren - apply the permission to children
+	 * 
+	 * @throws UserHasParentFolderPermissionsException - if parent folder has edit permissions that would override the
+	 *  change in any of the child files/folders.
+	 */
+	public void changeUserPermissionsForFolder(IrUser user, GroupWorkspaceFolder 
+			groupWorkspaceFolder, 
+			Set<IrClassTypePermission> permissions, 
+			boolean applyToChildren) throws UserHasParentFolderPermissionsException
+	{
+		// this means a user is trying to remove permissions from a 
+		if( userHasParentFolderEditPermissions(user, groupWorkspaceFolder))
+		{
+			throw new UserHasParentFolderPermissionsException("user = " + user + "child folder = " + groupWorkspaceFolder);
+		}
+		
+		log.debug("adding permissions for user " + user);
+		
+		// figure out which permissions are set
+		boolean hasRead = false;
+		boolean hasEdit = false;
+		boolean hasAddFile = false;
+		
+		// get folder permissions
+		IrClassTypePermission folderReadPermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+		
+		IrClassTypePermission folderAddFilePermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
+		IrClassTypePermission folderEditPermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
+		
+		// get file permissions
+		IrClassTypePermission fileViewPermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION);
+		IrClassTypePermission fileEditPermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.EDIT_PERMISSION);
+		IrClassTypePermission fileSharePermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.SHARE_PERMISSION);
+		
+		
+		if( permissions != null )
+		{
+		    for(IrClassTypePermission permission : permissions)
+		    {
+			    log.debug("permission = " + permission);
+			    log.debug(" compare to " + folderReadPermission);
+			    if(permission.equals(folderReadPermission) )
+			    {
+				    hasRead = true;
+			    }
+			    log.debug(" compare to " + folderAddFilePermission);
+			    if( permission.equals(folderAddFilePermission))
+			    {
+				    hasAddFile = true;
+			    }
+			    log.debug(" compare to " + folderEditPermission);
+			    if( permission.equals(folderEditPermission))
+			    {
+				    hasEdit = true;
+			    }
+		    }
+		}
+		log.debug("hasRead " + hasRead + " has AddFile = " + hasAddFile + " hasEdit = " + hasEdit + " applytoChildren = " + applyToChildren);
+		if( hasEdit || applyToChildren)
+		{
+			log.debug("hasEdit = " + hasEdit + " applytoChildren = " + applyToChildren);
+			List<GroupWorkspaceFile> files = groupWorkspaceFolderDAO.getAllFilesForFolder(groupWorkspaceFolder);
+			List<GroupWorkspaceFolder> folders = groupWorkspaceFolderDAO.getAllFoldersForFolder(groupWorkspaceFolder);
+			
+			// deal with files
+			for(GroupWorkspaceFile f : files )
+			{
+				IrAcl acl = securityService.getAcl(f.getVersionedFile());
+				if( acl == null )
+				{
+					acl = securityService.createAclForObject(f.getVersionedFile());
+				}
+				
+				IrUserAccessControlEntry uace = acl.getUserAccessControlEntry(user.getId());
+				if( uace == null )
+				{
+					uace = acl.createUserAccessControlEntry(user);
+				}
+				
+				if( hasEdit )
+				{
+					log.debug("adding edit and share permission to file " + f);
+				    uace.addPermission(fileEditPermission); 
+				    uace.addPermission(fileSharePermission);
+				    hasRead = true;
+				}
+				else
+				{
+					uace.removePermission(fileEditPermission);
+					uace.removePermission(fileSharePermission);
+				}
+				
+				if( hasAddFile )
+				{
+					hasRead = true;
+				}
+				
+				
+				if(hasRead)
+				{
+					log.debug("adding read permission to file " + f);
+					uace.addPermission(fileViewPermission);
+				}
+				else
+				{
+					uace.removePermission(fileViewPermission);
+				}
+				securityService.save(acl);
+			}
+			
+			// deal with folders
+			for( GroupWorkspaceFolder f : folders)
+			{
+				IrAcl acl = securityService.getAcl(f);
+				if( acl == null )
+				{
+					acl = securityService.createAclForObject(f);
+				}
+				IrUserAccessControlEntry uace = acl.getUserAccessControlEntry(user.getId());
+				if( uace == null )
+				{
+					uace = acl.createUserAccessControlEntry(user);
+				}
+				
+				if( hasEdit )
+		        {
+					log.debug("adding edit permission to folder " + f);
+		        	uace.addPermission(folderEditPermission);
+		        	hasRead = true;
+		        	hasAddFile = true;
+		        }
+		        else
+		        {
+		        	uace.removePermission(folderEditPermission);
+		        }
+		        
+		        if( hasAddFile )
+		        {
+		        	log.debug("adding add file permission to folder " + f);
+		        	uace.addPermission(folderAddFilePermission);
+		        	hasRead = true;
+		        }
+		        else
+		        {
+		        	uace.removePermission(folderAddFilePermission);
+		        }
+		        
+		        if( hasRead )
+		        {
+		        	log.debug("adding has read permission to folder " + f);
+		        	uace.addPermission(folderReadPermission);
+		        }
+		        else
+		        {
+		        	uace.removePermission(folderReadPermission);
+		        }
+		        securityService.save(acl);
+			}
+		}
+	    
+		IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, user);
+		if( userAcl == null )
+		{
+			userAcl = securityService.createAclForObject(groupWorkspaceFolder);
+		}
+		
+		
+		IrUserAccessControlEntry uace = userAcl.getUserAccessControlEntryByUserId(user.getId());
+		if( uace == null )
+		{
+			uace = userAcl.createUserAccessControlEntry(user);
+		}
+		
+		if( hasEdit )
+		{
+		    uace.addPermission(folderEditPermission);
+		    hasRead = true;
+		    hasAddFile = true;
+		}
+		else
+		{
+		    uace.removePermission(folderEditPermission);
+		}
+		        
+		if( hasAddFile )
+		{
+		    uace.addPermission(folderAddFilePermission);
+		    hasRead = true;
+		}
+		else
+		{
+		    uace.removePermission(folderAddFilePermission);
+		}
+			        
+		if( hasRead )
+		{
+		    uace.addPermission(folderReadPermission);
+		}
+		else
+		{
+		    uace.removePermission(folderReadPermission);
+		}
+		securityService.save(userAcl);
+	}
+	
+	/**
+	 * Determines if the user has edit permissions in any of the parent folders for the  
+	 * @param user - the user to check for edit permissions
+	 * @param child - child folder to check parents of
+	 * 
+	 * @return true if a parent folder has edit permissions.
+	 */
+	public boolean userHasParentFolderEditPermissions(IrUser user, GroupWorkspaceFolder child)
+	{
+		return (getFoldersWithEditPermission(user, child).size() > 0);
+	}
+	
+	/**
+	 * Get the list of parent folders that the user has edit permissions on.
+	 * 
+	 * @param user - user to get the permissions for 
+	 * @param child - child folder to check parents of
+	 *  
+	 * @return - list of parent folders the user has edit permissions on or an empty list if there are none.
+	 */
+	public List<GroupWorkspaceFolder> getFoldersWithEditPermission(IrUser user, GroupWorkspaceFolder child)
+	{
+		List<GroupWorkspaceFolder> folders = new LinkedList<GroupWorkspaceFolder>();
+		
+		// get parent folders
+		List<GroupWorkspaceFolder> parentFolders = groupWorkspaceFolderDAO.getFolderPath(child);
+		for(GroupWorkspaceFolder parent : parentFolders)
+		{
+			if(!parent.equals(child))
+			{
+				securityService.hasPermission(parent, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
+				folders.add(parent);
+			}
+		}
+		return folders;
+	}
+	
 	
 	/**
 	 * Delete a group workspace file.
@@ -701,7 +952,9 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	 * @param groupWorkspace - group workspace
 	 * @param permissions - set of permissions to give
 	 */
-	public void giveUsersPermissionsToGroupFileSystem(List<IrUser> users, GroupWorkspace groupWorkspace, List<IrClassTypePermission> permissions)
+	public void giveUsersPermissionsToGroupFileSystem(List<IrUser> users, 
+			GroupWorkspace groupWorkspace, 
+			List<IrClassTypePermission> permissions)
 	{
 		List<GroupWorkspaceFile> files = getAllFiles(groupWorkspace.getId());
 		List<GroupWorkspaceFolder> folders = getAllFolders(groupWorkspace.getId());

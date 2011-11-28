@@ -131,9 +131,28 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_folder_properties.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
         </action>
         
-        <!--  View the group workspace folder properties -->
+        <action name="editUserGroupFolderPermissions"
+            method="editUserPermissions"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
+        </action>
+        
+        <action name="saveUserGroupFolderPermissions"
+            method="saveUserPermissions"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
+        </action>
+        
+        <!--  View the group workspace file properties -->
         <action name="viewGroupWorkspaceFileProperties"
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFileProperties">
             <interceptor-ref name="crudStack" />

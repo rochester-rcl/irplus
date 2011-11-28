@@ -33,12 +33,14 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.groupspace.UserHasParentFolderPermissionsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
@@ -301,6 +303,1004 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
 		
 	}
 	
+	/**
+	 * Test changing the user permissions for the folder 
+	 * 
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws PermissionNotGrantedException
+	 * @throws LocationAlreadyExistsException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws UserDeletedPublicationException
+	 * @throws UserHasParentFolderPermissionsException 
+	 */
+	public void changeUserPermissionsForFolderAllPermissionsTest() throws DuplicateNameException, 
+	    IllegalFileSystemNameException, 
+	    PermissionNotGrantedException, 
+	    LocationAlreadyExistsException, 
+	    UserHasPublishedDeleteException, 
+	    UserDeletedPublicationException, UserHasParentFolderPermissionsException
+	{
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		// save the repository
+		tm.commit(ts);
+
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		UserEmail email2 = new UserEmail("email2");
+		IrUser user2 = userService.createUser("password", "username2", email2);
+		
+		// create the group workspace
+		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspaceService.save(groupWorkspace);
+		
+		
+		// give the user edit permissions on workspace
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.addAll(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
+		assert permissions.size() > 0 : "Should have more than one permission";
+		IrClassTypePermission groupEdit = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		assert groupEdit != null: "Group edit should not be null";
+		assert permissions.contains(groupEdit) : "permissions should contain group edit but does not";
+		
+		// give user1 all permissions
+		groupWorkspaceService.addUserToGroup(user, groupWorkspace, permissions, true);
+		
+		IrClassTypePermission groupRead= securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION);
+		HashSet<IrClassTypePermission> readPermissions = new HashSet<IrClassTypePermission>();
+		readPermissions.add(groupRead);
+		groupWorkspaceService.addUserToGroup(user2, groupWorkspace, readPermissions, false);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		assert groupWorkspace.getId() != null : "Group workspace should be found";
+		GroupWorkspaceFolder myFolder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder", null, user);
+		GroupWorkspaceFile gf = groupWorkspaceFileSystemService.addFile(repo, myFolder, user, "groupFile", "a group file in a folder");
+
+		tm.commit(ts);
+		
+		// new transaction - create two new folders and a personal file
+		ts = tm.getTransaction(td);
+		
+		myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+		assert myFolder != null : "folder should exist";
+		
+		user = userService.getUser(user.getId(), false);
+		 
+		// add sub Folder
+		GroupWorkspaceFolder subFolder = groupWorkspaceFileSystemService.addFolder(myFolder, "subFolder", null, user);
+		
+		// add file to sub folder
+		GroupWorkspaceFile gf2 = groupWorkspaceFileSystemService.addFile(repo, subFolder, user, "groupFile", "a group file in a folder");
+		tm.commit(ts);
+        
+		
+		
+		// start new transaction
+        ts = tm.getTransaction(td);
+        user = userService.getUser(user.getId(), false);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        subFolder = groupWorkspaceFileSystemService.getFolder(subFolder.getId(), false);
+        gf2 = groupWorkspaceFileSystemService.getFile(gf2.getId(), false); 
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) == 0: 
+        	"User should NOT have file edit permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) == 0 : 
+        	"User should NOT have file share permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        tm.commit(ts);
+        
+       
+        // change the permissions
+        ts = tm.getTransaction(td);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        HashSet<IrClassTypePermission> folderPermissions = new HashSet<IrClassTypePermission>();
+		folderPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+        
+        groupWorkspaceFileSystemService.changeUserPermissionsForFolder(user2, myFolder, folderPermissions, false);
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) >= 1: 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have file share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        
+        tm.commit(ts);
+        
+     
+        ts = tm.getTransaction(td);
+     	IrUser deleteUser = userService.getUser(user.getId(), false);
+        groupWorkspaceService.delete(groupWorkspaceService.get(groupWorkspace.getId(), false), deleteUser );
+        tm.commit(ts);
+		
+		// cleanup
+		ts = tm.getTransaction(td);
+		deleteUser = userService.getUser(user.getId(), false);
+		
+		user2 = userService.getUser(user2.getId(), false);
+		userService.deleteUser(user2, deleteUser);
+		
+		userService.deleteUser(deleteUser, deleteUser);
+		helper.cleanUpRepository();
+		tm.commit(ts);	
+	}
+	
+	
+	/**
+	 * Test changing the user permissions for the folder 
+	 * 
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws PermissionNotGrantedException
+	 * @throws LocationAlreadyExistsException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws UserDeletedPublicationException
+	 * @throws UserHasParentFolderPermissionsException 
+	 */
+	public void changeUserPermissionsForFolderAddFilePermissionsTest() throws DuplicateNameException, 
+	    IllegalFileSystemNameException, 
+	    PermissionNotGrantedException, 
+	    LocationAlreadyExistsException, 
+	    UserHasPublishedDeleteException, 
+	    UserDeletedPublicationException, UserHasParentFolderPermissionsException
+	{
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		// save the repository
+		tm.commit(ts);
+
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		UserEmail email2 = new UserEmail("email2");
+		IrUser user2 = userService.createUser("password", "username2", email2);
+		
+		// create the group workspace
+		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspaceService.save(groupWorkspace);
+		
+		
+		// give the user edit permissions on workspace
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.addAll(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
+		assert permissions.size() > 0 : "Should have more than one permission";
+		IrClassTypePermission groupEdit = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		assert groupEdit != null: "Group edit should not be null";
+		assert permissions.contains(groupEdit) : "permissions should contain group edit but does not";
+		
+		// give user1 all permissions
+		groupWorkspaceService.addUserToGroup(user, groupWorkspace, permissions, true);
+		
+		IrClassTypePermission groupRead= securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION);
+		HashSet<IrClassTypePermission> readPermissions = new HashSet<IrClassTypePermission>();
+		readPermissions.add(groupRead);
+		groupWorkspaceService.addUserToGroup(user2, groupWorkspace, readPermissions, false);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		assert groupWorkspace.getId() != null : "Group workspace should be found";
+		GroupWorkspaceFolder myFolder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder", null, user);
+		GroupWorkspaceFile gf = groupWorkspaceFileSystemService.addFile(repo, myFolder, user, "groupFile", "a group file in a folder");
+
+		tm.commit(ts);
+		
+		// new transaction - create two new folders and a personal file
+		ts = tm.getTransaction(td);
+		
+		myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+		assert myFolder != null : "folder should exist";
+		
+		user = userService.getUser(user.getId(), false);
+		 
+		// add sub Folder
+		GroupWorkspaceFolder subFolder = groupWorkspaceFileSystemService.addFolder(myFolder, "subFolder", null, user);
+		
+		// add file to sub folder
+		GroupWorkspaceFile gf2 = groupWorkspaceFileSystemService.addFile(repo, subFolder, user, "groupFile", "a group file in a folder");
+		tm.commit(ts);
+        
+		
+		
+		// start new transaction
+        ts = tm.getTransaction(td);
+        user = userService.getUser(user.getId(), false);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        subFolder = groupWorkspaceFileSystemService.getFolder(subFolder.getId(), false);
+        gf2 = groupWorkspaceFileSystemService.getFile(gf2.getId(), false); 
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) == 0: 
+        	"User should NOT have file edit permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) == 0 : 
+        	"User should NOT have file share permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        tm.commit(ts);
+        
+       
+        // change the permissions
+        ts = tm.getTransaction(td);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        HashSet<IrClassTypePermission> folderPermissions = new HashSet<IrClassTypePermission>();
+		folderPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
+        
+        groupWorkspaceFileSystemService.changeUserPermissionsForFolder(user2, myFolder, folderPermissions, false);
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) == 0: 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) == 0 : 
+        	"User should have file share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        
+        tm.commit(ts);
+        
+     
+        ts = tm.getTransaction(td);
+     	IrUser deleteUser = userService.getUser(user.getId(), false);
+        groupWorkspaceService.delete(groupWorkspaceService.get(groupWorkspace.getId(), false), deleteUser );
+        tm.commit(ts);
+		
+		// cleanup
+		ts = tm.getTransaction(td);
+		deleteUser = userService.getUser(user.getId(), false);
+		
+		user2 = userService.getUser(user2.getId(), false);
+		userService.deleteUser(user2, deleteUser);
+		
+		userService.deleteUser(deleteUser, deleteUser);
+		helper.cleanUpRepository();
+		tm.commit(ts);	
+	}
+	
+	/**
+	 * Test changing the user permissions for the folder 
+	 * 
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws PermissionNotGrantedException
+	 * @throws LocationAlreadyExistsException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws UserDeletedPublicationException
+	 * @throws UserHasParentFolderPermissionsException 
+	 */
+	public void changeUserPermissionsForFolderRemoveAllPermissionsCascadeTest() throws DuplicateNameException, 
+	    IllegalFileSystemNameException, 
+	    PermissionNotGrantedException, 
+	    LocationAlreadyExistsException, 
+	    UserHasPublishedDeleteException, 
+	    UserDeletedPublicationException, UserHasParentFolderPermissionsException
+	{
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		// save the repository
+		tm.commit(ts);
+
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		UserEmail email2 = new UserEmail("email2");
+		IrUser user2 = userService.createUser("password", "username2", email2);
+		
+		// create the group workspace
+		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspaceService.save(groupWorkspace);
+		
+		
+		// give the user edit permissions on workspace
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.addAll(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
+		assert permissions.size() > 0 : "Should have more than one permission";
+		IrClassTypePermission groupEdit = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		assert groupEdit != null: "Group edit should not be null";
+		assert permissions.contains(groupEdit) : "permissions should contain group edit but does not";
+		
+		// give user1 all permissions
+		groupWorkspaceService.addUserToGroup(user, groupWorkspace, permissions, true);
+		
+		IrClassTypePermission groupRead= securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION);
+		HashSet<IrClassTypePermission> readPermissions = new HashSet<IrClassTypePermission>();
+		readPermissions.add(groupRead);
+		groupWorkspaceService.addUserToGroup(user2, groupWorkspace, readPermissions, false);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		assert groupWorkspace.getId() != null : "Group workspace should be found";
+		GroupWorkspaceFolder myFolder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder", null, user);
+		GroupWorkspaceFile gf = groupWorkspaceFileSystemService.addFile(repo, myFolder, user, "groupFile", "a group file in a folder");
+
+		tm.commit(ts);
+		
+		// new transaction - create two new folders and a personal file
+		ts = tm.getTransaction(td);
+		
+		myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+		assert myFolder != null : "folder should exist";
+		
+		user = userService.getUser(user.getId(), false);
+		 
+		// add sub Folder
+		GroupWorkspaceFolder subFolder = groupWorkspaceFileSystemService.addFolder(myFolder, "subFolder", null, user);
+		
+		// add file to sub folder
+		GroupWorkspaceFile gf2 = groupWorkspaceFileSystemService.addFile(repo, subFolder, user, "groupFile", "a group file in a folder");
+		tm.commit(ts);
+        
+		
+		
+		// start new transaction
+        ts = tm.getTransaction(td);
+        user = userService.getUser(user.getId(), false);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        subFolder = groupWorkspaceFileSystemService.getFolder(subFolder.getId(), false);
+        gf2 = groupWorkspaceFileSystemService.getFile(gf2.getId(), false); 
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) == 0: 
+        	"User should NOT have file edit permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) == 0 : 
+        	"User should NOT have file share permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        tm.commit(ts);
+        
+       
+        // change the permissions
+        ts = tm.getTransaction(td);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        HashSet<IrClassTypePermission> folderPermissions = new HashSet<IrClassTypePermission>();
+		
+        
+        groupWorkspaceFileSystemService.changeUserPermissionsForFolder(user2, myFolder, folderPermissions, true);
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) == 0 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) == 0 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) == 0: 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) == 0 : 
+        	"User should have file share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) == 0 : 
+        	"User should have file read but does not";
+        
+        
+        
+        tm.commit(ts);
+        
+     
+        ts = tm.getTransaction(td);
+     	IrUser deleteUser = userService.getUser(user.getId(), false);
+        groupWorkspaceService.delete(groupWorkspaceService.get(groupWorkspace.getId(), false), deleteUser );
+        tm.commit(ts);
+		
+		// cleanup
+		ts = tm.getTransaction(td);
+		deleteUser = userService.getUser(user.getId(), false);
+		
+		user2 = userService.getUser(user2.getId(), false);
+		userService.deleteUser(user2, deleteUser);
+		
+		userService.deleteUser(deleteUser, deleteUser);
+		helper.cleanUpRepository();
+		tm.commit(ts);	
+	}
+	
+	
+	/**
+	 * Test changing the user permissions for the folder 
+	 * 
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws PermissionNotGrantedException
+	 * @throws LocationAlreadyExistsException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws UserDeletedPublicationException
+	 * @throws UserHasParentFolderPermissionsException 
+	 */
+	public void changeUserPermissionsForFolderRemoveAllPermissionsNoCascadeTest() throws DuplicateNameException, 
+	    IllegalFileSystemNameException, 
+	    PermissionNotGrantedException, 
+	    LocationAlreadyExistsException, 
+	    UserHasPublishedDeleteException, 
+	    UserDeletedPublicationException, UserHasParentFolderPermissionsException
+	{
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		// save the repository
+		tm.commit(ts);
+
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		UserEmail email2 = new UserEmail("email2");
+		IrUser user2 = userService.createUser("password", "username2", email2);
+		
+		// create the group workspace
+		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspaceService.save(groupWorkspace);
+		
+		
+		// give the user edit permissions on workspace
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.addAll(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
+		assert permissions.size() > 0 : "Should have more than one permission";
+		IrClassTypePermission groupEdit = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		assert groupEdit != null: "Group edit should not be null";
+		assert permissions.contains(groupEdit) : "permissions should contain group edit but does not";
+		
+		// give user1 all permissions
+		groupWorkspaceService.addUserToGroup(user, groupWorkspace, permissions, true);
+		
+		IrClassTypePermission groupRead= securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION);
+		HashSet<IrClassTypePermission> readPermissions = new HashSet<IrClassTypePermission>();
+		readPermissions.add(groupRead);
+		groupWorkspaceService.addUserToGroup(user2, groupWorkspace, readPermissions, false);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		assert groupWorkspace.getId() != null : "Group workspace should be found";
+		GroupWorkspaceFolder myFolder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder", null, user);
+		GroupWorkspaceFile gf = groupWorkspaceFileSystemService.addFile(repo, myFolder, user, "groupFile", "a group file in a folder");
+
+		tm.commit(ts);
+		
+		// new transaction - create two new folders and a personal file
+		ts = tm.getTransaction(td);
+		
+		myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+		assert myFolder != null : "folder should exist";
+		
+		user = userService.getUser(user.getId(), false);
+		 
+		// add sub Folder
+		GroupWorkspaceFolder subFolder = groupWorkspaceFileSystemService.addFolder(myFolder, "subFolder", null, user);
+		
+		// add file to sub folder
+		GroupWorkspaceFile gf2 = groupWorkspaceFileSystemService.addFile(repo, subFolder, user, "groupFile", "a group file in a folder");
+		tm.commit(ts);
+        
+		
+		
+		// start new transaction
+        ts = tm.getTransaction(td);
+        user = userService.getUser(user.getId(), false);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        subFolder = groupWorkspaceFileSystemService.getFolder(subFolder.getId(), false);
+        gf2 = groupWorkspaceFileSystemService.getFile(gf2.getId(), false); 
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) == 0: 
+        	"User should NOT have edit permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) == 0 : 
+        	"User should NOT have add file permissions but does";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) == 0: 
+        	"User should NOT have file edit permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) == 0 : 
+        	"User should NOT have file share permissions but does";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        tm.commit(ts);
+        
+       
+        // change the permissions
+        ts = tm.getTransaction(td);
+        user2 = userService.getUser(user2.getId(), false);
+        myFolder = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+        HashSet<IrClassTypePermission> folderPermissions = new HashSet<IrClassTypePermission>();
+		folderPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+        
+        groupWorkspaceFileSystemService.changeUserPermissionsForFolder(user2, myFolder, folderPermissions, false);
+        
+        // check folder permissions
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 0: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 0 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(myFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 0 : 
+        	"User should have read permissions but does not";
+        
+        // check sub folder permissions
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 1 : 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 1 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have folder read permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) >= 0: 
+        	"User should have edit permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) >= 0 : 
+        	"User should have add file permissions but does not";
+        
+        assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) >= 1 : 
+        	"User should have read permissions but does not";
+        
+        // check file permissions
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) >= 1 : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION) >= 1 : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file view permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) >= 0: 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) >= 0 : 
+        	"User should have file share permissions but does not";
+        
+        assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) >= 1 : 
+        	"User should have file read but does not";
+        
+        
+        
+        tm.commit(ts);
+        
+     
+        ts = tm.getTransaction(td);
+     	IrUser deleteUser = userService.getUser(user.getId(), false);
+        groupWorkspaceService.delete(groupWorkspaceService.get(groupWorkspace.getId(), false), deleteUser );
+        tm.commit(ts);
+		
+		// cleanup
+		ts = tm.getTransaction(td);
+		deleteUser = userService.getUser(user.getId(), false);
+		
+		user2 = userService.getUser(user2.getId(), false);
+		userService.deleteUser(user2, deleteUser);
+		
+		userService.deleteUser(deleteUser, deleteUser);
+		helper.cleanUpRepository();
+		tm.commit(ts);	
+	}
+
 
 
 }

@@ -98,75 +98,51 @@
             <h3> Folder Properties: ${groupWorkspaceFolder.name} </h3>
             
            
-            <h3>User Permissions</h3>
-            <div class="dataTable">
-            <urstb:table width="100%">
-                <urstb:thead>
-                    <urstb:tr>
-                        <urstb:td>User</urstb:td>
-                        <urstb:td>Owner</urstb:td>
-                        <urstb:td>Edit</urstb:td>
-                        <urstb:td>Add File</urstb:td>
-                        <urstb:td>Read</urstb:td>
-                    </urstb:tr>
-                </urstb:thead>
-                <urstb:tbody
-                    var="entry" 
-                    oddRowClass="odd"
-                    evenRowClass="even"
-                    currentRowClassVar="rowClass"
-                    collection="${folderAcl.userEntries}">
-                    <urstb:tr 
-                            cssClass="${rowClass}"
-                            onMouseOver="this.className='highlight'"
-                            onMouseOut="this.className='${rowClass}'">
-                            
-                            <urstb:td>
-                                <c:if test="${entry.sid.researcher.primaryPicture != null }">
-                                    <c:url var="url" value="/researcherThumbnailDownloader.action">
-                                        <c:param name="irFileId" value="${entry.sid.researcher.primaryPicture.id}"/>
-                                        <c:param name="researcherId" value="${entry.sid.researcher.id}"/>
-                                    </c:url>
-                                    <img class="basic_thumbnail" src="${url}"/>
-                                   
-                                </c:if>
-                                
-                                 <c:if test="${entry.sid.researcher.primaryPicture == null}">
-                	                 <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
-                                 </c:if>	
-                                  <br/> 
-                                  <c:url var="editUserPermissions" value="/user/editUserGroupFolderPermissions.action">
-                                      <c:param name="editUserPermissionsId" value="${entry.sid.id}"/>
-                                      <c:param name="groupWorkspaceFolderId" value="${groupWorkspaceFolder.id}"/>
-                                  </c:url>
-                                 <a href="${editUserPermissions}">${entry.sid.firstName}&nbsp;${entry.sid.lastName}</a>
-                            </urstb:td>
-
-                            <urstb:td>
-                                <c:if test="${ entry.sid.id == groupWorkspaceFolder.owner.id}"> Yes </c:if>
-                                <c:if test="${ entry.sid.id != groupWorkspaceFolder.owner.id}"> No </c:if>
-                            </urstb:td>
-                            
-                            <urstb:td>
-                                <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_EDIT")}'>Yes</c:if>
-                                <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_EDIT")}'>No</c:if>
-                            </urstb:td>
-
-                            <urstb:td>
-                               <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>Yes</c:if>
-                               <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>No</c:if>
-                            </urstb:td>
-
-                            <urstb:td>
-                               <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_READ")}'>Yes</c:if>
-                               <c:if test='${!ir:entryHasPermission(entry, "GROUP_WORKSPACE_FOLDER_READ")}'>No</c:if>
-                            </urstb:td>
-                        
-                        
-                    </urstb:tr>
-                </urstb:tbody>
-            </urstb:table>
-            </div>    
+            <h3>Permissions For User:${editUser.firstName}&nbsp;${editUser.lastName}</h3>
+            
+            <form action="<c:url value="/user/saveUserGroupFolderPermissions"/>" >
+            <input type="hidden" name="groupWorkspaceFolderId" value="${groupWorkspaceFolder.id}"/>
+            <input type="hidden" name="editUserPermissionsId" value="${editUser.id}"/>
+            <table>
+            <tr>
+                <td> Folder Edit:&nbsp;</td>
+                <td>
+                    <input type="checkbox" 
+                        name="folderPermissions"
+                        value="GROUP_WORKSPACE_FOLDER_EDIT"  
+                        <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_EDIT")}'>
+                            checked="checked"
+                        </c:if>
+                    />    
+                </td>     
+            </tr>
+            <tr>
+                <td>Add File:</td>
+                <td>
+                       <input type="checkbox" 
+                              name="folderPermissions"
+                              value="GROUP_WORKSPACE_FOLDER_ADD_FILE" 
+                              <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>
+                                  checked="checked"
+                              </c:if>
+                        />         
+                </td>
+            </tr>
+            <tr>
+                <td>Read:</td>
+                <td> 
+                    <input type="checkbox" 
+                           name="folderPermissions"
+                           value="GROUP_WORKSPACE_FOLDER_READ"
+                         <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_READ")}'>
+                             checked="checked"
+                         </c:if>
+                     /> 
+                 </td>
+             </tr> 
+             </table> 
+             <input type="submit" value="save" />      
+           </form>
         </div>
         <!--  end body div -->
       
