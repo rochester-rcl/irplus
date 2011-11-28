@@ -40,7 +40,6 @@ import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.RoleService;
 import edu.ur.order.OrderType;
 
 /**
@@ -344,7 +343,6 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 		    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
 		    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
 		    }
-		    
 		}
 		
 		

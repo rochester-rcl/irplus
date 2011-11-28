@@ -30,7 +30,7 @@
 <html>
 
 <head>
-    <title>Group Workspace: ${groupSpace.name}</title>
+    <title>File Properties: ${groupWorkspaceFile.versionedFile.nameWithExtension}</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -154,8 +154,9 @@
                       </td>
                   </tr>
               </table>
-            
-            
+  
+            <br/>
+  
              <h3>User Permissions</h3>
             <div class="dataTable">
             <urstb:table width="100%">

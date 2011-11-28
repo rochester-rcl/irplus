@@ -18,14 +18,17 @@
 package edu.ur.ir.web.action.groupspace;
 
 import java.util.Collection;
-
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.security.IrAcl;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.IrUserAccessControlEntry;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -46,6 +49,12 @@ implements  UserIdAware{
 	/* id of the user accessing the information */
 	private Long userId;
 	
+	/* id of the user to edit permissions for */
+	private Long editUserPermissionsId;
+	
+	/* user to edit permissions on */
+	private IrUser editUser;	
+
 	/* id of the group workspace folder */
 	private Long groupWorkspaceFolderId;
 	
@@ -67,10 +76,20 @@ implements  UserIdAware{
 	/* set of folders that are the path for the current folder */
     private Collection <GroupWorkspaceFolder> folderPath;
 
+    /* access control entry for the user */
+    private IrUserAccessControlEntry editUserAcl;
+    
+    /* list of folder permissins */
+    private String[] folderPermissions;
+
 
 	/*  Logger for managing content types*/
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFolderPropertes.class);
 
+	/**
+	 * Allow a user to view folder properties.
+	 * 
+	 */
 	public String execute()
 	{
 		IrUser user = userService.getUser(userId, false);
@@ -82,12 +101,10 @@ implements  UserIdAware{
 		
 		if( groupWorkspaceFolder != null )
 		{
-			String readPermission = GroupWorkspaceFolder.FOLDER_READ_PERMISSION;
-			securityService.getPermissionForClass(groupWorkspaceFolder, readPermission);
 			
-			log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFolder, user, readPermission));
+			log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
 			if( user == null || 
-				securityService.hasPermission(groupWorkspaceFolder, user, readPermission) <= 0)
+				securityService.hasPermission(groupWorkspaceFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) <= 0)
 			{
 				return "accessDenied";
 			}
@@ -99,6 +116,165 @@ implements  UserIdAware{
 		{
 			return "notFound";
 		}
+	}
+	
+	/**
+	 * Allow a user to view and edit the permissions for a given user.
+	 * 
+	 * @return
+	 */
+	public String editUserPermissions()
+	{
+        IrUser user = userService.getUser(userId, false);
+		
+        if( user == null )
+        {
+        	return "accessDenied";
+        }
+		if( groupWorkspaceFolderId != null )
+		{
+			groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(groupWorkspaceFolderId, false);
+		}
+		if( groupWorkspaceFolder != null )
+		{
+			// only owners can make permission changes to folders
+			GroupWorkspace groupWorkspace = groupWorkspaceFolder.getGroupWorkspace();
+			GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+			if( !workspaceUser.isOwner() )
+			{
+				return "accessDenied";
+			}
+			editUser = userService.getUser(editUserPermissionsId, false);
+			
+			
+			if( editUser == null )
+			{
+				return "userNotFound";
+			}
+			IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, editUser);
+			editUserAcl = userAcl.getUserAccessControlEntryByUserId(editUser.getId());
+			log.debug("editUserAcl = " + editUserAcl);
+			
+		}
+		else
+		{
+			return "notFound";
+		}
+		return SUCCESS;
+	}
+	
+	/**
+	 * Save the selected permissions for the user.
+	 * 
+	 * @return
+	 */
+	public String saveUserPermissions()
+	{
+        IrUser user = userService.getUser(userId, false);
+		
+        if( user == null )
+        {
+        	return "accessDenied";
+        }
+		if( groupWorkspaceFolderId != null )
+		{
+			groupWorkspaceFolder = groupWorkspaceFileSystemService.getFolder(groupWorkspaceFolderId, false);
+		}
+		if( groupWorkspaceFolder != null )
+		{
+			// only owners can make permission changes to folders
+			GroupWorkspace groupWorkspace = groupWorkspaceFolder.getGroupWorkspace();
+			GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+			if( !workspaceUser.isOwner() )
+			{
+				return "accessDenied";
+			}
+			editUser = userService.getUser(editUserPermissionsId, false);
+			
+			
+			if( editUser == null )
+			{
+				return "userNotFound";
+			}
+			
+			log.debug("printing folder permissions ");
+			boolean hasRead = false;
+			boolean hasEdit = false;
+			boolean hasAddFile = false;
+			
+			if( folderPermissions != null )
+			{
+			    for(String permission : folderPermissions)
+			    {
+				    log.debug("permission = " + permission);
+				    if(permission.equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION) )
+				    {
+					    hasRead = true;
+				    }
+				
+				    if( permission.equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION))
+				    {
+					    hasAddFile = true;
+				    }
+				
+				    if( permission.equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
+				    {
+					    hasEdit = true;
+				    }
+			    }
+			}
+			
+			
+			IrClassTypePermission readPermission = securityService.getPermissionForClass(groupWorkspaceFolder, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+			IrClassTypePermission addFilePermission = securityService.getPermissionForClass(groupWorkspaceFolder, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
+			IrClassTypePermission editPermission = securityService.getPermissionForClass(groupWorkspaceFolder, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
+
+			IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, editUser);
+			if( userAcl != null )
+			{
+				editUserAcl = userAcl.getUserAccessControlEntryByUserId(editUser.getId());
+			    if( editUserAcl != null )
+			    {
+			        if( hasEdit )
+			        {
+			        	editUserAcl.addPermission(editPermission);
+			        	hasRead = true;
+			        	hasAddFile = true;
+			        }
+			        else
+			        {
+			        	editUserAcl.removePermission(editPermission);
+			        }
+			        
+			        if( hasAddFile )
+			        {
+			        	editUserAcl.addPermission(addFilePermission);
+			        	hasRead = true;
+			        }
+			        else
+			        {
+			        	editUserAcl.removePermission(addFilePermission);
+			        }
+			        
+			        if( hasRead )
+			        {
+			        	editUserAcl.addPermission(readPermission);
+			        }
+			        else
+			        {
+			        	editUserAcl.removePermission(readPermission);
+			        }
+			        securityService.save(userAcl);
+			    }
+			}
+			
+			
+		}
+		else
+		{
+			return "notFound";
+		}
+		return SUCCESS;
 	}
 	
 	/**
@@ -182,5 +358,47 @@ implements  UserIdAware{
 	public Collection<GroupWorkspaceFolder> getFolderPath() {
 		return folderPath;
 	}
+	
+	/**
+	 * Id of the user to edit permissions on.
+	 * @return
+	 */
+	public Long getEditUserPermissionsId() {
+		return editUserPermissionsId;
+	}
 
+	/**
+	 * Id of the user to edit permissions on.
+	 * @param editUserPermissionsId
+	 */
+	public void setEditUserPermissionsId(Long editUserPermissionsId) {
+		this.editUserPermissionsId = editUserPermissionsId;
+	}
+
+	/**
+	 * Get the user you are making permission changes to.
+	 * 
+	 * @return
+	 */
+	public IrUser getEditUser() {
+		return editUser;
+	}
+
+	/**
+	 * Get the edit user access control list.
+	 * 
+	 * @return
+	 */
+	public IrUserAccessControlEntry getEditUserAcl() {
+		return editUserAcl;
+	}
+
+	/**
+	 * Set the users folder permissions.
+	 * 
+	 * @param folderPermissions
+	 */
+	public void setFolderPermissions(String[] folderPermissions) {
+		this.folderPermissions = folderPermissions;
+	}
 }

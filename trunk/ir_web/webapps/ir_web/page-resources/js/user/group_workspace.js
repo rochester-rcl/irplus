@@ -502,8 +502,7 @@ YAHOO.ur.user.group_workspace = {
              
               
               dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: "javascript:YAHOO.ur.user.group_workspace.dropDownVersionedFileUpload(" + fileId + ")" });
-              dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: "javascript:alert('Override Lock')" });
-              dropMenu.addItem({text: '<span class="groupAddBtnImg">&nbsp;</span> Share', url: "javascript:alert('Share')" });
+              dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')'});
               dropMenu.addItems([
                   { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:alert('Publish')" },             
                   { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" },

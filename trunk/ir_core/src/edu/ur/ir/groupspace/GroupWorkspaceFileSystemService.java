@@ -3,6 +3,7 @@ package edu.ur.ir.groupspace;
 import java.io.File;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
@@ -216,6 +217,39 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @param groupWorkspace - group workspace to remove all permissions from.
 	 */
 	public void removeUserPermissionsFromGroupFileSystem(IrUser user, GroupWorkspace groupWorkspace);
+	
+	/**
+	 * Change the permission on a given folder and it's children folders and files. If
+	 * the permissions contain edit permissions for the folder, all child folders and files
+	 * will be updated with the edit permission Regardless of the applyToChildren flag.
+	 * 
+	 * @param user - user to change the permissions for
+	 * @param groupWorkspaceFolder - folder to change the permissions ons
+	 * @param permissions - permissions to give
+	 * 
+	 * @throws UserHasParentFolderPermissionsException - if parent folder has permissions that would override the
+	 *  change in any of the parent folders.
+	 */
+	public void changeUserPermissionsForFolder(IrUser user, GroupWorkspaceFolder 
+			groupWorkspaceFolder, Set<IrClassTypePermission> permissions, boolean applyToChildren) throws UserHasParentFolderPermissionsException;
+	
+	/**
+	 * Determines if the user has edit permissions in any of the parent folders for the  
+	 * @param user - the user to check for edit permissions
+	 * @param child - 
+	 * @return
+	 */
+	public boolean userHasParentFolderEditPermissions(IrUser user, GroupWorkspaceFolder child);
+	
+	/**
+	 * Get the list of parent folders that the user has edit permissions on.
+	 * 
+	 * @param user - user to get the permissions for 
+	 * @param child - child folder
+	 *  
+	 * @return - list of parent folders the user has edit permissions on or an empty list if there are none.
+	 */
+	public List<GroupWorkspaceFolder> getFoldersWithEditPermission(IrUser user, GroupWorkspaceFolder child);
 	
 	/**
 	 * Add the root folder to the group workspace.  This will set up all security permissions as needed
