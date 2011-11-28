@@ -49,6 +49,11 @@ public class SecurityUtilFunctions {
 	 */
 	public static boolean entryHasPermission(AccessControlEntry accessControlEntry, String permission)
 	{
+		// a null access control entry cannot have any permissions
+		if( accessControlEntry == null )
+		{
+			return false;
+		}
 	
 		return accessControlEntry.getPermissionNames().contains(permission);
 	}

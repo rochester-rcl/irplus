@@ -18,6 +18,8 @@
 package edu.ur.ir.web.action.groupspace;
 
 import java.util.Collection;
+import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -26,6 +28,7 @@ import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.groupspace.UserHasParentFolderPermissionsException;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.IrUserAccessControlEntry;
@@ -79,9 +82,11 @@ implements  UserIdAware{
     /* access control entry for the user */
     private IrUserAccessControlEntry editUserAcl;
     
-    /* list of folder permissins */
+    /* list of folder permissions */
     private String[] folderPermissions;
-
+    
+    /* apply the permission to children */
+    private boolean applyToChildren = false;
 
 	/*  Logger for managing content types*/
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFolderPropertes.class);
@@ -154,6 +159,7 @@ implements  UserIdAware{
 			IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, editUser);
 			editUserAcl = userAcl.getUserAccessControlEntryByUserId(editUser.getId());
 			log.debug("editUserAcl = " + editUserAcl);
+			folderPath = groupWorkspaceFileSystemService.getFolderPath(groupWorkspaceFolder);
 			
 		}
 		else
@@ -198,9 +204,7 @@ implements  UserIdAware{
 			}
 			
 			log.debug("printing folder permissions ");
-			boolean hasRead = false;
-			boolean hasEdit = false;
-			boolean hasAddFile = false;
+			HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 			
 			if( folderPermissions != null )
 			{
@@ -209,71 +213,53 @@ implements  UserIdAware{
 				    log.debug("permission = " + permission);
 				    if(permission.equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION) )
 				    {
-					    hasRead = true;
+				    	IrClassTypePermission read = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+				    	if( read == null )
+				    	{
+				    		throw new IllegalStateException("read permission is null");
+				    	}
+					    permissions.add(read);
 				    }
 				
 				    if( permission.equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION))
 				    {
-					    hasAddFile = true;
+				    	IrClassTypePermission addFile = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
+				    	if( addFile == null )
+				    	{
+				    		throw new IllegalStateException("add file permission is null");
+				    	}
+				    	permissions.add(addFile);
 				    }
 				
 				    if( permission.equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
 				    {
-					    hasEdit = true;
+				    	IrClassTypePermission editFolder = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
+				    	if( editFolder == null )
+				    	{
+				    		throw new IllegalStateException("edit folder permission is null");
+				    	}
+				    	permissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION));
 				    }
 			    }
 			}
 			
-			
-			IrClassTypePermission readPermission = securityService.getPermissionForClass(groupWorkspaceFolder, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
-			IrClassTypePermission addFilePermission = securityService.getPermissionForClass(groupWorkspaceFolder, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
-			IrClassTypePermission editPermission = securityService.getPermissionForClass(groupWorkspaceFolder, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
-
-			IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, editUser);
-			if( userAcl != null )
-			{
-				editUserAcl = userAcl.getUserAccessControlEntryByUserId(editUser.getId());
-			    if( editUserAcl != null )
-			    {
-			        if( hasEdit )
-			        {
-			        	editUserAcl.addPermission(editPermission);
-			        	hasRead = true;
-			        	hasAddFile = true;
-			        }
-			        else
-			        {
-			        	editUserAcl.removePermission(editPermission);
-			        }
-			        
-			        if( hasAddFile )
-			        {
-			        	editUserAcl.addPermission(addFilePermission);
-			        	hasRead = true;
-			        }
-			        else
-			        {
-			        	editUserAcl.removePermission(addFilePermission);
-			        }
-			        
-			        if( hasRead )
-			        {
-			        	editUserAcl.addPermission(readPermission);
-			        }
-			        else
-			        {
-			        	editUserAcl.removePermission(readPermission);
-			        }
-			        securityService.save(userAcl);
-			    }
+			try {
+				groupWorkspaceFileSystemService.changeUserPermissionsForFolder(editUser, groupWorkspaceFolder, permissions, applyToChildren);
+			} catch (UserHasParentFolderPermissionsException e) {
+				addFieldError("parentFolderPermissionsError", 
+						"A parent folder has permissions which would override the permissions choosen please check parent folders for edit permissions");
 			}
-			
-			
+			IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, editUser);
+			editUserAcl = userAcl.getUserAccessControlEntryByUserId(editUser.getId());
+			folderPath = groupWorkspaceFileSystemService.getFolderPath(groupWorkspaceFolder);
 		}
 		else
 		{
 			return "notFound";
 		}
+		
+		
+		
 		return SUCCESS;
 	}
 	
@@ -285,7 +271,6 @@ implements  UserIdAware{
 	public IrAcl getFolderAcl() {
 		return folderAcl;
 	}
-
 	
 	/**
 	 * Set the security service.
@@ -400,5 +385,14 @@ implements  UserIdAware{
 	 */
 	public void setFolderPermissions(String[] folderPermissions) {
 		this.folderPermissions = folderPermissions;
+	}
+	
+	/**
+	 * Determine if permissions should be applied to child files and folders.
+	 * 
+	 * @param applyToChildren
+	 */
+	public void setApplyToChildren(boolean applyToChildren) {
+		this.applyToChildren = applyToChildren;
 	}
 }

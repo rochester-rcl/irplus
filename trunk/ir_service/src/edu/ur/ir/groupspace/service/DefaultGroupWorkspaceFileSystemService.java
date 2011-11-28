@@ -680,11 +680,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 			Set<IrClassTypePermission> permissions, 
 			boolean applyToChildren) throws UserHasParentFolderPermissionsException
 	{
-		// this means a user is trying to remove permissions from a 
-		if( userHasParentFolderEditPermissions(user, groupWorkspaceFolder))
-		{
-			throw new UserHasParentFolderPermissionsException("user = " + user + "child folder = " + groupWorkspaceFolder);
-		}
+		
 		
 		log.debug("adding permissions for user " + user);
 		
@@ -727,6 +723,14 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 			    }
 		    }
 		}
+		
+		// this means a user is trying to remove permissions from a 
+		if( !hasEdit && userHasParentFolderEditPermissions(user, groupWorkspaceFolder))
+		{
+			throw new UserHasParentFolderPermissionsException("user = " + user + "child folder = " + groupWorkspaceFolder);
+		}
+		
+		
 		log.debug("hasRead " + hasRead + " has AddFile = " + hasAddFile + " hasEdit = " + hasEdit + " applytoChildren = " + applyToChildren);
 		if( hasEdit || applyToChildren)
 		{
@@ -905,8 +909,10 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		{
 			if(!parent.equals(child))
 			{
-				securityService.hasPermission(parent, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
-				folders.add(parent);
+				if( securityService.hasPermission(parent, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) > 0 )
+				{
+				    folders.add(parent);
+				}
 			}
 		}
 		return folders;
