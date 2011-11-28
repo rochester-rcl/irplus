@@ -99,13 +99,15 @@
             
            
             <h3>Permissions For User:${editUser.firstName}&nbsp;${editUser.lastName}</h3>
+            <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="parentFolderPermissionsError"/></p>
             
             <form action="<c:url value="/user/saveUserGroupFolderPermissions"/>" >
             <input type="hidden" name="groupWorkspaceFolderId" value="${groupWorkspaceFolder.id}"/>
             <input type="hidden" name="editUserPermissionsId" value="${editUser.id}"/>
             <table>
             <tr>
-                <td> Folder Edit:&nbsp;</td>
+                <td> Folder Edit:</td>
                 <td>
                     <input type="checkbox" 
                         name="folderPermissions"
@@ -114,8 +116,10 @@
                             checked="checked"
                         </c:if>
                     />    
-                </td>     
+                </td> 
+                    
             </tr>
+            
             <tr>
                 <td>Add File:</td>
                 <td>
@@ -125,7 +129,7 @@
                               <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>
                                   checked="checked"
                               </c:if>
-                        />         
+                        />      
                 </td>
             </tr>
             <tr>
@@ -140,7 +144,20 @@
                      /> 
                  </td>
              </tr> 
+             
+             <tr>
+                <td>Apply above changes to child files and folders &nbsp; &nbsp;</td>
+                <td> 
+                    <input type="checkbox" 
+                           name="applyToChildren"
+                           value="true"
+                           checked="checked" /> 
+                 </td>
+             </tr> 
              </table> 
+             
+             
+             
              <input type="submit" value="save" />      
            </form>
         </div>
