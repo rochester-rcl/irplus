@@ -30,7 +30,7 @@
 <html>
 
 <head>
-    <title>Edit Permissions for Group Workspace Folder: ${groupWorkspaceFolder.name}</title>
+    <title>Edit Permissions for Group Workspace File: ${groupWorkspaceFile.name}</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -71,7 +71,7 @@
         </c:url>
         <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
             <c:param name="tabName" value="GROUP_WORKSPACE"/>
-            <c:param name="groupWorkspaceId" value="${groupWorkspaceFolder.groupWorkspace.id}"/>
+            <c:param name="groupWorkspaceId" value="${groupWorkspaceFile.groupWorkspace.id}"/>
         </c:url>
   
         <div id="bd">
@@ -80,7 +80,7 @@
 	            <a href="${workspaceUrl}">Group Workspaces</a> /
 	           
 	            <span class="groupImg">&nbsp;</span>
-                <a href="${groupWorkspaceUrl}">${groupWorkspaceFolder.groupWorkspace.name}</a>&nbsp;/
+                <a href="${groupWorkspaceUrl}">${groupWorkspaceFile.groupWorkspace.name}</a>&nbsp;/
               
 	    
                  <c:forEach var="currentFolder" items="${folderPath}">
@@ -95,69 +95,42 @@
             </strong>
             <br/><br/>
            
-            <h3> Folder Properties: ${groupWorkspaceFolder.name} </h3>
+            <h3> Permissions for File: ${groupWorkspaceFile.name} </h3>
             
            
             <h3>Permissions For User:${editUser.firstName}&nbsp;${editUser.lastName}</h3>
             <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 			key="parentFolderPermissionsError"/></p>
             
-            <form action="<c:url value="/user/saveUserGroupFolderPermissions"/>" >
-            <input type="hidden" name="groupWorkspaceFolderId" value="${groupWorkspaceFolder.id}"/>
+            <form action="<c:url value="/user/saveUserGroupFilePermissions"/>" >
+            <input type="hidden" name="groupWorkspaceFileId" value="${groupWorkspaceFile.id}"/>
             <input type="hidden" name="editUserPermissionsId" value="${editUser.id}"/>
             <table>
             <tr>
                 <td> Folder Edit:</td>
                 <td>
                     <input type="checkbox" 
-                        name="folderPermissions"
-                        value="GROUP_WORKSPACE_FOLDER_EDIT"  
-                        <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_EDIT")}'>
+                        name="filePermissions"
+                        value="EDIT"  
+                        <c:if test='${ir:entryHasPermission(editUserAcl, "EDIT")}'>
                             checked="checked"
                         </c:if>
                     />    
                 </td> 
-                    
-            </tr>
-            
-            <tr>
-                <td>Add File:</td>
-                <td>
-                       <input type="checkbox" 
-                              name="folderPermissions"
-                              value="GROUP_WORKSPACE_FOLDER_ADD_FILE" 
-                              <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_ADD_FILE")}'>
-                                  checked="checked"
-                              </c:if>
-                        />      
-                </td>
             </tr>
             <tr>
                 <td>Read:</td>
                 <td> 
                     <input type="checkbox" 
-                           name="folderPermissions"
-                           value="GROUP_WORKSPACE_FOLDER_READ"
-                         <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_FOLDER_READ")}'>
+                           name="filePermissions"
+                           value="VIEW"
+                         <c:if test='${ir:entryHasPermission(editUserAcl, "VIEW")}'>
                              checked="checked"
                          </c:if>
                      /> 
                  </td>
              </tr> 
-             
-             <tr>
-                <td>Apply above changes to child files and folders &nbsp; &nbsp;</td>
-                <td> 
-                    <input type="checkbox" 
-                           name="applyToChildren"
-                           value="true"
-                           checked="checked" /> 
-                 </td>
-             </tr> 
              </table> 
-             
-             
-             
              <input type="submit" value="save" />      
            </form>
         </div>

@@ -43,7 +43,7 @@ import edu.ur.ir.web.action.UserIdAware;
  * @author Nathan Sarr
  *
  */
-public class ManageGroupWorkspaceFolderPropertes extends ActionSupport 
+public class ManageGroupWorkspaceFolderProperties extends ActionSupport 
 implements  UserIdAware{
 
 	/*eclipse generated id*/
@@ -89,7 +89,7 @@ implements  UserIdAware{
     private boolean applyToChildren = false;
 
 	/*  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFolderPropertes.class);
+	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceFolderProperties.class);
 
 	/**
 	 * Allow a user to view folder properties.
@@ -176,6 +176,7 @@ implements  UserIdAware{
 	 */
 	public String saveUserPermissions()
 	{
+		boolean error = false;
         IrUser user = userService.getUser(userId, false);
 		
         if( user == null )
@@ -248,6 +249,7 @@ implements  UserIdAware{
 			} catch (UserHasParentFolderPermissionsException e) {
 				addFieldError("parentFolderPermissionsError", 
 						"A parent folder has permissions which would override the permissions choosen please check parent folders for edit permissions");
+				error = true;
 			}
 			IrAcl userAcl = securityService.getAcl(groupWorkspaceFolder, editUser);
 			editUserAcl = userAcl.getUserAccessControlEntryByUserId(editUser.getId());
@@ -259,8 +261,14 @@ implements  UserIdAware{
 		}
 		
 		
-		
-		return SUCCESS;
+		if( !error )
+		{
+		    return SUCCESS;
+		}
+		else
+		{
+			return ERROR;
+		}
 	}
 	
 	/**

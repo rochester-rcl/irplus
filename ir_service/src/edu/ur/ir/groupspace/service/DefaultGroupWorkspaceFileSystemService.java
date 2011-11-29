@@ -663,6 +663,111 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	}
 	
 	/**
+	 * Change the user permissions for the specified file.
+	 * 
+	 * @param user - user to change the permissions for
+	 * @param groupWorkspaceFile - the file to change the permissions on
+	 * @param permissions - set of permissions the user should have for the file.  If no permissions
+	 * are listed all permissions are removed for the file.
+	 * 
+	 * @throws UserHasParentFolderPermissionsException - if the permissions for the parent folder or group workspace give the
+	 * user full control over the child file
+	 */
+	public void changeUserPermissionsForFile(IrUser user, GroupWorkspaceFile groupWorkspaceFile,
+			Set<IrClassTypePermission> permissions) throws UserHasParentFolderPermissionsException
+	{
+		log.debug("adding permissions for user " + user);
+		
+		// figure out which permissions are set
+		boolean hasRead = false;
+		boolean hasEdit = false;
+		
+		// get file permissions
+		IrClassTypePermission fileViewPermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION);
+		IrClassTypePermission fileEditPermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.EDIT_PERMISSION);
+		IrClassTypePermission fileSharePermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.SHARE_PERMISSION);
+		
+		
+		if( permissions != null )
+		{
+		    for(IrClassTypePermission permission : permissions)
+		    {
+			    log.debug("permission = " + permission);
+			    log.debug(" compare to " + fileViewPermission);
+			    if(permission.equals(fileViewPermission) )
+			    {
+				    hasRead = true;
+			    }
+			    
+			    log.debug(" compare to " + fileEditPermission);
+			    if( permission.equals(fileEditPermission))
+			    {
+				    hasEdit = true;
+			    }
+		    }
+		}
+		GroupWorkspace groupWorkspace = groupWorkspaceFile.getGroupWorkspace();
+		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+		
+		if( !hasEdit )
+		{
+			// this means a user is trying to remove permissions from a folder where a parent folder gives the user
+			// full control over it's children
+			if(workspaceUser.isOwner())
+			{
+				throw new UserHasParentFolderPermissionsException("user = " + user + "child file = " + groupWorkspaceFile);
+			}
+			if( groupWorkspaceFile.getGroupWorkspaceFolder() != null )
+			{
+				if( securityService.hasPermission( groupWorkspaceFile.getGroupWorkspaceFolder(), user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) > 0 ||
+						userHasParentFolderEditPermissions(user,  groupWorkspaceFile.getGroupWorkspaceFolder()) )
+				{
+					throw new UserHasParentFolderPermissionsException("user = " + user + "child file = " + groupWorkspaceFile);
+				}
+				
+			}
+		}
+		
+		IrAcl acl = securityService.getAcl(groupWorkspaceFile.getVersionedFile());
+		if( acl == null )
+		{
+			acl = securityService.createAclForObject(groupWorkspaceFile.getVersionedFile());
+		}
+		
+		IrUserAccessControlEntry uace = acl.getUserAccessControlEntry(user.getId());
+		if( uace == null )
+		{
+			uace = acl.createUserAccessControlEntry(user);
+		}
+		
+		if( hasEdit )
+		{
+			log.debug("adding edit and share permission to file " + groupWorkspaceFile);
+		    uace.addPermission(fileEditPermission); 
+		    uace.addPermission(fileSharePermission);
+		    hasRead = true;
+		}
+		else
+		{
+			uace.removePermission(fileEditPermission);
+			uace.removePermission(fileSharePermission);
+		}
+		
+		if(hasRead)
+		{
+			log.debug("adding read permission to file " + groupWorkspaceFile);
+			uace.addPermission(fileViewPermission);
+		}
+		else
+		{
+			uace.removePermission(fileViewPermission);
+		}
+		securityService.save(acl);
+
+		
+	}
+	
+	/**
 	 * Change the permission on a given folder and it's children folders and files.  If
 	 * the permissions contain edit permissions for the folder, all child folders and files
 	 * will be updated with the edit permission Regardless of the applyToChildren flag.
@@ -724,8 +829,12 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		    }
 		}
 		
-		// this means a user is trying to remove permissions from a 
-		if( !hasEdit && userHasParentFolderEditPermissions(user, groupWorkspaceFolder))
+		GroupWorkspace groupWorkspace = groupWorkspaceFolder.getGroupWorkspace();
+		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+		
+		// this means a user is trying to remove permissions from a folder where a parent folder gives the user
+		// full control over it's children
+		if( !hasEdit && (userHasParentFolderEditPermissions(user, groupWorkspaceFolder) || workspaceUser.isOwner()) )
 		{
 			throw new UserHasParentFolderPermissionsException("user = " + user + "child folder = " + groupWorkspaceFolder);
 		}
