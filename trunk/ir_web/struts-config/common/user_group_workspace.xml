@@ -127,7 +127,7 @@
         
         <!--  View the group workspace folder properties -->
         <action name="viewGroupWorkspaceFolderProperties"
-            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderProperties">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_folder_properties.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
@@ -136,7 +136,7 @@
         
         <action name="editUserGroupFolderPermissions"
             method="editUserPermissions"
-            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderProperties">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
@@ -145,11 +145,30 @@
         
         <action name="saveUserGroupFolderPermissions"
             method="saveUserPermissions"
-            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderPropertes">
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderProperties">
             <interceptor-ref name="crudStack" />
-            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">viewGroupWorkspaceFolderProperties.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="groupWorkspaceFolderId">${groupWorkspaceFolder.id}</param>
+        	</result>   
+        	<result name="error">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>  
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
+        </action>
+        
+         <action name="saveUserGroupFilePermissions"
+            method="saveUserPermissions"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFileProperties">
+            <interceptor-ref name="crudStack" />
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">viewGroupWorkspaceFileProperties.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="groupWorkspaceFileId">${groupWorkspaceFile.id}</param>
+        	</result> 
+        	<result name="error">/pages/user/workspace/group_workspace/edit_group_workspace_user_file_permissions.jsp</result>  
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_file_not_found.jsp</result>
         </action>
         
         <!--  View the group workspace file properties -->
@@ -158,6 +177,16 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_properties.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
+        </action>
+        
+        <!-- Edit the group workspace file permissions  -->
+        <action name="editUserGroupFilePermissions"
+            method="editUserPermissions"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFileProperties">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_file_permissions.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_file_not_found.jsp</result>
         </action>
         
         

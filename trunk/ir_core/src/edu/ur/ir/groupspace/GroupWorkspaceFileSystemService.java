@@ -234,6 +234,20 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 			groupWorkspaceFolder, Set<IrClassTypePermission> permissions, boolean applyToChildren) throws UserHasParentFolderPermissionsException;
 	
 	/**
+	 * Change the user permissions for the specified file.
+	 * 
+	 * @param user - user to change the permissions for
+	 * @param groupWorkspaceFile - the file to change the permissions on
+	 * @param permissions - set of permissions the user should have for the file.  If no permissions
+	 * are listed all permissions are removed for the file.
+	 * 
+	 * @throws UserHasParentFolderPermissionsException - if the permissions for the parent folder or group workspace give the
+	 * user full control over the child file
+	 */
+	public void changeUserPermissionsForFile(IrUser user, GroupWorkspaceFile groupWorkspaceFile,
+			Set<IrClassTypePermission> permissions) throws UserHasParentFolderPermissionsException;
+			
+	/**
 	 * Determines if the user has edit permissions in any of the parent folders for the  
 	 * @param user - the user to check for edit permissions
 	 * @param child - 
