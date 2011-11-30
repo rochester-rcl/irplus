@@ -34,13 +34,13 @@ import edu.ur.ir.user.IrUser;
 public class GroupWorkspaceWebUtilFunctions {
 	
 	/**
-	 * Returns true if the user is the owner of the given group workspace
+	 * Returns true if the current user is the owner of the given group workspace
 	 * 
 	 * @param groupWorkspace - group workspace to check ownership
 	 * 
 	 * @return true if the user is one of the owners of the group
 	 */
-	public static boolean isGroupWorkspaceOwner(GroupWorkspace groupWorkspace)
+	public static boolean isCurrentUserGroupWorkspaceOwner(GroupWorkspace groupWorkspace)
 	{
 		boolean isOwner = false;
 		IrUser user = null;
@@ -52,7 +52,7 @@ public class GroupWorkspaceWebUtilFunctions {
 			 }
         }
 		
-        if( user != null )
+        if( user != null && groupWorkspace != null)
         {
         	GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
         	if( workspaceUser != null )
@@ -62,5 +62,30 @@ public class GroupWorkspaceWebUtilFunctions {
         }
         return isOwner;
 	}
+	
+	/**
+	 * Returns true if the  user is the owner of the given group workspace
+	 * 
+	 * @param groupWorkspace - workspace to check
+	 * @param user - user to check
+	 * 
+	 * @return true if the user is an owner of the group workspace
+	 */
+	public static boolean isUserGroupWorkspaceOwner(GroupWorkspace groupWorkspace, IrUser user)
+	{
+		boolean isOwner = false;
+		
+		
+        if( user != null && groupWorkspace != null)
+        {
+        	GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+        	if( workspaceUser != null )
+        	{
+        		isOwner = workspaceUser.isOwner();
+        	}
+        }
+        return isOwner;
+	}
+
 
 }

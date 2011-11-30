@@ -92,7 +92,7 @@
                             ${groupWorkspace.description}
                         </urstb:td>
                         <urstb:td>
-                             <c:if test="${ir:isGroupWorkspaceOwner(groupWorkspace)}">
+                             <c:if test="${ir:isCurrentUserGroupWorkspaceOwner(groupWorkspace)}">
                                  <c:url value="/user/getGroupWorkspace.action" var="editGroupWorkspaceUrl">
 						            <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
 						         </c:url>

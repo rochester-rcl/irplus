@@ -735,12 +735,22 @@
 	
 	
    <function>
-		<name>isGroupWorkspaceOwner</name>
+		<name>isCurrentUserGroupWorkspaceOwner</name>
 		<function-class>
 			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace)
+			boolean isCurrentUserGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace)
+		</function-signature>
+	</function>
+	
+	   <function>
+		<name>isUserGroupWorkspaceOwner</name>
+		<function-class>
+			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isUserGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace, edu.ur.ir.user.IrUser)
 		</function-signature>
 	</function>
 
