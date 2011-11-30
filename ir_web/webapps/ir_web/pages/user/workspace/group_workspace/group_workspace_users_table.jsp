@@ -22,42 +22,76 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
+
 <div class="dataTable">
     <urstb:table width="100%">
         <urstb:thead>
             <urstb:tr>
-                <urstb:td> Name </urstb:td>
-                <urstb:td> Owner </urstb:td>
-                <urstb:td> Email </urstb:td>
-                <urstb:td> Action </urstb:td>
+                <urstb:td>User</urstb:td>
+                <urstb:td>Owner</urstb:td>
+                <urstb:td>Edit</urstb:td>
+                <urstb:td>Add File</urstb:td>
+                <urstb:td>Read</urstb:td>
             </urstb:tr>
         </urstb:thead>
         <urstb:tbody
-            var="workspaceUser" 
+            var="entry" 
             oddRowClass="odd"
             evenRowClass="even"
             currentRowClassVar="rowClass"
-            collection="${groupWorkspace.users}">
+            collection="${groupWorkspaceAcl.userEntries}">
             <urstb:tr 
                 cssClass="${rowClass}"
                 onMouseOver="this.className='highlight'"
                 onMouseOut="this.className='${rowClass}'">
+                            
                 <urstb:td>
-                    ${workspaceUser.user.firstName}&nbsp;${workspaceUser.user.lastName}
+                    <c:if test="${entry.sid.researcher.primaryPicture != null }">
+                        <c:url var="url" value="/researcherThumbnailDownloader.action">
+                            <c:param name="irFileId" value="${entry.sid.researcher.primaryPicture.id}"/>
+                            <c:param name="researcherId" value="${entry.sid.researcher.id}"/>
+                        </c:url>
+                        <img class="basic_thumbnail" src="${url}"/>
+                                   
+                    </c:if>
+                                
+                    <c:if test="${entry.sid.researcher.primaryPicture == null}">
+                        <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+                    </c:if>	
+                    <br/> 
+                    <c:url var="editUserPermissions" value="/user/editGroupWorkspacePermissions.action">
+                        <c:param name="editUserPermissionsId" value="${entry.sid.id}"/>
+                        <c:param name="groupWorkspaceFolderId" value="${groupWorkspaceFolder.id}"/>
+                    </c:url>
+                    <a href="${editUserPermissions}">${entry.sid.firstName}&nbsp;${entry.sid.lastName}</a>
                 </urstb:td>
-                  <urstb:td>
-                    ${workspaceUser.owner}
-                </urstb:td>      
-                <urstb:td>
-                    ${workspaceUser.user.defaultEmail.email}
-                </urstb:td>
-                <urstb:td>
-                    <a href="">Edit Permissions</a> / <a href="javascript:YAHOO.ur.group_workspace_invite.removeUser(${workspaceUser.user.id});">Remove</a>
-                </urstb:td>                        
 
-            </urstb:tr>
-            
-            
-        </urstb:tbody>
-    </urstb:table>
-</div>
+                <urstb:td>
+                    <c:if test="${ir:isUserGroupWorkspaceOwner(groupWorkspace, entry.sid)}">
+                    Yes
+                    </c:if>
+                    <c:if test="${!ir:isUserGroupWorkspaceOwner(groupWorkspace, entry.sid)}">
+                    No
+                    </c:if>
+                </urstb:td>
+                            
+                <urstb:td>
+                    <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_EDIT")}'>Yes</c:if>
+                    <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_EDIT")}'>No</c:if>
+                </urstb:td>
+
+               <urstb:td>
+                   <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_ADD_FILE")}'>Yes</c:if>
+                   <c:if test='${ !ir:entryHasPermission(entry, "GROUP_WORKSPACE_ADD_FILE")}'>No</c:if>
+               </urstb:td>
+
+               <urstb:td>
+                   <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_READ")}'>Yes</c:if>
+                   <c:if test='${!ir:entryHasPermission(entry, "GROUP_WORKSPACE_READ")}'>No</c:if>
+               </urstb:td>
+                        
+                        
+           </urstb:tr>
+       </urstb:tbody>
+   </urstb:table>
+</div>    

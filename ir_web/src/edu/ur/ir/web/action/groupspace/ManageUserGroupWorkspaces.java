@@ -31,6 +31,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceEmailInvite;
 import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
+import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
@@ -63,7 +64,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	
 	/* service for dealing with group space information */
 	private GroupWorkspaceService groupWorkspaceService;
-
+	
 	/* id of the user trying to make changes */
 	private Long userId;
 
@@ -114,9 +115,18 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	
 	private String tabName = "WORKSPACE";
 
+    // acl for a group workspace
+    private IrAcl groupWorkspaceAcl;
 
 
-
+	/**
+	 * Get the group workspace access control list.
+	 * 
+	 * @return
+	 */
+	public IrAcl getGroupWorkspaceAcl() {
+		return groupWorkspaceAcl;
+	}
 
 	/**
 	 * Default constructor
@@ -161,6 +171,8 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		    	return "accessDenied";
 		    }
 		}
+		
+		groupWorkspaceAcl = securityService.getAcl(groupWorkspace);
 	    return "get";
 	}
 	
