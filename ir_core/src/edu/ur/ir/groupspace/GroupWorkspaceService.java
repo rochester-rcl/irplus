@@ -143,5 +143,20 @@ public interface GroupWorkspaceService extends Serializable{
 	public GroupWorkspaceUser addUserToGroup(IrUser user, 
 			GroupWorkspace groupWorkspace, Set<IrClassTypePermission> permissions, boolean setAsOwner)
 	    throws DuplicateNameException;
+	
+	
+	/**
+	 * Change the user permissions for the group workspace.
+	 * 
+	 * @param user - user to change the permissions for
+	 * @param groupWorkspace - the group workspace to change the permissions on
+	 * @param permissions - set of permissions to give - all other permissions will be removed if the
+	 * user has other permissions - empty set will remove all permissions for the user
+	 * @param applyToChildren  - apply the permission changes to all child files and folders for the user.
+	 * 
+	 * @throws UserHasParentFolderPermissionsException - if the user has owner or edit privileges on the group workspace
+	 */
+	public void changeUserPermissions(IrUser user, GroupWorkspace groupWorkspace,
+			Set<IrClassTypePermission> permissions, boolean applyToChildren) throws UserHasParentFolderPermissionsException;
 
 }

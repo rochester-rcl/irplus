@@ -713,7 +713,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		{
 			// this means a user is trying to remove permissions from a folder where a parent folder gives the user
 			// full control over it's children
-			if(workspaceUser.isOwner())
+			if(workspaceUser.isOwner() || securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION) > 0)
 			{
 				throw new UserHasParentFolderPermissionsException("user = " + user + "child file = " + groupWorkspaceFile);
 			}
@@ -787,7 +787,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	{
 		
 		
-		log.debug("adding permissions for user " + user);
+		log.debug("changing permissions for user " + user);
 		
 		// figure out which permissions are set
 		boolean hasRead = false;
@@ -796,7 +796,6 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		
 		// get folder permissions
 		IrClassTypePermission folderReadPermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
-		
 		IrClassTypePermission folderAddFilePermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
 		IrClassTypePermission folderEditPermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
 		
@@ -834,7 +833,10 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		
 		// this means a user is trying to remove permissions from a folder where a parent folder gives the user
 		// full control over it's children
-		if( !hasEdit && (userHasParentFolderEditPermissions(user, groupWorkspaceFolder) || workspaceUser.isOwner()) )
+		if( !hasEdit && (workspaceUser.isOwner() || 
+				         securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION) > 0 ||
+				         userHasParentFolderEditPermissions(user, groupWorkspaceFolder) ) 
+		   )
 		{
 			throw new UserHasParentFolderPermissionsException("user = " + user + "child folder = " + groupWorkspaceFolder);
 		}

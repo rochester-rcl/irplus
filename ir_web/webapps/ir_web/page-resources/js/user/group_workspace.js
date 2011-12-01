@@ -73,7 +73,7 @@ YAHOO.ur.user.group_workspace = {
 	    	currentWorkspaceId = document.getElementById('groupFolderForm_workspaceId').value;
 	    }
 	    
-	    if( workspaceId == 0 )
+	    if( workspaceId == null || workspaceId == 0 )
 	    {
 	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
 	    }
@@ -159,21 +159,6 @@ YAHOO.ur.user.group_workspace = {
             {       	    
                 var response = o.responseText;
                 document.getElementById('group_workspaces').innerHTML = response;
-            
-                // this is for capturing history
-                // it may fail if this is not an A grade browser so we need to
-                // catch the error.
-                // this will store the folder Id in the URL
-                try 
-                {
-            	    // do not remove the string conversion on folder id otherwise an error occurs
-                    YAHOO.util.History.navigate( "groupWorkspaceModule", "0" );
-                } 
-                catch ( e ) 
-                {
-                	alert('fail');
-                    // history failed
-                }
             
                 // update shared inbox count
                 YAHOO.ur.shared.file.inbox.getSharedFilesCount();

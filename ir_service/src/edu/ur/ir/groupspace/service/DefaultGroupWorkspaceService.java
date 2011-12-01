@@ -34,8 +34,10 @@ import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.GroupWorkspaceUserDAO;
+import edu.ur.ir.groupspace.UserHasParentFolderPermissionsException;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.IrUserAccessControlEntry;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrRole;
@@ -375,6 +377,226 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	 */
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+
+	/**
+	 * Change the user permissions for the group workspace.
+	 * 
+	 * @param user - user to change the permissions for
+	 * @param groupWorkspace - the group workspace to change the permissions on
+	 * @param permissions - set of permissions to give - all other permissions will be removed if the
+	 * user has other permissions - empty set will remove all permissions for the user
+	 * 
+	 * @param applyToChildren  - apply the permission changes to all child files and folders for the user.
+	 * 
+	 * @throws UserHasParentFolderPermissionsException - if user is owner or has edit privileges on the group workspace
+	 */
+	public void changeUserPermissions(IrUser user,
+			GroupWorkspace groupWorkspace,
+			Set<IrClassTypePermission> permissions, boolean applyToChildren) throws UserHasParentFolderPermissionsException {
+		log.debug("changing permissions for user " + user);
+		
+		// figure out which permissions are set
+		boolean hasRead = false;
+		boolean hasEdit = false;
+		boolean hasAddFile = false;
+		
+		// get group Workspace permissions
+		IrClassTypePermission groupWorkspaceReadPermission = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION);
+		IrClassTypePermission groupWorkspaceAddFilePermission = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION);
+		IrClassTypePermission groupWorkspaceEditPermission = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		
+		// get folder permissions
+		IrClassTypePermission folderReadPermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+		IrClassTypePermission folderAddFilePermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
+		IrClassTypePermission folderEditPermission = securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
+		
+		// get file permissions
+		IrClassTypePermission fileViewPermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION);
+		IrClassTypePermission fileEditPermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.EDIT_PERMISSION);
+		IrClassTypePermission fileSharePermission = securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.SHARE_PERMISSION);
+		
+		
+		if( permissions != null )
+		{
+		    for(IrClassTypePermission permission : permissions)
+		    {
+			    log.debug("permission = " + permission);
+			    log.debug(" compare to " + groupWorkspaceReadPermission);
+			    if(permission.equals(groupWorkspaceReadPermission) )
+			    {
+				    hasRead = true;
+			    }
+			    log.debug(" compare to " + groupWorkspaceAddFilePermission);
+			    if( permission.equals(groupWorkspaceAddFilePermission))
+			    {
+				    hasAddFile = true;
+			    }
+			    log.debug(" compare to " + groupWorkspaceEditPermission);
+			    if( permission.equals(groupWorkspaceEditPermission))
+			    {
+				    hasEdit = true;
+			    }
+		    }
+		}
+		
+		
+		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+		
+		// this means a user is trying to remove edit permissions from a 
+		// group workspace where the user is the owner
+		if( !hasEdit && workspaceUser.isOwner()) 
+		{
+			throw new UserHasParentFolderPermissionsException("user = " + user + "child folder = " + groupWorkspace);
+		}
+		
+		
+		log.debug("hasRead " + hasRead + " has AddFile = " + hasAddFile + " hasEdit = " + hasEdit + " applytoChildren = " + applyToChildren);
+		if( workspaceUser.isOwner() || hasEdit || applyToChildren)
+		{
+			log.debug("hasEdit = " + hasEdit + " applytoChildren = " + applyToChildren);
+			List<GroupWorkspaceFile> files = groupWorkspaceFileSystemService.getAllFiles(groupWorkspace.getId());
+			List<GroupWorkspaceFolder> folders = groupWorkspaceFileSystemService.getAllFolders(groupWorkspace.getId());
+			
+			// deal with files
+			for(GroupWorkspaceFile f : files )
+			{
+				IrAcl acl = securityService.getAcl(f.getVersionedFile());
+				if( acl == null )
+				{
+					acl = securityService.createAclForObject(f.getVersionedFile());
+				}
+				
+				IrUserAccessControlEntry uace = acl.getUserAccessControlEntry(user.getId());
+				if( uace == null )
+				{
+					uace = acl.createUserAccessControlEntry(user);
+				}
+				
+				if( hasEdit )
+				{
+					log.debug("adding edit and share permission to file " + f);
+				    uace.addPermission(fileEditPermission); 
+				    uace.addPermission(fileSharePermission);
+				    hasRead = true;
+				}
+				else
+				{
+					uace.removePermission(fileEditPermission);
+					uace.removePermission(fileSharePermission);
+				}
+				
+				if( hasAddFile )
+				{
+					hasRead = true;
+				}
+				
+				
+				if(hasRead)
+				{
+					log.debug("adding read permission to file " + f);
+					uace.addPermission(fileViewPermission);
+				}
+				else
+				{
+					uace.removePermission(fileViewPermission);
+				}
+				securityService.save(acl);
+			}
+			
+			// deal with folders
+			for( GroupWorkspaceFolder f : folders)
+			{
+				IrAcl acl = securityService.getAcl(f);
+				if( acl == null )
+				{
+					acl = securityService.createAclForObject(f);
+				}
+				IrUserAccessControlEntry uace = acl.getUserAccessControlEntry(user.getId());
+				if( uace == null )
+				{
+					uace = acl.createUserAccessControlEntry(user);
+				}
+				
+				if( hasEdit )
+		        {
+					log.debug("adding edit permission to folder " + f);
+		        	uace.addPermission(folderEditPermission);
+		        	hasRead = true;
+		        	hasAddFile = true;
+		        }
+		        else
+		        {
+		        	uace.removePermission(folderEditPermission);
+		        }
+		        
+		        if( hasAddFile )
+		        {
+		        	log.debug("adding add file permission to folder " + f);
+		        	uace.addPermission(folderAddFilePermission);
+		        	hasRead = true;
+		        }
+		        else
+		        {
+		        	uace.removePermission(folderAddFilePermission);
+		        }
+		        
+		        if( hasRead )
+		        {
+		        	log.debug("adding has read permission to folder " + f);
+		        	uace.addPermission(folderReadPermission);
+		        }
+		        else
+		        {
+		        	uace.removePermission(folderReadPermission);
+		        }
+		        securityService.save(acl);
+			}
+		}
+	    
+		IrAcl userAcl = securityService.getAcl(groupWorkspace, user);
+		if( userAcl == null )
+		{
+			userAcl = securityService.createAclForObject(groupWorkspace);
+		}
+		
+		
+		IrUserAccessControlEntry uace = userAcl.getUserAccessControlEntryByUserId(user.getId());
+		if( uace == null )
+		{
+			uace = userAcl.createUserAccessControlEntry(user);
+		}
+		
+		if( hasEdit )
+		{
+		    uace.addPermission(groupWorkspaceEditPermission);
+		    hasRead = true;
+		    hasAddFile = true;
+		}
+		else
+		{
+		    uace.removePermission(groupWorkspaceEditPermission);
+		}
+		        
+		if( hasAddFile )
+		{
+		    uace.addPermission(groupWorkspaceAddFilePermission);
+		    hasRead = true;
+		}
+		else
+		{
+		    uace.removePermission(groupWorkspaceAddFilePermission);
+		}
+			        
+		if( hasRead )
+		{
+		    uace.addPermission(groupWorkspaceReadPermission);
+		}
+		else
+		{
+		    uace.removePermission(groupWorkspaceReadPermission);
+		}
+		securityService.save(userAcl);
 	}
 
 }
