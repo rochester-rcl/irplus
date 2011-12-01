@@ -127,8 +127,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
         }
         else if ( user != null)
         {
-        	if( genericItem.getOwner().equals(user) || user.hasRole(IrRole.ADMIN_ROLE) ||
-            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
+        	if( genericItem.getOwner().equals(user) || 
+        	    user.hasRole(IrRole.ADMIN_ROLE) ||
+            	itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) )
         	{
         		TransformedFile tf = irFile.getTransformedFileBySystemCode(systemCode);
             	if( tf != null )

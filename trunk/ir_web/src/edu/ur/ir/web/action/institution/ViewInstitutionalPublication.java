@@ -210,8 +210,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	            	if (!user.hasRole(IrRole.ADMIN_ROLE)) 
 	            	{
 	            		// check user permissions if they are not an administrator
-	            	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0
-	            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
+	            	    if ( !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) 
+	            			&& !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) )  {
 	            		
 	            	    	log.debug("User has no Read / edit metadata permission for this item");
 	            	    	message = "Restricted Access";
@@ -237,8 +237,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
             	if (!user.hasRole(IrRole.ADMIN_ROLE)  && !user.equals(institutionalItemVersion.getItem().getOwner())) 
             	{
             		// check user permissions if they are not an administrator - view privileges override embargo date
-            	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0
-            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
+            	    if ( !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) 
+            			&& !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) )  {
             		
             	    	log.debug("User has no Read / edit metadata permission for this item and it is embargoed");
             	    	message = "The publication will be available to view starting on date : " + institutionalItemVersion.getItem().getReleaseDate();

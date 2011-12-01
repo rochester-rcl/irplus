@@ -68,10 +68,21 @@ public interface SecurityService extends Serializable{
      * @param sid - secure id 
      * @param permission - permission to check for
      * 
+     * @return true if the user has the specified permission for the given domain instance.
+     */
+    public boolean hasPermission(Object domainInstance, Sid sid, String permission);
+    
+    /**
+     * Determine if the user has the specified permission.
+     * 
+     * @param domainInstance - domain instance to check
+     * @param sid - secure id 
+     * @param permission - permission to check for
+     * 
      * @return the number of times the sid has the given permission - 0 indicates the sid does
      * not have the permission
      */
-    public Long hasPermission(Object domainInstance, Sid sid, String permission);
+    public Long getPermissionCount(Object domainInstance, Sid sid, String permission);
     
 	/**
 	 * Creates an ACL object for the specified domain instance if

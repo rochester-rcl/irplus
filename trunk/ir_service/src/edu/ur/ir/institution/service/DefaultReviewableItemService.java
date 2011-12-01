@@ -90,10 +90,8 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 		
 		log.debug("Checking reviewer permissions for " + pendingItems.size() );
 		for(ReviewableItem item: pendingItems) {
-			long permission = institutionalCollectionSecurityService.hasPermission(item.getInstitutionalCollection(),
-					user, InstitutionalCollectionSecurityService.REVIEWER_PERMISSION);
-			
-			if (permission > 0) {
+			if (institutionalCollectionSecurityService.hasPermission(item.getInstitutionalCollection(),
+					user, InstitutionalCollectionSecurityService.REVIEWER_PERMISSION)) {
 				itemsForReview.add(item);
 			}
 		}

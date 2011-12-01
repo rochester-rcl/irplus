@@ -453,7 +453,12 @@ public class DefaultSecurityService implements SecurityService {
 		irAclDAO.makeTransient(acl);
 	}
 
-	public Long hasPermission(Object domainInstance, Sid sid, String permission) {
+	public boolean hasPermission(Object domainInstance, Sid sid, String permission) {
+		return getPermissionCount(domainInstance, sid, permission) > 0;
+	}
+	
+	public Long getPermissionCount(Object domainInstance, Sid sid, String permission)
+	{
 		Long objectId = getObjectId(domainInstance);
 		String className = CgLibHelper.cleanClassName(domainInstance.getClass().getName());
 		return irAclDAO.hasPermission(objectId, className, sid, permission);

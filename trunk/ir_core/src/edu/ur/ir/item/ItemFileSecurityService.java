@@ -65,10 +65,9 @@ public interface ItemFileSecurityService extends Serializable{
 	 * @param user  user to check
 	 * @param permission  permission to check
 	 * 
-	 * @return number of times the permission was found for the user a count greater than one means the user has
-	 * the specified permission.
+	 * @return true if the user has permissions on the item file
 	 */
-	public long hasPermission(ItemFile itemFile, IrUser user, ItemFilePermission permission);
+	public boolean hasPermission(ItemFile itemFile, IrUser user, ItemFilePermission permission);
 
 	
 	/**

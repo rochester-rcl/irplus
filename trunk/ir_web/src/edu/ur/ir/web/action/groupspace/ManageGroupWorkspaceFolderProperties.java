@@ -109,7 +109,7 @@ implements  UserIdAware{
 			
 			log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
 			if( user == null || 
-				securityService.hasPermission(groupWorkspaceFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION) <= 0)
+				!securityService.hasPermission(groupWorkspaceFolder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION))
 			{
 				return "accessDenied";
 			}

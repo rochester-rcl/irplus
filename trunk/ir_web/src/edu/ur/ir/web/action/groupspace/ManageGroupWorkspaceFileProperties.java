@@ -112,7 +112,7 @@ implements  UserIdAware{
 			log.debug(" security service has permission = " + securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission));
 			
 			if( user == null || 
-					securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission) <= 0)
+					!securityService.hasPermission(groupWorkspaceFile.getVersionedFile(), user, readPermission))
 			{
 				return "accessDenied";
 			}

@@ -170,7 +170,8 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 			
 			    
 			try {
-				if( user.hasRole(IrRole.ADMIN_ROLE) || institutionalCollectionSecurityService.hasPermission(parent, user, InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION) > 0 )
+				if( user.hasRole(IrRole.ADMIN_ROLE) || 
+						institutionalCollectionSecurityService.hasPermission(parent, user, InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION)  )
 				{
 				    collection = parent.createChild(collectionName.trim());
 				    institutionalCollectionService.saveCollection(parent);
