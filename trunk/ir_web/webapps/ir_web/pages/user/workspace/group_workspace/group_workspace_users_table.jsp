@@ -59,9 +59,9 @@
                         <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
                     </c:if>	
                     <br/> 
-                    <c:url var="editUserPermissions" value="/user/editGroupWorkspacePermissions.action">
+                    <c:url var="editUserPermissions" value="/user/editUserGroupWorkspacePermissions.action">
                         <c:param name="editUserPermissionsId" value="${entry.sid.id}"/>
-                        <c:param name="groupWorkspaceFolderId" value="${groupWorkspaceFolder.id}"/>
+                        <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
                     </c:url>
                     <a href="${editUserPermissions}">${entry.sid.firstName}&nbsp;${entry.sid.lastName}</a>
                 </urstb:td>
