@@ -161,7 +161,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         			itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) +
         			" is admin = " + user.hasRole(IrRole.ADMIN_ROLE));
         	if( genericItem.getOwner().equals(user) || 
-            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) || 
+            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION)) || 
             	user.hasRole(IrRole.ADMIN_ROLE)
                )
         	{

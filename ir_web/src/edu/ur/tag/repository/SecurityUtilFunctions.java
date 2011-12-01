@@ -267,8 +267,7 @@ public class SecurityUtilFunctions {
             	 }
             	 else
             	 {
-            	     Long count = securityService.hasPermission(domainObject, user, permissions);
-                     if( count > 0)
+                     if( securityService.hasPermission(domainObject, user, permissions))
                      {
                 	     granted = true;
                      }

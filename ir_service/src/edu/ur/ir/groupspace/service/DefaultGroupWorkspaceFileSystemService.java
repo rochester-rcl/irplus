@@ -238,7 +238,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		}
 		GroupWorkspaceFile workspaceFile = null;
 		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
-		if( securityService.hasPermission(workspace, user, editPermission) > 0 )
+		if( securityService.hasPermission(workspace, user, editPermission)  )
 		{
 		
 		    workspaceFile = workspace.getRootFile(name);
@@ -337,7 +337,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
     {
     	GroupWorkspaceFile workspaceFile = null;
 		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
-		if( securityService.hasPermission(workspace, user, editPermission) > 0 )
+		if( securityService.hasPermission(workspace, user, editPermission)  )
 		{
 		    if( fileName == null || fileName.trim().equals("") )
 		    {
@@ -429,8 +429,8 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
     	GroupWorkspaceFile workspaceFile = null;
 		String addPermission = GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION;
 		String editPermission = GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION;
-		if( securityService.hasPermission(folder, user, addPermission) > 0 ||
-				securityService.hasPermission(folder, user, editPermission) > 0	)
+		if( securityService.hasPermission(folder, user, addPermission)  ||
+				securityService.hasPermission(folder, user, editPermission) 	)
 		{
 		    if( fileName == null || fileName.trim().equals("") )
 		    {
@@ -527,8 +527,8 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
     	GroupWorkspaceFile workspaceFile = null;
 		String addPermission = GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION;
 		String editPermission = GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION;
-		if( securityService.hasPermission(folder, user, addPermission) > 0 ||
-				securityService.hasPermission(folder, user, editPermission) > 0	)
+		if( securityService.hasPermission(folder, user, addPermission) ||
+				securityService.hasPermission(folder, user, editPermission) 	)
 		{
 		    if( fileName == null ||fileName.trim().equals("") )
 		    {
@@ -615,7 +615,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		if( !deletingUser.hasRole(IrRole.ADMIN_ROLE) )
 		{
 			if( !workspaceUser.isOwner() &&  
-				securityService.hasPermission(folder, deletingUser, editPermission) <= 0 )
+				!securityService.hasPermission(folder, deletingUser, editPermission)  )
 			{
 				throw new PermissionNotGrantedException("User does not have permission to delete the folder");
 			}
@@ -713,13 +713,13 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		{
 			// this means a user is trying to remove permissions from a folder where a parent folder gives the user
 			// full control over it's children
-			if(workspaceUser.isOwner() || securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION) > 0)
+			if(workspaceUser.isOwner() || securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION) )
 			{
 				throw new UserHasParentFolderPermissionsException("user = " + user + "child file = " + groupWorkspaceFile);
 			}
 			if( groupWorkspaceFile.getGroupWorkspaceFolder() != null )
 			{
-				if( securityService.hasPermission( groupWorkspaceFile.getGroupWorkspaceFolder(), user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) > 0 ||
+				if( securityService.hasPermission( groupWorkspaceFile.getGroupWorkspaceFolder(), user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION)  ||
 						userHasParentFolderEditPermissions(user,  groupWorkspaceFile.getGroupWorkspaceFolder()) )
 				{
 					throw new UserHasParentFolderPermissionsException("user = " + user + "child file = " + groupWorkspaceFile);
@@ -834,7 +834,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		// this means a user is trying to remove permissions from a folder where a parent folder gives the user
 		// full control over it's children
 		if( !hasEdit && (workspaceUser.isOwner() || 
-				         securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION) > 0 ||
+				         securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION)  ||
 				         userHasParentFolderEditPermissions(user, groupWorkspaceFolder) ) 
 		   )
 		{
@@ -1020,7 +1020,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		{
 			if(!parent.equals(child))
 			{
-				if( securityService.hasPermission(parent, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) > 0 )
+				if( securityService.hasPermission(parent, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION)  )
 				{
 				    folders.add(parent);
 				}
@@ -1137,7 +1137,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		String editPermission = GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION;
 		GroupWorkspaceFolder folder = null;
 		// make sure user has permission
-		if( securityService.hasPermission(groupWorkspace, user, editPermission) > 0 )
+		if( securityService.hasPermission(groupWorkspace, user, editPermission)  )
 		{
 			folder = groupWorkspace.createRootFolder(user, folderName);
 			folder.setDescription(description);
@@ -1203,7 +1203,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		String editPermission = GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION;
 		GroupWorkspaceFolder folder = null;
 		// make sure user has permission
-		if( securityService.hasPermission(parentFolder, user, editPermission) > 0 )
+		if( securityService.hasPermission(parentFolder, user, editPermission) )
 		{
 			folder = parentFolder.createChild(name, user);
 			folder.setDescription(description);

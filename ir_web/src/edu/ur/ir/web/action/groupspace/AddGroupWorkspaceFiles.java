@@ -40,6 +40,7 @@ import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.security.SecurityService;
 
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -120,6 +121,11 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	
 	/* service to send emails when an error occurs */
 	private ErrorEmailService errorEmailService;
+	
+	/* service to deal with security information */
+	private SecurityService securityService;
+
+
 
 	/**
 	 * Set the user id.
@@ -134,11 +140,11 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	{
 		IrUser user = userService.getUser(userId, false);
 		//only authoring roles can add group workspace files
-		if( !user.hasRole(IrRole.AUTHOR_ROLE))
+		if(groupWorkspaceFolder != null )
 		{
-			return("accessDenied");
+			//if( securityService.hasPermission(domainInstance, sid, permission) )
 		}
-		return SUCCESS;
+		return("accessDenied");
 	}
 	
 	/**
@@ -524,5 +530,14 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	 */
 	public GroupWorkspace getGroupWorkspace() {
 		return groupWorkspace;
+	}
+	
+	/**
+	 * Set the security service
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

@@ -88,7 +88,7 @@
  		                   onmouseout="this.className='ur_button';"
 	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
 	                       
-	          <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
+	          <c:if test='${ir:isCurrentUserGroupWorkspaceOwner(groupWorkspace)}'>
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.user.group_workspace.manageUsers(${groupWorkspace.id});"
 	                       onmouseover="this.className='ur_buttonover';"

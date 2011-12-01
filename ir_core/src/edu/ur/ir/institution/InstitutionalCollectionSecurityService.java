@@ -150,11 +150,10 @@ public interface InstitutionalCollectionSecurityService extends Serializable{
 	 * @param user - user to check
 	 * @param permission - permission to check
 	 * 
-	 * @return - number of times the permission was found for the user a count greater than one means the user has
-	 * the specified permission.
+	 * @return - true if the user has the specified permission
 	 * 
 	 */
-	public long hasPermission(InstitutionalCollection collection, IrUser user, InstitutionalCollectionPermission permission);
+	public boolean hasPermission(InstitutionalCollection collection, IrUser user, InstitutionalCollectionPermission permission);
 	
 	/**
 	 * Give the specified permission to the institutional collection for the given group.

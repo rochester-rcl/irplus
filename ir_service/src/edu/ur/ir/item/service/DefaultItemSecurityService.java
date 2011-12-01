@@ -247,7 +247,7 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 	 * 
 	 * @see edu.ur.ir.item.ItemSecurityService#hasPermission(GenericItem, IrUser, ItemPermission)
 	 */
-	public long hasPermission(GenericItem item, IrUser user, ItemPermission permission) {
+	public boolean hasPermission(GenericItem item, IrUser user, ItemPermission permission) {
 		return securityService.hasPermission(item, user, permission.getPermission());
 	}
 
