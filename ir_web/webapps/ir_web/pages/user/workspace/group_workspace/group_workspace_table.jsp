@@ -97,7 +97,7 @@
 						            <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
 						         </c:url>
 						         
-						        <a href="${editGroupWorkspaceUrl}">Edit or Invite users</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.group_workspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
+						        <a href="${editGroupWorkspaceUrl}">Properties</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.group_workspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
                              </c:if>
                         </urstb:td>
                     </urstb:tr>
