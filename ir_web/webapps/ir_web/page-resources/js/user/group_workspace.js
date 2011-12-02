@@ -16,7 +16,7 @@
 
 /**
  * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * in the group workspace.
  */
 YAHOO.namespace("ur.user.group_workspace");
 
