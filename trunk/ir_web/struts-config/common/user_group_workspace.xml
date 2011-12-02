@@ -105,6 +105,31 @@
         </action> 
         
         
+        <action name="editUserGroupWorkspacePermissions"
+            method="editUserPermissions"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorksapceUserPermissions">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_permissions.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
+        </action>
+        
+        <action name="saveUserGroupWorkspacePermissions"
+            method="saveUserPermissions"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorksapceUserPermissions">
+            <interceptor-ref name="crudStack" />
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">getGroupWorkspace.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="groupWorkspaceId">${groupWorkspace.id}</param>
+        	      <param name="tabName">USERS</param>
+        	</result>   
+        	<result name="error">/pages/user/workspace/group_workspace/edit_group_workspace_user_permissions.jsp</result>  
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
+        </action>
+        
+        
         <!-- remove user from group workspace -->
         <action name="removeGroupWorkspaceUser"
             method="removeUser" 

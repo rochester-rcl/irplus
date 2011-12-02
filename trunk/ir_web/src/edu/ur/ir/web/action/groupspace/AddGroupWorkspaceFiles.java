@@ -140,9 +140,22 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 	{
 		IrUser user = userService.getUser(userId, false);
 		//only authoring roles can add group workspace files
-		if(groupWorkspaceFolder != null )
+		if( folderId != null && folderId != 0)
 		{
-			//if( securityService.hasPermission(domainInstance, sid, permission) )
+		    if(groupWorkspaceFolder != null )
+		    {
+			    if( securityService.hasPermission(groupWorkspaceFolder , user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) )
+			    {
+				    return SUCCESS;
+			    }
+		    }
+		}
+		else if( groupWorkspace != null )
+		{
+			if( securityService.hasPermission(groupWorkspace , user, GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION) )
+		    {
+			    return SUCCESS;
+		    }
 		}
 		return("accessDenied");
 	}
