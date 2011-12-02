@@ -56,6 +56,8 @@
  	<ur:js src="page-resources/js/util/base_path.jsp"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
+ 	<ur:js src="page-resources/js/menu/main_menu.js"/>
+ 	<ur:js src="page-resources/js/user/group_workspace_permissions.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -96,26 +98,43 @@
             <input type="hidden" name="editUserPermissionsId" value="${editUser.id}"/>
             <table>
             
+ 
             <tr>
-                <td> Owner:</td>
-                <td>
+                <td>Group Workspace Read:</td>
+                <td> 
                     <input type="checkbox" 
-                        name="owner"
-                        value="true" 
-                        <c:if test="${ir:isUserGroupWorkspaceOwner(groupWorkspace, editUser)}">
-                          checked="checked"
-                        </c:if>
-                        />
-                   
-                </td> 
-                    
+                           name="groupWorkspacePermissions"
+                           id="GROUP_WORKSPACE_READ"
+                           value="GROUP_WORKSPACE_READ"
+                           onclick="YAHOO.ur.user.group_workspace.permissions.checkGroupPermission(this, groupWorkspacePermissions);" 
+                         <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_READ")}'>
+                             checked="checked"
+                         </c:if>
+                     /> 
+                 </td>
+             </tr> 
+             <tr>
+                <td>Group Workspace Add File:</td>
+                <td>
+                       <input type="checkbox" 
+                              name="groupWorkspacePermissions"
+                              id="GROUP_WORKSPACE_ADD_FILE"
+                              value="GROUP_WORKSPACE_ADD_FILE" 
+                              onclick="YAHOO.ur.user.group_workspace.permissions.checkGroupPermission(this, groupWorkspacePermissions);" 
+                              <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_ADD_FILE")}'>
+                                  checked="checked"
+                              </c:if>
+                        />      
+                </td>
             </tr>
             <tr>
-                <td> Folder Edit:</td>
+                <td>Group Workspace Edit:</td>
                 <td>
                     <input type="checkbox" 
                         name="groupWorkspacePermissions"
+                        id="GROUP_WORKSPACE_EDIT"
                         value="GROUP_WORKSPACE_EDIT"  
+                        onclick="YAHOO.ur.user.group_workspace.permissions.checkGroupPermission(this, groupWorkspacePermissions);" 
                         <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_EDIT")}'>
                             checked="checked"
                         </c:if>
@@ -124,37 +143,17 @@
                     
             </tr>
             
-            <tr>
-                <td>Add File:</td>
-                <td>
-                       <input type="checkbox" 
-                              name="groupWorkspacePermissions"
-                              value="GROUP_WORKSPACE_ADD_FILE" 
-                              <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_ADD_FILE")}'>
-                                  checked="checked"
-                              </c:if>
-                        />      
-                </td>
-            </tr>
-            <tr>
-                <td>Read:</td>
-                <td> 
-                    <input type="checkbox" 
-                           name="groupWorkspacePermissions"
-                           value="GROUP_WORKSPACE_READ"
-                         <c:if test='${ir:entryHasPermission(editUserAcl, "GROUP_WORKSPACE_READ")}'>
-                             checked="checked"
-                         </c:if>
-                     /> 
-                 </td>
-             </tr> 
+            
+            
              
              <tr>
                 <td>Apply above changes to child files and folders &nbsp; &nbsp;</td>
                 <td> 
                     <input type="checkbox" 
+                           id="applyToChildren"
                            name="applyToChildren"
                            value="true"
+                           onclick="YAHOO.ur.user.group_workspace.permissions.checkApplyToChildrenGroup();"
                            checked="checked" /> 
                  </td>
              </tr> 
