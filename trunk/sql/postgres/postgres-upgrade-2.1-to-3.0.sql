@@ -472,3 +472,6 @@ ALTER TABLE ir_group_workspace.group_workspace_file_delete_record OWNER TO ir_pl
 CREATE SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
 ALTER TABLE ir_group_workspace.group_workspace_file_delete_record_seq OWNER TO ir_plus;
 
+-- create an index on the personal folder personal folder id
+CREATE INDEX personal_file_user_id_personal_folder_id_idx ON ir_user.personal_file(user_id, personal_folder_id);
+
