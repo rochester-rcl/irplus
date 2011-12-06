@@ -3900,3 +3900,5 @@ CREATE SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
 ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper_seq OWNER TO ir_plus;
 
 
+-- create an index on the personal folder personal folder id
+CREATE INDEX personal_file_user_id_personal_folder_id_idx ON ir_user.personal_file(user_id, personal_folder_id);
