@@ -582,6 +582,16 @@
 			boolean canEditFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
+	
+	<function>
+		<name>canReadFile</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canReadFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
 
 	<function>
 		<name>canBreakLock</name>

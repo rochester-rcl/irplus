@@ -61,6 +61,7 @@ public class InviteLogin extends ActionSupport implements Preparable {
 	/* group workspace invite service */
 	private GroupWorkspaceInviteService groupWorkspaceInviteService;
 	
+	/* email invite */
 	private GroupWorkspaceEmailInvite groupWorkspaceEmailInvite;
 	
 

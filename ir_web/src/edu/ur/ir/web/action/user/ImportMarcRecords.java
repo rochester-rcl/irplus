@@ -162,7 +162,13 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 			}
 	        finally
 	        {
-		        file.delete();
+	        	try
+	        	{
+		            file.delete();
+	        	}
+	        	catch (Exception e) {
+					throw new IllegalStateException(e);
+				}
 	        }
 		}
 		else

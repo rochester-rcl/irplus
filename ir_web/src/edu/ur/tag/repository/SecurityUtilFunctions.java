@@ -279,7 +279,7 @@ public class SecurityUtilFunctions {
         
 	}
 
-	public  void setSecurityService(SecurityService securityService) {
+	public void setSecurityService(SecurityService securityService) {
 		SecurityUtilFunctions.securityService = securityService;
 	}
 

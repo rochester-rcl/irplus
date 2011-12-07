@@ -25,8 +25,6 @@ import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherLinkDAO;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherPublicationDAO;
-import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.UserFileSystemService;
 
 /**

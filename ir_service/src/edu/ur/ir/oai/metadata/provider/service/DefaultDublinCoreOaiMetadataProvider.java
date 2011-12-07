@@ -521,8 +521,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 			if( publishedDate != null )
 			{
 		        Element citationElement = doc.createElement("dc:date");
-		        SimpleDateFormatter sdf = new SimpleDateFormatter();
-		        Text data = doc.createTextNode(sdf.getDate(publishedDate));
+		        Text data = doc.createTextNode(SimpleDateFormatter.getDate(publishedDate));
 		        citationElement.appendChild(data);
     	        oaiDc.appendChild(citationElement);
 			}

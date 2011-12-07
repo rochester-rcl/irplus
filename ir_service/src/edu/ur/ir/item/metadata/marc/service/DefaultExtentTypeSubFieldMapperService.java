@@ -30,6 +30,9 @@ import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperDAO;
  */
 public class DefaultExtentTypeSubFieldMapperService implements ExtentTypeSubFieldMapperService{
 
+	/* eclipse generated id */
+	private static final long serialVersionUID = 2873580730193057836L;
+	
 	// Extent type sub field mapper
 	private ExtentTypeSubFieldMapperDAO extentTypeSubFieldMapperDAO;
 

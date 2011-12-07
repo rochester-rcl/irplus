@@ -75,7 +75,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	private static final long serialVersionUID = 1486364189520804900L;
 	
 	// create a factory instance
-	private MarcFactory factory = MarcFactory.newInstance();
+	private transient MarcFactory factory = MarcFactory.newInstance();
 	
 	// default date form
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy");
@@ -174,7 +174,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
     		record.getControlFields().add(control_006);
     		
     		// add 007 fields
-    		ControlField control_007 = factory.newControlField("007", new String(mapper.getControlField007()));
+    		ControlField control_007 = factory.newControlField("007", mapper.getControlField007());
     		record.getControlFields().add(control_007);
     		
     		handle008Field(record, mapper, year, item.getLanguageType(), placeOfPublication);
@@ -280,7 +280,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 			// take all the item extents 
 			for(ItemExtent extent : extents)
 			{
-				if( mapper.getExtentType().getId() == extent.getExtentType().getId())
+				if( mapper.getExtentType().getId().equals(extent.getExtentType().getId()))
 				{
 			        //get the datafield 
 				    MarcDataField marcDataField = mapper.getMarcDataFieldMapper().getMarcDataField();
@@ -545,7 +545,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 					df.addSubfield(factory.newSubfield('4', relatorCode.getMarcRelatorCode().getRelatorCode()));
 					
 					// add note
-					if( relatorCode.equals("ths"))
+					if( relatorCode.getMarcRelatorCode().getRelatorCode().equals("ths"))
 					{
 						DataField df2 = factory.newDataField("500", ' ', ' ');
 						df2.addSubfield(factory.newSubfield('a', "Advisor:" + removeInvalidXmlChars(pn.getForename() + " " + pn.getMiddleName() + " " + pn.getSurname())));

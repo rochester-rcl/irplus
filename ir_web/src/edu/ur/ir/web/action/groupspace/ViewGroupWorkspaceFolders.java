@@ -175,6 +175,7 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	 */
 	private void createFileSystem()
 	{
+		user = userService.getUser(userId, false);
 		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		if(parentFolderId != null && parentFolderId > 0)
 		{

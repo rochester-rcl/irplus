@@ -83,14 +83,16 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 			    {
 			    	Authentication auth = externalAuthenticationProvider.authenticate(new LdapAuthenticationToken(userName, this.password));
 			        ExternalAuthenticationDetails externalDetails = null;
-			    	
+			        ExternalUserAccount externalUserAccount = null;
+			        
 			    	if( auth.getDetails() instanceof ExternalAuthenticationDetails)
 			        {
 			    		externalDetails  = (ExternalAuthenticationDetails)auth.getDetails();
+			    		if( externalDetails != null )
+			    		{
+			    			externalUserAccount = userService.getByExternalUserNameAccountType( userName, externalDetails.getType());
+			    		}
 			        }
-			    	
-			        ExternalUserAccount externalUserAccount = userService.getByExternalUserNameAccountType( userName, externalDetails.getType());
-			        
 					
 			        if( externalUserAccount != null )
 			        {

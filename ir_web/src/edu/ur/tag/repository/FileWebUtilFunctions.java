@@ -20,10 +20,6 @@ package edu.ur.tag.repository;
 import java.util.Collection;
 import java.util.Set;
 
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
@@ -251,7 +247,7 @@ public class FileWebUtilFunctions {
 	{
 		boolean canLockFile = false;
 		
-		 if( versionedFile.isLocked() || versionedFile == null 
+		 if( versionedFile == null || versionedFile.isLocked()  
 		    			|| versionedFile.getOwner() == null )
 		{
 		    canLockFile = false;
@@ -262,17 +258,9 @@ public class FileWebUtilFunctions {
 		}
 		else 
 		{
-			log.debug("checking has lock permission");
-	         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 		
-	         if( auth != null) {
-	 			 if(auth.getPrincipal() instanceof UserDetails) {
-	 				 user = (IrUser)auth.getPrincipal();
-	 			 }
-	         }
 	         IrAcl acl = mySecurityService.getAcl(versionedFile, user);
 			 if (acl != null) {
-			    if (acl.isGranted("EDIT", user, false)) {
+			    if (acl.isGranted(VersionedFile.EDIT_PERMISSION, user, false)) {
 			    	canLockFile = true;
 				}
 			}
@@ -298,16 +286,10 @@ public class FileWebUtilFunctions {
 		else 
 		{
 			log.debug("checking has share permission");
-	         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 		
-	         if( auth != null) {
-	 			 if(auth.getPrincipal() instanceof UserDetails) {
-	 				 user = (IrUser)auth.getPrincipal();
-	 			 }
-	         }
+	        
 	         IrAcl acl = mySecurityService.getAcl(versionedFile, user);
 			 if (acl != null) {
-			    if (acl.isGranted("SHARE", user, false)) {
+			    if (acl.isGranted(VersionedFile.SHARE_PERMISSION, user, false)) {
 			    	canShareFile = true;
 				}
 			}
@@ -339,17 +321,9 @@ public class FileWebUtilFunctions {
 		}
 		else 
 		{
-			 log.debug("checking can edit permission");
-	         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 		
-	         if( auth != null) {
-	 			 if(auth.getPrincipal() instanceof UserDetails) {
-	 				 user = (IrUser)auth.getPrincipal();
-	 			 }
-	         }
 	         IrAcl acl = mySecurityService.getAcl(versionedFile, user);
 			 if (acl != null) {
-			    if (acl.isGranted("EDIT", user, false)) {
+			    if (acl.isGranted(VersionedFile.EDIT_PERMISSION, user, false)) {
 			    	canEdit = true;
 				}
 			}
@@ -368,7 +342,7 @@ public class FileWebUtilFunctions {
 	public static boolean canBreakLock(IrUser user, VersionedFile versionedFile)
 	{
 		boolean canBreakLock = false;
-		if (!versionedFile.isLocked() || versionedFile == null) {
+		if (versionedFile == null || !versionedFile.isLocked() ) {
 			canBreakLock = false;
 		} 
 		else if (versionedFile.getOwner() != null && 
@@ -377,17 +351,9 @@ public class FileWebUtilFunctions {
 		} 
 		else  
 		{
-			 log.debug("checking can manage permission");
-	         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 		
-	         if( auth != null) {
-	 			 if(auth.getPrincipal() instanceof UserDetails) {
-	 				 user = (IrUser)auth.getPrincipal();
-	 			 }
-	         }
 	         IrAcl acl = mySecurityService.getAcl(versionedFile, user);
 			 if (acl != null) {
-			    if (acl.isGranted("MANAGE", user, false)) {
+			    if (acl.isGranted(VersionedFile.MANAGE_PERMISSION, user, false)) {
 			    	canBreakLock = true;
 				}
 			}
@@ -441,6 +407,26 @@ public class FileWebUtilFunctions {
 		}
 		
 		return fileExist;
+	}
+	
+	/**
+	 * Determine if the user can read the file.
+	 * 
+	 * @param user - user to check
+	 * @param versionedFile - versioned file to use
+	 * 
+	 * @return true if teh user can read the file otherwise false
+	 */
+	public static boolean canReadFile(IrUser user, VersionedFile versionedFile)
+	{
+		boolean canRead = false;
+	    IrAcl acl = mySecurityService.getAcl(versionedFile, user);
+		if (acl != null) {
+		    if (acl.isGranted(VersionedFile.VIEW_PERMISSION, user, false)) {
+			    canRead = true;
+			}
+		}
+		return canRead;
 	}
 
 	/**

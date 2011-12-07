@@ -53,6 +53,9 @@ import edu.ur.util.TokenGenerator;
  */
 public class DefaultGroupWorkspaceInviteService implements GroupWorkspaceInviteService{
 	
+	/*eclipse generated id */
+	private static final long serialVersionUID = 1966209896959100819L;
+
 	/* Data access for the group workspace group invite  */
 	private GroupWorkspaceEmailInviteDAO groupWorkspaceEmailInviteDAO;
 	

@@ -143,21 +143,29 @@
                         onMouseOver="this.className='highlight'"
                         onMouseOut="this.className='${rowClass}'">
                         <urstb:td>
+                            
                             <!-- this deals with folder information
-	                          folders get an id of the folder_checkbox_{id} 
-	                          where id  is the id of the folder -->
-	                          <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
-	                              <input type="checkbox" name="groupFolderIds" id="group_folder_checkbox_${fileSystemObject.id}" 
+	                        folders get an id of the folder_checkbox_{id} 
+	                        where id  is the id of the folder -->
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                            <ir:acl domainObject="${fileSystemObject}" hasPermission="GROUP_WORKSPACE_FOLDER_EDIT">
+	                                <input type="checkbox" name="groupFolderIds" id="group_folder_checkbox_${fileSystemObject.id}" 
 	                                     value="${fileSystemObject.id}"/>
-	                         </c:if>
-	                     
+	                            </ir:acl>      
+	                        </c:if>
+	                        
+	                        
+	                        
 	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             <input type="checkbox" name="groupFileIds" id="group_file_checkbox_${fileSystemObject.id}" 
-	                                 value="${fileSystemObject.id}"/>
+	                             <c:if test="${ir:canEditFile( user, fileSystemObject.versionedFile) }">
+	                                 <input type="checkbox" name="groupFileIds" id="group_file_checkbox_${fileSystemObject.id}" 
+	                                     value="${fileSystemObject.id}"/>
+	                             </c:if>
 	                         </c:if>
+	                         
                         </urstb:td>
                         
                         <urstb:td>
@@ -180,12 +188,14 @@
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-	                             <div id="group_file_${fileSystemObject.id}">    	
+	                             <div id="group_file_${fileSystemObject.id}">   
+	                             <c:if test="${ir:canEditFile( user, fileSystemObject.versionedFile) }"> 	
 	                              <button type="button" class="table_button"
 	                                 onmouseover="this.className='table_buttonover';"
  		                             onmouseout="this.className='table_button';"
  		                             onclick="javascript:YAHOO.ur.user.group_workspace.buildFileMenu(this, 'group_file_'+ ${fileSystemObject.id}, 
  			                                 'group_file_menu_' + ${fileSystemObject.id}, ${fileSystemObject.id});"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
+	                             </c:if>
 	                             </div>
 	                         </c:if>
                         </urstb:td>
@@ -195,10 +205,16 @@
 	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id},${groupWorkspace.id},-1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
-		                        <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
-		                            <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
-		                        </c:url>
-	                            <a href="${groupWorkspaceFileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a>
+	                            <c:if test="${ir:canReadFile( user, fileSystemObject.versionedFile)}"> 	
+		                            <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
+		                                <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
+		                            </c:url>
+		                       
+	                                <a href="${groupWorkspaceFileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a>
+	                            </c:if> 
+	                            <c:if test="${!ir:canReadFile( user, fileSystemObject.versionedFile)}">
+	                                <ur:maxText numChars="50" text="${fileSystemObject.name}"/> 
+	                            </c:if>   
 	                            <c:if test="${fileSystemObject.versionedFile.locked}">
 	                                <span class="lockBtnImg">&nbsp;</span><div class="smallText">Locked by ${fileSystemObject.versionedFile.lockedBy.username}</div>
 	                            </c:if>

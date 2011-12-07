@@ -16,13 +16,14 @@
 
 package edu.ur.ir.item.metadata.marc;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Nathan Sarr
  *
  */
-public interface IdentifierTypeSubFieldMapperService {
+public interface IdentifierTypeSubFieldMapperService extends Serializable{
 	
 	/**
 	 * Get all identifier type sub field mappers.
