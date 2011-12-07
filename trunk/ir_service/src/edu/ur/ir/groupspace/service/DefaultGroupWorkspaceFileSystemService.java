@@ -1035,9 +1035,21 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	 * 
 	 * @param personalFileId
 	 */
-	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason)
+	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason) throws PermissionNotGrantedException
 	{
 		VersionedFile versionedFile = gf.getVersionedFile();
+		GroupWorkspaceUser workspaceUser = gf.getGroupWorkspace().getUser(deletingUser);
+		
+		if( !deletingUser.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			if( !workspaceUser.isOwner() &&  
+				!securityService.hasPermission(versionedFile, deletingUser, VersionedFile.EDIT_PERMISSION)  )
+			{
+				throw new PermissionNotGrantedException("User does not have permission to delete the folder");
+			}
+		}
+		
+		
 		GroupWorkspace groupWorkspace = gf.getGroupWorkspace();
 		
 		// create a delete record 

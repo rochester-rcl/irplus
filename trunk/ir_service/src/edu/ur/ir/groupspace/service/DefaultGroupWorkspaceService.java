@@ -214,8 +214,10 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	 * 
 	 * @param user
 	 * @param deletingUser
+	 * 
+	 * @throws PermissionNotGrantedException - if the user does not have permissions to delete the file
 	 */
-	private void deleteRootFiles(GroupWorkspace workspace, IrUser deletingUser)
+	private void deleteRootFiles(GroupWorkspace workspace, IrUser deletingUser) throws PermissionNotGrantedException
 	{
 		log.debug("Delete root files");
 		// delete the users root files

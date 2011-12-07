@@ -198,8 +198,9 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @param gf - group workspace file
 	 * @param deletingUser - user deleting the file
 	 * @param deleteReason - reason for deleting the group workspace file
+	 * @throws PermissionNotGrantedException - if the user does not have permission to delete the file
 	 */
-	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason);
+	public void delete(GroupWorkspaceFile gf, IrUser deletingUser, String deleteReason) throws PermissionNotGrantedException;
 	
 	/**
 	 * Gives the user permissions for the given group file system.
