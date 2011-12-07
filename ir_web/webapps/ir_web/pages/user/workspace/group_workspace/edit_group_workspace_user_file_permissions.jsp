@@ -107,7 +107,7 @@
             <input type="hidden" name="editUserPermissionsId" value="${editUser.id}"/>
             <table>
             <tr>
-                <td> Folder Edit:</td>
+                <td> File Edit:</td>
                 <td>
                     <input type="checkbox" 
                         name="filePermissions"

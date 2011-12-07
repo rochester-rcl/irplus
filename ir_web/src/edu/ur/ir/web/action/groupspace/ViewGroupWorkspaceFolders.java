@@ -14,6 +14,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
@@ -142,7 +143,7 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			    //}
 			    
 			    try {
-					groupWorkspaceFileSystemService.delete(gf, user, "OWNER DELETING FOLDER - " + gf.getFullPath());
+					groupWorkspaceFileSystemService.delete(gf, user, "USER DELETING FOLDER - " + gf.getFullPath());
 				} catch (PermissionNotGrantedException e) {
 					return "accessDenied";
 				}
@@ -160,7 +161,11 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 				//   	return "accessDenied";
 				// }
 				//deleteFileFromIndex(pf, user);
-				groupWorkspaceFileSystemService.delete(gf, user, "OWNER DELETING FILE");
+				try {
+				    groupWorkspaceFileSystemService.delete(gf, user, "USER DELETING FILE");
+				} catch (PermissionNotGrantedException e) {
+					return "accessDenied";
+				}
 			}
 		}
 		createFileSystem();
