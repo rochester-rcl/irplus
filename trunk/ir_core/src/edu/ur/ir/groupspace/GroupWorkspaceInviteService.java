@@ -16,6 +16,7 @@
 
 package edu.ur.ir.groupspace;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ import edu.ur.ir.user.UnVerifiedEmailException;
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceInviteService 
+public interface GroupWorkspaceInviteService extends Serializable
 {
 	/**
 	 * Find the Invite information for a specified token

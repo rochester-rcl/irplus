@@ -17,6 +17,7 @@
 
 package edu.ur.ir.item.metadata.marc;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -25,9 +26,12 @@ import java.util.Comparator;
  * @author Nathan Sarr
  *
  */
-public class MarcDataFieldMapperComparator implements Comparator<MarcDataFieldMapper>{
+public class MarcDataFieldMapperComparator implements Comparator<MarcDataFieldMapper>, Serializable{
 
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 7720600376479926074L;
+
 	public int compare(MarcDataFieldMapper o1, MarcDataFieldMapper o2) {
 		return o1.getMarcDataField().getCode().compareToIgnoreCase(o2.getMarcDataField().getCode());
 	}

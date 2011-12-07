@@ -1,5 +1,6 @@
 package edu.ur.ir.oai.metadata.provider.service;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import org.w3c.dom.Document;
@@ -12,8 +13,11 @@ import org.w3c.dom.Element;
 
 import edu.ur.ir.oai.OaiUtil;
 
-public class MarcXmlElementAppender {
+public class MarcXmlElementAppender implements Serializable{
 	
+	/*eclipse generated id  */
+	private static final long serialVersionUID = -2510728648221077475L;
+
 	protected static final String CONTROL_FIELD = "controlfield";
 
 	protected static final String DATA_FIELD = "datafield";

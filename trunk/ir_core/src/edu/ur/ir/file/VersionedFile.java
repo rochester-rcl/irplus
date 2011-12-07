@@ -104,6 +104,9 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	/* allows user to edit the file versions and share with others */
 	public static String SHARE_PERMISSION = "SHARE";
 	
+	/* allows user to edit the file versions and share with others */
+	public static String MANAGE_PERMISSION = "MANAGE";
+	
 	/**
 	 * Package protected versioned file constructor.
 	 */

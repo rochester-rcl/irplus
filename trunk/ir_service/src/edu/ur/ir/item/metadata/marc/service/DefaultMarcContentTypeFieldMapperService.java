@@ -30,6 +30,8 @@ import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperService;
  */
 public class DefaultMarcContentTypeFieldMapperService implements MarcContentTypeFieldMapperService{
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 7216124852955703323L;
 	private MarcContentTypeFieldMapperDAO marcContentTypeFieldMapperDAO;
 	
 

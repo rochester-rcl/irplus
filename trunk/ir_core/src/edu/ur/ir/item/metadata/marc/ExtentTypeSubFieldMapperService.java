@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item.metadata.marc;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface ExtentTypeSubFieldMapperService {
+public interface ExtentTypeSubFieldMapperService extends Serializable{
 	
 	/**
 	 * Get all extent type sub field mappers.

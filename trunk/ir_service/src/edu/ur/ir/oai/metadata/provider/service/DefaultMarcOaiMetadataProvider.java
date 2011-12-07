@@ -28,7 +28,7 @@ public class DefaultMarcOaiMetadataProvider implements OaiMetadataProvider{
 	
 	public static String SCHEMA = "http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd";
 
-	MarcXmlElementAppender marcXmlAppender = new MarcXmlElementAppender();
+	private MarcXmlElementAppender marcXmlAppender = new MarcXmlElementAppender();
 
 	/** Person name formatter */
 	private BasicPersonNameFormatter nameFormatter;

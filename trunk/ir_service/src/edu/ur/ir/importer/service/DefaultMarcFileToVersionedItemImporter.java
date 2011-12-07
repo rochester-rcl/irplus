@@ -89,6 +89,9 @@ import edu.ur.ir.user.IrUser;
 public class DefaultMarcFileToVersionedItemImporter 
     implements MarcFileToVersionedItemImporter, Comparator<Subfield> {
 	
+	/* eclipse generated id*/
+	private static final long serialVersionUID = -850371858195567041L;
+
 	//  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(DefaultMarcFileToVersionedItemImporter.class);
 	
