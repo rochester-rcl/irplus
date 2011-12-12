@@ -61,11 +61,24 @@
    </table>
    
   <div align="right">
- 	           <button class="ur_button" 
+               <c:if test="${ parentFolderId == null || parentFolderId == 0}">
+                   <ir:acl domainObject="${groupWorkspace}" hasPermission="GROUP_WORKSPACE_EDIT">
+ 	                   <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
  		                   onClick="YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder();"
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
+ 		           </ir:acl>
+	           </c:if>
+	           <c:if test="${ parentFolderId != null && parentFolderId != 0}">
+                   <ir:acl domainObject="${parentFolder}" hasPermission="GROUP_WORKSPACE_FOLDER_EDIT">
+ 	                   <button class="ur_button" 
+ 		                   onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+ 		                   onClick="YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder();"
+ 		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
+ 		           </ir:acl>
+	           </c:if>
 	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.user.group_workspace.singleFileUploadDialog.showDialog();"

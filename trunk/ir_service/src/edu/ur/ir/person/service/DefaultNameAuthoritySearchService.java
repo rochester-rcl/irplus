@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -112,10 +113,13 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 		String indexFolder = nameAuthorityIndex.getAbsolutePath();
 		
 		IndexSearcher searcher = null;
+		IndexReader reader = null;
 		try {
 			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			searcher = new IndexSearcher(directory, true);
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
+			reader = IndexReader.open(directory, true);
+			searcher = new IndexSearcher(reader);
+			
+			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
@@ -149,6 +153,14 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 					searcher.close();
 				} catch (IOException e) {
 					log.error("the searcher could not be closed", e);
+				}
+			}
+			if( reader != null )
+			{
+				try {
+					reader.close();
+				} catch (IOException e) {
+					log.error("the reader could not be closed", e);
 				}
 			}
 		} 

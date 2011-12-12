@@ -794,5 +794,17 @@ public class HbIrUserDAO implements IrUserDAO {
 		q.setFetchSize(maxResults);
 		return (List<IrUser>) q.list();	
     }
+
+	/**
+	 * Gets all users who have a non-null index location
+	 * 
+	 * @return all users who have a non null index location
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersWithWorkspaceIndex() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
+		.getNamedQuery("getUsersWithPersonalIndexFolder");		
+		return (List<IrUser>) q.list();	
+	}
 	
 }

@@ -23,6 +23,7 @@ import java.util.Properties;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -102,13 +103,15 @@ public class DefaultUserIndexServiceTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		IndexSearcher searcher = new IndexSearcher(dir, true);
-		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardAnalyzer(Version.LUCENE_29));
+		IndexReader reader = IndexReader.open(dir, true);
+		IndexSearcher searcher = new IndexSearcher(reader);
+		QueryParser parser = new QueryParser(Version.LUCENE_35, field, new StandardAnalyzer(Version.LUCENE_35));
 		Query q1 = parser.parse(queryString);
 		TopDocs hits = searcher.search(q1, 1000);
 		int hitCount = hits.totalHits;
 
 		searcher.close();
+		reader.close();
 
 		return hitCount;
 	}
