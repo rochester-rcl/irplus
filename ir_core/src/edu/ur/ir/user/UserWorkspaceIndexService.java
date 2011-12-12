@@ -20,11 +20,13 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.repository.Repository;
 
 
 /**
- * Interface for indexing user information.
+ * Interface for indexing user workspace information.
  * 
  * @author Nathan Sarr
  *
@@ -148,7 +150,7 @@ public interface UserWorkspaceIndexService extends Serializable{
 	public void deleteItemFromIndex(IrUser user, Long personalItemId);
 	
 	/**
-	 * Add a personal item to the index.  Creates an index floder if one does not already exist
+	 * Add a personal item to the index.  Creates an index folder if one does not already exist
 	 * 
 	 * @param repository
 	 * @param personalItem
@@ -166,5 +168,65 @@ public interface UserWorkspaceIndexService extends Serializable{
 	 * @throws IOException - if folder locaton cannot be created
 	 */
 	public void updateIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException, IOException;
+	
+	
+	
+	/**
+	 * Delete a group workspace file from the index.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace file
+	 */
+	public void deleteGroupWorkspaceFileFromIndex(IrUser user, Long groupWorkspaceFileId);
+	
+	/**
+	 * Add a group workspace file to the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceFile - group workspace file to index
+	 * @throws LocationAlreadyExistsException - if the new location already exists 
+	 * @throws IOException - if location cannot be created
+	 */
+	public void addToIndex(Repository repository, GroupWorkspaceFile groupWorkspaceFile) throws LocationAlreadyExistsException, IOException;
+	
+	/**
+	 * Update the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceFile - group workspace file to add
+	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
+	 * @throws IOException - if folder location cannot be created
+	 */
+	public void updateIndex(Repository repository, GroupWorkspaceFile groupWorkspaceFile) throws LocationAlreadyExistsException, IOException;
+	
+	
+	/**
+	 * Delete a group workspace folder from the index.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace file
+	 */
+	public void deleteGroupWorkspaceFolderFromIndex(IrUser user, Long groupWorkspaceFolderId);
+	
+	/**
+	 * Add a group workspace folder to the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceFolder - group workspace folder to index
+	 * @throws LocationAlreadyExistsException - if the new location already exists 
+	 * @throws IOException - if location cannot be created
+	 */
+	public void addToIndex(Repository repository, GroupWorkspaceFolder groupWorkspaceFolder) throws LocationAlreadyExistsException, IOException;
+	
+	/**
+	 * Update the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceolder - group workspace folder to add
+	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
+	 * @throws IOException - if folder location cannot be created
+	 */
+	public void updateIndex(Repository repository, GroupWorkspaceFolder groupWorkspaceFolder) throws LocationAlreadyExistsException, IOException;
+	
+	
+	
 
 }

@@ -65,6 +65,13 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
+        <!--  re-index all user workspaces in the repository -->
+        <action name="reIndexAllUserWorkspaces" 
+            class="edu.ur.ir.web.action.user.ReIndexAllUsersWithWorkspace">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
         <!--  re-index all the researchers in the repository -->
         <action name="reIndexResearchers" 
             class="edu.ur.ir.web.action.researcher.ReIndexResearchers">

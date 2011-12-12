@@ -416,10 +416,6 @@
            </list>
        </property>
    </bean>
-   
-   <bean id="defaultTextAnalyzer" 
-       class="edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter" 
-       singleton="false" />
        
    <bean id="standardWithACIIFolding"
          class="edu.ur.lucene.analysis.StandardWithACIIFoldingFilter"
@@ -430,7 +426,7 @@
        class="edu.ur.ir.user.service.DefaultUserWorkspaceIndexService">
        <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
        <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="irFileIndexingFailureRecordDAO" ref="irFileIndexingFailureRecordDAO"/>
@@ -502,7 +498,7 @@
        class="edu.ur.ir.user.service.DefaultUserWorkspaceSearchService">
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
 
    <bean id="nameAuthoritySearchService" 

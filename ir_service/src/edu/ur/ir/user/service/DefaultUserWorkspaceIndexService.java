@@ -27,13 +27,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.NumericUtils;
 
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
@@ -43,6 +43,8 @@ import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.IrFileIndexingFailureRecord;
 import edu.ur.ir.file.IrFileIndexingFailureRecordDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.index.FileTextExtractor;
 import edu.ur.ir.index.FileTextExtractorService;
 import edu.ur.ir.item.GenericItem;
@@ -306,7 +308,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
         Document doc = new Document();
         
 	    doc.add(new Field(PERSONAL_FILE_ID, 
-	    		NumberTools.longToString(personalFile.getId()), 
+	    		NumericUtils.longToPrefixCoded(personalFile.getId()), 
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
 	    
@@ -323,7 +325,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				Field.Index.ANALYZED));
 	   
 	    doc.add(new Field(VERSIONED_FILE_ID, 
-	    		NumberTools.longToString(personalFile.getVersionedFile().getId()), 
+	    		NumericUtils.longToPrefixCoded(personalFile.getVersionedFile().getId()), 
 		 	    Field.Store.YES, 
 			    Field.Index.ANALYZED));
 
@@ -379,12 +381,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		text = null;
 		
 		doc.add(new Field(VERSIONED_FILE_ID, 
-				NumberTools.longToString(personalFile.getVersionedFile().getId()), 
+				NumericUtils.longToPrefixCoded(personalFile.getVersionedFile().getId()), 
 		 	    Field.Store.YES, 
 			    Field.Index.NOT_ANALYZED));
 			
         
-        writeDocument(personalIndexFolder.getAbsolutePath(),  doc);
+        writeDocument(personalIndexFolder,  doc);
 		
 	}
 	
@@ -394,13 +396,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File directoryPath, Document document)
 	{
 		log.debug("write document to directory " + directoryPath );
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(directoryPath);
+			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
@@ -485,7 +487,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			
 			directory = FSDirectory.open(personalIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFileId));
+			Term term = new Term(PERSONAL_FILE_ID, NumericUtils.longToPrefixCoded(personalFileId));
 			writer.deleteDocuments(term);
 			
 		} catch (Exception e) {
@@ -554,7 +556,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				Field.Index.ANALYZED));
 		
 		doc.add(new Field(PERSONAL_FOLDER_ID, 
-				NumberTools.longToString(personalFolder.getId()), 
+				NumericUtils.longToPrefixCoded(personalFolder.getId()), 
 				Field.Store.YES, 
 				Field.Index.NOT_ANALYZED));
 		
@@ -563,7 +565,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 		
-		writeDocument(personalIndexFolder.getAbsolutePath(), 
+		writeDocument(personalIndexFolder, 
 				doc);
 
 	}
@@ -597,7 +599,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				Field.Index.ANALYZED));
 		
 		doc.add(new Field(PERSONAL_COLLECTION_ID, 
-				NumberTools.longToString(personalCollection.getId()), 
+				NumericUtils.longToPrefixCoded(personalCollection.getId()), 
 				Field.Store.YES, 
 				Field.Index.NOT_ANALYZED));
 		
@@ -606,7 +608,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 		
-		writeDocument(personalIndexFolder.getAbsolutePath(), 
+		writeDocument(personalIndexFolder, 
 				doc);
 
 	}
@@ -644,7 +646,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			
 			directory = FSDirectory.open(personalIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(PERSONAL_COLLECTION_ID, NumberTools.longToString(personalCollectionId));
+			Term term = new Term(PERSONAL_COLLECTION_ID, NumericUtils.longToPrefixCoded(personalCollectionId));
 			writer.deleteDocuments(term);
 			writer.close();
 		} catch (Exception e) {
@@ -716,7 +718,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			
 			directory = FSDirectory.open(personalIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolderId));
+			Term term = new Term(PERSONAL_FOLDER_ID, NumericUtils.longToPrefixCoded(personalFolderId));
 			writer.deleteDocuments(term);
 			writer.close();
 		} catch (Exception e) {
@@ -798,7 +800,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
         Document doc = new Document();
         
         doc.add(new Field(SHARED_INBOX_FILE_ID,
-        		NumberTools.longToString(inboxFile.getId()), 
+        		NumericUtils.longToPrefixCoded(inboxFile.getId()), 
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
         
@@ -873,7 +875,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			    Field.Index.NOT_ANALYZED));
 		
         
-        writeDocument(personalIndexFolder.getAbsolutePath(), 
+        writeDocument(personalIndexFolder, 
         		doc);
 		
 	}
@@ -911,7 +913,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			
 			directory = FSDirectory.open(personalIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(sharedInboxFileId));
+			Term term = new Term(SHARED_INBOX_FILE_ID, NumericUtils.longToPrefixCoded(sharedInboxFileId));
 			writer.deleteDocuments(term);
 		} catch (Exception e) {
 			log.error(e);
@@ -978,7 +980,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	public void addToIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException, IOException
 	{
 		File personalIndexFolder = getPersonalIndexFolder(personalItem.getOwner(), repository);
-		this.writeDocument(personalIndexFolder.getAbsolutePath(), getDocument(personalItem));
+		this.writeDocument(personalIndexFolder, getDocument(personalItem));
 	}
 	
 	/**
@@ -1014,7 +1016,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			
 			directory = FSDirectory.open(personalIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItemId));
+			Term term = new Term(PERSONAL_ITEM_ID, NumericUtils.longToPrefixCoded(personalItemId));
 			writer.deleteDocuments(term);
 		} catch (Exception e) {
 			log.error(e);
@@ -1108,7 +1110,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		
 		Document doc = new Document();
 		doc.add(new Field(PERSONAL_ITEM_ID, 
-				NumberTools.longToString(personalItem.getId()), 
+				NumericUtils.longToPrefixCoded(personalItem.getId()), 
 				Field.Store.YES, 
 				Field.Index.NOT_ANALYZED));
 		
@@ -1140,20 +1142,20 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 		
-		    String collectionId =  NumberTools.longToString(personalItem.getPersonalCollection().getId());
+		    String collectionId =  NumericUtils.longToPrefixCoded(personalItem.getPersonalCollection().getId());
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_ID, 
 				collectionId, 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 		
 		
-		    String collectionLeftValue = NumberTools.longToString(personalItem.getPersonalCollection().getLeftValue());		
+		    String collectionLeftValue = NumericUtils.longToPrefixCoded(personalItem.getPersonalCollection().getLeftValue());		
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_LEFT_VALUE, 
 				collectionLeftValue, 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 		
-		    String collectionRightValue = NumberTools.longToString(personalItem.getPersonalCollection().getRightValue());		
+		    String collectionRightValue = NumericUtils.longToPrefixCoded(personalItem.getPersonalCollection().getRightValue());		
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_RIGHT_VALUE, 
 				collectionRightValue, 
 				Field.Store.YES, 
@@ -1595,6 +1597,52 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	public void setIrFileIndexingFailureRecordDAO(
 			IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO) {
 		this.irFileIndexingFailureRecordDAO = irFileIndexingFailureRecordDAO;
+	}
+
+	@Override
+	public void addToIndex(Repository repository,
+			GroupWorkspaceFile groupWorkspaceFile)
+			throws LocationAlreadyExistsException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addToIndex(Repository repository,
+			GroupWorkspaceFolder groupWorkspaceFolder)
+			throws LocationAlreadyExistsException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteGroupWorkspaceFileFromIndex(IrUser user,
+			Long groupWorkspaceFileId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteGroupWorkspaceFolderFromIndex(IrUser user,
+			Long groupWorkspaceFolderId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateIndex(Repository repository,
+			GroupWorkspaceFile groupWorkspaceFile)
+			throws LocationAlreadyExistsException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateIndex(Repository repository,
+			GroupWorkspaceFolder groupWorkspaceFolder)
+			throws LocationAlreadyExistsException, IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 

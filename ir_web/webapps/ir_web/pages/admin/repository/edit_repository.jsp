@@ -286,9 +286,7 @@
                            <br/>
                            <br/>
                            
-                           <c:url var="resetAllHandles" value="/admin/resetAllHandles.action"/>
-                           
-                           <a href="${resetAllHandles}">Reset all handles</a>
+                           <a href="<c:url value="/admin/reIndexAllUserWorkspaces.action"/>">Re-Index All User Workspaces</a>
                            <br/>
                            <br/>
                        </c:if>

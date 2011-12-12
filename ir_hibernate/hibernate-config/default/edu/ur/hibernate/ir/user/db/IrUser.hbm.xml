@@ -274,6 +274,12 @@
 		IrUser.username = ?
 	</query>
 	
+	 <!-- named query for getting users where the personal index is not null -->
+	<query name="getUsersWithPersonalIndexFolder">
+		from IrUser as irUser where
+		irUser.personalIndexFolder is not null
+	</query>
+	
     <!-- named query for getting a user -->
 	<query name="getUserByToken">
 		from IrUser as IrUser where

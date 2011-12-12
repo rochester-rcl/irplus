@@ -108,7 +108,7 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
 			IndexProcessingType processingType);
 	
     /**
-     * Add all items within the given user to be processed
+     * Add all file system objects available to the given user to be processed
      * 
      * @param user - user with all items to be processed
      * @param processing type - type of processing to be performed.
@@ -117,6 +117,12 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
     public void reIndexAllUserItems( IrUser user,
 			IndexProcessingType processingType) throws IOException;
     
-  
+    /**
+     * Will delete and set all user workspaces to be re-indexed
+     * 
+     * @param processing type - type of processing to be performed.
+     * @throws IOException 
+     */
+    public void reIndexAllWorkspaceUsers(IndexProcessingType processingType) throws IOException;
 
 }

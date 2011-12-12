@@ -40,7 +40,7 @@ import edu.ur.file.db.FileInfo;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter;
+import edu.ur.lucene.analysis.StandardWithACIIFoldingFilter;
 import edu.ur.util.FileUtil;
 
 /**
@@ -129,7 +129,7 @@ public class DefaultExcelXmlTextExtractorTest {
 		IndexWriter writer = null;
 		try {
 			writer = new IndexWriter(dir, 
-					new StandardWithISOLatin1AccentFilter(), true, IndexWriter.MaxFieldLength.LIMITED);
+					new StandardWithACIIFoldingFilter(), true, IndexWriter.MaxFieldLength.LIMITED);
 			writer.addDocument(doc);
 			writer.optimize();
 			writer.close();
@@ -178,7 +178,7 @@ public class DefaultExcelXmlTextExtractorTest {
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
 		IndexSearcher searcher = new IndexSearcher(dir, true);
-		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardWithISOLatin1AccentFilter());
+		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardWithACIIFoldingFilter());
 		Query q1 = parser.parse(queryString);
 
 		TopDocs hits = searcher.search(q1,1000);

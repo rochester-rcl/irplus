@@ -24,13 +24,14 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.NumberTools;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
 
 import edu.ur.ir.FileSystem;
@@ -138,10 +139,12 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 		
 		String indexFolder = personalIndexFolder.getAbsolutePath();
 		IndexSearcher searcher = null;
+		IndexReader reader = null;
 		try {
 			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			searcher = new IndexSearcher(directory, true);
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
+			reader = IndexReader.open(directory, true);
+			searcher = new IndexSearcher(reader);
+			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
@@ -174,6 +177,14 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 					log.error("the searcher could not be closed", e);
 				}
 			}
+			if( reader != null )
+			{
+				try {
+					reader.close();
+				} catch (IOException e) {
+					log.error("the reader could not be closed", e);
+				}
+			}
 		}
 		searchResults.setObjects(fileSystemObjects);
 		
@@ -198,31 +209,31 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 		if( type.equals(FileSystemType.PERSONAL_FILE.getType()) )
 		{
 			log.debug( "personal file id = " + document.get(DefaultUserWorkspaceIndexService.PERSONAL_FILE_ID));
-			Long personalFileId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_FILE_ID));
+			Long personalFileId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_FILE_ID));
 			fileSystem = userFileSystemService.getPersonalFile(personalFileId, false);
 		}
 		if( type.equals(FileSystemType.PERSONAL_FOLDER.getType()))
 		{
 			log.debug( "personal folder id = " + document.get(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_ID));
-			Long personalFolderId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_ID));
+			Long personalFolderId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_ID));
 			fileSystem = userFileSystemService.getPersonalFolder(personalFolderId, false);
 		}
 		if( type.equals(FileSystemType.SHARED_INBOX_FILE.getType()))
 		{
 			log.debug( "inbox file id = " + document.get(DefaultUserWorkspaceIndexService.SHARED_INBOX_FILE_ID));
-			Long inboxFileId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.SHARED_INBOX_FILE_ID));
+			Long inboxFileId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.SHARED_INBOX_FILE_ID));
 			fileSystem = userFileSystemService.getSharedInboxFile(inboxFileId, false);
 		}
 		if( type.equals(FileSystemType.PERSONAL_ITEM.getType()))
 		{
 			log.debug( "personal id = " + document.get(DefaultUserWorkspaceIndexService.PERSONAL_ITEM_ID));
-			Long personalItemId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_ITEM_ID));
+			Long personalItemId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_ITEM_ID));
 			fileSystem = userPublishingFileSystemService.getPersonalItem(personalItemId, false);
 		}
 		if( type.equals(FileSystemType.PERSONAL_COLLECTION.getType()))
 		{
 			log.debug( "personal collection id = " + document.get(DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_ID));
-			Long personalCollectionId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_ID));
+			Long personalCollectionId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_ID));
 			fileSystem = userPublishingFileSystemService.getPersonalCollection(personalCollectionId, false);
 		}
 

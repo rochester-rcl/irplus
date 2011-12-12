@@ -325,4 +325,23 @@ UserWorkspaceIndexProcessingRecordService
     	return records;
 	}
 
+	/**
+     * Will delete and set all user workspaces to be re-indexed
+     * 
+     * @param processing type - type of processing to be performed.
+     * @throws IOException 
+     */
+	public void reIndexAllWorkspaceUsers(IndexProcessingType processingType)
+			throws IOException {
+		List<IrUser> users = userService.getUsersWithWorkspaceIndex();
+		log.debug("re indexing " + users.size() + " accounts");
+		for(IrUser user : users)
+		{
+			user.setReBuildUserWorkspaceIndex(true);
+			userService.makeUserPersistent(user);
+			this.reIndexAllUserItems(user, processingType);
+		}
+		
+	}
+
 }

@@ -14,7 +14,6 @@ import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
-import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
@@ -74,7 +73,7 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	/*  Logger for vierw workspace action */
 	private static final Logger log = Logger.getLogger(ViewGroupWorkspaceFolders.class);
 	
-	/* Parentg group folder */
+	/* Parent group folder */
 	private GroupWorkspaceFolder parentFolder;
 
 	/* Service to deal with group workspace information  */

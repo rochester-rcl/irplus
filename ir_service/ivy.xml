@@ -43,8 +43,8 @@
         </dependency>
 
          <!-- lucene files-->
-        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.9.4">
-            <artifact name="lucene-misc" type="jar"/>
+        <dependency org="org.apache.lucene" name="lucene-queries" rev="3.5.0">
+            <artifact name="lucene-queries" type="jar"/>
         </dependency>
         
         <!-- spring files -->
