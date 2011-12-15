@@ -89,4 +89,18 @@
 		from GroupWorkspaceFile as groupWorkspaceFile where
 		groupWorkspaceFile.groupWorkspace.id = :workspaceId and groupWorkspaceFile.groupWorkspaceFolder.id is NULL
 	</query>
+	
+		<!--  All folders for the specified folder including folders in sub folders -->
+	<query name="getAllFilesUserHasPermissionFor">
+	   select groupWorkspaceFile from 
+	   GroupWorkspaceFile groupWorkspaceFile,
+	   IrAcl irAcl
+	      join irAcl.userEntries as userEntries 
+	      join userEntries.irUser as user
+	      join userEntries.irClassTypePermissions as classPermission 
+        where  irAcl.classType.name = :className
+        and classPermission.name = :permissionName
+        and user.id = :userId
+        and irAcl.objectId = groupWorkspaceFile.versionedFile.id
+	</query>
 </hibernate-mapping>

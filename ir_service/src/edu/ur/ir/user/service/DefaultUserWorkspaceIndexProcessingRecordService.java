@@ -9,7 +9,10 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.FileCollaborator;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
@@ -43,7 +46,10 @@ UserWorkspaceIndexProcessingRecordService
 	/** File system service for users. */
 	private UserFileSystemService userFileSystemService;
 	
-    /** user publishing file system service */
+	/** File system service for group workspaces. */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
+
+	/** user publishing file system service */
     private UserPublishingFileSystemService userPublishingFileSystemService;
     
 	/** Service for dealing with processing types */
@@ -75,6 +81,8 @@ UserWorkspaceIndexProcessingRecordService
 		List<SharedInboxFile> inboxFiles = userFileSystemService.getSharedInboxFiles(user);
 		Set<PersonalFile> rootFiles = user.getRootFiles();
 		Set<PersonalItem> rootItems = user.getRootPersonalItems();
+		List<GroupWorkspaceFolder> groupWorkspaceFolders = groupWorkspaceFileSystemService.getAllFoldersUserHasPermissionFor(user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+		List<GroupWorkspaceFile> groupWorkspaceFiles = groupWorkspaceFileSystemService.getAllFilesUserHasPermissionFor(user, VersionedFile.VIEW_PERMISSION);
 		
 		for( PersonalFile rootFile : rootFiles)
 		{
@@ -84,6 +92,16 @@ UserWorkspaceIndexProcessingRecordService
 		for(PersonalItem personalItem : rootItems)
 		{
 			save(user.getId(), personalItem, processingType);
+		}
+		
+		for(GroupWorkspaceFolder folder : groupWorkspaceFolders)
+		{
+			save(user.getId(), folder, processingType);
+		}
+		
+		for(GroupWorkspaceFile file : groupWorkspaceFiles)
+		{
+			save(user.getId(), file, processingType);
 		}
 		
 		// re-index shared inbox files
@@ -259,48 +277,117 @@ UserWorkspaceIndexProcessingRecordService
 	}
 
 	
+	/**
+	 * Get the user workspace index processing record data access object.
+	 * 
+	 * @return
+	 */
 	public UserWorkspaceIndexProcessingRecordDAO getUserWorkspaceIndexProcessingRecordDAO() {
 		return userWorkspaceIndexProcessingRecordDAO;
 	}
 
+	/**
+	 * Set the workspace index processing record data access object
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordDAO
+	 */
 	public void setUserWorkspaceIndexProcessingRecordDAO(
 			UserWorkspaceIndexProcessingRecordDAO userWorkspaceIndexProcessingRecordDAO) {
 		this.userWorkspaceIndexProcessingRecordDAO = userWorkspaceIndexProcessingRecordDAO;
 	}
 	
+	/**
+	 * Get the user file system service.
+	 * 
+	 * @return
+	 */
 	public UserFileSystemService getUserFileSystemService() {
 		return userFileSystemService;
 	}
 
+	/**
+	 * Set the user file system service.
+	 * 
+	 * @param userFileSystemService
+	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
 	}
 	
+	/**
+	 * Get the user publishing file system service.
+	 * 
+	 * @return
+	 */
 	public UserPublishingFileSystemService getUserPublishingFileSystemService() {
 		return userPublishingFileSystemService;
 	}
 
+	/**
+	 * Set the user publishing file system service.
+	 * 
+	 * @param userPublishingFileSystemService
+	 */
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
 	}
 	
+	/**
+	 * Get the index processing type service.
+	 * 
+	 * @return
+	 */
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
 
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
+	/**
+	 * Get the user service.
+	 * 
+	 * @return
+	 */
 	public UserService getUserService() {
 		return userService;
 	}
 
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	/**
+	 * Get the group workspace file system service.
+	 * 
+	 * @return the group workspace file system service.
+	 */
+	public GroupWorkspaceFileSystemService getGroupWorkspaceFileSystemService() {
+		return groupWorkspaceFileSystemService;
+	}
+
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+				GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}	
 	
 	/**
 	 * Update all indexes for a group workspace file - since a workspace file can be shared across multiple users, we may

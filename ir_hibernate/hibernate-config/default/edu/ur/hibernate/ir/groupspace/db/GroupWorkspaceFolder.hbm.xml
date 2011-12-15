@@ -163,4 +163,20 @@
 	    and groupFolder.treeRoot.id = :rootId
 	</query>
 	
+	<!--  All folders for the specified folder including folders in sub folders -->
+	<query name="getAllFoldersUserHasPermissionFor">
+	   select groupWorkspaceFolder from 
+	   GroupWorkspaceFolder groupWorkspaceFolder,
+	   IrAcl irAcl
+	      join irAcl.userEntries as userEntries 
+	      join userEntries.irUser as user
+	      join userEntries.irClassTypePermissions as classPermission 
+        where  irAcl.classType.name = :className
+        and classPermission.name = :permissionName
+        and user.id = :userId
+        and irAcl.objectId = groupWorkspaceFolder.id
+	</query>
+	
+
+	
 </hibernate-mapping>

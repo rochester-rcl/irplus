@@ -19,6 +19,7 @@ package edu.ur.ir.groupspace;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.user.IrUser;
 
 /**
  * Interface for persisting group folder information
@@ -84,4 +85,13 @@ public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
 	public List<GroupWorkspaceFolder> getAllFoldersForFolder(GroupWorkspaceFolder groupFolder);
 	
 
+	/**
+	 * Get all folders for the given user that has the specified permission on the folder.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all folders for which the user has the specified permission.
+	 */
+	public List<GroupWorkspaceFolder> getAllFoldersUserHasPermissionFor(IrUser user, String permission);
 }

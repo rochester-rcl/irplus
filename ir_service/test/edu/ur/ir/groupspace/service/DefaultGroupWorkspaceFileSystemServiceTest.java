@@ -18,6 +18,7 @@ package edu.ur.ir.groupspace.service;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 
 import java.util.Properties;
 
@@ -441,6 +442,13 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
         assert securityService.hasPermission(subFolder, user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION)  : 
         	"User should have read permissions but does not";
         
+        List<GroupWorkspaceFolder> folders = groupWorkspaceFileSystemService.getAllFoldersUserHasPermissionFor(user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+        
+        assert folders.size() == 2 : "Should have 2 folders but has " + folders.size();
+        assert folders.contains(subFolder) : "Should contain subfolder " + subFolder + " but does not";
+        assert folders.contains(myFolder) : "Should contain myfolder " + myFolder + " but does not ";
+        
+        
         // check file permissions
         assert securityService.hasPermission(gf.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION)  : 
         	"User should have file edit permissions but does not";
@@ -459,6 +467,32 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
         
         assert securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION)  : 
         	"User should have file read but does not";
+        
+        // second file
+        assert securityService.hasPermission(gf2.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION)  : 
+        	"User should have file edit permissions but does not";
+        
+        assert securityService.hasPermission(gf2.getVersionedFile(), user, VersionedFile.SHARE_PERMISSION)  : 
+        	"User should have fils share permissions but does not";
+        
+        assert securityService.hasPermission(gf2.getVersionedFile(), user, VersionedFile.VIEW_PERMISSION) : 
+        	"User should have file view permissions but does not";
+        
+        assert !securityService.hasPermission(gf2.getVersionedFile(), user2, VersionedFile.EDIT_PERMISSION) : 
+        	"User should NOT have file edit permissions but does";
+        
+        assert !securityService.hasPermission(gf2.getVersionedFile(), user2, VersionedFile.SHARE_PERMISSION) : 
+        	"User should NOT have file share permissions but does";
+        
+        assert securityService.hasPermission(gf2.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION)  : 
+        	"User should have file read but does not";
+        
+        
+        List<GroupWorkspaceFile> files = groupWorkspaceFileSystemService.getAllFilesUserHasPermissionFor(user2, VersionedFile.VIEW_PERMISSION);
+        
+        assert files.size() == 2 : "Should have 2 files but has " + files.size();
+        assert files.contains(gf) : "Should contain group file file " + gf + " but does not";
+        assert files.contains(gf2) : "Should contain group file file " + gf2 + " but does not";
         
         
         tm.commit(ts);
@@ -1029,6 +1063,11 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
         assert !securityService.hasPermission(gf.getVersionedFile(), user2, VersionedFile.VIEW_PERMISSION) : 
         	"User should have file read but does not";
         
+        List<GroupWorkspaceFile> files = groupWorkspaceFileSystemService.getAllFilesUserHasPermissionFor(user2, VersionedFile.VIEW_PERMISSION);
+        assert files.size() == 0 : "Should have no files but has " + files.size();
+        
+        List<GroupWorkspaceFolder> folders = groupWorkspaceFileSystemService.getAllFoldersUserHasPermissionFor(user2, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+        assert folders.size() == 0 : "Should have 0 folders but has " + folders.size();
         
         
         tm.commit(ts);

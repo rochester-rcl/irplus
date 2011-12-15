@@ -530,4 +530,21 @@ public class DefaultSecurityService implements SecurityService {
 		return irUserAccessControlEntryDAO.getUserControlEntriesForUsers(acl, users);
 	}
 
+	/**
+	 * Returns all users with the specified permission on the domain instance.  This
+	 * should only return users with explicit permissions set on them.  This will NOT
+	 * return a user who has the permission by being within a group that is given the permission.
+	 * 
+	 * @param domainInstance - domain instance to check
+	 * @param permission - permissions the sid must have
+	 * 
+	 * @return List of sids with the specified permissions.
+	 */
+	public Set<IrUser> getUsersWithPermissionForObject(Object domainInstance,
+			String permission) {
+		Long objectId = getObjectId(domainInstance);
+		String className = CgLibHelper.cleanClassName(domainInstance.getClass().getName());
+		return irAclDAO.getUsersWithPermissionForObject(objectId, className, permission);
+	}
+
 }

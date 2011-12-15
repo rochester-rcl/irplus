@@ -29,11 +29,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.NumericUtils;
+import org.apache.lucene.util.Version;
 
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
@@ -106,7 +108,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	
 	public static final String PERSONAL_FILE_ID = "personal_file_id";
 	
-	public static final String FILE_DESCRIPTION = "personal_file_description";
+	public static final String FILE_DESCRIPTION = "file_description";
 	
 	public static final String FILE_VERSION_ID = "file_version_id";
 	
@@ -125,10 +127,16 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	public static final String TYPE = "type";
 	
 	
+	/** Group workspace file id */
+	public static final String GROUP_WORKSPACE_FILE_ID = "group_workspace_file_id";
 	
-	public static final String PERSONAL_FOLDER_NAME = "personal_folder_name";
+	public static final String GROUP_WORKSPACE_FOLDER_ID = "group_workspace_folder_id";
 	
-	public static final String PERSONAL_FOLDER_DESCRIPTION = "personal_folder_description";
+	
+	
+	public static final String FOLDER_NAME = "folder_name";
+	
+	public static final String FOLDER_DESCRIPTION = "folder_description";
 	
 	public static final String PERSONAL_FOLDER_ID = "personal_folder_id";
 	
@@ -406,7 +414,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
-			writer.optimize();
 			
 		} catch (Exception e) {
 			log.error(e);
@@ -539,7 +546,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		File personalIndexFolder = this.getPersonalIndexFolder(personalFolder.getOwner(), repository);
 		
 		Document doc = new Document();
-		doc.add(new Field(PERSONAL_FOLDER_NAME, 
+		doc.add(new Field(FOLDER_NAME, 
 				personalFolder.getName(), 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
@@ -550,7 +557,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			description = personalFolder.getDescription();
 		}
 		
-		doc.add(new Field(PERSONAL_FOLDER_DESCRIPTION, 
+		doc.add(new Field(FOLDER_DESCRIPTION, 
 				description, 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
@@ -963,11 +970,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		deleteInboxFileFromIndex(inboxFile.getSharedWithUser(), inboxFile.getId());
 		addToIndex(repository, inboxFile);
 	}
-
-	
-
-	
-	
 
 	/**
 	 * Add the personal item to the index.
@@ -1578,7 +1580,8 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 
@@ -1599,49 +1602,323 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		this.irFileIndexingFailureRecordDAO = irFileIndexingFailureRecordDAO;
 	}
 
-	@Override
+	/**
+	 * Add a group workspace file to the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceFile - group workspace file to index
+	 * @param IrUser user - user to add the group workspace file to.
+	 * 
+	 * @throws LocationAlreadyExistsException - if the new location already exists 
+	 * @throws IOException - if location cannot be created
+	 */
 	public void addToIndex(Repository repository,
-			GroupWorkspaceFile groupWorkspaceFile)
+			GroupWorkspaceFile groupWorkspaceFile, IrUser user)
 			throws LocationAlreadyExistsException, IOException {
-		// TODO Auto-generated method stub
+		
+		File personalIndexFolder = this.getPersonalIndexFolder(user, repository);
+        
+        Document doc = new Document();
+        
+	    doc.add(new Field(GROUP_WORKSPACE_FILE_ID, 
+	    		NumericUtils.longToPrefixCoded(groupWorkspaceFile.getId()), 
+			Field.Store.YES, 
+			Field.Index.NOT_ANALYZED));
+	    
+	    String fileDescription = "" + groupWorkspaceFile.getVersionedFile().getDescription();
+	    
+	    doc.add( new Field(FILE_DESCRIPTION,
+	        fileDescription,
+	        Field.Store.NO,
+	        Field.Index.ANALYZED) );
+	    
+	    doc.add(new Field(TYPE, 
+				groupWorkspaceFile.getFileSystemType().getType(), 
+				Field.Store.YES,
+				Field.Index.ANALYZED));
+	   
+	    doc.add(new Field(VERSIONED_FILE_ID, 
+	    		NumericUtils.longToPrefixCoded(groupWorkspaceFile.getVersionedFile().getId()), 
+		 	    Field.Store.YES, 
+			    Field.Index.ANALYZED));
+
+	    FileVersion mostRecentVersion = groupWorkspaceFile.getVersionedFile().getCurrentVersion();
+
+	    
+	    String name = mostRecentVersion.getVersionedFile().getName() + "";
+	    String extension = mostRecentVersion.getVersionedFile().getExtension() + "";
+	    String nameWithExtension = mostRecentVersion.getVersionedFile().getNameWithExtension() + "";
+	    String creator = mostRecentVersion.getVersionCreator().getUsername() + "";
+	    String text = getDocumentBodyText(mostRecentVersion);
+	   
+	    
+		doc.add(new Field(BASE_VERSIONED_FILE_NAME, 
+					name, 
+					Field.Store.YES, 
+					Field.Index.ANALYZED));
+			
+		doc.add(new Field(VERSIONED_FILE_NAME_EXTENSION, 
+					extension, 
+					Field.Store.YES, 
+					Field.Index.ANALYZED));
+			
+		doc.add(new Field(FULL_VERSIONED_FILE_NAME, 
+				nameWithExtension, 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+					
+		doc.add(new Field(FILE_VERSION_CREATOR,
+				creator, 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		if( text != null  && !text.trim().equals(""))
+		{
+		    doc.add(new Field(FILE_BODY_TEXT, 
+			 	    text, 
+				    Field.Store.NO, 
+				    Field.Index.ANALYZED));
+		}
+		
+		// null out the text as this could hold a huge amount of information
+		text = null;
+		
+		doc.add(new Field(VERSIONED_FILE_ID, 
+				NumericUtils.longToPrefixCoded(groupWorkspaceFile.getVersionedFile().getId()), 
+		 	    Field.Store.YES, 
+			    Field.Index.NOT_ANALYZED));
+			
+        
+        writeDocument(personalIndexFolder,  doc);
 		
 	}
 
-	@Override
+	/**
+	 * Add a group workspace folder to the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceFolder - group workspace folder to index
+	 * @param user - user who's index will be updated with the new information.
+	 * 
+	 * @throws LocationAlreadyExistsException - if the new location already exists 
+	 * @throws IOException - if location cannot be created
+	 */
 	public void addToIndex(Repository repository,
-			GroupWorkspaceFolder groupWorkspaceFolder)
+			GroupWorkspaceFolder groupWorkspaceFolder, IrUser user)
 			throws LocationAlreadyExistsException, IOException {
-		// TODO Auto-generated method stub
+		File personalIndexFolder = this.getPersonalIndexFolder(user, repository);
+		
+		Document doc = new Document();
+		doc.add(new Field(FOLDER_NAME, 
+				groupWorkspaceFolder.getName(), 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		String description = "";
+		if( groupWorkspaceFolder.getDescription() != null )
+		{
+			description = groupWorkspaceFolder.getDescription();
+		}
+		
+		doc.add(new Field(FOLDER_DESCRIPTION, 
+				description, 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		doc.add(new Field(GROUP_WORKSPACE_FOLDER_ID, 
+				NumericUtils.longToPrefixCoded(groupWorkspaceFolder.getId()), 
+				Field.Store.YES, 
+				Field.Index.NOT_ANALYZED));
+		
+		doc.add(new Field(TYPE, 
+				groupWorkspaceFolder.getFileSystemType().getType(), 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		writeDocument(personalIndexFolder, 
+				doc);
+
 		
 	}
 
-	@Override
+	/**
+	 * Delete a group workspace file from the index.
+	 * 
+	 * @param user - user who has the index you wish to remove the workspace file from
+	 * @param groupWorkspaceFileId - id of the group workspace file
+	 */
 	public void deleteGroupWorkspaceFileFromIndex(IrUser user,
 			Long groupWorkspaceFileId) {
-		// TODO Auto-generated method stub
+		String info = user.getPersonalIndexFolder();
+		File personalIndexFolder = null;
 		
+		// if the user does not have an index folder
+		// don't need to do anything.
+		if( info == null || groupWorkspaceFileId == null )
+		{
+			return;
+		}
+		else
+		{
+			personalIndexFolder = new File(info);
+			if( !personalIndexFolder.exists()  || personalIndexFolder.list() == null || personalIndexFolder.list().length == 0)
+			{
+				return;
+			}
+		}
+		
+		Directory directory = null;
+		IndexWriter writer = null;
+		try {
+			
+			directory = FSDirectory.open(personalIndexFolder);
+			writer = getWriter(directory);
+			Term term = new Term(GROUP_WORKSPACE_FILE_ID, NumericUtils.longToPrefixCoded(groupWorkspaceFileId));
+			writer.deleteDocuments(term);
+			
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally
+		{
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		}
 	}
 
-	@Override
+	/**
+	 * Delete a group workspace folder from the index.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace file
+	 * @param user - user whoes index should have the folder removed from
+	 */
 	public void deleteGroupWorkspaceFolderFromIndex(IrUser user,
 			Long groupWorkspaceFolderId) {
-		// TODO Auto-generated method stub
+		// if the user does not have an index folder
+		// don't need to do anything.
+		String info = user.getPersonalIndexFolder();
+		File personalIndexFolder = null;
+		
+		// if the user does not have an index folder
+		// don't need to do anything.
+		if( info == null || groupWorkspaceFolderId == null)
+		{
+			return;
+		}
+		else
+		{
+			personalIndexFolder = new File(info);
+			if( !personalIndexFolder.exists())
+			{
+				return;
+			}
+		}
+		
+		Directory directory = null;
+		IndexWriter writer = null;
+		try {
+			
+			directory = FSDirectory.open(personalIndexFolder);
+			writer = getWriter(directory);
+			Term term = new Term(GROUP_WORKSPACE_FOLDER_ID, NumericUtils.longToPrefixCoded(groupWorkspaceFolderId));
+			writer.deleteDocuments(term);
+			writer.close();
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally
+		{
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		}
 		
 	}
 
-	@Override
+	/**
+	 * Update the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceFile - group workspace file to add
+	 * @param user - user who's index will be updated with the information.
+	 * 
+	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
+	 * @throws IOException - if folder location cannot be created
+	 */
 	public void updateIndex(Repository repository,
-			GroupWorkspaceFile groupWorkspaceFile)
+			GroupWorkspaceFile groupWorkspaceFile, IrUser user)
 			throws LocationAlreadyExistsException, IOException {
-		// TODO Auto-generated method stub
+		deleteGroupWorkspaceFileFromIndex(user, groupWorkspaceFile.getId());
+		addToIndex(repository, groupWorkspaceFile, user);
 		
 	}
 
-	@Override
+	/**
+	 * Update the index.  Creates an index folder if one does not already exist
+	 * 
+	 * @param repository - repository for IR+
+	 * @param groupWorkspaceolder - group workspace folder to add
+	 * @param user - user who's index will be updated with the new information.
+	 * 
+	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
+	 * @throws IOException - if folder location cannot be created
+	 */
 	public void updateIndex(Repository repository,
-			GroupWorkspaceFolder groupWorkspaceFolder)
+			GroupWorkspaceFolder groupWorkspaceFolder, IrUser user)
 			throws LocationAlreadyExistsException, IOException {
-		// TODO Auto-generated method stub
+		deleteGroupWorkspaceFolderFromIndex(user, groupWorkspaceFolder.getId());
+		addToIndex(repository, groupWorkspaceFolder, user);
 		
 	}
 

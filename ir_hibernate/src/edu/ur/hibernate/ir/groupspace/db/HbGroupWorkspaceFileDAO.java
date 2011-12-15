@@ -22,8 +22,10 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileDAO;
+import edu.ur.ir.user.IrUser;
 
 /**
  * Group workspace data access for file data.
@@ -130,6 +132,24 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 	
+	/**
+	 * Get all files for the given user that has the specified permission on the file.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all files for which the user has the specified permission.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFile> getAllFilesUserHasPermissionFor(
+			IrUser user, String permission) {
+		Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllFilesUserHasPermissionFor");
+		q1.setParameter("className", VersionedFile.class.getName());
+		q1.setParameter("permissionName", permission);
+		q1.setParameter("userId", user.getId());
+		List<GroupWorkspaceFile> files = (List<GroupWorkspaceFile>) q1.list();
+		return files;
+	}
 
 
 }

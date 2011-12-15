@@ -79,7 +79,7 @@ public class GroupWorkspaceFile extends BasePersistent implements FileSystem{
 	 * @see edu.ur.ir.FileSystem#getFileSystemType()
 	 */
 	public FileSystemType getFileSystemType() {
-		return FileSystemType.GROUP_FILE;
+		return FileSystemType.GROUP_WORKSPACE_FILE;
 	}
 
 	/* (non-Javadoc)

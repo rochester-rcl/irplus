@@ -25,6 +25,7 @@ import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
+import edu.ur.ir.user.IrUser;
 
 /**
  * Persistent storage for group folder data.
@@ -181,6 +182,25 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 		q.setParameter("rightValue", groupFolder.getRightValue());
 		q.setParameter("rootId", groupFolder.getTreeRoot().getId());
 		return (List<GroupWorkspaceFolder>) q.list();
+	}
+
+	/**
+	 * Get all folders for the given user that has the specified permission on the folder.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all folders for which the user has the specified permission.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getAllFoldersUserHasPermissionFor(
+			IrUser user, String permission) {
+		Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllFoldersUserHasPermissionFor");
+		q1.setParameter("className", GroupWorkspaceFolder.class.getName());
+		q1.setParameter("permissionName", permission);
+		q1.setParameter("userId", user.getId());
+		List<GroupWorkspaceFolder> folders = (List<GroupWorkspaceFolder>) q1.list();
+		return folders;
 	}
 
 }

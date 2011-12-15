@@ -19,6 +19,7 @@ package edu.ur.ir.groupspace;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.user.IrUser;
 
 /**
  * @author Nathan Sarr
@@ -53,4 +54,14 @@ public interface GroupWorkspaceFileDAO extends CrudDAO<GroupWorkspaceFile>
 	  * @return all the files within the group workspace
 	  */
 	public List<GroupWorkspaceFile> getAllFiles(Long groupWorkspaceId);
+	
+	/**
+	 * Get all files for the given user that has the specified permission on the folder.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all files for which the user has the specified permission.
+	 */
+	public List<GroupWorkspaceFile> getAllFilesUserHasPermissionFor(IrUser user, String permission);
 }

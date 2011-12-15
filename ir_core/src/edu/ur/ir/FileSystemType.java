@@ -48,8 +48,8 @@ public class FileSystemType implements Serializable, Orderable{
 	public static final FileSystemType RESEARCHER_PUBLICATION = new FileSystemType("researcherPublication", 1);
 	public static final FileSystemType RESEARCHER_LINK = new FileSystemType("researcherLink", 1);
 	public static final FileSystemType RESEARCHER_INSTITUTIONAL_ITEM = new FileSystemType("researcherInstitutionalItem", 1);
-	public static final FileSystemType GROUP_FILE = new FileSystemType("groupFile", 1);
-	public static final FileSystemType GROUP_FOLDER = new FileSystemType("groupFolder", 10);
+	public static final FileSystemType GROUP_WORKSPACE_FILE = new FileSystemType("groupWorkspaceFile", 1);
+	public static final FileSystemType GROUP_WORKSPACE_FOLDER = new FileSystemType("groupWorkspaceFolder", 10);
 
 	
 	/**
@@ -120,13 +120,13 @@ public class FileSystemType implements Serializable, Orderable{
 		{
 			return RESEARCHER_INSTITUTIONAL_ITEM;
 		}
-		else if(systemType.equalsIgnoreCase(GROUP_FOLDER.getType()))
+		else if(systemType.equalsIgnoreCase(GROUP_WORKSPACE_FOLDER.getType()))
 		{
-			return GROUP_FOLDER;
+			return GROUP_WORKSPACE_FOLDER;
 		}
-		else if(systemType.equalsIgnoreCase(GROUP_FILE.getType()))
+		else if(systemType.equalsIgnoreCase(GROUP_WORKSPACE_FILE.getType()))
 		{
-			return GROUP_FILE;
+			return GROUP_WORKSPACE_FILE;
 		}
 		
 		return null;
