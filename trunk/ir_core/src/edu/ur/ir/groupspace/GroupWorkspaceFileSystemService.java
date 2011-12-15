@@ -301,4 +301,27 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 */
 	public GroupWorkspaceFolder addFolder(GroupWorkspaceFolder parentFolder, String name, String description, IrUser user) throws DuplicateNameException, IllegalFileSystemNameException, PermissionNotGrantedException;
 
+	
+	/**
+	 * Get all folders for the given user that has the specified permission on the folder.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all folders for which the user has the specified permission.
+	 */
+	public List<GroupWorkspaceFolder> getAllFoldersUserHasPermissionFor(
+			IrUser user, String permission);
+	
+	/**
+	 * Get all files for the given user that has the specified permission on the file.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all files for which the user has the specified permission.
+	 */
+	public List<GroupWorkspaceFile> getAllFilesUserHasPermissionFor(
+			IrUser user, String permission);
+	
 }

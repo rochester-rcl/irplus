@@ -991,7 +991,8 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	}
 	
 	/**
-	 * Determines if the user has edit permissions in any of the parent folders for the  
+	 * Determines if the user has edit permissions in any of the parent folders for the given child folder.
+	 * 
 	 * @param user - the user to check for edit permissions
 	 * @param child - child folder to check parents of
 	 * 
@@ -1312,6 +1313,34 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	public void setGroupWorkspaceFileDeleteRecordDAO(
 			GroupWorkspaceFileDeleteRecordDAO groupWorkspaceFileDeleteRecordDAO) {
 		this.groupWorkspaceFileDeleteRecordDAO = groupWorkspaceFileDeleteRecordDAO;
+	}
+	
+	/**
+	 * Get all folders for the given user that has the specified permission on the folder.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all folders for which the user has the specified permission.
+	 */
+	public List<GroupWorkspaceFolder> getAllFoldersUserHasPermissionFor(
+			IrUser user, String permission)
+	{
+		return groupWorkspaceFolderDAO.getAllFoldersUserHasPermissionFor(user, permission);
+	}
+	
+	/**
+	 * Get all files for the given user that has the specified permission on the file.
+	 * 
+	 * @param user - user to check
+	 * @param permission - permission to check
+	 * 
+	 * @return all files for which the user has the specified permission.
+	 */
+	public List<GroupWorkspaceFile> getAllFilesUserHasPermissionFor(
+			IrUser user, String permission)
+	{
+	    return groupWorkspaceFileDAO.getAllFilesUserHasPermissionFor(user, permission);	
 	}
 	
 }

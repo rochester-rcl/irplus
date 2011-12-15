@@ -297,6 +297,28 @@ public class HbIrAclDAO implements IrAclDAO {
 		return sids;
 	}
 	
+    /**
+     * Get users with the given permission for the object.
+     * 
+     * @param objectId - id of the object
+     * @param className - class name of the object
+     * @param permission - permission for the object.
+     * 
+     * @return - all users with the given permission
+     */
+    @SuppressWarnings("unchecked")
+	public Set<IrUser> getUsersWithPermissionForObject(Long objectId, String className, String permission)
+    {
+    	Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("usersWithSpecifiedPermission");
+		q1.setParameter("objectId", objectId);
+		q1.setParameter("className", className);
+		q1.setParameter("permissionName", permission);
+		List<IrUser> userSids = (List<IrUser>) q1.list();
+		HashSet<IrUser> users = new HashSet<IrUser>();
+		users.addAll(userSids);
+		return users;
+    }
+	
 	/**
 	 * Return sepcified sids who have the specified permission
 	 * 

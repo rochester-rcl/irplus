@@ -22,6 +22,7 @@ import java.util.Set;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.user.IrUser;
 
 /**
  * Interface for perisisting Access control lists.
@@ -78,6 +79,17 @@ public interface IrAclDAO extends CountableDAO, CrudDAO<IrAcl>{
      * @return all sids who have the specified permission for the specified object
      */
     public Set<Sid> getSidsWithPermissionForObject(Long objectId, String className, String permission);
+    
+    /**
+     * Get users with the given permission for the object.
+     * 
+     * @param objectId - id of the object
+     * @param className - class name of the object
+     * @param permission - permission for the object.
+     * 
+     * @return - all users with the given permission
+     */
+    public Set<IrUser> getUsersWithPermissionForObject(Long objectId, String className, String permission);
 	
 	/**
 	 * @param sid - Secure id to get acls for

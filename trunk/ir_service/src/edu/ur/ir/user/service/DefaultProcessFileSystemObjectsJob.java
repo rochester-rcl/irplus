@@ -19,6 +19,9 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.FileSystemType;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
@@ -80,6 +83,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		UserService userService = null;
 		RepositoryService repositoryService = null;
 		UserFileSystemService userFileSystemService = null;
+		GroupWorkspaceFileSystemService groupWorkspaceFileSystemService = null;
 		UserPublishingFileSystemService userPublishingFileSystemService = null;
 		ErrorEmailService errorEmailService = null;
 		UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingService = null;
@@ -91,6 +95,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
 			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
 			userFileSystemService = (UserFileSystemService) applicationContext.getBean("userFileSystemService");
+			groupWorkspaceFileSystemService = (GroupWorkspaceFileSystemService) applicationContext.getBean("groupWorkspaceFileSystemService");
 			userWorkspaceIndexService = (UserWorkspaceIndexService) applicationContext.getBean("userWorkspaceIndexService");
 			userService = (UserService) applicationContext.getBean("userService");
 			userPublishingFileSystemService = (UserPublishingFileSystemService) applicationContext.getBean("userPublishingFileSystemService");
@@ -154,6 +159,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 				        try 
 				        {
 						    processUpdate( record, repository, userWorkspaceIndexService, userFileSystemService, 
+						    		groupWorkspaceFileSystemService,
 							     userPublishingFileSystemService, user);
 						    userWorkspaceIndexProcessingService.delete(record);
 					    } 
@@ -171,6 +177,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 					    try 
 					    {
 						    processInsert( record, repository, userWorkspaceIndexService, userFileSystemService, 
+						     groupWorkspaceFileSystemService,
 							 userPublishingFileSystemService, user);
 						    userWorkspaceIndexProcessingService.delete(record);
 					    } 
@@ -238,6 +245,14 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		{
 		    userWorkspaceIndexService.deleteCollectionFromIndex(user, workspaceItemId);
 		}
+		if(fileSystemType.equals(FileSystemType.GROUP_WORKSPACE_FILE))
+		{
+		    userWorkspaceIndexService.deleteGroupWorkspaceFileFromIndex(user, workspaceItemId);
+		}
+		if(fileSystemType.equals(FileSystemType.GROUP_WORKSPACE_FOLDER))
+		{
+		    userWorkspaceIndexService.deleteGroupWorkspaceFolderFromIndex(user, workspaceItemId);
+		}
 	}
 	
 	/**
@@ -253,6 +268,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			Repository repository, 
 			UserWorkspaceIndexService userWorkspaceIndexService,
 			UserFileSystemService userFileSystemService,
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService,
 			UserPublishingFileSystemService userPublishingFileSystemService, 
 			IrUser user) throws LocationAlreadyExistsException, IOException
 	{
@@ -320,6 +336,30 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			    processDelete(record, user, userWorkspaceIndexService);
 			}
 		}
+		if(fileSystemType.equals(FileSystemType.GROUP_WORKSPACE_FILE))
+		{
+			GroupWorkspaceFile file = groupWorkspaceFileSystemService.getFile(workspaceItemId, false);
+			if( file != null )
+			{
+		        userWorkspaceIndexService.updateIndex(repository, file, user);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
+		}
+		if(fileSystemType.equals(FileSystemType.GROUP_WORKSPACE_FOLDER))
+		{
+			GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.getFolder(workspaceItemId, false);
+			if( folder != null )
+			{
+			    userWorkspaceIndexService.updateIndex(repository, folder, user);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
+		}
 	}
 	
 	/**
@@ -335,6 +375,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			Repository repository, 
 			UserWorkspaceIndexService userWorkspaceIndexService,
 			UserFileSystemService userFileSystemService,
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService,
 			UserPublishingFileSystemService userPublishingFileSystemService,
 			IrUser user) throws LocationAlreadyExistsException, IOException
 	{
@@ -396,6 +437,30 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			if( collection != null )
 			{
 		        userWorkspaceIndexService.addToIndex(repository, collection);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
+		}
+		if(fileSystemType.equals(FileSystemType.GROUP_WORKSPACE_FILE))
+		{
+			GroupWorkspaceFile file = groupWorkspaceFileSystemService.getFile(workspaceItemId, false);
+			if( file != null )
+			{
+		        userWorkspaceIndexService.addToIndex(repository, file, user);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
+		}
+		if(fileSystemType.equals(FileSystemType.GROUP_WORKSPACE_FOLDER))
+		{
+			GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.getFolder(workspaceItemId, false);
+			if( folder != null )
+			{
+			    userWorkspaceIndexService.addToIndex(repository, folder, user);
 			}
 			else
 			{

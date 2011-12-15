@@ -373,12 +373,12 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		// search the document and make sure we can find the stored data
 		try {
 
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME, 
+			int hits = executeQuery(DefaultUserWorkspaceIndexService.FOLDER_NAME, 
 					personalFolder.getName(), 
 					lucenDirectory);
 
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME + " "
+			+ " for finding " + DefaultUserWorkspaceIndexService.FOLDER_NAME + " "
 			+ personalFolder.getName();
 			
 			
@@ -396,12 +396,12 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		// search the document and make sure we can find the stored data
 		try {
 
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME, 
+			int hits = executeQuery(DefaultUserWorkspaceIndexService.FOLDER_NAME, 
 					personalFolder.getName(), 
 					lucenDirectory);
 
 			assert hits == 0 : "Hit count should equal 0 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME + " " + personalFolder.getName();
+			+ " for finding " + DefaultUserWorkspaceIndexService.FOLDER_NAME + " " + personalFolder.getName();
 			
 			
 		} catch (Exception e) {

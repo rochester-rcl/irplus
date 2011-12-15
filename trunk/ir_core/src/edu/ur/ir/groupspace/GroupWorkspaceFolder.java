@@ -194,7 +194,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceFolder>, FileSystem{
 	 * @see edu.ur.ir.FileSystem#getFileSystemType()
 	 */
 	public FileSystemType getFileSystemType() {
-		return FileSystemType.GROUP_FOLDER;
+		return FileSystemType.GROUP_WORKSPACE_FOLDER;
 	}
 
 	/**
