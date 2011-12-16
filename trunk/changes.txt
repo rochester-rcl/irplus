@@ -7,7 +7,7 @@ IR+ changes 2.1 to 3.0
    - allows administrators to delete an invite
    - allows administrators to see list of named files shared
 - Updated to Lucene version 3.5
-- Updated to Struts 2.2.3.1
+- Updated to Struts 2.3.1
 - Updated to load user id when going to approve user affiliations - fixes menu bar
 - Updated to YUI 2.8.2 r1
 - Updated to PDF box 1.4.0
