@@ -247,13 +247,13 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 		}
 		if( type.equals(FileSystemType.GROUP_WORKSPACE_FILE.getType()) )
 		{
-			log.debug( "personal file id = " + document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FILE_ID));
+			log.debug( "group workspace file id = " + document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FILE_ID));
 			Long groupWorkspaceFileId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FILE_ID));
 			fileSystem = groupWorkspaceFileSystemService.getFile(groupWorkspaceFileId, false);
 		}
 		if( type.equals(FileSystemType.GROUP_WORKSPACE_FOLDER.getType()))
 		{
-			log.debug( "personal folder id = " + document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FOLDER_ID));
+			log.debug( "group workspace folder id = " + document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FOLDER_ID));
 			Long groupWorkspaceFolderId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FOLDER_ID));
 			fileSystem = groupWorkspaceFileSystemService.getFolder(groupWorkspaceFolderId, false);
 		}
