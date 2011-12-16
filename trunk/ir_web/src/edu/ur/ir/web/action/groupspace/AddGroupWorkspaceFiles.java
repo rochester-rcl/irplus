@@ -179,14 +179,24 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 		}
 		
 		
+		
 		// THIS WILL NEED to change to see if the user has add file privileges
-		if( groupWorkspaceFolder != null && !groupWorkspaceFolder.getOwner().getId().equals(userId))
+		if( groupWorkspaceFolder != null )
     	{
-			//destination does not belong to user
-    		log.error("user does not own folder = " + groupWorkspaceFolder + " user = " + user);
-    		return("accessDenied");
+			if( !securityService.hasPermission(groupWorkspaceFolder, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION))
+			{
+				//destination does not belong to user
+    		    log.error("user does not own folder = " + groupWorkspaceFolder + " user = " + user);
+    		    return("accessDenied");
+			}
     		
     	}
+		else if(!securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION) )
+		{
+			//destination does not belong to user
+		    log.error("user does not own folder = " + groupWorkspaceFolder + " user = " + user);
+		    return("accessDenied");
+		}
 		
 		LinkedList<GroupWorkspaceFile> addedFiles = new LinkedList<GroupWorkspaceFile>();
 		

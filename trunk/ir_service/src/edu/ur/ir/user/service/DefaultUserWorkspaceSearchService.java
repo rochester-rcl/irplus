@@ -38,6 +38,7 @@ import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.SearchHelper;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserWorkspaceSearchService;
@@ -50,22 +51,28 @@ import edu.ur.ir.user.UserWorkspaceSearchService;
  */
 public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchService{
 	
-	/** eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = 8399684576467880725L;
 
-	/** Analyzer for dealing with analyzing the search */
+	/* Analyzer for dealing with analyzing the search */
 	private transient Analyzer analyzer;
 	
-	/**  Get the logger for this class */
+	/*  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceSearchService.class);
 	
-	/** File system service for loading file system objects */
+	/* File system service for loading file system objects */
 	private UserFileSystemService userFileSystemService;
 	
-	/** publishing service for user */
+	/* Service to access group workspace file system information */
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
+	
+
+
+
+	/* publishing service for user */
 	private UserPublishingFileSystemService userPublishingFileSystemService;
 
-	/** Fields to be searched   */
+	/* Fields to be searched   */
 	private String[] fields = {DefaultUserWorkspaceIndexService.FULL_VERSIONED_FILE_NAME,
 			DefaultUserWorkspaceIndexService.BASE_VERSIONED_FILE_NAME,
 			DefaultUserWorkspaceIndexService.VERSIONED_FILE_NAME_EXTENSION,
@@ -238,25 +245,69 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 			Long personalCollectionId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_ID));
 			fileSystem = userPublishingFileSystemService.getPersonalCollection(personalCollectionId, false);
 		}
+		if( type.equals(FileSystemType.GROUP_WORKSPACE_FILE.getType()) )
+		{
+			log.debug( "personal file id = " + document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FILE_ID));
+			Long groupWorkspaceFileId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FILE_ID));
+			fileSystem = groupWorkspaceFileSystemService.getFile(groupWorkspaceFileId, false);
+		}
+		if( type.equals(FileSystemType.GROUP_WORKSPACE_FOLDER.getType()))
+		{
+			log.debug( "personal folder id = " + document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FOLDER_ID));
+			Long groupWorkspaceFolderId = NumericUtils.prefixCodedToLong(document.get(DefaultUserWorkspaceIndexService.GROUP_WORKSPACE_FOLDER_ID));
+			fileSystem = groupWorkspaceFileSystemService.getFolder(groupWorkspaceFolderId, false);
+		}
 
 		
 		return fileSystem;
 	}
 
 
+	/**
+	 * Get the user file system service.
+	 * 
+	 * @return user file system service.
+	 */
 	public UserFileSystemService getUserFileSystemService() {
 		return userFileSystemService;
 	}
 
-
+	/**
+	 * Set the user file system serivce.
+	 * 
+	 * @param userFileSystemService
+	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
 	}
 
-
+	/**
+	 * Set the user publishing file system service.
+	 * 
+	 * @param userPublishingFileSystemService
+	 */
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
+	}
+	
+	/**
+	 * Get the group workspace file system service.
+	 * 
+	 * @return group workspace file system service.
+	 */
+	public GroupWorkspaceFileSystemService getGroupWorkspaceFileSystemService() {
+		return groupWorkspaceFileSystemService;
+	}
+
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
 	}
 	
 

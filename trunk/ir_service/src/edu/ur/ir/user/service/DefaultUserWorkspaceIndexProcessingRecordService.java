@@ -15,6 +15,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
@@ -55,6 +56,9 @@ UserWorkspaceIndexProcessingRecordService
 	/** Service for dealing with processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
+	/** security service to deal with user information */
+	private SecurityService securityService;
+
 	/** service for dealing with users */
 	private UserService userService;
 	
@@ -400,14 +404,40 @@ UserWorkspaceIndexProcessingRecordService
 	 */
 	public List<UserWorkspaceIndexProcessingRecord> saveAll(
 			GroupWorkspaceFile workspaceFile, IndexProcessingType processingType) {
+		
 		LinkedList<UserWorkspaceIndexProcessingRecord> records = new LinkedList<UserWorkspaceIndexProcessingRecord>();
-		records.add(save(workspaceFile.getVersionedFile().getOwner().getId(), workspaceFile, processingType));
     	
     	//add the new version to all users
-    	Set<FileCollaborator> collaborators = workspaceFile.getVersionedFile().getCollaborators();
-    	for(FileCollaborator collaborator : collaborators)
+		Set<IrUser> users = securityService.getUsersWithPermissionForObject(workspaceFile.getVersionedFile(), VersionedFile.VIEW_PERMISSION);
+    	
+    	for(IrUser user : users)
     	{
-    	    records.add(save(collaborator.getCollaborator().getId(), workspaceFile, processingType));
+    	    records.add(save(user.getId(), workspaceFile, processingType));
+ 		}
+    	return records;
+	}
+	
+	/**
+	 * Update all indexes for a group workspace folder - since a workspace folder can be shared across multiple users, we may
+	 * want to update all users.  This method provides this option.
+	 * 
+	 * @param workspaceFolder - workspace folder to update
+	 * @param processingType - type of processing
+	 * 
+	 * @return list of records updated.
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> saveAll(
+			GroupWorkspaceFolder workspaceFolder, IndexProcessingType processingType) {
+		
+		LinkedList<UserWorkspaceIndexProcessingRecord> records = new LinkedList<UserWorkspaceIndexProcessingRecord>();
+		
+    	
+    	//add the new version to all users
+		Set<IrUser> users = securityService.getUsersWithPermissionForObject(workspaceFolder, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
+    	
+    	for(IrUser user : users)
+    	{
+    	    records.add(save(user.getId(), workspaceFolder, processingType));
  		}
     	return records;
 	}
@@ -429,6 +459,24 @@ UserWorkspaceIndexProcessingRecordService
 			this.reIndexAllUserItems(user, processingType);
 		}
 		
+	}
+	
+	/**
+	 * Get the security service.
+	 * 
+	 * @return
+	 */
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 
 }

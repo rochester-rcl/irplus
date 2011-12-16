@@ -160,7 +160,7 @@
                             <!-- this deals with folder information
 	                        folders get an id of the folder_checkbox_{id} 
 	                        where id  is the id of the folder -->
-	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
 	                            <ir:acl domainObject="${fileSystemObject}" hasPermission="GROUP_WORKSPACE_FOLDER_EDIT">
 	                                <input type="checkbox" name="groupFolderIds" id="group_folder_checkbox_${fileSystemObject.id}" 
 	                                     value="${fileSystemObject.id}"/>
@@ -172,7 +172,7 @@
 	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                             <c:if test="${ir:canEditFile( user, fileSystemObject.versionedFile) }">
 	                                 <input type="checkbox" name="groupFileIds" id="group_file_checkbox_${fileSystemObject.id}" 
 	                                     value="${fileSystemObject.id}"/>
@@ -185,7 +185,7 @@
                                <!-- this deals with folder information
 	                          folders get an id of the folder_checkbox_{id} 
 	                          where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
 	                            <div id="group_folder_${fileSystemObject.id}">
 	                            <button type="button"  class="table_button" 
 	                                onmouseover="this.className='table_buttonover';"
@@ -200,7 +200,7 @@
 	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                             <div id="group_file_${fileSystemObject.id}">   
 	                             <c:if test="${ir:canEditFile( user, fileSystemObject.versionedFile) }"> 	
 	                              <button type="button" class="table_button"
@@ -214,10 +214,10 @@
                         </urstb:td>
                         
                         <urstb:td>
-                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
 	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id},${groupWorkspace.id},-1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                            <c:if test="${ir:canReadFile( user, fileSystemObject.versionedFile)}"> 	
 		                            <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
 		                                <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
@@ -239,7 +239,7 @@
  	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                             ${fileSystemObject.versionedFile.largestVersion}
 	                         </c:if>
                         </urstb:td>
@@ -248,19 +248,19 @@
  	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                              <ir:fileSizeDisplay sizeInBytes="${fileSystemObject.versionedFile.currentFileSizeBytes}"/>
 	                         </c:if>
                         </urstb:td>
                             
                         <urstb:td>
-                             <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+                             <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
                               <c:url var="groupWorkspaceFolderPropertiesUrl" value="/user/viewGroupWorkspaceFolderProperties.action">
 		                            <c:param name="groupWorkspaceFolderId" value="${fileSystemObject.id}"/>
 		                        </c:url>
                                  <a href="${groupWorkspaceFolderPropertiesUrl}">Properties</a>
                              </c:if>
-                              <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+                              <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
                               <c:url var="groupWorkspaceFilePropertiesUrl" value="/user/viewGroupWorkspaceFileProperties.action">
 		                            <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
 		                        </c:url>
@@ -272,14 +272,14 @@
                             <!-- this deals with folder information
 	                          folders get an id of the folder_checkbox_{id} 
 	                          where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
 	                              ${fileSystemObject.owner.firstName}&nbsp;${fileSystemObject.owner.lastName}
 	                         </c:if>
 	                     
 	                         <!-- this deals with file information
 	                              folders get an id of the folder_checkbox_{id} 
 	                              where id  is the id of the folder -->
-	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                             ${fileSystemObject.versionedFile.owner.firstName}&nbsp;${fileSystemObject.versionedFile.owner.lastName}
 	                         </c:if>
                         </urstb:td>

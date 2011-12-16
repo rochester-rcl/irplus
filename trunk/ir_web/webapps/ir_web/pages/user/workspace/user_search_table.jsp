@@ -74,7 +74,13 @@
                             </c:if>	
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
                                 <span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">${fileSystemObject.name}</a>
-                            </c:if>                        
+                            </c:if>   
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
+                                <span class="folderBtnImg">&nbsp;</span><a href="">${fileSystemObject.name}</a>
+                            </c:if>   
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
+                                <span class="folderBtnImg">&nbsp;</span><a href="">${fileSystemObject.name}</a>
+                            </c:if>                     
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
@@ -91,6 +97,12 @@
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            /My Publications${fileSystemObject.path}
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
+	                            /Group Workspaces${fileSystemObject.path}
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
+	                            /Group Workspaces${fileSystemObject.path}
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>${fileSystemObject.description}</urstb:td>
@@ -109,6 +121,12 @@
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">Open Folder</a>
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
+	                            <a href="">Open Folder</a>
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
+	                            <a href="">Open Folder</a>
 	                        </c:if>
                         </urstb:td>
                     </urstb:tr>
