@@ -28,10 +28,12 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -210,7 +212,6 @@ public class DefaultUserIndexService implements UserIndexService{
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
-			writer.optimize();
 			
 		} catch (IOException e) {
 			log.error(e);
@@ -281,7 +282,6 @@ public class DefaultUserIndexService implements UserIndexService{
 			    writer.addDocument(d);
 			}
 			writer.commit();
-			writer.optimize();
 			
 		}
 		catch (IOException e) 
@@ -443,7 +443,8 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		IndexWriter writer = new IndexWriter(directory,indexWriterConfig);
 		return writer;
 	}
 	
@@ -461,7 +462,9 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 	

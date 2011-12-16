@@ -65,10 +65,4 @@ public interface InstitutionalCollectionIndexService extends Serializable{
 	public void add(List<InstitutionalCollection> collections, File collectionIndexFolder,
 			boolean overwriteExistingIndex);
 	
-	/**
-	 * Optimize the specified collection index.
-	 * 
-	 * @param collectionIndex
-	 */
-	public void optimize(File collectionIndex);
 }

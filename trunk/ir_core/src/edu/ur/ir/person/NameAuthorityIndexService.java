@@ -65,12 +65,4 @@ public interface NameAuthorityIndexService extends Serializable{
 	 */
 	public void addNames(List<PersonNameAuthority> names, File nameAuthorityIndexFolder,
 			boolean overwriteExistingIndex);
-	
-	/**
-	 * Optimize the index.
-	 * 
-	 * @param name authority index
-	 */
-	public void optimize(File nameAuthorityIndex);
-	
 }

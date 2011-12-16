@@ -156,13 +156,7 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 			    }
 		    	tm.commit(ts);
 		    }
-	
-
-		    // at the end optimize everything
-		    if( repository != null )
-		    {
-		        institutionalItemIndexService.optimize(f);
-		    }
+		   
 		}
 		catch(Exception e)
 		{

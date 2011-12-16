@@ -65,11 +65,5 @@ public interface UserGroupIndexService extends Serializable {
 	public void add(List<IrUserGroup> userGroups, File userGroupIndexFolder,
 			boolean overwriteExistingIndex);
 	
-	/**
-	 * Optimize the specified user group index.
-	 * 
-	 * @param userGroupIndex
-	 */
-	public void optimize(File userGroupIndex);
 
 }

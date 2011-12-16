@@ -31,11 +31,13 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.NumericUtils;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -69,25 +71,25 @@ import edu.ur.ir.person.PersonName;
  */
 public class DefaultInstitutionalItemIndexService implements InstitutionalItemIndexService {
 	
-	/** eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = 2088750504787725269L;
 
-	/** Service for sending email errors */
+	/* Service for sending email errors */
 	private ErrorEmailService errorEmailService;
 	
-	/** data access for indexing record failure data access */
+	/* data access for indexing record failure data access */
 	private IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO;
 	
-	/** Batch size for processing collections */
+	/* Batch size for processing collections */
 	private int collectionBatchSize = 1;
 	
-	/** Analyzer for dealing with text indexing */
+	/* Analyzer for dealing with text indexing */
 	private transient Analyzer analyzer;
 	
-	/** Service that maintains file text extractors */
+	/* Service that maintains file text extractors */
 	private FileTextExtractorService fileTextExtractorService;
 	
-	/** Service for dealing with institutional items */
+	/* Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
 		
 	/** separator used for multi-set data */
@@ -1102,19 +1104,38 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	}
 	
 	
+	/**
+	 * Get the institutional item service.
+	 * 
+	 * @return - institutional item service.
+	 */
 	public InstitutionalItemService getInstitutionalItemService() {
 		return institutionalItemService;
 	}
 
+	/**
+	 * Set the institutional item service.
+	 * @param institutionalItemService
+	 */
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
 	}
 
+	/**
+	 * Get the collection batch size.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#getCollectionBatchSize()
+	 */
 	public int getCollectionBatchSize() {
 		return collectionBatchSize;
 	}
 
+	/**
+	 * Set the collection batch size.
+	 * 
+	 * @param collectionBatchSize
+	 */
 	public void setCollectionBatchSize(int collectionBatchSize) {
 		this.collectionBatchSize = collectionBatchSize;
 	}
@@ -1130,7 +1151,8 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 	
@@ -1148,87 +1170,44 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		IndexWriter  writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 
 
 	/**
-	 * Optimize the index.
+	 * Get the error email service.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#optimize(java.io.File)
+	 * @return email error service
 	 */
-	public void optimize(File institutionalItemIndex) {
-		IndexWriter writer = null;
-		Directory directory = null;
-		try 
-		{
-			directory = FSDirectory.open(institutionalItemIndex);
-			writer = getWriter(directory);
-			writer.optimize();
-		} 
-		catch (Exception e) 
-		{
-			log.error(e);
-			errorEmailService.sendError(e);
-		}
-		finally 
-        {
-		    if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    writer = null;
-		    try 
-		    {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (Exception e1)
-	    	{
-				log.error(e1);
-			}
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-		    
-	    }
-	}
-
-
-
-
 	public ErrorEmailService getErrorEmailService() {
 		return errorEmailService;
 	}
 
-
-
-
+	/**
+	 * Set the email error service.
+	 * 
+	 * @param errorEmailService
+	 */
 	public void setErrorEmailService(ErrorEmailService errorEmailService) {
 		this.errorEmailService = errorEmailService;
 	}
 
-
-
-
+	/**
+	 * Get the ir file indexing failure record.
+	 * @return
+	 */
 	public IrFileIndexingFailureRecordDAO getIrFileIndexingFailureRecordDAO() {
 		return irFileIndexingFailureRecordDAO;
 	}
 
-
-
-
+	/**
+	 * Set the ir file indexing failure record data access object.
+	 * 
+	 * @param irFileIndexingFailureRecordDAO
+	 */
 	public void setIrFileIndexingFailureRecordDAO(
 			IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO) {
 		this.irFileIndexingFailureRecordDAO = irFileIndexingFailureRecordDAO;

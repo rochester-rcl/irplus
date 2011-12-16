@@ -74,12 +74,5 @@ public interface InstitutionalItemIndexService extends Serializable{
 	 * @param institutionalItem
 	 */
 	public void deleteItem(Long id, File insitutionalItemIndex);
-	
-	/**
-	 * Optimize the index.
-	 * 
-	 * @param institutionalItemIndex
-	 */
-	public void optimize(File institutionalItemIndex);
 
 }
