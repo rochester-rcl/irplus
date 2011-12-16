@@ -497,6 +497,7 @@
    <bean id="userWorkspaceSearchService" 
        class="edu.ur.ir.user.service.DefaultUserWorkspaceSearchService">
        <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
        <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
        <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
@@ -716,6 +717,8 @@
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
+       <property name="securityService" ref="securityService"/>
        <property name="userService" ref="userService"/>
    </bean>
    

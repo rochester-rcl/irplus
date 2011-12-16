@@ -41,8 +41,6 @@ implements  UserIdAware{
 
 	/* id of the group workspace folder */
 	private Long groupWorkspaceId;
-	
-
 
 	/* the group workspace */
 	private GroupWorkspace groupWorkspace;

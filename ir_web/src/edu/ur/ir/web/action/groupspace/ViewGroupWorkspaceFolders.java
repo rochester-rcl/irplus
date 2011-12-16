@@ -134,9 +134,9 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			    
 			    
 			    //un-index all the files
-			    //List<PersonalFile> allFiles =  userFileSystemService.getAllFilesForFolder(pf);
+			    //List<GroupWorkspaceFile> allFiles = groupWorkspaceFileSystemService.getAllFilesForFolder(gf);
 			    
-			    //for(PersonalFile aFile : allFiles)
+			    //for(GroupWorkspaceFile aFile : allFiles)
 			    //{
 			    //	deleteFileFromIndex(aFile, user);
 			    //}

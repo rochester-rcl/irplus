@@ -109,7 +109,7 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 				 GroupWorkspaceFolder folder = null;
 				 try {
 					folder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, folderName, folderDescription, thisUser);
-					userWorkspaceIndexProcessingRecordService.save(folder.getOwner().getId(), folder, 
+					userWorkspaceIndexProcessingRecordService.saveAll( folder, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 					
 			        folderAdded = true;
@@ -135,12 +135,12 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 		else
 		{
 		    // add sub folder	
-			GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.getFolder(parentFolderId, true);
+			GroupWorkspaceFolder parentFolder = groupWorkspaceFileSystemService.getFolder(parentFolderId, true);
 			try
 			{
-			    GroupWorkspaceFolder personalFolder = groupWorkspaceFileSystemService.addFolder(folder, folderName, folderDescription, thisUser);
+			    GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.addFolder(parentFolder, folderName, folderDescription, thisUser);
 			    
-			    userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
+			    userWorkspaceIndexProcessingRecordService.saveAll(  folder, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			    
 			    folderAdded = true;
