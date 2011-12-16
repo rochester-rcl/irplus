@@ -29,10 +29,12 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -308,7 +310,8 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 	
@@ -326,62 +329,12 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		IndexWriter  writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 
-	
-	/**
-	 * Optimize the index.
-	 * 
-	 * @see edu.ur.ir.person.NameAuthorityIndexService#optimize(java.io.File)
-	 */
-	public void optimize(File nameAuthorityIndex) {
-		IndexWriter writer = null;
-		Directory directory = null;
-		try 
-		{
-		    directory = FSDirectory.open(nameAuthorityIndex);
-			writer = getWriter(directory);
-			writer.optimize();
-		} 
-		catch (Exception e) 
-		{
-			log.error(e);
-			errorEmailService.sendError(e);
-		}
-		finally 
-        {
-		    if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    writer = null;
-		    try 
-		    {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-		    
-	    }
-	}
 	
 	private Document getDocument(PersonNameAuthority personNameAuthority)
 	{

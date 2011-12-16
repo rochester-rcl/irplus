@@ -27,10 +27,12 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.NumericUtils;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -124,7 +126,8 @@ public class DefaultUserGroupIndexService implements UserGroupIndexService
 		IndexWriter writer = null;
 		try {
 			directory = FSDirectory.open(userGroupIndexFolder);
-			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			writer = new IndexWriter(directory, indexWriterConfig);
 			Term term = new Term(ID, NumericUtils.longToPrefixCoded(userGroupId));
 			writer.deleteDocuments(term);
 			writer.commit();
@@ -196,11 +199,14 @@ public class DefaultUserGroupIndexService implements UserGroupIndexService
 			
 			if(overwriteExistingIndex)
 			{
-			    writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+				IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+				indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+			    writer = new IndexWriter(directory, indexWriterConfig);
 			}
 			else
 			{
-				writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+				IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+				writer = new IndexWriter(directory, indexWriterConfig);
 			}
 			 
 			for(Document d : docs)
@@ -253,65 +259,6 @@ public class DefaultUserGroupIndexService implements UserGroupIndexService
 		    docs = null;
 		}
 	}
-	
-	/**
-	 * Optimize the specified user group index.
-	 * 
-	 * @param userGroupIndex
-	 */
-	public void optimize(File userGroupIndex)
-	{
-		IndexWriter writer = null;
-		Directory directory = null;
-		try 
-		{
-		    directory = FSDirectory.open(userGroupIndex);
-			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
-			writer.optimize();
-		} 
-		catch (Exception e) 
-		{
-			log.error(e);
-			errorEmailService.sendError(e);
-		}
-		finally 
-        {
-		    if (writer != null) {
-		    	try 
-			    {
-				    writer.close();
-			    }
-			    catch (Exception e) 
-			    {
-				    log.error(e);
-				    try
-				    {
-				    	if( IndexWriter.isLocked(directory))
-						{
-				            IndexWriter.unlock(directory);
-						}
-			     	}
-			    	catch (IOException e1)
-			    	{
-						log.error(e1);
-					}
-			    }
-		    }
-		    writer = null;
-		    
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-	    }
-	}
 
 	/**
 	 * Get the document for the user group
@@ -356,7 +303,8 @@ public class DefaultUserGroupIndexService implements UserGroupIndexService
 		IndexWriter writer = null;
 		try {
 			directory = FSDirectory.open(new File(directoryPath));
-			writer =  new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			writer =  new IndexWriter(directory,indexWriterConfig);
 			writer.addDocument(document);
 			writer.commit();
 		} catch (Exception e) {

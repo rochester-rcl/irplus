@@ -44,11 +44,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.NumericUtils;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -267,66 +269,6 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	}
 
 	/**
-	 * Optimize the specified collection index.
-	 * 
-	 * @param collectionIndex - folder location of the institutional collection index
-	 * @see edu.ur.ir.institution.InstitutionalCollectionIndexService#optimize(java.io.File)
-	 */
-	public void optimize(File collectionIndex) {
-		IndexWriter writer = null;
-		Directory directory = null;
-		try 
-		{
-		    directory = FSDirectory.open(collectionIndex);
-			writer = getWriter(directory);
-			writer.optimize();
-		} 
-		catch (Exception e) 
-		{
-			log.error(e);
-			errorEmailService.sendError(e);
-		}
-		finally 
-        {
-		    if (writer != null) {
-		    	try 
-			    {
-				    writer.close();
-			    }
-			    catch (Exception e) 
-			    {
-				    log.error(e);
-				    try
-				    {
-				    	if( IndexWriter.isLocked(directory))
-						{
-				            IndexWriter.unlock(directory);
-						}
-			     	}
-			    	catch (IOException e1)
-			    	{
-						log.error(e1);
-					}
-			    }
-		    }
-		    writer = null;
-		    
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-	    }
-		
-	}
-
-	/**
 	 * Update the institutional collection to the index.
 	 * 
 	 * @param collection - institutional collection to add.
@@ -499,7 +441,8 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-	    return new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+	    return new IndexWriter(directory, indexWriterConfig);
 	}
 	
 	/**
@@ -516,7 +459,9 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		IndexWriter  writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 	

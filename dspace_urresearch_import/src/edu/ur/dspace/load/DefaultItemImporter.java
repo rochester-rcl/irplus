@@ -556,7 +556,6 @@ public class DefaultItemImporter implements ItemImporter{
 				log.debug("*********************** Done Loading Loading ****************************\n\n");
 			}
 		}
-		nameAuthorityIndexService.optimize(new File(repo.getNameIndexFolder()));
 		updateHandleSequence();
 	}
 	

@@ -172,8 +172,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 				    new File(repository.getResearcherIndexFolder()) );
 		}
 		    	
-		researcherIndexService.optimize(new File(repository.getResearcherIndexFolder()));
-
         return SUCCESS;
 	}
 
@@ -271,13 +269,11 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		{
 		    researcherIndexService.updateIndex(researcher, 
 				        new File(repository.getResearcherIndexFolder()) );
-		    researcherIndexService.optimize( new File(repository.getResearcherIndexFolder()));
 		}
 	  	else
 		{
 			researcherIndexService.deleteFromIndex(researcher.getId(), 
 				    new File(repository.getResearcherIndexFolder()) );
-			researcherIndexService.optimize( new File(repository.getResearcherIndexFolder()));
 		}
 		return SUCCESS;
 		

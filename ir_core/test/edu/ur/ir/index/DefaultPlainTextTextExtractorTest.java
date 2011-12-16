@@ -24,7 +24,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -134,12 +136,10 @@ public class DefaultPlainTextTextExtractorTest {
         // store the document
         IndexWriter writer = null;
         try {
-			writer = new IndexWriter(dir, 
-					new StandardWithACIIFoldingFilter(), 
-					true,
-					IndexWriter.MaxFieldLength.LIMITED);
+        	IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35,  new StandardWithACIIFoldingFilter());
+			indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+			writer = new IndexWriter(dir, indexWriterConfig);
 		    writer.addDocument(doc);
-		    writer.optimize();
 		    writer.close();
         } catch (Exception e) {
 			throw new RuntimeException(e);
@@ -177,8 +177,10 @@ public class DefaultPlainTextTextExtractorTest {
 	private int executeQuery(String field, String queryString, Directory dir) throws 
 	CorruptIndexException, IOException, ParseException
 	{
-		IndexSearcher searcher = new IndexSearcher(dir, true);
-		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardWithACIIFoldingFilter() );
+		
+		IndexReader reader = IndexReader.open(dir, true);
+		IndexSearcher searcher = new IndexSearcher(reader);
+		QueryParser parser = new QueryParser(Version.LUCENE_35, field, new StandardWithACIIFoldingFilter() );
 		Query q1 = parser.parse(queryString);
 		TopDocs hits= searcher.search(q1, 1000);
 		int hitCount = hits.totalHits;
