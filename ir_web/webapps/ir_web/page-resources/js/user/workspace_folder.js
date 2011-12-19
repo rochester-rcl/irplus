@@ -613,12 +613,7 @@ YAHOO.ur.folder =
         fileId, 
         locked, 
         canUnLock, 
-        canLock, 
-        canBreakLock,
-        canShare, 
-        canEdit, 
-        fileName,
-        fileNameWithoutExtension){
+        canLock){
        
 
         var buttonMenu = document.getElementById(div);
@@ -648,9 +643,12 @@ YAHOO.ur.folder =
              folderMenuArray.push(dropMenu);
 
              dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download', url: basePath + 'user/personalFileDownload.action' + '?personalFileId=' +fileId });
-         
-             dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: 'javascript:YAHOO.ur.folder.renameFile( ' + fileId + ')' });
-         
+            
+             if( canEdit )
+             {
+                 dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: 'javascript:YAHOO.ur.folder.renameFile( ' + fileId + ')' });
+             }
+             
              /*
                Add items to the menu by passing an array of object literals 
                (each of which represents a set of YAHOO.widget.MenuItem 
