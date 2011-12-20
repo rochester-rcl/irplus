@@ -79,7 +79,21 @@
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
  		           </ir:acl>
 	           </c:if>
-	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
+	           <c:if test="${ parentFolderId == null || parentFolderId == 0}">
+                   <ir:acl domainObject="${groupWorkspace}" hasPermission="GROUP_WORKSPACE_ADD_FILE">
+                   <button class="ur_button" 
+	                       onclick="YAHOO.ur.user.group_workspace.singleFileUploadDialog.showDialog();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="addSingleFileButton"><span class="pageAddBtnImg">&nbsp;</span>Add File</button>
+	               <button class="ur_button" onclick="javascript:document.addGroupWorkspaceFilesForm.submit();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
+                   </ir:acl>
+              </c:if>
+	          <c:if test="${ parentFolderId != null && parentFolderId != 0}">
+                   <ir:acl domainObject="${parentFolder}" hasPermission="GROUP_WORKSPACE_FOLDER_ADD_FILE">
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.user.group_workspace.singleFileUploadDialog.showDialog();"
 	                       onmouseover="this.className='ur_buttonover';"
@@ -89,7 +103,9 @@
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
+	               </ir:acl>
 	          </c:if>
+	          
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.folder.moveFolderData();"
 	                       onmouseover="this.className='ur_buttonover';"
@@ -202,13 +218,22 @@
 	                              where id  is the id of the folder -->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
 	                             <div id="group_file_${fileSystemObject.id}">   
-	                             <c:if test="${ir:canEditFile( user, fileSystemObject.versionedFile) }"> 	
+	                             	
 	                              <button type="button" class="table_button"
 	                                 onmouseover="this.className='table_buttonover';"
  		                             onmouseout="this.className='table_button';"
  		                             onclick="javascript:YAHOO.ur.user.group_workspace.buildFileMenu(this, 'group_file_'+ ${fileSystemObject.id}, 
- 			                                 'group_file_menu_' + ${fileSystemObject.id}, ${fileSystemObject.id});"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
-	                             </c:if>
+ 			                                 'group_file_menu_' + ${fileSystemObject.id}, 
+ 			                                 ${fileSystemObject.id},
+ 			                                 ${fileSystemObject.versionedFile.locked}, 
+	                                         ${ir:isLocker(user,fileSystemObject.versionedFile)}, 
+	                                         ${ir:canLockFile(user,fileSystemObject.versionedFile)},
+	                                         ${ir:canBreakLock(user,fileSystemObject.versionedFile)},
+	                                         ${ir:canShareFile(user,fileSystemObject.versionedFile)}, 
+	                                         ${ir:canEditFile(user,fileSystemObject.versionedFile)},
+	                                        '${ur:escapeSingleQuote(fileSystemObject.name)}', 
+	                                        '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
+	                             
 	                             </div>
 	                         </c:if>
                         </urstb:td>
