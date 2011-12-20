@@ -99,39 +99,39 @@
         
         
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-core" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-tx" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-tx" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-tx" type="jar"/>
         </dependency>
 
-        <dependency org="org.springframework" name="spring-beans" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-beans" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-beans" type="jar"/>
         </dependency>
 
-        <dependency org="org.springframework" name="spring-context" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-context" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-context" type="jar"/>
         </dependency>
 
-        <dependency org="org.springframework" name="spring-expression" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-expression" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-expression" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-orm" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-orm" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-orm" type="jar"/>
         </dependency>
         
-         <dependency org="org.springframework" name="spring-asm" rev="3.0.5.RELEASE" transitive="false">
+         <dependency org="org.springframework" name="spring-asm" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-asm" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-jdbc" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-jdbc" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-jdbc" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-aop" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-aop" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-aop" type="jar"/>
         </dependency>
         

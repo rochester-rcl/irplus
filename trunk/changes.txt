@@ -9,8 +9,8 @@ IR+ changes 2.1 to 3.0
 - Updated to Lucene version 3.5
 - Updated to Struts 2.3.1
 - Updated to load user id when going to approve user affiliations - fixes menu bar
-- Updated to YUI 2.8.2 r1
-- Updated to PDF box 1.4.0
+- Updated to YUI 2.9.0 
+- Updated to PDF box 1.6.0
 - Updated to POI 3.7 
 - Updated to ivy 2.2.0
 - Updated to hibernate 3.6.0 Final
@@ -18,7 +18,7 @@ IR+ changes 2.1 to 3.0
 - Added indexing capabilities for collections
 - Added indexing capabilities for user groups
 - Changed upload files to return access denied rather than files not uploaded for non-authoring users.
-- Updated to Spring 3.0.5
+- Updated to Spring 3.1.0
 - Updated to re-index all items within a collection tree if a new collection is added
 - Updated email to have a new column - lower case email to allow comparison by the lower case email
   address
@@ -41,6 +41,7 @@ IR+ changes 2.1 to 3.0
 - Updated user admin to view all groups a user belongs to
 - Fixed issue realted to deleting a file in shared file inbox
 - Updated to only use one ivysettings.xml file
+- Added abiity to re-index all users with a workspace in administration section
 
 [ur_persistence_util]
 =============================
