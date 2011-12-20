@@ -445,7 +445,15 @@ YAHOO.ur.user.group_workspace = {
      */
      buildFileMenu : function(element, div, 
          menuName, 
-         fileId){
+         fileId,
+         locked,
+         canUnLock, 
+         canLock,
+         canBreakLock,
+         canShare, 
+         canEdit, 
+         fileName,
+         fileNameWithoutExtension){
         
 
          var buttonMenu = document.getElementById(div);
@@ -475,25 +483,44 @@ YAHOO.ur.user.group_workspace = {
               groupFolderMenuArray.push(dropMenu);
 
               dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download',url: basePath + 'user/groupWorkspaceFileDownload.action' + '?groupWorkspaceFileId=' +fileId + '&bustcache='+new Date().getTime() });
-              dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.user.group_workspace.getLockOnFileId('+ fileId + ')' });
-              dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')' });
-              dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: "javascript:alert('edit')" });
-          
-              /*
-                Add items to the menu by passing an array of object literals 
-                (each of which represents a set of YAHOO.widget.MenuItem 
-                 configuration properties) to the "addItems" method.
-               */
-             
+              if( canEdit )
+              {
+            	  dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: "javascript:alert('edit')" });
+              }
               
-              dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: "javascript:YAHOO.ur.user.group_workspace.dropDownVersionedFileUpload(" + fileId + ")" });
-              dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')'});
-              dropMenu.addItems([
-                  { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:alert('Publish')" },             
-                  { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" },
-                  { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: "javascript:alert('Properties')" },
-                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url:  "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_file_checkbox_"+ fileId +"')"}
-              ]);
+              if( !locked && canLock)
+              {
+                  dropMenu.addItem({ text: '<span class="lockBtnImg">&nbsp;</span> Lock &amp; Edit',  url: 'javascript:YAHOO.ur.user.group_workspace.getLockOnFileId('+ fileId + ')' });
+              }
+              
+              if( canUnLock )
+              {
+                  dropMenu.addItem({ text: '<span class="unlockBtnImg">&nbsp;</span> UnLock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')' });
+              }
+              
+              if( canEdit )
+              {
+                  dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: ''});
+              }
+              
+              if( canBreakLock )
+              {
+            	  dropMenu.addItem({ text: '<span class="deleteLockBtnImg">&nbsp;</span> Override Lock',  url: 'javascript:YAHOO.ur.user.group_workspace.unLockFile(' + fileId +')'});
+              }
+             
+              dropMenu.addItem({ text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:alert('Publish')" });
+              
+              if( canEdit )
+              {
+                  dropMenu.addItem({ text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" });
+              }
+              
+              dropMenu.addItem({ text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: "javascript:alert('Properties')" });
+              
+              if( canEdit )
+              {
+            	  dropMenu.addItem({ text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url:  "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_file_checkbox_"+ fileId +"')"});
+              }
           
              
               
