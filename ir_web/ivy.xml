@@ -78,7 +78,7 @@
         </dependency>
         
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-web" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-web" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-web" type="jar"/>
         </dependency>
         
