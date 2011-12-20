@@ -613,7 +613,12 @@ YAHOO.ur.folder =
         fileId, 
         locked, 
         canUnLock, 
-        canLock){
+        canLock, 
+        canBreakLock,
+        canShare, 
+        canEdit, 
+        fileName,
+        fileNameWithoutExtension){
        
 
         var buttonMenu = document.getElementById(div);
@@ -846,12 +851,12 @@ YAHOO.ur.folder =
 	    {
 	    	var response = o.responseText;
 	        YAHOO.ur.folder.destroyFolderMenus();
-	       
 	        
 	        // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
+	        	
 	            var uploadForm = document.getElementById('upload_form_fields');
 	            // update the form fields with the response.  This updates
 	            // the form, if there was an issue, update the form with
