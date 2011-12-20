@@ -215,7 +215,8 @@
 	                                 ${ir:canBreakLock(user,fileSystemObject.versionedFile)},
 	                                 ${ir:canShareFile(user,fileSystemObject.versionedFile)}, 
 	                                 ${ir:canEditFile(user,fileSystemObject.versionedFile)},
-	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
+	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', 
+	                                 '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
 	                             </div>
 	                         </c:if>
                         </urstb:td>
