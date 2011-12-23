@@ -1342,5 +1342,15 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	{
 	    return groupWorkspaceFileDAO.getAllFilesUserHasPermissionFor(user, permission);	
 	}
+
+	/**
+	 * Save the group workspace file into persistent storage.
+	 * 
+	 * @param groupWorkspaceFile
+	 */
+	public void save(GroupWorkspaceFile groupWorkspaceFile) {
+		groupWorkspaceFileDAO.makePersistent(groupWorkspaceFile);
+		
+	}
 	
 }

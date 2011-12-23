@@ -253,4 +253,11 @@
             <result name="success">/pages/user/workspace/unlock_file_response.jsp</result>
         </action>
     
+        <!--  Rename file  -->
+        <action name="*GroupWorkspaceFile" class="edu.ur.ir.web.action.groupspace.RenameGroupWorkspaceFile" method="{1}">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/rename_group_workspace_file_form.jsp</result>
+            <result name="get">/pages/user/workspace/group_workspace/rename_group_workspace_file_form.jsp</result>
+        </action>   
         
