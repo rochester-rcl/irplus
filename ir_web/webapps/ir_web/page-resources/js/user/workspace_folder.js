@@ -32,8 +32,8 @@ var deleteFolderAction = basePath + 'user/deletePersonalFileSystemObjects.action
 var getFolderAction = basePath + 'user/getPersonalFolder.action';
 
 // Action to rename file
-var fileRenameAction = basePath + 'user/renameFile.action';
-var getFileNameAction = basePath + 'user/getFile.action';
+var fileRenameAction = basePath + 'user/renamePersonalFile.action';
+var getFileNameAction = basePath + 'user/getPersonalFile.action';
 
 // actions for moving folders
 var myAvailableFolderMoveAction = basePath + 'user/availablePersonalFoldersMove.action';
@@ -1023,7 +1023,7 @@ YAHOO.ur.folder =
 	            // new news item) based on the action.
                 var cObj = YAHOO.util.Connect.asyncRequest('post',
                  versionedFileUploadAction, callback);
-                YAHOO.ur.folder.clearVersionedFileUploadForm();
+                
             }
 	    };
 	
@@ -1037,6 +1037,7 @@ YAHOO.ur.folder =
 	    //handle the sucessful upload
 	    var handleSuccess = function(o) 
 	    {
+	    	YAHOO.ur.folder.clearVersionedFileUploadForm();
 	        YAHOO.ur.folder.destroyFolderMenus();
 	        var response = o.responseText;
 	        
@@ -1137,8 +1138,7 @@ YAHOO.ur.folder =
 	    document.getElementById('personal_file_id').value = "";
 	    document.getElementById('new_version_file').value = "";
 	    document.getElementById('user_file_description').value = "";
-	    var versionUploadHeader = document.getElementById('add_version_note');
-        versionUploadHeader.innerHTML = '';
+	    
 	
 	    var uploadError = document.getElementById('locked_by_user_error');
    
@@ -1379,7 +1379,7 @@ YAHOO.ur.folder =
 	        var data = this.getData();
 		    if (data.folderName == "" ) 
 		    {
-		        alert("A folder name must be entered");
+		        alert("A file name must be entered");
 			    return false;
 		    } 
 		    else 

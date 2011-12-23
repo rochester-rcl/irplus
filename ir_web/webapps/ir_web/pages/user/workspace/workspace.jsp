@@ -452,7 +452,7 @@
 		 <div class="bd">
 
  		     <form id="invite_files_form" name="inviteFilesForm" 
-		         method="post" enctype="multipart/form-data"
+		         method="post" 
 		        action="user/viewInviteUser.action">		          
 			    <div id="invite_form_fields">
 			        <c:import url="invite_files_confirmation.jsp"/>
@@ -468,7 +468,7 @@
 	     <div class="hd">Create new version?</div>
 		 <div class="bd">
 		     <form id="new_version_form" name="newVersionForm" 
-		         method="post" enctype="multipart/form-data">		
+		         method="post">		
 		         
 		         <input type="hidden" name="personalItemId"/>
 		         <input type="hidden" name="parentCollectionId"/>
@@ -489,10 +489,26 @@
 	     <div class="hd">Rename file</div>
 		 <div class="bd">
 		     <form id="rename_form" name="renameForm" 
-		         method="post" enctype="multipart/form-data">		
+		         method="post">		
 		         <p align="left">
 	              	<div id="renameFileDialogFields">
 	              	    <c:import url="rename_file_form.jsp"/>
+	              	</div>		             
+		         </p>
+		     </form>		          
+		 </div>
+	 </div>
+	 <!--  end rename file dialog -->
+	 
+	 <!--  Rename file dialog -->
+	 <div id="renameGroupWorkspaceFileDialog" class="hidden">
+	     <div class="hd">Rename Group Workspace file</div>
+		 <div class="bd">
+		     <form id="rename_group_workspace_file_form" name="renameGroupWokspaceFileForm" 
+		         method="post">		
+		         <p align="left">
+	              	<div id="renameGroupWorkspaceFileDialogFields">
+	              	    <c:import url="group_workspace/rename_group_workspace_file_form.jsp"/>
 	              	</div>		             
 		         </p>
 		     </form>		          
