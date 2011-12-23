@@ -24,7 +24,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id="group_workspace_locked_by_user_error">
-<span class="errorMessage"><ir:printError errors="${fieldErrors}" 
+<span class="errorMessage" id="groupWorkspaceNewVersionError"><ir:printError errors="${fieldErrors}" 
 		                       key="lockedByUser"/></span><br/>
 		                       <span class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="cannotLock"/></span>
@@ -43,7 +43,7 @@
     </tr>
     <tr>
          <td class="label">Description:</td>
-         <td align="left" class="input"><textarea id="group_file_description" 
+         <td align="left" class="input"><textarea id="group_workspace_file_description" 
              name="groupFileDescription" cols="47" rows="2"></textarea></td>
     </tr>
         <tr>

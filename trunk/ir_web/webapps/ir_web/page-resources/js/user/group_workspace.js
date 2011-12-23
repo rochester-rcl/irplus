@@ -36,6 +36,10 @@ var groupWorkspaceFolderState = "0";
 //view the version of a file
 var viewGroupWorkspaceFileVersion = basePath + 'user/viewGroupWorkspaceNewFileVersionUpload.action';
 
+//Action to rename file
+var groupWorkspaceFileRenameAction = basePath + 'user/renameGroupWorkspaceFile.action';
+var getGroupWorkspaceFileNameAction = basePath + 'user/getGroupWorkspaceFile.action';
+
 
 //actions for adding and removing folders - group workspace
 var updateGroupWorkspaceFolderAction = basePath + 'user/updateGroupWorkspaceFolder.action';
@@ -485,7 +489,7 @@ YAHOO.ur.user.group_workspace = {
               dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download',url: basePath + 'user/groupWorkspaceFileDownload.action' + '?groupWorkspaceFileId=' +fileId + '&bustcache='+new Date().getTime() });
               if( canEdit )
               {
-            	  dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: "javascript:alert('edit')" });
+            	  dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: 'javascript:YAHOO.ur.user.group_workspace.renameFile( ' + fileId + ')' });
               }
               
               if( !locked && canLock)
@@ -500,7 +504,7 @@ YAHOO.ur.user.group_workspace = {
               
               if( canEdit )
               {
-                  dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: ''});
+                  dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: 'javascript:YAHOO.ur.user.group_workspace.dropDownVersionedFileUpload(' + fileId +')'});
               }
               
               if( canBreakLock )
@@ -1110,7 +1114,6 @@ YAHOO.ur.user.group_workspace = {
 	            {   
                     var divToUpdate = document.getElementById('group_workspace_version_upload_form_fields');
                     divToUpdate.innerHTML = o.responseText; 
-                    
                     YAHOO.ur.user.group_workspace.versionedFileUploadDialog.showDialog();
                 }
             },
@@ -1147,7 +1150,7 @@ YAHOO.ur.user.group_workspace = {
 	            // new news item) based on the action.
                 var cObj = YAHOO.util.Connect.asyncRequest('post',
                  versionedFileUploadAction, callback);
-                YAHOO.ur.user.group_workspace.clearVersionedFileUploadForm();
+               
             }
 	    };
 	
@@ -1161,6 +1164,7 @@ YAHOO.ur.user.group_workspace = {
 	    //handle the sucessful upload
 	    var handleSuccess = function(o) 
 	    {
+	    	YAHOO.ur.user.group_workspace.clearVersionedFileUploadForm();
 	    	YAHOO.ur.user.group_workspace.destroyFolderMenus();
 	        var response = o.responseText;
 	        
@@ -1190,9 +1194,7 @@ YAHOO.ur.user.group_workspace = {
 	                // we can clear the upload form and get the pictures
 	                var folderId = document.getElementById("groupFoldersParentFolderId").value;
 	                var workspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
-	                alert('folderId = ' + folderId + ' workspaceId = ' + workspaceId);
 	                YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,-1); 
-	               
 	    	    	YAHOO.ur.util.wait.waitDialog.hide();
 	            }
 	        }
@@ -1255,7 +1257,8 @@ YAHOO.ur.user.group_workspace = {
 	    document.getElementById('group_workspace_file_id').value = "";
 	    document.getElementById('group_workspace_new_version_file').value = "";
 	    document.getElementById('group_workspace_file_description').value = "";
-	    var uploadError = document.getElementById('group_workspace_locked_by_user_error');
+	    var uploadError = document.getElementById('groupWorkspaceNewVersionError');
+	    uploadError.innerHtml = '';
    },
    
    
@@ -1382,6 +1385,169 @@ YAHOO.ur.user.group_workspace = {
        '&bustcache='+new Date().getTime(), callback, null);
    }, 
    
+   
+   /**
+    * clear the file rename form
+    */
+   clearFileRenameForm : function()
+   {
+       // clear out the error message
+       var renameError = document.getElementById('group_workspace_rename_error_div');
+       renameError.innerHTML = "";   
+       
+       document.renameGroupWokspaceFileForm.newFileName.value = "";
+       document.renameGroupWokspaceFileForm.fileDescription.value ="";
+   },
+   
+   /**
+    * Function to create the rename dialog
+    */
+   createFileRenameDialog : function()
+   {
+	    // Define various event handlers for Dialog
+	    var handleSubmit = function() 
+	    {
+			this.submit();
+	    };
+		
+	    // handle a cancel of the adding folder dialog
+	    var handleCancel = function() 
+	    {
+	    	YAHOO.ur.user.group_workspace.clearFileRenameForm();
+	    	YAHOO.ur.user.group_workspace.renameFileDialog.hide();
+	    };
+	
+	    // handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	
+	        //get the response from renaming a file
+	        var response = o.responseText;
+	        
+	        	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var renameForm = document.getElementById('renameGroupWorkspaceFileDialogFields');
+	    
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            renameForm.innerHTML = response;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("renameGroupWorkspaceForm_success").value;
+	    
+	            //if the rename was not success then show the user the error message
+	            // received from the server
+	            if( success == "false" )
+	            {
+	            	YAHOO.ur.user.group_workspace.renameFileDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the file was renamed
+	            	YAHOO.ur.user.group_workspace.renameFileDialog.hide();
+	            	YAHOO.ur.user.group_workspace.clearFileRenameForm();
+	            	var folderId = document.getElementById("groupFoldersParentFolderId").value;
+			        var workspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+			        YAHOO.ur.user.group_workspace.getFolderById(folderId, workspaceId ,-1); 
+	            }
+	        }
+
+	    };
+	
+	    // handle form sbumission failure
+	    var handleFailure = function(o) 
+	    {
+	        alert("Submision failed due to a network issue : " + o.status + " status text " + o.statusText);
+	    };
+
+	    // Instantiate the Dialog
+	    // make it modal - 
+	    // it should not start out as visible - it should not be shown until 
+	    // rename file button is clicked.
+	    YAHOO.ur.user.group_workspace.renameFileDialog = new YAHOO.widget.Dialog('renameGroupWorkspaceFileDialog', 
+           { width : "600px",
+		      visible : false, 
+		      modal : true,
+		      buttons : [ { text:"Submit", handler:handleSubmit, isDefault:true },
+					      { text:"Cancel", handler:handleCancel } ]
+		    } );
+	
+	    YAHOO.ur.user.group_workspace.renameFileDialog.submit = function()
+		{
+	    	YAHOO.ur.user.group_workspace.destroyFolderMenus();
+	        YAHOO.util.Connect.setForm('renameGroupWokspaceFileForm');
+	        if( YAHOO.ur.user.group_workspace.renameFileDialog.validate() )
+	        {
+               var cObj = YAHOO.util.Connect.asyncRequest('POST',
+            		   groupWorkspaceFileRenameAction, callback);
+           }
+       }
+       	
+	    YAHOO.ur.user.group_workspace.renameFileDialog.showDialog = function()
+	    {
+	    	YAHOO.ur.user.group_workspace.renameFileDialog.center();
+	    	YAHOO.ur.user.group_workspace.renameFileDialog.show();
+	    }
+  
+	    // Validate the entries in the form to require that both first and last name are entered
+	    YAHOO.ur.user.group_workspace.renameFileDialog.validate = function() 
+	    {
+	        var data = this.getData();
+		    if (data.folderName == "" ) 
+		    {
+		        alert("A file name must be entered");
+			    return false;
+		    } 
+		    else 
+		    {
+			    return true;
+		    }
+	    };
+
+	    // Wire up the success and failure handlers
+	    var callback = { success: handleSuccess, failure: handleFailure };
+			
+	    // Render the Dialog
+	    YAHOO.ur.user.group_workspace.renameFileDialog.render();
+       
+   },
+   
+   /**
+    * Function to rename file
+    */
+   renameFile : function(fileId)
+   {
+	    /*
+        * This call back updates the html when editing file name
+        */
+       var callback =
+       {
+           success: function(o) 
+           {
+               // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                   var divToUpdate = document.getElementById('renameGroupWorkspaceFileDialogFields');
+                   divToUpdate.innerHTML = o.responseText; 
+                   YAHOO.ur.user.group_workspace.renameFileDialog.showDialog();   
+				}             
+           },
+	
+	        failure: function(o) 
+	        {
+	            alert('Rename a file Failure ' + o.status + ' status text ' + o.statusText );
+	        }
+       };
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+           getGroupWorkspaceFileNameAction + '?groupWorkspaceFileId=' + fileId +  '&bustcache='+new Date().getTime(), 
+           callback, null);
+               	
+	},
+   
   	
 	// initialize the page
 	// this is called once the dom has
@@ -1394,6 +1560,7 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.createFolderDeleteConfirmDialog();
 	    YAHOO.ur.user.group_workspace.singleFileUpload();
 	    YAHOO.ur.user.group_workspace.versionedFileUpload();
+	    YAHOO.ur.user.group_workspace.createFileRenameDialog();
 	    
 	    groupWorkspaceId = document.getElementById("groupWorkspaceFormGroupWorkspaceId").value;
 	    groupWorkspaceFolderId = document.getElementById("groupWorkspaceFormGroupWorkspaceFolderId").value;
