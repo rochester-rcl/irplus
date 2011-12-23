@@ -248,7 +248,7 @@
         </action>
         
         <!--  Rename file  -->
-        <action name="*File" class="edu.ur.ir.web.action.user.RenamePersonalFile" method="{1}">
+        <action name="*PersonalFile" class="edu.ur.ir.web.action.user.RenamePersonalFile" method="{1}">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/rename_file_form.jsp</result>

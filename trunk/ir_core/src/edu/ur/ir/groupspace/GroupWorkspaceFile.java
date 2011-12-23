@@ -105,7 +105,8 @@ public class GroupWorkspaceFile extends BasePersistent implements FileSystem{
 	}
 
 	/**
-	 * Get the name of the versioned file.
+	 * Get the name of the versioned file.  This will include
+	 * the name and the extension of the file.
 	 * 
 	 * @see edu.ur.simple.type.NameAware#getName()
 	 */

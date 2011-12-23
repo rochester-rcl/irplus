@@ -99,6 +99,13 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 */
 	public void save(GroupWorkspaceFolder groupWorkspaceFolder);
 	
+	/**
+	 * Save the group workspace file into persistent storage.
+	 * 
+	 * @param groupWorkspaceFile
+	 */
+	public void save(GroupWorkspaceFile groupWorkspaceFile);
+	
    /**
      * Create a group workspace versioned file in the system with the specified file for the
      * given workspace. This is created at the root level (added to the group workspace)
