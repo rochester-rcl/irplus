@@ -81,7 +81,7 @@
         	      <param name="groupWorkspaceId">${groupWorkspace.id}</param>
         	      <param name="tabName">GROUP_WORKSPACE</param>
         	 </result>
-            <result name="input">/pages/user/workspace/upload_files.jsp</result>
+            <result name="input">/pages/user/workspace/group_workspace/upload_files.jsp</result>
         </action>
         
         <!-- download a group workspace file -->
