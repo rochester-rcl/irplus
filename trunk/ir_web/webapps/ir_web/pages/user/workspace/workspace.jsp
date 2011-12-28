@@ -270,13 +270,13 @@
 	<div id="groupFolderDialog" class="hidden">
 	    <div class="hd">Group Folder Information</div>
 		<div class="bd">
-		    <form id="groupFolder" name="groupFolderForm" 
+		    <form id="groupFolderForm" name="groupFolderForm" 
 		        method="post" action="user/addGroupFolder.action">
 		        
 		         <input type="hidden" id="groupFolderForm_parentFolderId"
 		               name="parentFolderId" value="${parentFolderId}"/>
 		               
-              	<div id="groupFolderDialogFields">
+              	<div id="groupWorkspaceFolderDialogFields">
               	    <c:import url="group_workspace/group_workspace_folder_form.jsp"/>
               	</div>
 		     </form>

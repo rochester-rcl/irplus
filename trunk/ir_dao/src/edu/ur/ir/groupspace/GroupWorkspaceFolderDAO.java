@@ -30,6 +30,26 @@ import edu.ur.ir.user.IrUser;
 public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
 {
 	/**
+	 * Find the root folder for the specified folder name and 
+	 * group workspace id.
+	 * 
+	 * @param name of the folder
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @return the found root folder or null if the folder is not found.
+	 */
+	public GroupWorkspaceFolder getRootFolder(String name, Long groupWorkspaceId);
+	
+	/**
+	 * Find the folder for the specified folder name and 
+	 * group workspace folder id.
+	 * 
+	 * @param name of the folder
+	 * @param parentId id of the parent folder
+	 * @return the found folder or null if the folder is not found.
+	 */
+	public GroupWorkspaceFolder getFolder(String name, Long parentId);
+	
+	/**
 	 * Get the path to the folder.
 	 * 
 	 * @param parentFolderId - id of the parent folder

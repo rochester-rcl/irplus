@@ -36,6 +36,26 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	public GroupWorkspaceFolder getFolder(Long id, boolean lock);
 	
 	/**
+	 * Find the folder for the specified folder name and 
+	 * group workspace folder id.
+	 * 
+	 * @param name of the folder
+	 * @param parentId id of the parent folder
+	 * @return the found folder or null if the folder is not found.
+	 */
+	public GroupWorkspaceFolder getFolder(String name, Long parentId);
+	
+	/**
+	 * Find the root folder for the specified folder name and 
+	 * group workspace id.
+	 * 
+	 * @param name of the folder
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @return the found root folder or null if the folder is not found.
+	 */
+	public GroupWorkspaceFolder getRootFolder(String name, Long groupWorkspaceId);
+	
+	/**
 	 * Get the group workspace file.
 	 * 
 	 * @param id - id of the group workspace file
