@@ -119,6 +119,21 @@
 	    where folder.groupWorkspace.id = :groupWorkspaceId
 	    and folder.id = folder.treeRoot.id
 	</query>
+	
+	<!-- named query for getting a root personal folder by name/user -->
+	<query name="getRootGroupWorkspaceFolderByName">
+		from GroupWorkspaceFolder as folder where
+		folder.name = :name
+		and folder.groupWorkspace.id = :groupWorkspaceId
+		and folder.id = folder.treeRoot.id
+	</query>
+	
+	<!-- named query for getting a personal folder by name parent id -->
+	<query name="getGroupWorkspaceFolderByNameParent">
+		from GroupWorkspaceFolder as folder where
+		folder.name = :name
+		and folder.parent.id = :parentId
+	</query>
      
     <!-- Gets the path for a given folder-->
 	<query name="getGroupWorkspaceFolderPath">

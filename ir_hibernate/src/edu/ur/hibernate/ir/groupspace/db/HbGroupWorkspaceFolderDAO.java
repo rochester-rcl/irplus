@@ -203,4 +203,34 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 		return folders;
 	}
 
+	/**
+	 * Find the folder for the specified folder name and 
+	 * group workspace folder id.
+	 * 
+	 * @param name of the folder
+	 * @param parentId id of the parent folder
+	 * @return the found folder or null if the folder is not found.
+	 */
+	public GroupWorkspaceFolder getFolder(String name, Long parentId) {
+		Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceFolderByNameParent");
+		q1.setParameter("name", name);
+		q1.setParameter("parentId", parentId);
+		return (GroupWorkspaceFolder) q1.uniqueResult();
+	}
+
+	/**
+	 * Find the root folder for the specified folder name and 
+	 * group workspace id.
+	 * 
+	 * @param name of the folder
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @return the found root folder or null if the folder is not found.
+	 */
+	public GroupWorkspaceFolder getRootFolder(String name, Long groupWorkspaceId) {
+		Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootGroupWorkspaceFolderByName");
+		q1.setParameter("name", name);
+		q1.setParameter("groupWorkspaceId", groupWorkspaceId);
+		return (GroupWorkspaceFolder) q1.uniqueResult();
+	}
+
 }

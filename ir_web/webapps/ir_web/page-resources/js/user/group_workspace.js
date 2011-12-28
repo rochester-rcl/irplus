@@ -620,7 +620,7 @@ YAHOO.ur.user.group_workspace = {
 	        	 YAHOO.ur.util.wait.waitDialog.hide();
 	            //get the response from adding a folder
 	            var response = o.responseText;
-	            var folderForm = document.getElementById('groupFolderDialogFields');
+	            var folderForm = document.getElementById('groupWorkspaceFolderDialogFields');
 	    
 	            // update the form fields with the response.  This updates
 	            // the form, if there was an issue, update the form with
@@ -638,8 +638,9 @@ YAHOO.ur.user.group_workspace = {
 	            }
 	            else
 	            {
-	            	workspaceId = document.groupFolderForm.groupWorkspaceId.value;
-	            	parentFolderId = document.groupFolderForm.parentFolderId.value;
+	            	var workspaceId = document.groupFolderForm.groupWorkspaceId.value;
+	            	var parentFolderId = document.groupFolderForm.parentFolderId.value;
+	            	
 	            	
 	            	YAHOO.ur.user.group_workspace.groupFolderDialog.hide();
 	            	YAHOO.ur.user.group_workspace.clearFolderForm();
@@ -1054,7 +1055,7 @@ YAHOO.ur.user.group_workspace = {
               configuration properties) to the "addItems" method.
              */
              dropMenu.addItems([
-                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:alert('edit')" },
+                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:YAHOO.ur.user.group_workspace.editFolder(" + folderId + ")" },
                  { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('move')" },
                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_folder_checkbox_"+ folderId +"')" }
              ]);
@@ -1075,6 +1076,43 @@ YAHOO.ur.user.group_workspace = {
         
         
     },
+    
+    /**
+     * Function to edit folder information
+     */
+    editFolder : function(id)
+    {
+	    /*
+         * This call back updates the html when editing the folder
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+ 			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       
+                    var divToUpdate = document.getElementById('groupWorkspaceFolderDialogFields');
+                    divToUpdate.innerHTML = o.responseText;
+
+                    document.groupFolderForm.newGroupFolder.value = "false";
+                    YAHOO.ur.user.group_workspace.groupFolderDialog.showFolder();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Edit Group workspace Folder Failure ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+        		getGroupWorkspaceFolderAction + '?updateFolderId=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+                	
+	},
+	
     
     /*
      * Destroys all of the drop down menues in the table

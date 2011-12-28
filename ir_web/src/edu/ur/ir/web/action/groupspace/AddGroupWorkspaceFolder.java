@@ -30,6 +30,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 
 import edu.ur.ir.user.UserService;
@@ -55,6 +56,9 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 	
 	//service to deal with group workspace information
 	private GroupWorkspaceService groupWorkspaceService;
+	
+	// service to deal with security information
+	private SecurityService securityService;
 
 	// the name of the folder to add 
 	private String folderName;
@@ -173,6 +177,71 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 	 */
 	public String update() throws NoIndexFoundException
 	{
+		log.debug("updating a group folder parent folderId = " + parentFolderId);
+		folderAdded = false;
+		
+		IrUser user = userService.getUser(userId, true);
+		GroupWorkspaceFolder existingFolder = groupWorkspaceFileSystemService.getFolder(updateFolderId, true);
+		groupWorkspaceId = existingFolder.getGroupWorkspace().getId();
+		
+		// make sure the user has edit privileges
+		if( !securityService.hasPermission(existingFolder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION)  )
+		{
+			addFieldError("permissionDenied", "You do not have permission to edith this folder");
+        	return "added";
+        }
+
+		GroupWorkspaceFolder other = null;
+		
+		// check the name.  This makes sure that 
+		// if the name has been changed, it does not conflict
+		// with a folder already in the folder system.
+		if( parentFolderId == null || parentFolderId == 0)
+		{
+			other = groupWorkspaceFileSystemService.getRootFolder(folderName, userId);
+		}
+		else
+		{
+			other = groupWorkspaceFileSystemService.getFolder(folderName, parentFolderId);
+		}
+		
+		// name has been changed and does not conflict
+		if( other == null)
+		{
+			try {
+				existingFolder.reName(folderName);
+				existingFolder.setDescription(folderDescription);
+				groupWorkspaceFileSystemService.save(existingFolder);
+				
+				userWorkspaceIndexProcessingRecordService.save(existingFolder.getOwner().getId(), existingFolder, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+				
+				folderAdded = true;
+			} catch (DuplicateNameException e) {
+				folderAdded = false;
+				folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
+				addFieldError("personalFolderAlreadyExists", folderMessage);
+			} catch (IllegalFileSystemNameException ifsne) {
+				folderAdded = false;
+				folderMessage = getText("illegalPersonalFolderName", new String[]{folderName, String.valueOf(ifsne.getIllegalCharacters())});
+				addFieldError("illegalPersonalFolderName", folderMessage);
+			}
+			
+		}
+		// name has not been changed
+		else if(other.getId().equals(updateFolderId))
+		{
+			other.setDescription(folderDescription);
+			groupWorkspaceFileSystemService.save(other);
+			userWorkspaceIndexProcessingRecordService.save(other.getOwner().getId(), other, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+			
+			folderAdded = true;
+		} else {
+			folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
+			addFieldError("personalFolderAlreadyExists", folderMessage);
+		}
+			
 	    return "added";
 	}
 
@@ -183,6 +252,19 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 	 */
 	public String get()
 	{
+		log.debug("get called");
+		
+		GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.getFolder(updateFolderId, true);
+		IrUser user = userService.getUser(userId, true);
+		if( !securityService.hasPermission(folder, user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION)  )
+		{
+        	return "accessDenied";
+        }
+		
+		log.debug("folder name = " + folder.getName() + " description = " + folder.getDescription());
+		folderName = folder.getName();
+		folderDescription = folder.getDescription();
+		
 	    return "get";
 	}
 	
@@ -370,6 +452,15 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 	 */
 	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
 		this.groupWorkspaceService = groupWorkspaceService;
+	}
+	
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 
 }
