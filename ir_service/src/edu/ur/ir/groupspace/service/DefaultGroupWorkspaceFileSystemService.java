@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
@@ -35,6 +36,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceFileDeleteRecordDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.groupspace.UserHasParentFolderPermissionsException;
 import edu.ur.ir.repository.Repository;
@@ -46,6 +48,8 @@ import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
+
+
 
 /**
  * Group workspace file system service to allow for the management and
@@ -74,6 +78,11 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	// Service class for dealing with the (A)cess (C)ontrol (L)ists 
 	private SecurityService securityService;
 	
+	// service to deal with group worskpace information
+	private GroupWorkspaceService groupWorkspaceService;
+	
+
+
 	//  Get the logger for this class 
 	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceFileSystemService.class);
 
@@ -1312,6 +1321,166 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		}
 		
 	}
+	
+	/**
+	 * Allow a user to move folders and files to a given group workspace.
+	 * 
+	 * @param User - user who is doing the moving
+	 * @param destination - group workspace folder to move the files to
+	 * @param foldersToMove - list of folders to move
+	 * @param filesToMove - list of files to move
+	 * 
+	 * @return list of files and folders that cannot be moved.
+	 * @throws PermissionNotGrantedException 
+	 */
+	public List<FileSystem> moveFolderSystemInformation(IrUser user, GroupWorkspaceFolder destination, 
+			List<GroupWorkspaceFolder> foldersToMove, 
+			List<GroupWorkspaceFile> filesToMove) throws PermissionNotGrantedException
+	{
+		
+		LinkedList<FileSystem> notMoved = new LinkedList<FileSystem>();
+		
+		
+		// move folders first
+		if( foldersToMove != null )
+		{
+			// if they can't edit the destination then they can't move the folder
+			if( !user.hasRole(IrRole.ADMIN_ROLE) && !securityService.hasPermission(destination, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) )
+			{
+				throw new PermissionNotGrantedException(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION);
+			}
+			
+			
+		    for( GroupWorkspaceFolder folder : foldersToMove)
+		    {
+		    	
+		    	log.debug("Adding folder " + folder + " to destination " + destination);
+			   
+			    try {
+			    	 if( user.hasRole(IrRole.ADMIN_ROLE) || securityService.hasPermission(folder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) )
+			    	 {
+			    		 destination.addChild(folder);
+			    	 }
+			    	 else
+			    	 {
+			    		 notMoved.add(folder);
+			    	 }
+				} catch (DuplicateNameException e) {
+					notMoved.add(folder);
+				}
+			    
+		    }
+		}
+	
+		
+		if( filesToMove != null  && notMoved.size() == 0)
+		{
+			// if they can't add files then throw exception
+			if( !user.hasRole(IrRole.ADMIN_ROLE) && !securityService.hasPermission(destination, user, GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) )
+			{
+				throw new PermissionNotGrantedException(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION);
+			}
+		    for( GroupWorkspaceFile file : filesToMove)
+		    {
+		    	log.debug("Adding file " + file + " to destination " + destination);
+			    try {
+			    	if( user.hasRole(IrRole.ADMIN_ROLE) || securityService.hasPermission(file.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) )
+			    	{
+			            destination.addGroupFile(file);
+			    	}
+			    	else
+			    	{
+			    		notMoved.add(file);
+			    	}
+				} catch (DuplicateNameException e) {
+					notMoved.add(file);
+				}
+		    	
+		    }
+		}
+		
+		if( notMoved.size() == 0)
+		{
+			groupWorkspaceFolderDAO.makePersistent(destination);
+		}
+		
+		return notMoved;
+	}
+	
+	
+	/**
+	 * Allow user information to be moved to the root level.
+	 * 
+	 * @param user - user moving the files and folders
+	 * @param groupWorkspace - root group workspace location
+	 * @param foldersToMove - folders to move
+	 * @param filesToMove - files to move
+	 * 
+	 * @return list of files and folders that cannot be moved.
+	 * @throws PermissionNotGrantedException 
+	 */
+	public List<FileSystem> moveFolderSystemInformation(IrUser user, GroupWorkspace groupWorkspace, 
+			List<GroupWorkspaceFolder> foldersToMove, 
+			List<GroupWorkspaceFile> filesToMove) throws PermissionNotGrantedException
+	{
+		LinkedList<FileSystem> notMoved = new LinkedList<FileSystem>();
+		
+		// move folders first
+		if( foldersToMove != null )
+		{
+			// if they can't edit the destination then they can't move the folder
+			if( !user.hasRole(IrRole.ADMIN_ROLE) && !securityService.hasPermission(groupWorkspace, user, GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION) )
+			{
+				throw new PermissionNotGrantedException(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+			}
+		    for( GroupWorkspaceFolder folder : foldersToMove)
+		    {
+		    	log.debug("Adding folder " + folder + " to root of user " + user);
+			    try {
+			    	if( user.hasRole(IrRole.ADMIN_ROLE) || securityService.hasPermission(folder, user, GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION) )
+			    	{
+			    	    groupWorkspace.addRootFolder(folder);
+			    	}
+			    	else
+			    	{
+			    		notMoved.add(folder);
+			    	}
+				} catch (DuplicateNameException e) {
+					notMoved.add(folder);
+				}		    	
+		    	
+		    }
+		}
+		
+		// then move the files
+		if( filesToMove != null && notMoved.size() == 0)
+		{
+		    for( GroupWorkspaceFile file : filesToMove)
+		    {
+		    	log.debug("Adding file " + file + " to root of user " + user);
+
+			    try {
+			    	if( user.hasRole(IrRole.ADMIN_ROLE) || securityService.hasPermission(file.getVersionedFile(), user, VersionedFile.EDIT_PERMISSION) )
+			    	{
+			            groupWorkspace.addRootFile(file);
+			    	}
+			    	else
+			    	{
+			    		notMoved.add(file);
+			    	}
+			    } catch (DuplicateNameException e) {
+					notMoved.add(file);
+				}		        
+		    }
+		}
+
+		if( notMoved.size() == 0)
+		{
+			groupWorkspaceService.save(groupWorkspace);
+		}
+		
+		return notMoved;
+	}
     
 	/**
 	 * Set the security service.
@@ -1377,6 +1546,52 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	public void save(GroupWorkspaceFile groupWorkspaceFile) {
 		groupWorkspaceFileDAO.makePersistent(groupWorkspaceFile);
 		
+	}
+	
+	/**
+	 * Get the group workspace service.
+	 * 
+	 * @return group workspace service
+	 */
+	public GroupWorkspaceService getGroupWorkspaceService() {
+		return groupWorkspaceService;
+	}
+
+	/**
+	 * Set the group workspace service.
+	 * 
+	 * @param groupWorkspaceService 
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
+	}
+
+	/**
+	 * Get the files for group workspace id and listed file ids.  If the list of fileIds 
+	 * is null no files are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace to look in
+	 * @param fileIds - list of file ids within the group workspace
+	 * 
+	 * @return the found files
+	 */
+	public List<GroupWorkspaceFile> getFilesByIds(Long groupWorkspaceId,
+			List<Long> fileIds) {
+		return groupWorkspaceFileDAO.getFiles(groupWorkspaceId, fileIds);
+	}
+
+	/**
+	 * Get the group workspace folders in the given list with the specified ids.  If the list
+	 * of folderIds is empty, no folders are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @param folderIds - list of folder ids to retrieve
+	 * 
+	 * @return the found folders
+	 */
+	public List<GroupWorkspaceFolder> getFoldersByIds(Long groupWorkspaceId,
+			List<Long> folderIds) {
+		return groupWorkspaceFolderDAO.getFolders(groupWorkspaceId, folderIds);
 	}
 	
 }

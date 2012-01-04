@@ -897,6 +897,7 @@
        <property name="groupWorkspaceFileDeleteRecordDAO" ref="groupWorkspaceFileDeleteRecordDAO"/>
        <property name="repositoryService" ref="repositoryService"/>
        <property name="securityService" ref="securityService"/>
+       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
    </bean>
    
      <!-- ****************************************** --> 

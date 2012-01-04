@@ -105,17 +105,45 @@
 	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
 	               </ir:acl>
 	          </c:if>
-	          
-	               <button class="ur_button" 
-	                       onclick="YAHOO.ur.folder.moveFolderData();"
+	                       
+	          <c:if test="${ parentFolderId == null || parentFolderId == 0}">
+                   <ir:acl domainObject="${groupWorkspace}" hasPermission="GROUP_WORKSPACE_EDIT">
+ 	                   <button class="ur_button" 
+	                       onclick="YAHOO.ur.user.group_workspace.moveFolderData();"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
-	                       id="moveButton"><span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
-	               <button class="ur_button" 
+	                       id="moveButton"><span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button> 
+ 		           </ir:acl>
+	           </c:if>
+	           <c:if test="${ parentFolderId != null && parentFolderId != 0}">
+                   <ir:acl domainObject="${parentFolder}" hasPermission="GROUP_WORKSPACE_FOLDER_EDIT">
+ 	                   <button class="ur_button" 
+	                       onclick="YAHOO.ur.user.group_workspace.moveFolderData();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="moveButton"><span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button> 
+ 		           </ir:acl>
+	           </c:if>             
+	                       
+	                       
+	          <c:if test="${ parentFolderId == null || parentFolderId == 0}">
+                   <ir:acl domainObject="${groupWorkspace}" hasPermission="GROUP_WORKSPACE_EDIT">
+ 	                   <button class="ur_button" 
 	                       onclick="YAHOO.ur.user.group_workspace.deleteFolder.showDialog();"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
-	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
+	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button> 
+ 		           </ir:acl>
+	           </c:if>
+	           <c:if test="${ parentFolderId != null && parentFolderId != 0}">
+                   <ir:acl domainObject="${parentFolder}" hasPermission="GROUP_WORKSPACE_FOLDER_EDIT">
+ 	                   <button class="ur_button" 
+	                       onclick="YAHOO.ur.user.group_workspace.deleteFolder.showDialog();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button> 
+ 		           </ir:acl>
+	           </c:if>              
 	                       
 	          <c:if test='${ir:isCurrentUserGroupWorkspaceOwner(groupWorkspace)}'>
 	               <button class="ur_button" 

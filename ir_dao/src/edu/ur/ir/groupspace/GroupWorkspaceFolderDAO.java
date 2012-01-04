@@ -114,4 +114,15 @@ public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
 	 * @return all folders for which the user has the specified permission.
 	 */
 	public List<GroupWorkspaceFolder> getAllFoldersUserHasPermissionFor(IrUser user, String permission);
+	
+	/**
+	 * Get the group workspace folders in the given list with the specified ids.  If the list
+	 * of folderIds is empty, no folders are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @param folderIds - list of folder ids to retrieve
+	 * 
+	 * @return the found folders
+	 */
+	public List<GroupWorkspaceFolder> getFolders(Long groupWorkspaceId, List<Long> folderIds);
 }

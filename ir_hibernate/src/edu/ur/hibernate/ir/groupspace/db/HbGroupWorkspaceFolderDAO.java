@@ -16,6 +16,7 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -231,6 +232,32 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 		q1.setParameter("name", name);
 		q1.setParameter("groupWorkspaceId", groupWorkspaceId);
 		return (GroupWorkspaceFolder) q1.uniqueResult();
+	}
+
+	/**
+	 * Get the group workspace folders in the given list with the specified ids.  If the list
+	 * of folderIds is empty, no folders are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @param folderIds - list of folder ids to retrieve
+	 * 
+	 * @return the found folders
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getFolders(Long groupWorkspaceId,
+			List<Long> folderIds) {
+		
+		if( folderIds.size() > 0 )
+		{
+		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceFolders");
+		    q.setParameter("groupWorkspaceId", groupWorkspaceId);
+		    q.setParameterList("folderIds", folderIds);
+		    return q.list();
+		}
+		else
+		{
+			return new LinkedList<GroupWorkspaceFolder>();
+		}
 	}
 
 }

@@ -18,6 +18,7 @@ package edu.ur.ir.groupspace.service;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import java.util.Properties;
@@ -34,6 +35,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
+import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
 import edu.ur.ir.groupspace.GroupWorkspace;
@@ -1338,6 +1340,276 @@ public class DefaultGroupWorkspaceFileSystemServiceTest {
 		userService.deleteUser(deleteUser, deleteUser);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
+	}
+	
+	/**
+	 * Test moving files and folders to an existing folder
+	 * @throws DuplicateNameException 
+	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void moveFileFolderTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, PermissionNotGrantedException
+	{
+		
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		UserEmail email = new UserEmail("email");
+
+		IrUser user = userService.createUser("password", "username", email);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		
+		// create the group workspace
+		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspaceService.save(groupWorkspace);
+		
+		
+		// give the user edit permissions on workspace
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.addAll(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
+		assert permissions.size() > 0 : "Should have more than one permission";
+		IrClassTypePermission groupEdit = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		assert groupEdit != null: "Group edit should not be null";
+		assert permissions.contains(groupEdit) : "permissions should contain group edit but does not";
+		
+		// give user1 all permissions
+		groupWorkspaceService.addUserToGroup(user, groupWorkspace, permissions, true);
+		
+		// save the repository
+		tm.commit(ts);
+		
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		
+		tm.commit(ts);
+		
+		// new transaction - create two new folders and a personal file
+		ts = tm.getTransaction(td);
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		GroupWorkspaceFolder myFolder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder1", null, user);
+		    assert myFolder != null : "folder should be created";
+		    
+		GroupWorkspaceFolder destination = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder2", null, user);
+	
+	    assert destination != null : "folder should be created";
+		assert groupWorkspace.getRootFolder(destination.getName()) != null : 
+			"Should be able to find folder " + destination;
+		
+		GroupWorkspaceFile gf = groupWorkspaceFileSystemService.addFile(repo, myFolder, user, f, "test file", "description");
+		
+		tm.commit(ts);
+        
+		
+		// start new transaction
+        ts = tm.getTransaction(td);
+        assert gf.getId() != null : "Group workspace file should not have a null id " + gf;
+        List<GroupWorkspaceFolder> foldersToMove = new LinkedList<GroupWorkspaceFolder>();
+        foldersToMove.add(myFolder);
+        
+        // move the folder into other folder
+        List<FileSystem> objectsNotMoved = groupWorkspaceFileSystemService.moveFolderSystemInformation(user, destination, foldersToMove, null);
+        assert objectsNotMoved.size() == 0 : "All objects should have been moved but were not";
+        
+        tm.commit(ts);
+     
+        //new transaction - make sure the folder was moved.
+		ts = tm.getTransaction(td);
+		IrUser otherUser2 = userService.getUser(user.getUsername());
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		GroupWorkspaceFolder theDestination = groupWorkspace.getRootFolder(destination.getName());
+		GroupWorkspaceFolder newChild = theDestination.getChild(myFolder.getName());
+		gf = groupWorkspaceFileSystemService.getFile(gf.getId(), false);
+		assert  newChild != null : "Was not able to find " + myFolder
+		+ " in children of " +
+		theDestination ;
+		
+		assert newChild.getFile(gf.getName()) != null : "File " + gf.getName() 
+		+ "was not found ";
+		
+		// move the file now to the folder above (parent folder)
+		List<GroupWorkspaceFile> filesToMove = new LinkedList<GroupWorkspaceFile>();
+        filesToMove.add(gf);
+        
+        //move the file to the parent folder
+        objectsNotMoved = groupWorkspaceFileSystemService.moveFolderSystemInformation(otherUser2, theDestination, null, filesToMove);
+        assert objectsNotMoved.size() == 0 : "All objects should have been moved but were not";
+        tm.commit(ts);
+		
+		
+		// make sure move occurred
+		ts = tm.getTransaction(td);
+		destination = groupWorkspaceFileSystemService.getFolder(destination.getId(), false);
+		assert destination.getFiles().contains(gf) : "Destination folder " + destination + " should have file " + gf;
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		otherUser2 = userService.getUser(otherUser2.getId(), false);
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		groupWorkspaceService.delete(groupWorkspace, otherUser2);
+		userService.deleteUser(otherUser2, otherUser2);
+		tm.commit(ts);
+		
+	    // Start new transaction
+		ts = tm.getTransaction(td);
+		assert userService.getUser(otherUser2.getId(), false) == null : "User should be null"; 
+		helper.cleanUpRepository();
+		tm.commit(ts);	
+		
+	}
+	
+	/**
+	 * Test moving files and folders to the root (the User)
+	 * @throws DuplicateNameException 
+	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void moveFileFolderToRootTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, PermissionNotGrantedException
+	{
+		
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		UserEmail email = new UserEmail("email");
+
+		IrUser user = userService.createUser("password", "username", email);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		
+		// create the group workspace
+		GroupWorkspace groupWorkspace = new GroupWorkspace("groupSpace");
+		groupWorkspaceService.save(groupWorkspace);
+		
+		
+		// give the user edit permissions on workspace
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.addAll(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
+		assert permissions.size() > 0 : "Should have more than one permission";
+		IrClassTypePermission groupEdit = securityService.getClassTypePermission(GroupWorkspace.class.getName(), GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION);
+		assert groupEdit != null: "Group edit should not be null";
+		assert permissions.contains(groupEdit) : "permissions should contain group edit but does not";
+		
+		// give user1 all permissions
+		groupWorkspaceService.addUserToGroup(user, groupWorkspace, permissions, true);
+		
+		// save the repository
+		tm.commit(ts);
+		
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		
+		tm.commit(ts);
+		
+		// new transaction - create two new folders
+		ts = tm.getTransaction(td);
+		
+		user = userService.getUser(user.getId(), false);
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		GroupWorkspaceFolder myFolder = groupWorkspaceFileSystemService.addFolder(groupWorkspace, "myFolder1", null, user);
+		    assert myFolder != null : "folder should be created";
+
+		GroupWorkspaceFolder subFolder = groupWorkspaceFileSystemService.addFolder(myFolder, "subFolder", null, user);
+			
+		assert subFolder != null : "folder should be created";
+		
+		groupWorkspaceFileSystemService.save(myFolder);
+		
+		GroupWorkspaceFile gf = groupWorkspaceFileSystemService.addFile(repo, myFolder, user, f, "test file", "description");
+		
+		tm.commit(ts);
+        
+		// start new transaction
+        ts = tm.getTransaction(td);
+        assert gf.getId() != null : "Group workspace file should not have a null id " + gf;
+        groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+        user = userService.getUser(user.getUsername());
+        List<GroupWorkspaceFolder> foldersToMove = new LinkedList<GroupWorkspaceFolder>();
+        foldersToMove.add(subFolder);
+        List<FileSystem> objectsNotMoved =  groupWorkspaceFileSystemService.moveFolderSystemInformation(user, groupWorkspace,
+        		foldersToMove, null);
+        assert objectsNotMoved.size() == 0 : "All object should have been moved but were not";
+        tm.commit(ts);
+
+        // start new transaction
+        ts = tm.getTransaction(td);
+        groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		GroupWorkspaceFolder newRoot = groupWorkspace.getRootFolder(subFolder.getName());
+		assert newRoot != null : "Should be able to find the folder " + subFolder;
+		assert newRoot.getId().equals(subFolder.getId()) : "folder id's should be the same newRoot = " + newRoot
+		+ " subFolder = " + subFolder;
+        tm.commit(ts);
+ 
+        ts = tm.getTransaction(td);
+		GroupWorkspaceFolder oldParent = groupWorkspaceFileSystemService.getFolder(myFolder.getId(), false);
+		assert oldParent.getChildren().size() == 0 : "Should not have any children but has " +
+		oldParent.getChildren().size();
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		user = userService.getUser(user.getUsername());
+		// move the file now to the folder above
+		List<GroupWorkspaceFile> filesToMove = new LinkedList<GroupWorkspaceFile>();
+        filesToMove.add(groupWorkspaceFileSystemService.getFile(gf.getId(),false));
+        objectsNotMoved =  groupWorkspaceFileSystemService.moveFolderSystemInformation(user,groupWorkspace, 
+				null, filesToMove);
+        assert objectsNotMoved.size() == 0 : "All object should have been moved but were not";
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		user = userService.getUser(user.getUsername());
+		// make sure the file has been moved
+		gf = groupWorkspaceFileSystemService.getFile(gf.getId(), false);
+		assert gf.getGroupWorkspaceFolder() == null : "GroupWorkspaceFile should no longer have a parent folder " + 
+		gf.getGroupWorkspaceFolder();
+		
+		assert groupWorkspace.getRootFile(gf.getName()) != null : "Should be able to find the file";
+		tm.commit(ts);
+		
+		 // Start new transaction
+		ts = tm.getTransaction(td);
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		groupWorkspace = groupWorkspaceService.get(groupWorkspace.getId(), false);
+		groupWorkspaceService.delete(groupWorkspace, deleteUser);
+		userService.deleteUser(deleteUser, deleteUser);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		assert userService.getUser(user.getId(), false) == null : "User should be null"; 
+		helper.cleanUpRepository();
+		tm.commit(ts);
 	}
 
 
