@@ -1585,6 +1585,24 @@ YAHOO.ur.user.group_workspace = {
            callback, null);
                	
 	},
+	
+    /**
+     * Allow files and folders to be moved
+     */
+    moveFolderData : function()
+    {
+        if (!urUtil.checkForNoSelections(document.groupFolders.groupFolderIds) &&
+	        !urUtil.checkForNoSelections(document.groupFolders.groupFileIds))
+		{
+			 alert('Please select at least one checkbox next to the files or folders you wish to move.');
+	    } 
+	    else
+	    {
+            var viewMoveFoldersAction = basePath + 'user/viewMoveGroupWorkspaceFolderLocations.action';
+            document.groupFolders.action = viewMoveFoldersAction;
+            document.groupFolders.submit();
+        }
+    },
    
   	
 	// initialize the page

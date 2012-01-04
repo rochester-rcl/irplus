@@ -1,32 +1,15 @@
-/*
-   Copyright 2008 University of Rochester
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
-
 /**
  * This code is for dealing with moving files and folders 
  * in the workspace.
  */
-YAHOO.namespace("ur.folder.move");
+YAHOO.namespace("ur.group_workspace.move");
 
-
-YAHOO.ur.folder.move = 
+YAHOO.ur.group_workspace.move = 
 {
     getMoveFolder : function(destinationId)
     {
-        var viewMoveFoldersAction = basePath + 'user/getMovePersonalFolderDestinations.action';
-        document.getElementById("destination_id").value = destinationId;
+        var viewMoveFoldersAction = basePath + 'user/getMoveGroupWorkspaceFolderDestinations.action';
+        document.getElementById("destinationId").value = destinationId;
         document.viewChildContentsForMove.action = viewMoveFoldersAction;
 
 	    // handle a successful return
@@ -78,11 +61,15 @@ YAHOO.ur.folder.move =
  	            }
 	            else
 	            {
-	                var destinationId = document.getElementById('destination_id').value;
+	                var destinationId = document.getElementById('destinationId').value;
+	                var groupWorkspaceId = document.getElementById('groupWorkspaceId').value;
 	                var getFoldersAction = basePath + 'user/workspace.action'
 	        
 	                getFoldersAction = getFoldersAction +
-	                     '?parentFolderId=' + destinationId + '&bustcache='+new Date().getTime();
+	                     '?groupWorkspaceFolderId=' + destinationId + 
+	                     '&tabName=GROUP_WORKSPACE' +
+	                     '&groupWorkspaceId=' +  groupWorkspaceId +
+	                     '&bustcache='+new Date().getTime();
 	            
 	                window.location = getFoldersAction;
 	            }
@@ -102,7 +89,7 @@ YAHOO.ur.folder.move =
 
 
 	    YAHOO.util.Connect.setForm('viewChildContentsForMove');
-        var action = basePath + "user/movePersonalFolderInformation.action";
+        var action = basePath + "user/moveGroupWorkspaceFolderInformation.action";
         var cObj = YAHOO.util.Connect.asyncRequest('POST',
                 action, callback);
     },
@@ -136,9 +123,7 @@ YAHOO.ur.folder.move =
     {
         YAHOO.ur.folder.move.createMoveErrorDialog();
     }
-    
 }
 
-
-// initialize the code once the dom is ready
-YAHOO.util.Event.onDOMReady(YAHOO.ur.folder.move.init);
+//initialize the code once the dom is ready
+YAHOO.util.Event.onDOMReady(YAHOO.ur.group_workspace.move.init);

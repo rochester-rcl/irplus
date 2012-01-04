@@ -103,4 +103,12 @@
         and user.id = :userId
         and irAcl.objectId = groupWorkspaceFile.versionedFile.id
 	</query>
+	
+	 <!-- named query for getting files  within a given group workspace and with 
+         given file ids-->
+	<query name="getGroupWorkspaceFiles">
+		from GroupWorkspaceFile as groupWorkspaceFile
+		where groupWorkspaceFile.groupWorkspace.id = :groupWorkspaceId
+		and groupWorkspaceFile.id in (:fileIds)
+	</query>
 </hibernate-mapping>

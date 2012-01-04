@@ -16,6 +16,7 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -149,6 +150,31 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 		q1.setParameter("userId", user.getId());
 		List<GroupWorkspaceFile> files = (List<GroupWorkspaceFile>) q1.list();
 		return files;
+	}
+
+	/**
+	 * Get the files for group workspace id and listed file ids.  If the list of fileIds 
+	 * is null no files are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace to look in
+	 * @param fileIds - list of file ids within the group workspace
+	 * 
+	 * @return the found files
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFile> getFiles(Long groupWorkspaceId, List<Long> fileIds) {
+		
+		if( fileIds.size() > 0 )
+		{
+		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceFiles");
+		    q.setParameter("groupWorkspaceId", groupWorkspaceId);
+		    q.setParameterList("fileIds", fileIds);
+		    return q.list();
+		}
+		else
+		{
+			return new LinkedList<GroupWorkspaceFile>();
+		}
 	}
 
 

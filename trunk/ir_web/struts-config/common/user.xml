@@ -262,6 +262,10 @@
             <result name="success" type="no-op"/>
         </action>  
         
+        <!--  ************************************ -->
+        <!--  Move files/folders actions     -->
+        <!--  ************************************ -->
+        
         <action name="viewMovePersonalFolderLocations"
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="viewLocations">

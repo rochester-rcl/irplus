@@ -102,7 +102,7 @@
 		and personalFile.personalFolder.id is NULL
 	</query>
 	
-   <!-- named query for getting files  -->
+    <!-- named query for getting files  -->
 	<query name="getFiles">
 		from PersonalFile as PersonalFile 
 		where PersonalFile.owner.id = :userId

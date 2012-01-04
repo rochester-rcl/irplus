@@ -7,6 +7,7 @@ import java.util.Set;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.ir.FileSystem;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
@@ -350,5 +351,59 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 */
 	public List<GroupWorkspaceFile> getAllFilesUserHasPermissionFor(
 			IrUser user, String permission);
+	
+	/**
+	 * Allow a user to move folders and files to a given group workspace.
+	 * 
+	 * @param User - user who is doing the moving
+	 * @param destination - group workspace folder to move the files to
+	 * @param foldersToMove - list of folders to move
+	 * @param filesToMove - list of files to move
+	 * 
+	 * @return list of files and folders that cannot be moved.
+	 * @throws PermissionNotGrantedException 
+	 */
+	public List<FileSystem> moveFolderSystemInformation(IrUser user, GroupWorkspaceFolder destination, 
+			List<GroupWorkspaceFolder> foldersToMove, 
+			List<GroupWorkspaceFile> filesToMove) throws PermissionNotGrantedException;
+	
+	
+	/**
+	 * Allow user information to be moved to the root level.
+	 * 
+	 * @param user - user moving the files and folders
+	 * @param groupWorkspace - root group workspace location
+	 * @param foldersToMove - folders to move
+	 * @param filesToMove - files to move
+	 * 
+	 * @return list of files and folders that cannot be moved.
+	 * @throws PermissionNotGrantedException 
+	 */
+	public List<FileSystem> moveFolderSystemInformation(IrUser user, GroupWorkspace groupWorkspace, 
+			List<GroupWorkspaceFolder> foldersToMove, 
+			List<GroupWorkspaceFile> filesToMove) throws PermissionNotGrantedException;
+	
+	/**
+	 * Get the group workspace folders in the given list with the specified ids.  If the list
+	 * of folderIds is empty, no folders are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace
+	 * @param folderIds - list of folder ids to retrieve
+	 * 
+	 * @return the found folders
+	 */
+	public List<GroupWorkspaceFolder> getFoldersByIds(Long groupWorkspaceId,
+			List<Long> folderIds);
+	
+	/**
+	 * Get the files for group workspace id and listed file ids.  If the list of fileIds 
+	 * is null no files are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace to look in
+	 * @param fileIds - list of file ids within the group workspace
+	 * 
+	 * @return the found files
+	 */
+	public List<GroupWorkspaceFile> getFilesByIds(Long groupWorkspaceId, List<Long> fileIds);
 	
 }

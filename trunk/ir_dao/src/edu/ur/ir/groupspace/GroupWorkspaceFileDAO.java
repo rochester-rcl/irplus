@@ -64,4 +64,15 @@ public interface GroupWorkspaceFileDAO extends CrudDAO<GroupWorkspaceFile>
 	 * @return all files for which the user has the specified permission.
 	 */
 	public List<GroupWorkspaceFile> getAllFilesUserHasPermissionFor(IrUser user, String permission);
+	
+	/**
+	 * Get the files for group workspace id and listed file ids.  If the list of fileIds 
+	 * is null no files are returned.
+	 * 
+	 * @param groupWorkspaceId - id of the group workspace to look in
+	 * @param fileIds - list of file ids within the group workspace
+	 * 
+	 * @return the found files
+	 */
+	public List<GroupWorkspaceFile> getFiles(Long groupWorkspaceId, List<Long> fileIds);
 }

@@ -192,6 +192,12 @@
         and irAcl.objectId = groupWorkspaceFolder.id
 	</query>
 	
-
+    <!-- named query for getting folders within a given group workspace and with 
+         given folder ids  -->
+	<query name="getGroupWorkspaceFolders">
+		from GroupWorkspaceFolder as groupWorkspaceFolder
+		where groupWorkspaceFolder.groupWorkspace.id = :groupWorkspaceId
+		and groupWorkspaceFolder.id in (:folderIds)
+	</query>
 	
 </hibernate-mapping>
