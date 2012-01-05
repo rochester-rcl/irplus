@@ -276,13 +276,20 @@
             class="edu.ur.ir.web.action.groupspace.MoveGroupWorkspaceFileSystemObjects"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/group_workspace/move_folder_frag.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/move_folder.jsp</result>
         </action>
         
         <action name="moveGroupWorkspaceFolderInformation"
             class="edu.ur.ir.web.action.groupspace.MoveGroupWorkspaceFileSystemObjects"
             method="move">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/group_workspace/move_folder_frag.jsp</result>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">workspace.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="groupWorkspaceFolderId">${destination.id}</param>
+        	      <param name="groupWorkspaceId">${groupWorkspace.id}</param>
+        	      <param name="tabName">GROUP_WORKSPACE</param>
+        	</result>
+        	<result name="error">/pages/user/workspace/group_workspace/move_folder.jsp</result>
         </action>
         

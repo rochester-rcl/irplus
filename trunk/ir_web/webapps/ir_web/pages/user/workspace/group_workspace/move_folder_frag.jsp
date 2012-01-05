@@ -44,9 +44,9 @@
 		
 		
 		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.group_workspace.move.getMoveFolder('0');">${user.username}</ur:a>/
+		            Move To Location: /<a href="javascript:YAHOO.ur.group_workspace.move.getMoveFolder('0');">${user.username}</a>/
 		            <c:forEach var="folder" items="${destinationPath}">
-			            <ur:a href="javascript:YAHOO.ur.group_workspace.move.getMoveFolder('${folder.id}')">${folder.name}</ur:a>/
+			            <a href="javascript:YAHOO.ur.group_workspace.move.getMoveFolder('${folder.id}')">${folder.name}</a>/
                     </c:forEach>
                 </div>
             

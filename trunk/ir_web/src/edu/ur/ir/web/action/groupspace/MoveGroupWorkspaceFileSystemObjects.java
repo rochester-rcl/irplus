@@ -63,12 +63,13 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 	// current contents of the destination folder 
 	private List<FileSystem> currentDestinationContents = new LinkedList<FileSystem>();
 	
-	// boolean to indicate that the action was successful 
-	private boolean actionSuccess;
+
 	
 	// current destination */
 	private GroupWorkspaceFolder destination;
 	
+
+
 	//  Logger 
 	private static final Logger log = Logger.getLogger(MoveGroupWorkspaceFileSystemObjects.class);
 
@@ -80,7 +81,12 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
     
     // service to deal with group workspace inforamtion
     private GroupWorkspaceService groupWorkspaceService;
+    
+    // parent group workspace
+    private GroupWorkspace groupWorkspace;
 	
+
+
 
 	/**
 	 * Set the group workspace.
@@ -101,6 +107,7 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		log.debug("view move locations");
 		user = userService.getUser(userId, false);
 
+		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		List<Long> listFolderIds = new LinkedList<Long>();
 		for( Long id : groupFolderIds)
 		{
@@ -119,11 +126,11 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		{
 		    destination = groupWorkspaceFileSystemService.getFolder(destinationId, false);
 		    
-		    GroupWorkspace workspace = destination.getGroupWorkspace();
+		   
 		    IrUser user = userService.getUser(userId, false);
 		    
 		    // user cannot access a folder in a workspace they do not have permissions for
-		    if( !user.hasRole(IrRole.ADMIN_ROLE) || workspace.getUser(user) == null )
+		    if( !user.hasRole(IrRole.ADMIN_ROLE) || groupWorkspace.getUser(user) == null )
 		    {
 		    	return "accessDenied";
 		    }
@@ -151,7 +158,7 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		}
 		else
 		{
-			GroupWorkspace groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+			
 			// user cannot access a folder in a workspace they do not have permissions for
 		    if( !user.hasRole(IrRole.ADMIN_ROLE) || groupWorkspace.getUser(user) == null )
 		    {
@@ -173,9 +180,10 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 	{
 		log.debug("move files and folders called");
 		user = userService.getUser(userId, false);
-
+		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+		
 		List<FileSystem> notMoved;
-		actionSuccess = true;
+		
 
 		List<Long> listFolderIds = new LinkedList<Long>();
 		for( Long id : groupFolderIds)
@@ -206,7 +214,9 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		    destination = 
 		    	 groupWorkspaceFileSystemService.getFolder(destinationId, false);
 		    
-		    
+		    destinationPath = groupWorkspaceFileSystemService.getFolderPath(destination);
+		    currentDestinationContents.addAll(destination.getChildren());
+		    currentDestinationContents.addAll(destination.getFiles());
 		    try {
 				notMoved = groupWorkspaceFileSystemService.moveFolderSystemInformation(user, destination, foldersToMove, filesToMove);
 			} catch (PermissionNotGrantedException e) {
@@ -216,7 +226,8 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		}
 		else
 		{
-			GroupWorkspace groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+			currentDestinationContents.addAll(groupWorkspace.getRootFolders());
+			currentDestinationContents.addAll(groupWorkspace.getRootFiles());
 			try {
 				notMoved = groupWorkspaceFileSystemService.moveFolderSystemInformation(user, groupWorkspace, foldersToMove, filesToMove);
 			} catch (PermissionNotGrantedException e) {
@@ -228,13 +239,13 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		if( notMoved.size() > 0 )
 		{
 			String message = getText("folderNamesAlreadyExist");
-			actionSuccess = false;
 			StringBuffer sb = new StringBuffer(message);
 			for(FileSystem fileSystem : notMoved)
 			{
 			    sb.append( " " + fileSystem.getName());
 			}
 			addFieldError("moveError", sb.toString());
+			return ERROR;
 		}
 		
 		
@@ -252,6 +263,17 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 	public void setGroupFolderIds(Long[] folderIds) {
 		this.groupFolderIds = folderIds;
 	}
+	
+
+	/**
+	 * Get the destination.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspaceFolder getDestination() {
+		return destination;
+	}
+
 
 
 	/**
@@ -292,14 +314,6 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		return currentDestinationContents;
 	}
 
-	/**
-	 * Get the action success.
-	 * 
-	 * @return
-	 */
-	public boolean getActionSuccess() {
-		return actionSuccess;
-	}
 
 	/**
 	 * Get the destination id.
@@ -399,6 +413,16 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 	public void setGroupWorkspaceFileSystemService(
 			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
 		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+	
+	
+	/**
+	 * Get the group workspace.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
 	}
 	
 
