@@ -10,9 +10,11 @@ import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
@@ -55,6 +57,12 @@ public class RenameGroupWorkspaceFile extends ActionSupport implements UserIdAwa
 	
 	/* service to deal with security */
 	private SecurityService securityService;
+	
+	/* process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+
+	/* service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 
 	/**
@@ -106,7 +114,7 @@ public class RenameGroupWorkspaceFile extends ActionSupport implements UserIdAwa
 				    renameMessage = getText("illegalNameError", new String[]{e.getName(), String.valueOf(e.getIllegalCharacters())});
 				    addFieldError("illegalNameError", renameMessage);
 			    }
-			    groupWorkspaceFileSystemService.save(groupWorkspaceFile);
+			    
 			    fileRenamed = true;
 				
 		    } else {
@@ -119,6 +127,13 @@ public class RenameGroupWorkspaceFile extends ActionSupport implements UserIdAwa
 			fileRenamed = true;
 			// assume description change
 			groupWorkspaceFileSystemService.save(groupWorkspaceFile);
+		}
+		
+		if( fileRenamed )
+		{
+			groupWorkspaceFileSystemService.save(groupWorkspaceFile);
+		    userWorkspaceIndexProcessingRecordService.saveAll(groupWorkspaceFile, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		return SUCCESS;
@@ -250,5 +265,25 @@ public class RenameGroupWorkspaceFile extends ActionSupport implements UserIdAwa
 	 */
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	/**
+	 * Set the user workspace index processing record service.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 }

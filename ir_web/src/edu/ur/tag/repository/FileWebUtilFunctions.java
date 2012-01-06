@@ -117,26 +117,36 @@ public class FileWebUtilFunctions {
 	public static boolean canMoveToFolder(Collection<FileSystem> objectsToMove, FileSystem destination)
 	{
 		
-		if( !destination.getFileSystemType().equals(FileSystemType.PERSONAL_FOLDER))
+		
+		if( destination.getFileSystemType().equals(FileSystemType.PERSONAL_FOLDER))
 	    {
-		    return false;	
-		}
-		
-				
-		boolean canMove = true;
-		
-		for(FileSystem fileSystemObject : objectsToMove)
-		{
-			if( fileSystemObject.getFileSystemType().equals(FileSystemType.PERSONAL_FOLDER))
+			for(FileSystem fileSystemObject : objectsToMove)
 			{
-			    if( fileSystemObject.getId().equals(destination.getId()))
-			    {
-			    	canMove = false;
-			    }
+				if( fileSystemObject.getFileSystemType().equals(FileSystemType.PERSONAL_FOLDER))
+				{
+				    if( fileSystemObject.getId().equals(destination.getId()))
+				    {
+				    	return false;
+				    }
+				}
+			}
+		}
+		else if(destination.getFileSystemType().equals(FileSystemType.GROUP_WORKSPACE_FOLDER))
+	    {
+			for(FileSystem fileSystemObject : objectsToMove)
+			{
+				if( fileSystemObject.getFileSystemType().equals(FileSystemType.GROUP_WORKSPACE_FOLDER))
+				{
+				    if( fileSystemObject.getId().equals(destination.getId()))
+				    {
+				    	return false;
+				    }
+				}
 			}
 		}
 		
-		return canMove;
+		
+		return true;
 	}
 	
 	/**
@@ -156,21 +166,20 @@ public class FileWebUtilFunctions {
 		    return false;	
 		}
 		
-				
-		boolean canMove = true;
-		
 		for(FileSystem fileSystemObject : objectsToMove)
 		{
 			if( fileSystemObject.getFileSystemType().equals(FileSystemType.RESEARCHER_FOLDER))
 			{
 			    if( fileSystemObject.getId().equals(destination.getId()))
 			    {
-			    	canMove = false;
+			    	return false;
 			    }
 			}
 		}
 		
-		return canMove;
+		return true;
+		
+		
 	}
 
 	/**
@@ -183,26 +192,35 @@ public class FileWebUtilFunctions {
 	public static boolean isFileToBeMoved(Collection<FileSystem> objectsToMove, FileSystem object)
 	{
 		
-		if( !object.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
+		if( object.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
 	    {
-		    return false;	
-		}
-		
-				
-		boolean isFileToMove = false;
-		
-		for(FileSystem fileSystemObject : objectsToMove)
-		{
-			if( fileSystemObject.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
+			for(FileSystem fileSystemObject : objectsToMove)
 			{
-			    if( fileSystemObject.getId().equals(object.getId()))
-			    {
-			    	isFileToMove = true;
-			    }
+				if( fileSystemObject.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
+				{
+				    if( fileSystemObject.getId().equals(object.getId()))
+				    {
+				    	return true;
+				    }
+				}
+			}
+		}
+		else if( object.getFileSystemType().equals(FileSystemType.GROUP_WORKSPACE_FILE) )
+		{
+			for(FileSystem fileSystemObject : objectsToMove)
+			{
+				if( fileSystemObject.getFileSystemType().equals(FileSystemType.GROUP_WORKSPACE_FILE))
+				{
+				    if( fileSystemObject.getId().equals(object.getId()))
+				    {
+				    	return true;
+				    }
+				}
 			}
 		}
 		
-		return isFileToMove;
+		
+		return false;
 	}
 	
 	
