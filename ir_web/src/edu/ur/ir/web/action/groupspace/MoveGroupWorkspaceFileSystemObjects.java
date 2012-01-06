@@ -242,10 +242,6 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 			return ERROR;
 		}
 		
-		
-		//load the data
-        viewLocations();		
-		
 		return SUCCESS;
 	}
 

@@ -162,7 +162,7 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		log.debug("move files and folders called");
 		user = userService.getUser(userId, false);
 
-		List<FileSystem> notMoved = new LinkedList<FileSystem>();
+		List<FileSystem> notMoved;
 		actionSuccess = true;
 
 		List<Long> listFolderIds = new LinkedList<Long>();
@@ -214,16 +214,15 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		{
 			String message = getText("folderNamesAlreadyExist");
 			actionSuccess = false;
+			StringBuffer sb = new StringBuffer(message);
 			for(FileSystem fileSystem : notMoved)
 			{
-			    message = message + " " + fileSystem.getName();
+			    sb.append( " " + fileSystem.getName() );
 			}
-			addFieldError("moveError", message);
+			addFieldError("moveError", sb.toString());
+			viewLocations();
+			return ERROR;
 		}
-		
-		
-		//load the data
-        viewLocations();		
 		
 		return SUCCESS;
 	}

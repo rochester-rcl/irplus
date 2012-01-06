@@ -22,9 +22,5 @@ YAHOO.ur.group_workspace.move =
 	    document.viewChildContentsForMove.action = basePath + "user/moveGroupWorkspaceFolderInformation.action";
 	    document.viewChildContentsForMove.submit();
     }
-    
-
 }
 
-//initialize the code once the dom is ready
-YAHOO.util.Event.onDOMReady(YAHOO.ur.group_workspace.move.init);

@@ -279,7 +279,7 @@
             method="viewLocations">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
+            <result name="success">/pages/user/workspace/move_folder.jsp</result>
         </action>
         
         <action name="movePersonalFolderInformation"
@@ -287,7 +287,12 @@
             method="move">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">workspace.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="parentFolderId">${destination.id}</param>
+        	</result>
+        	<result name="error">/pages/user/workspace/move_folder.jsp</result>
         </action>
         
         <!--  ************************************ -->
