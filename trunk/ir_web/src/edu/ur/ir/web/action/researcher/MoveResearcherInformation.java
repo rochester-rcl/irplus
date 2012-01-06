@@ -31,7 +31,6 @@ import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
-import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserFileSystemService;
@@ -90,9 +89,6 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 	
     /** Service for dealing with researcher information*/
     private ResearcherFileSystemService researcherFileSystemService;
-	
-	/**  Researcher service for dealing with researcher information*/
-	private ResearcherService researcherService;
 	
 	/** Service for getting user information */
 	private UserService userService;
@@ -254,7 +250,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		researcherId = researcher.getId();
 
 
-		List<FileSystem> notMoved = new LinkedList<FileSystem>();
+		List<FileSystem> notMoved;
 		actionSuccess = true;
 
 		List<Long> listFolderIds = new LinkedList<Long>();
@@ -340,16 +336,16 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		{
 			String message = getText("folderNamesAlreadyExist");
 			actionSuccess = false;
+			StringBuffer sb = new StringBuffer(message);
 			for(FileSystem fileSystem : notMoved)
 			{
-			    message = message + " " + fileSystem.getName();
+			   sb.append(message + " " + fileSystem.getName());
 			}
-			addFieldError("moveError", message);
+			addFieldError("moveError", sb.toString());
+			//load the data
+	        viewLocations();
+	        return ERROR;
 		}
-		
-		
-		//load the data
-        viewLocations();		
 		
 		return SUCCESS;
 	}
@@ -423,10 +419,6 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		this.publicationIds = publicationIds;
 	}
 
-	public ResearcherFileSystemService getResearcherFileSystemService() {
-		return researcherFileSystemService;
-	}
-
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
@@ -446,14 +438,6 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 
 	public void setLinksToMove(List<ResearcherLink> linksToMove) {
 		this.linksToMove = linksToMove;
-	}
-
-	public ResearcherService getResearcherService() {
-		return researcherService;
-	}
-
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
 	}
 
 	public void injectUserId(Long userId) {

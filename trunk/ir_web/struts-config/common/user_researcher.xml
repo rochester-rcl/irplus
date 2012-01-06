@@ -379,20 +379,6 @@
             </result> 
         </action>         
         
-        <!--  move the selected researcher objects -->
-        <action name="moveResearcherFileSystemObjects" class="edu.ur.ir.web.action.researcher.MoveResearcherFileSystemObjects">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/move_folders_response.jsp</result>
-        </action>
-        
-        <action name="viewMoveResearcherFolderLocations"
-            class="edu.ur.ir.web.action.researcher.MoveResearcherFileSystemObjects"
-            method="viewLocations">
-            <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/researcher/move.jsp</result>
-        </action>
-        
         
        <!--  ************************************ 			   -->
        <!--  Researcher move actions                           -->
@@ -410,7 +396,7 @@
             method="viewLocations">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/researcher/move_researcher_info_frag.jsp</result>
+            <result name="success">/pages/user/researcher/move.jsp</result>
         </action>
         
         <action name="moveResearcherInformation"
@@ -418,5 +404,12 @@
             method="move">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/researcher/move_researcher_info_frag.jsp</result>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">viewResearcher.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="researcherId">${researcherId}</param>
+        	      <param name="showFoldersTab">true</param>
+        	      <param name="parentFolderId">${destination.id}</param>
+        	</result>
+            <result name="error">/pages/user/researcher/move.jsp</result>
         </action>
