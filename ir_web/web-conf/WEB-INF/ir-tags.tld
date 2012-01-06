@@ -513,25 +513,6 @@
 		</function-signature>
 	</function>
 	
-	<function>
-		<name>canMoveToPersonalCollection</name>
-		<function-class>
-			edu.ur.tag.repository.CollectionWebUtilFunctions
-		</function-class>
-		<function-signature>
-			boolean canMoveToPersonalCollection(java.util.Collection, edu.ur.ir.FileSystem)
-		</function-signature>
-	</function>
-
-	<function>
-		<name>isPublicationToBeMoved</name>
-		<function-class>
-			edu.ur.tag.repository.CollectionWebUtilFunctions
-		</function-class>
-		<function-signature>
-			boolean isPublicationToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
-		</function-signature>
-	</function>
 
 	<function>
 		<name>canLockFile</name>

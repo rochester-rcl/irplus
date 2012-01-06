@@ -161,7 +161,7 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		log.debug("move called");
 		user = userService.getUser(userId, false);
 
-		List<FileSystem> notMoved = new LinkedList<FileSystem>();
+		List<FileSystem> notMoved;
 		actionSuccess = true;
 
 		List<Long> listCollectionIds = new LinkedList<Long>();
@@ -208,16 +208,19 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		{
 			String message = getText("collectionNamesAlreadyExist");
 			actionSuccess = false;
+			StringBuffer sb = new StringBuffer(message);
 			for(FileSystem fileSystem : notMoved)
 			{
-			    message = message + " " + fileSystem.getName();
+			    sb.append( " " + fileSystem.getName() );
 			}
-			addFieldError("moveError", message);
+			addFieldError("moveError", sb.toString());
+			//load the data
+	        viewLocations();	
+	        return ERROR;
 		}
 		
 		
-		//load the data
-        viewLocations();		
+			
 		
 		return SUCCESS;
 	}

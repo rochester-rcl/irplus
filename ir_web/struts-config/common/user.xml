@@ -399,7 +399,7 @@
             method="viewLocations">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
+            <result name="success">/pages/user/workspace/move_collection.jsp</result>
         </action>
         
         <action name="movePersonalCollectionInformation"
@@ -407,7 +407,13 @@
             method="move">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">workspace.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="parentCollectionId">${destination.id}</param>
+        	      <param name="tabName">COLLECTION</param>
+        	</result>
+            <result name="error">/pages/user/workspace/move_collection.jsp</result>
         </action>        
 
         <!--  ************************************ -->
