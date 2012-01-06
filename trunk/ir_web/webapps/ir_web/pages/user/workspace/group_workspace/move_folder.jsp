@@ -93,6 +93,16 @@
                            </c:forEach>
                        </div>
             
+                        <c:if test="${ destination.id == null || destination.id == 0}">
+                           <c:if test='${ !ir:hasPermission( "GROUP_WORKSPACE_EDIT", groupWorkspace )}'>
+		                       <p class="errorMessage">You do not have permissions to move files or folders to this location</p>
+					       </c:if>
+					    </c:if> 
+					    <c:if test="${ destination.id != null && destination.id != 0}">
+					       <c:if test='${ !ir:hasPermission( "GROUP_WORKSPACE_FOLDER_EDIT", destination  )}'>
+                               <p class="errorMessage">You do not have permissions to move files or folders to this location </p>
+                           </c:if>
+                        </c:if>   
                        <br/>
                        <br/>                                 
                    </td>
@@ -157,6 +167,19 @@
 			            onclick="javascript:YAHOO.ur.group_workspace.move.moveFolder();"
 			            onmouseover="this.className='ur_buttonover';"
 			            onmouseout="this.className='ur_button';"
+
+
+			          <c:if test="${ destination.id == null || destination.id == 0}">
+                        <c:if test='${ !ir:hasPermission( "GROUP_WORKSPACE_EDIT", groupWorkspace )}'>
+		                        disabled="disabled"
+					       </c:if>
+					    </c:if> 
+					    <c:if test="${ destination.id != null && destination.id != 0}">
+					       <c:if test='${ !ir:hasPermission( "GROUP_WORKSPACE_FOLDER_EDIT", destination  )}'>
+                             disabled="disabled"
+                        </c:if>
+                     </c:if>    
+			           
 			            >Move<span class="pageWhiteGoBtnImg">&nbsp;</span>
 			    </button>
 		   </td>
@@ -196,11 +219,21 @@
                           onMouseOut="this.className='${rowClass}'">
                           <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
-						        <span class="folderBtnImg"></span><a
+                                <c:if test="${ir:canMoveToFolder(foldersToMove, fileSystemObject)}">
+						           <span class="folderBtnImg"></span><a
 							            href="javascript:YAHOO.ur.group_workspace.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a>
+							    </c:if>
+							    <c:if test="${!ir:canMoveToFolder(foldersToMove, fileSystemObject)}">
+						           <span class="folderBtnImg"></span><span class="errorMessage">${fileSystemObject.name} [Moving]</span>
+					           </c:if>
 					       </c:if>
 			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
-						       <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}
+			           	       <c:if test="${!ir:isFileToBeMoved(filesToMove, fileSystemObject)}">
+						           <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}
+					           </c:if>
+					           <c:if test="${ir:isFileToBeMoved(filesToMove, fileSystemObject)}">
+					               <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><span class="errorMessage">${fileSystemObject.name}[Moving] </span>
+					           </c:if>
 					       </c:if>	 
                           </urstb:td>
                       </urstb:tr>

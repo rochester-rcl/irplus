@@ -63,12 +63,8 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 	// current contents of the destination folder 
 	private List<FileSystem> currentDestinationContents = new LinkedList<FileSystem>();
 	
-
-	
 	// current destination */
 	private GroupWorkspaceFolder destination;
-	
-
 
 	//  Logger 
 	private static final Logger log = Logger.getLogger(MoveGroupWorkspaceFileSystemObjects.class);
@@ -84,8 +80,6 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
     
     // parent group workspace
     private GroupWorkspace groupWorkspace;
-	
-
 
 
 	/**
@@ -126,11 +120,11 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		{
 		    destination = groupWorkspaceFileSystemService.getFolder(destinationId, false);
 		    
-		   
+		   log.debug("destination = " + destination);
 		    IrUser user = userService.getUser(userId, false);
 		    
 		    // user cannot access a folder in a workspace they do not have permissions for
-		    if( !user.hasRole(IrRole.ADMIN_ROLE) || groupWorkspace.getUser(user) == null )
+		    if( !user.hasRole(IrRole.ADMIN_ROLE) && groupWorkspace.getUser(user) == null )
 		    {
 		    	return "accessDenied";
 		    }
@@ -160,7 +154,7 @@ public class MoveGroupWorkspaceFileSystemObjects extends ActionSupport implement
 		{
 			
 			// user cannot access a folder in a workspace they do not have permissions for
-		    if( !user.hasRole(IrRole.ADMIN_ROLE) || groupWorkspace.getUser(user) == null )
+		    if( !user.hasRole(IrRole.ADMIN_ROLE) && groupWorkspace.getUser(user) == null )
 		    {
 		    	return "accessDenied";
 		    }

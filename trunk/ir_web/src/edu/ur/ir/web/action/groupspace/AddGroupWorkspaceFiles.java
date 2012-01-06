@@ -68,8 +68,6 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 
 	/* group workspace the user will be adding the files to */
 	private GroupWorkspace groupWorkspace;
-	
-
 
 	/* The id of the user to add files to  */
 	private Long userId;
