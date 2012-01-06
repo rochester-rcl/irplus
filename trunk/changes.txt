@@ -1,8 +1,9 @@
 IR+ changes 2.1 to 3.0
 ==============================
 - Updated rename file - now re-indexes after name change
-- Simplified move personal folder and files code
-- Simplified move researcher folder and files code
+- Simplified move personal collections and items (should also help with performance)
+- Simplified move personal folder and files code (should also help with performance)
+- Simplified move researcher folder and files code (should also help with performance)
 - Updated Approve affiliations - removed unneeded variables and imports
 - added last login date to user search results table 
 - updated to allow filtering by role and affiliation in user administration
