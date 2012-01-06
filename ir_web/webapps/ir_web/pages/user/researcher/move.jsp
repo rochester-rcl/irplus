@@ -88,9 +88,9 @@
 		
 		
 		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder('0');">My Files</ur:a>/
+		            Move To Location: <a href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder('0');">My Files</a>/
 		            <c:forEach var="folder" items="${destinationPath}">
-			            <ur:a href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder('${folder.id}')">${folder.name}</ur:a>/
+			            <a href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder('${folder.id}')">${folder.name}</a>/
                     </c:forEach>
                 </div>
             
@@ -232,47 +232,53 @@
                           onMouseOver="this.className='highlight'"
                           onMouseOut="this.className='${rowClass}'">
                           <urstb:td>
+                            
                             <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
-			           	       <c:if test="${ir:canMoveToResearcherFolder(foldersToMove, fileSystemObject)}">
+                               <c:set var="canMove" value="${ir:canMoveToFolder(foldersToMove, fileSystemObject)}"/>
+			           	       <c:if test="${canMove}">
 						            <span class="folderBtnImg"></span><a
 							            href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a>
 					           </c:if>
-					           <c:if test="${!ir:canMoveToResearcherFolder(foldersToMove, fileSystemObject)}">
+					           <c:if test="${!canMove}">
 					               <span class="folderBtnImg"></span><span class="errorMessage">${fileSystemObject.name} [Moving]</span>
 					           </c:if>
 					       </c:if>
 			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFile'}">
-			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(filesToMove, fileSystemObject)}">
+			           	       <c:set var="beingMoved" value="${ir:isFileToBeMoved(filesToMove, fileSystemObject)}"/>
+			           	       <c:if test="${!beingMoved}">
 						           <ir:fileTypeImg cssClass="tableImg" irFile="${fileSystemObject.irFile}"/>${fileSystemObject.name}
 					           </c:if>
-					           <c:if test="${ir:isResearcherObjectToBeMoved(filesToMove, fileSystemObject)}">
+					           <c:if test="${beingMoved}">
 						           <ir:fileTypeImg cssClass="tableImg" irFile="${fileSystemObject.irFile}"/><span class="errorMessage">${fileSystemObject.name}[Moving]</span>
 					           </c:if>
 					       </c:if>
 					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
-			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(publicationsToMove, fileSystemObject)}">
+					           <c:set var="beingMoved" value="${ir:isFileToBeMoved(publicationsToMove, fileSystemObject)}"/>
+			           	       <c:if test="${!beingMoved}">
 						            <span class="scriptImg">&nbsp;</span>${fileSystemObject.name}
                                </c:if>
-			           	       <c:if test="${ir:isResearcherObjectToBeMoved(publicationsToMove, fileSystemObject)}">
+			           	       <c:if test="${beingMoved}">
 						            <span class="packageBtnImg">&nbsp;</span><span class="errorMessage">${fileSystemObject.name}[Moving]</span>
                                </c:if>
 					       </c:if>
 					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">
-			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(linksToMove, fileSystemObject)}">
+					           <c:set var="beingMoved" value="${ir:isFileToBeMoved(linksToMove, fileSystemObject)}"/>
+			           	       <c:if test="${!beingMoved}">
 						            <img alt="" 
 			                           src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>${fileSystemObject.name}
 					           </c:if>
-			           	       <c:if test="${ir:isResearcherObjectToBeMoved(linksToMove, fileSystemObject)}">
+			           	       <c:if test="${beingMoved}">
 						            <img  alt="" 
 			                           src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/><span class="errorMessage">${fileSystemObject.name}[Moving]</span>
 					           </c:if>
 
 					       </c:if>
 					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
-			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(itemsToMove, fileSystemObject)}">
+					           <c:set var="beingMoved" value="${ir:isFileToBeMoved(itemsToMove, fileSystemObject)}"/>
+			           	       <c:if test="${!beingMoved}">
 						            <span class="packageBtnImg">&nbsp;</span> ${fileSystemObject.name}
 						       </c:if>
-			           	       <c:if test="${ir:isResearcherObjectToBeMoved(itemsToMove, fileSystemObject)}">
+			           	       <c:if test="${beingMoved}">
 						            <span class="packageBtnImg">&nbsp;</span><span class="errorMessage"> ${fileSystemObject.name} [Moving]</span>
 						       </c:if>
 					       </c:if>						

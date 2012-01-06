@@ -197,20 +197,22 @@
                           onMouseOut="this.className='${rowClass}'">
                           <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-					           <c:if test="${ir:canMoveToFolder(foldersToMove, fileSystemObject)}">
+                               <c:set var="canMove" value="${ir:canMoveToFolder(foldersToMove, fileSystemObject)}"/>
+					           <c:if test="${canMove}">
 						            <span class="folderBtnImg"></span><a
 							            href="javascript:YAHOO.ur.folder.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a>
 					           </c:if>
-					           <c:if test="${!ir:canMoveToFolder(foldersToMove, fileSystemObject)}">
+					           <c:if test="${!canMove}">
 						
 						           <span class="folderBtnImg"></span><span class="errorMessage">${fileSystemObject.name} [Moving]</span>
 					           </c:if>
 					       </c:if>
 			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-			           	   		<c:if test="${!ir:isFileToBeMoved(filesToMove, fileSystemObject)}">
+			           	        <c:set var="beingMoved" value="${ir:isFileToBeMoved(filesToMove, fileSystemObject)}"/>
+			           	   		<c:if test="${!beingMoved}">
 						            <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}
 						        </c:if>
-			           	   		<c:if test="${ir:isFileToBeMoved(filesToMove, fileSystemObject)}">
+			           	   		<c:if test="${beingMoved}">
 						            <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><span class="errorMessage">${fileSystemObject.name}[Moving] </span>
 						        </c:if>
 					       </c:if>	 
