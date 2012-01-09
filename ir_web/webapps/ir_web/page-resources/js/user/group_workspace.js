@@ -197,8 +197,8 @@ YAHOO.ur.user.group_workspace = {
 	    
 	    document.getElementById('groupWorkspaceName').value = "";
 		document.getElementById('groupWorkspaceDescription').value = "";
-		document.getElementById('groupWorkspaceId').value = "";
-		document.addGroupWorkspace.newGroupWorkspace.value = "true";
+		document.getElementById('editGroupWorkspaceId').value = "";
+		document.newGroupWorkspaceForm.newGroupWorkspace.value = "true";
 	},
 	
 	
@@ -238,7 +238,7 @@ YAHOO.ur.user.group_workspace = {
 		        // the error messages.
 		        groupspaceForm.innerHTML = o.responseText;
 		        // determine if the add/edit was a success
-		        var success = document.getElementById("success").value;
+		        var success = document.getElementById("newGroupWorkspaceFormSuccess").value;
 		  
 		        //if the content type was not added then show the user the error message.
 		        // received from the server
