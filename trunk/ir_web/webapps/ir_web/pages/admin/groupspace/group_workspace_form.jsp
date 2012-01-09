@@ -23,12 +23,12 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 		       
 		<!--  if editing an id must be passed -->     
-	    <input type="hidden" name="id" value="${groupWorkspace.id}"/>
+	    <input type="hidden" name="id" id="editGroupWorkspaceId" value="${groupWorkspace.id}"/>
 		               
 	    <input type="hidden" id="newGroupWorkspace"
 		        name="newGroupWorkspace" value="true"/>
 		
-		<input type="hidden" id="success" name="success" value="${success}"/>       
+		<input type="hidden" id="newGroupWorkspaceFormSuccess" name="success" value="${success}"/>       
 		
 		<div id="groupWorkspaceError">
 	        <!--  get the error messages from fieldErrors -->
