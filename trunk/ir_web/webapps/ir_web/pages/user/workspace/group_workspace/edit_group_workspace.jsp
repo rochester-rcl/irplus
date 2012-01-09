@@ -96,7 +96,7 @@
                          <form id="editGroupWorkspaceInformation" name="groupWorkspaceInformation" method="post" 
                              action="<c:url value="/user/updateGroupWorkspace.action"/>">
                             <input type="hidden" id="groupWorkspaceId" 
-                                  name="id" value="${groupWorkspace.id}" />
+                                  name="groupWorkspaceId" value="${groupWorkspace.id}" />
                             <table class="formTable">
                                 <tr>
                                     <td class="label">
