@@ -64,6 +64,36 @@ public class GroupWorkspaceWebUtilFunctions {
 	}
 	
 	/**
+	 * Returns true if the current user is the owner of the given group workspace
+	 * 
+	 * @param groupWorkspace - group workspace to check ownership
+	 * 
+	 * @return true if the user is one of the owners of the group
+	 */
+	public static boolean isGroupWorkspaceMember(GroupWorkspace groupWorkspace)
+	{
+		boolean isMember = false;
+		IrUser user = null;
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+ 		
+        if( auth != null) {
+			 if(auth.getPrincipal() instanceof UserDetails) {
+				 user = (IrUser)auth.getPrincipal();
+			 }
+        }
+		
+        if( user != null && groupWorkspace != null)
+        {
+        	GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
+        	if( workspaceUser != null )
+        	{
+        		isMember = true;
+        	}
+        }
+        return isMember;
+	}
+	
+	/**
 	 * Returns true if the  user is the owner of the given group workspace
 	 * 
 	 * @param groupWorkspace - workspace to check

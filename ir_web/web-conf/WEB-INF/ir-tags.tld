@@ -705,6 +705,16 @@
 	</function>
 	
 	
+	<function>
+		<name>isGroupWorkspaceMember</name>
+		<function-class>
+			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isGroupWorkspaceMember(edu.ur.ir.groupspace.GroupWorkspace)
+		</function-signature>
+   </function>
+   
    <function>
 		<name>isCurrentUserGroupWorkspaceOwner</name>
 		<function-class>
@@ -715,7 +725,7 @@
 		</function-signature>
 	</function>
 	
-	   <function>
+    <function>
 		<name>isUserGroupWorkspaceOwner</name>
 		<function-class>
 			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
