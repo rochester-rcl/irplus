@@ -23,7 +23,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 		       
 		<!--  if editing an id must be passed -->     
-	    <input type="hidden" name="id" id="editGroupWorkspaceId" value="${groupWorkspace.id}"/>
+	    <input type="hidden" name="id" id="groupWorkspaceId" value="${groupWorkspace.id}"/>
 		               
 	    <input type="hidden" id="newGroupWorkspace"
 		        name="newGroupWorkspace" value="true"/>

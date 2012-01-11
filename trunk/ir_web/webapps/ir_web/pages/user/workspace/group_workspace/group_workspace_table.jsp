@@ -25,18 +25,16 @@
 
 <fmt:setBundle basename="messages"/>
 
-   <br/>
-
-   <table width="100%">
-   <tr>
-       <td align="left" width="75%">
+   <div align="left">
            <strong>Path:&nbsp;/
-	          <span class="groupImg">&nbsp;</span>Group Workspaces /   
+	          <span class="groupImg">&nbsp;</span>Group Workspaces 
            </strong>
-       </td>      
-   </tr>
-   </table>
-   
+   </div>
+    <div align="right">
+    Show Groups: 
+    <input type="radio">All</input>
+    <input type="radio">I'm a Member Only</input>
+    </div>
    
    
   <div align="right">
@@ -86,7 +84,12 @@
 	                        </div>
                         </urstb:td>
                         <urstb:td>
-                           <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaceById(${groupWorkspace.id});">${groupWorkspace.name}</a>
+                           <c:if test="${ir:isGroupWorkspaceMember(groupWorkspace)}">
+                               <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaceById(${groupWorkspace.id});">${groupWorkspace.name}</a>
+                           </c:if>
+                           <c:if test="${!ir:isGroupWorkspaceMember(groupWorkspace)}">
+                               ${groupWorkspace.name}
+                           </c:if>
                         </urstb:td>
                         <urstb:td>
                             ${groupWorkspace.description}

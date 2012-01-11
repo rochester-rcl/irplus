@@ -36,6 +36,7 @@ import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.order.OrderType;
 
 /**
  * Action for going to the users workspace.
@@ -96,6 +97,9 @@ UserIdAware {
 
     /* id of the group workspace folder id*/
     private Long groupWorkspaceFolderId;
+    
+    private int numberOfResultsToShow = 25;
+	private int numberOfPagesToShow = 10;
 
 
 	/**
@@ -136,7 +140,7 @@ UserIdAware {
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 				}
 		    }
-		    groupWorkspaces = groupWorkspaceService.getGroupWorkspacesForUser(userId);
+		    groupWorkspaces = groupWorkspaceService.getGroupWorkspacesNameOrder(0, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		    return SUCCESS;
 		}
 		else
