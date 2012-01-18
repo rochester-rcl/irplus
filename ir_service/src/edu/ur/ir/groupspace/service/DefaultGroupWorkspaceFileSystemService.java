@@ -303,36 +303,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
         		    user);
 	        
-	        // get the list of permissions for each user in the workspace
-			IrAcl acl = securityService.getAcl(workspace);
-			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
-			for(IrUserAccessControlEntry entry : userEntries)
-			{
-				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
-				IrUser entryUser = entry.getIrUser();
-				
-				// set of permissions to give each user for the folder
-				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
-			    for(IrClassTypePermission permission : groupPermissions)
-			    {
-				    if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION))
-				    {
-				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
-				    }
-				    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION) ||
-				    		 permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION) )
-				    {
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
-				    }
-				 
-			    }
-			    
-			    if( fileSystemPermissions.size() > 0 )
-			    {
-			        securityService.createPermissions(versionedFile, entryUser, fileSystemPermissions);
-			    }
-			    
-			}
+	        addPermissionsForGroupUsers(workspace, workspaceFile);
 		}
 		else
 		{
@@ -400,37 +371,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		    }
 	        groupWorkspaceFileDAO.makePersistent(workspaceFile);
 	        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), user);
-	        
-	        // get the list of permissions for each user in the workspace
-			IrAcl acl = securityService.getAcl(workspace);
-			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
-			for(IrUserAccessControlEntry entry : userEntries)
-			{
-				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
-				IrUser entryUser = entry.getIrUser();
-				
-				// set of permissions to give each user for the folder
-				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
-			    for(IrClassTypePermission permission : groupPermissions)
-			    {
-				    if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION))
-				    {
-				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
-				    }
-				    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION) ||
-				    		 permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION) )
-				    {
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
-				    }
-				 
-			    }
-			    
-			    if( fileSystemPermissions.size() > 0 )
-			    {
-			        securityService.createPermissions(versionedFile, entryUser, fileSystemPermissions);
-			    }
-			    
-			}
+	        addPermissionsForGroupUsers(workspace, workspaceFile);
 		}
 		else
 		{
@@ -438,6 +379,41 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		}
 		
 	    return workspaceFile;	
+    }
+    
+    //add permissions to the versioned file being added to the root of the group workspace for 
+    // all users that have permissions 
+    private void addPermissionsForGroupUsers(GroupWorkspace workspace, GroupWorkspaceFile file)
+    {
+        // get the list of permissions for each user in the workspace
+		IrAcl acl = securityService.getAcl(workspace);
+		Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
+		for(IrUserAccessControlEntry entry : userEntries)
+		{
+			Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
+			IrUser entryUser = entry.getIrUser();
+			
+			// set of permissions to give each user for the folder
+			List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+		    for(IrClassTypePermission permission : groupPermissions)
+		    {
+			    if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_EDIT_PERMISSION))
+			    {
+			    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
+			    }
+			    else if( permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_ADD_FILE_PERMISSION) ||
+			    		 permission.getName().equals(GroupWorkspace.GROUP_WORKSPACE_READ_PERMISSION) )
+			    {
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
+			    }
+			 
+		    }
+		    
+		    if( fileSystemPermissions.size() > 0 )
+		    {
+		        securityService.createPermissions(file.getVersionedFile(), entryUser, fileSystemPermissions);
+		    }
+	    }
     }
     
     /**
@@ -500,36 +476,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
        
             securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
         		user);
-            // get the list of permissions for each user in the workspace
-			IrAcl acl = securityService.getAcl(folder);
-			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
-			for(IrUserAccessControlEntry entry : userEntries)
-			{
-				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
-				IrUser entryUser = entry.getIrUser();
-				
-				// set of permissions to give each user for the folder
-				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
-			    for(IrClassTypePermission permission : groupPermissions)
-			    {
-				    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
-				    {
-				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
-				    }
-				    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) ||
-				    		 permission.getName().equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION) )
-				    {
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
-				    }
-				 
-			    }
-			    
-			    if( fileSystemPermissions.size() > 0 )
-			    {
-			        securityService.createPermissions(versionedFile, entryUser, fileSystemPermissions);
-			    }
-			    
-			}
+            addPermissionsForFolderUsers(folder, workspaceFile);
 		}
 		else
 		{
@@ -595,42 +542,50 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
      
             securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
         		    user);
-            // get the list of permissions for each user in the workspace
-			IrAcl acl = securityService.getAcl(folder);
-			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
-			for(IrUserAccessControlEntry entry : userEntries)
-			{
-				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
-				IrUser entryUser = entry.getIrUser();
-				
-				// set of permissions to give each user for the folder
-				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
-			    for(IrClassTypePermission permission : groupPermissions)
-			    {
-				    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
-				    {
-				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
-				    }
-				    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) ||
-				    		 permission.getName().equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION) )
-				    {
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
-				    }
-				 
-			    }
-			    
-			    if( fileSystemPermissions.size() > 0 )
-			    {
-			        securityService.createPermissions(versionedFile, entryUser, fileSystemPermissions);
-			    }
-			    
-			}
+            addPermissionsForFolderUsers(folder, workspaceFile);
 		}
 		else
 		{
 			throw new PermissionNotGrantedException("User does not have permissions to add the file");
 		}
         return workspaceFile;	
+    }
+    
+     //add permissions to the versioned file being added to the folder in the group workspace for 
+    // all users that have permissions 
+    private void addPermissionsForFolderUsers(GroupWorkspaceFolder folder, GroupWorkspaceFile file)
+    {
+    	
+    	// get the list of permissions for each user in the workspace
+		IrAcl acl = securityService.getAcl(folder);
+		Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
+		for(IrUserAccessControlEntry entry : userEntries)
+		{
+			Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
+			IrUser entryUser = entry.getIrUser();
+			
+			// set of permissions to give each user for the folder
+			List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+		    for(IrClassTypePermission permission : groupPermissions)
+		    {
+			    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
+			    {
+			    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(VersionedFile.class.getName()));
+			    }
+			    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION) ||
+			    		 permission.getName().equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION) )
+			    {
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(), VersionedFile.VIEW_PERMISSION));
+			    }
+			 
+		    }
+		    
+		    if( fileSystemPermissions.size() > 0 )
+		    {
+		        securityService.createPermissions(file.getVersionedFile(), entryUser, fileSystemPermissions);
+		    }
+		    
+		}
     }
     
     /**
@@ -655,8 +610,6 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 				throw new PermissionNotGrantedException("User does not have permission to delete the folder");
 			}
 		}
-		
-		
 		
 		List<GroupWorkspaceFile> files = groupWorkspaceFolderDAO.getAllFilesForFolder(folder);
 		List<GroupWorkspaceFolder> folders = groupWorkspaceFolderDAO.getAllFoldersForFolder(folder);
@@ -1256,40 +1209,7 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 			folder = parentFolder.createChild(name, user);
 			folder.setDescription(description);
 			save(folder);
-			
-			// get the list of permissions for each user in the parent folder
-			IrAcl acl = securityService.getAcl(parentFolder);
-			Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
-			for(IrUserAccessControlEntry entry : userEntries)
-			{
-				Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
-				IrUser entryUser = entry.getIrUser();
-				
-				// set of permissions to give each user for the folder
-				List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
-			    for(IrClassTypePermission permission : groupPermissions)
-			    {
-				    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
-				    {
-				    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
-				    }
-				    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION))
-				    {
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
-				    }
-				    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION))
-				    {
-				    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
-				    }
-			    }
-			    
-			    if( fileSystemPermissions.size() > 0 )
-			    {
-			        securityService.createPermissions(folder, entryUser, fileSystemPermissions);
-			    }
-			    
-			}
+			giveUsersFolderPermissions(parentFolder, folder);
 		}
 		else
 		{
@@ -1297,6 +1217,44 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		}
 		
 		return folder;
+	}
+	
+	//give the new child folder permissions based on parent folder
+	private void giveUsersFolderPermissions(GroupWorkspaceFolder parentFolder, GroupWorkspaceFolder newChildFolder)
+	{
+		// get the list of permissions for each user in the parent folder
+		IrAcl acl = securityService.getAcl(parentFolder);
+		Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
+		for(IrUserAccessControlEntry entry : userEntries)
+		{
+			Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
+			IrUser entryUser = entry.getIrUser();
+			
+			// set of permissions to give each user for the folder
+			List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+		    for(IrClassTypePermission permission : groupPermissions)
+		    {
+			    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
+			    {
+			    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+			    }
+			    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION))
+			    {
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
+			    }
+			    else if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_READ_PERMISSION))
+			    {
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+			    }
+		    }
+		    
+		    if( fileSystemPermissions.size() > 0 )
+		    {
+		        securityService.createPermissions(newChildFolder, entryUser, fileSystemPermissions);
+		    }
+		    
+		}
 	}
 	
 	/**
@@ -1402,9 +1360,74 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		if( notMoved.size() == 0)
 		{
 			groupWorkspaceFolderDAO.makePersistent(destination);
+			// deal with permissions 
+			
+			// fix all files selected for move
+			if( filesToMove != null )
+			{
+			    for( GroupWorkspaceFile f : filesToMove )
+			    {
+				    this.addPermissionsForFolderUsers(destination, f);
+			    }
+			}
+			
+			if( foldersToMove != null )
+			{
+			    // fix all files and child folders for permissions
+			    // based on parent folder
+			    for(GroupWorkspaceFolder folder : foldersToMove)
+			    {
+				    List<GroupWorkspaceFile> files = groupWorkspaceFolderDAO.getAllFilesForFolder(folder);
+				    for(GroupWorkspaceFile f : files)
+				    {
+					   this.addPermissionsForFolderUsers(destination, f);
+				    }
+				
+				
+				    List<GroupWorkspaceFolder> children = groupWorkspaceFolderDAO.getAllFoldersForFolder(folder);
+				    for(GroupWorkspaceFolder child : children)
+				    {
+					    giveAdminFolderPermissions(destination, child);
+				    }
+				    giveAdminFolderPermissions(destination, folder);
+			    }
+			}
+			
 		}
 		
 		return notMoved;
+	}
+	
+	//give the new child folder permissions only permissions where the parent folder user has edit permissions
+	private void giveAdminFolderPermissions(GroupWorkspaceFolder parentFolder, GroupWorkspaceFolder newChildFolder)
+	{
+		// get the list of permissions for each user in the parent folder
+		IrAcl acl = securityService.getAcl(parentFolder);
+		Set<IrUserAccessControlEntry> userEntries = acl.getUserEntries();
+		for(IrUserAccessControlEntry entry : userEntries)
+		{
+			Set<IrClassTypePermission> groupPermissions = entry.getIrClassTypePermissions();
+			IrUser entryUser = entry.getIrUser();
+			
+			// sonly give permissions for users who have edit permissions on the given parent
+			List<IrClassTypePermission> fileSystemPermissions = new LinkedList<IrClassTypePermission>();
+		    for(IrClassTypePermission permission : groupPermissions)
+		    {
+			    if( permission.getName().equals(GroupWorkspaceFolder.FOLDER_EDIT_PERMISSION))
+			    {
+			    	fileSystemPermissions.addAll(securityService.getClassTypePermissions(GroupWorkspaceFolder.class.getName()));
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_ADD_FILE_PERMISSION));
+			    	fileSystemPermissions.add(securityService.getClassTypePermission(GroupWorkspaceFolder.class.getName(), GroupWorkspaceFolder.FOLDER_READ_PERMISSION));
+			    }
+		    }
+		    
+		    if( fileSystemPermissions.size() > 0 )
+		    {
+		        securityService.createPermissions(newChildFolder, entryUser, fileSystemPermissions);
+		    }
+		    
+		}
 	}
 	
 	

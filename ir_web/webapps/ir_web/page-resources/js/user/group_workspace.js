@@ -197,7 +197,7 @@ YAHOO.ur.user.group_workspace = {
 	    
 	    document.getElementById('groupWorkspaceName').value = "";
 		document.getElementById('groupWorkspaceDescription').value = "";
-		document.getElementById('editGroupWorkspaceId').value = "";
+		document.getElementById('groupWorkspaceId').value = "";
 		document.newGroupWorkspaceForm.newGroupWorkspace.value = "true";
 	},
 	

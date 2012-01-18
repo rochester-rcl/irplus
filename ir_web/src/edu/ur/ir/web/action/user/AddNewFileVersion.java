@@ -30,6 +30,7 @@ import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
@@ -45,55 +46,65 @@ import edu.ur.ir.web.action.UserIdAware;
  */
 public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	
-	/**  Eclipse generated id */
+	/*  Eclipse generated id */
 	private static final long serialVersionUID = -2621769968886370338L;
 	
-	/**  Logger for add personal folder action */
+	/*  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(AddNewFileVersion.class);
 	
-	/** id of the personal file  */
+	/* id of the personal file  */
 	private Long personalFileId;
 	
-	/** personal file for the user  */
+	/* personal file for the user  */
 	private PersonalFile personalFile;
 	
-	/** User trying to upload the file */
+	/* User trying to upload the file */
 	private Long userId;
 	
-	/** User service access  */
+	/* User service access  */
 	private UserService userService;
 	
-	/** File system service for users. */
+	/* File system service for users. */
 	private UserFileSystemService userFileSystemService;
 	
-	/** process for setting up personal workspace information to be indexed */
+	/* process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
-	/** service for accessing index processing types */
+	/* service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-	/** description of the file  */
+	/* description of the file  */
 	private String userFileDescription;
 	
-	/** actual set of files uploaded */
+	/* actual set of files uploaded */
 	private File file;
 	
-	/**  File name uploaded from the file system */
+	/*  File name uploaded from the file system */
 	private String fileFileName;
 	
-	/** content types of the files.  */
+	/* content types of the files.  */
 	private String fileContentType;
 	
-	/** Repository service for placing information in the repository */
+	/* Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
-	/** set to true if the version was added  */
+	/* set to true if the version was added  */
 	private boolean versionAdded = false; 
 	
-	/** Keep the file locked  even after the new version has been uploaded*/
+	/* Keep the file locked  even after the new version has been uploaded*/
 	private boolean keepLocked = false;
 	
-	/** service to create thumbnails  */
+	/* notify collaborators */
+	private boolean notifyCollaborators = false;
+	
+	/* service to deal with inviting users */
+	private InviteUserService inviteUserService;
+	
+
+
+
+
+	/* service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
 
 	/**
@@ -130,6 +141,8 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 		{
 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 					false);
+			
+			// lock the file for the user to make change
 			if(versionedFile.getLockedBy() == null)
 			{
 				repositoryService.lockVersionedFile(versionedFile, user);
@@ -145,6 +158,17 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 			    thumbnailTransformerService.transformFile(repository, irFile);			    
 			    userWorkspaceIndexProcessingRecordService.saveAll(personalFile, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+			    
+			    // unlock the file if the user did not select keep locked
+				if( !keepLocked)
+				{
+					repositoryService.unlockVersionedFile(versionedFile, user);
+				}
+				
+				if( notifyCollaborators )
+				{
+				    inviteUserService.notifyCollaboratorsOfNewVersion(personalFile);
+				}
 			}
 			else
 			{
@@ -152,11 +176,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 				"The file is currently locked by user: " + versionedFile.getLockedBy().getUsername());
 		        returnStatus = INPUT;
 			}
-			// unlock the file if the user did not select keep locked
-			if( !keepLocked)
-			{
-				repositoryService.unlockVersionedFile(versionedFile, user);
-			}
+			
 			
 		}
 		else
@@ -170,66 +190,119 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 		
 	}
 	
+	/**
+	 * Get the personal file id.
+	 * 
+	 * @return
+	 */
 	public Long getPersonalFileId() {
 		return personalFileId;
 	}
 
+	/**
+	 * Set the personal file id.
+	 * 
+	 * @param personalFileId
+	 */
 	public void setPersonalFileId(Long personalFileId) {
 		this.personalFileId = personalFileId;
 	}
 
-	public UserService getUserService() {
-		return userService;
-	}
-
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
+	/**
+	 * Get the personal file.
+	 * 
+	 * @return
+	 */
 	public PersonalFile getPersonalFile() {
 		return personalFile;
 	}
 
-	public void setPersonalFile(PersonalFile personalFile) {
-		this.personalFile = personalFile;
-	}
-
+	/**
+	 * Get the user file description.
+	 * 
+	 * @return
+	 */
 	public String getUserFileDescription() {
 		return userFileDescription;
 	}
 
+	/**
+	 * Set the user file description.
+	 * 
+	 * @param userFileDescription
+	 */
 	public void setUserFileDescription(String userFileDescription) {
 		this.userFileDescription = userFileDescription;
 	}
 
+	/**
+	 * Get the file.
+	 * 
+	 * @return
+	 */
 	public File getFile() {
 		return file;
 	}
 
+	/**
+	 * Set the file.
+	 * 
+	 * @param file
+	 */
 	public void setFile(File file) {
 		this.file = file;
 	}
 
+	/**
+	 * Get the file content type.
+	 * 
+	 * @return
+	 */
 	public String getFileContentType() {
 		return fileContentType;
 	}
 
+	/**
+	 * Set the file content type.
+	 * 
+	 * @param fileContentType
+	 */
 	public void setFileContentType(String fileContentType) {
 		this.fileContentType = fileContentType;
 	}
 
+	/**
+	 * Get the file name.
+	 * 
+	 * @return
+	 */
 	public String getFileFileName() {
 		return fileFileName;
 	}
 
+	/**
+	 * Set the file name
+	 * 
+	 * @param fileFileName
+	 */
 	public void setFileFileName(String fileFileName) {
 		this.fileFileName = fileFileName;
 	}
 
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
@@ -242,52 +315,80 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 		this.userId = userId;
 	}
 
-	public UserFileSystemService getUserFileSystemService() {
-		return userFileSystemService;
-	}
-
+	/**
+	 * Set the user file system service.
+	 * 
+	 * @param userFileSystemService
+	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
 	}
 
-
-	public boolean isVersionAdded() {
-		return versionAdded;
-	}
-
-	public void setVersionAdded(boolean versionAdded) {
-		this.versionAdded = versionAdded;
-	}
-
+	/**
+	 * Set keep locked.
+	 * 
+	 * @param keepLocked
+	 */
 	public void setKeepLocked(boolean keepLocked) {
 		this.keepLocked = keepLocked;
 	}
 
-	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
-		return userWorkspaceIndexProcessingRecordService;
-	}
-
+	/**
+	 * Set the user workspace index processing record service.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
-	public IndexProcessingTypeService getIndexProcessingTypeService() {
-		return indexProcessingTypeService;
-	}
-
+	
+	/**
+	 * Set the index processint type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
-	public ThumbnailTransformerService getThumbnailTransformerService() {
-		return thumbnailTransformerService;
-	}
-
+	/**
+	 * Set the thumbnail transformer service.
+	 * 
+	 * @param thumbnailTransformerService
+	 */
 	public void setThumbnailTransformerService(
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;
+	}
+	
+	/**
+	 * Notify the collaborators.
+	 * 
+	 * @return
+	 */
+	public boolean getNotifyCollaborators() {
+		return notifyCollaborators;
+	}
+	
+	/**
+	 * Notify the collaborators.
+	 * 
+	 * @param notifyCollaborators
+	 */
+	public void setNotifyCollaborators(boolean notifyCollaborators) {
+		this.notifyCollaborators = notifyCollaborators;
+	}
+	
+	/**
+	 * Invite user service.
+	 * 
+	 * @param inviteUserService
+	 */
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
 	}
 
 

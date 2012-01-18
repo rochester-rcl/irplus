@@ -41,6 +41,19 @@
 	   <!--  uncomment for ssl
 	       <property name="session" ref="mailSession" /> 
 	    -->
+	   
+	   <!--  these would need to be set to send emails throug gmail 
+	   <property name="username" value="username" />
+	   <property name="password" value="password" />
+ 
+	   
+	   <property name="javaMailProperties">
+	       <props>
+       	      <prop key="mail.smtp.auth">true</prop>
+       	      <prop key="mail.smtp.starttls.enable">true</prop>
+       	   </props>
+	   </property>
+	    --> 
     </bean>
     
     
@@ -299,5 +312,22 @@
     			]]>
     		</value>
     	</property>
-    </bean>     
+    </bean>    
+    
+    <bean id = "newFileVersionMailMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
+    	<property name="subject"> <value>  <![CDATA[ From %FIRST_NAME% %LAST_NAME% - New Version of %NAME% Added ]]> </value> </property>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			**DO NOT REPLY TO THIS MESSAGE**
+    			
+    			You can login into the system using the link below:
+    			%BASE_WEB_APP_PATH%home.action
+    			
+    			A new version of '%NAME%' has been updated in your workspace. ]]>
+    		</value>
+    	</property>
+    </bean> 
 </beans>
