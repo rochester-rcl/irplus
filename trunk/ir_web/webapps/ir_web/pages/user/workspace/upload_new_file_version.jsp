@@ -46,8 +46,14 @@
          <td align="left" class="input"><textarea id="user_file_description" 
              name="userFileDescription" cols="47" rows="2"></textarea></td>
     </tr>
-        <tr>
+    <tr>
          <td class="label">Keep Locked</td>
          <td align="left" class="input"><input type="checkbox" name="keepLocked" value="true"/></td>
     </tr>
+    <c:if test="${!empty personalFile.versionedFile.collaborators}">
+    <tr>
+         <td class="label">Notify Collaborators</td>
+         <td align="left" class="input"><input type="checkbox" selected="true" name="notifyCollaborators" value="true"/></td>
+    </tr>
+    </c:if>
 </table>

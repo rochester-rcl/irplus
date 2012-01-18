@@ -290,4 +290,12 @@ public interface InviteUserService extends Serializable{
 	 */
 	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user);
 	
+	/**
+	 * Notify users that a new version of a file has been added.
+	 * 
+	 * @param personalFile - personal file that has been updated.
+	 * @return - list of collaborators where the email could not be sent
+	 */
+	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile);
+	
 }

@@ -84,7 +84,7 @@ YAHOO.ur.groupspace = {
 		        groupspaceForm.innerHTML = o.responseText;
 		    
 		        // determine if the add/edit was a success
-		        var success = document.getElementById("success").value;
+		        var success = document.getElementById("newGroupWorkspaceFormSuccess").value;
 		  
 		        //if the content type was not added then show the user the error message.
 		        // received from the server
@@ -95,7 +95,6 @@ YAHOO.ur.groupspace = {
 		        else
 		        {
 		        	var id = document.getElementById('groupWorkspaceId').value;
-		        	alert('groupWorkspaceId = ' + groupWorkspaceId);
 		        	window.location = getGroupWorkspaceAction+ '?id=' + id;
 		        }
 		    }

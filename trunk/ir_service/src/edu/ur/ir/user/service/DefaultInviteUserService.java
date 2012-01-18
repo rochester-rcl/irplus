@@ -66,7 +66,9 @@ import edu.ur.order.OrderType;
 import edu.ur.util.TokenGenerator;
 
 /**
- * Service for inviting user
+ * Service for inviting user to share files or notifying workspace users
+ * of changes within the workspace
+ * 
  * 
  * @author Sharmila Ranganathan
  *
@@ -88,6 +90,10 @@ public class DefaultInviteUserService implements InviteUserService {
 	/* Mail message for inviting a user who is not in the system*/
 	private SimpleMailMessage userNotExistMailMessage;
 	
+	/* Message to notify users of a new file version */
+	private SimpleMailMessage newFileVersionMailMessage;
+	
+
 	/* Mail message to unshare the document*/
 	private SimpleMailMessage unShareMailMessage;
 
@@ -618,6 +624,51 @@ public class DefaultInviteUserService implements InviteUserService {
 	}
 	
 	/**
+	 * Notify users that a new version of a file has been added.
+	 * 
+	 * @param personalFile - personal file that has been updated.
+	 * @return - list of collaborators where the email could not be sent
+	 */
+	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile)
+	{
+		List<FileCollaborator> emailsNotSent = new LinkedList<FileCollaborator>();
+		Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
+		for( FileCollaborator collaborator : collaborators )
+		{
+			try 
+			{
+				SimpleMailMessage message = new SimpleMailMessage(newFileVersionMailMessage);
+				message.setTo(collaborator.getCollaborator().getDefaultEmail().getEmail());
+				
+				String subject = message.getSubject();
+				subject = StringUtils.replace(subject, "%FIRST_NAME%", personalFile.getOwner().getFirstName());
+				subject = StringUtils.replace(subject, "%LAST_NAME%", personalFile.getOwner().getLastName());
+				subject = StringUtils.replace(subject, "%NAME%", personalFile.getName());
+				message.setSubject(subject);
+				
+				String text = message.getText();
+				
+				// Get the name of files
+				text = StringUtils.replace(text, "%NAME%", personalFile.getName());
+				text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
+				
+				if( personalFile.getDescription() != null && !personalFile.getDescription().trim().equals(""))
+				{
+					text = text + "\n Notes: \n\n" + personalFile.getDescription();
+				}
+				
+				message.setText(text);
+				sendEmail(message);
+			} 
+			catch(IllegalStateException e) 
+			{
+				emailsNotSent.add(collaborator);
+			}
+		}
+		return emailsNotSent;
+	}
+	
+	/**
 	 * Find invite information by token
 	 * 
 	 *  @see edu.ur.ir.user.InviteUserService#findInviteInfoByToken(String)
@@ -1017,5 +1068,16 @@ public class DefaultInviteUserService implements InviteUserService {
 	public FolderAutoShareInfo getFolderAutoShareInfoById(Long id, boolean lock)
 	{
 		return this.folderAutoShareInfoDAO.getById(id, lock);
+	}
+	
+	
+	/**
+	 * Set the new file version mail message.
+	 * 
+	 * @param newFileVersionMailMessage
+	 */
+	public void setNewFileVersionMailMessage(
+			SimpleMailMessage newFileVersionMailMessage) {
+		this.newFileVersionMailMessage = newFileVersionMailMessage;
 	}
 }

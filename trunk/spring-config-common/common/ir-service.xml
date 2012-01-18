@@ -374,6 +374,7 @@
        <property name="userExistMailMessage" ref="userExistMailMessage"/>
        <property name="userNotExistMailMessage" ref="userNotExistMailMessage"/>
        <property name="unShareMailMessage" ref="unShareMailMessage"/>
+        <property name="newFileVersionMailMessage" ref="newFileVersionMailMessage"/>
        <property name="securityService" ref="securityService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
