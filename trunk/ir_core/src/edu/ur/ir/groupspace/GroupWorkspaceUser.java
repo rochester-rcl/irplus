@@ -39,6 +39,11 @@ public class GroupWorkspaceUser extends BasePersistent {
 	
 	/* indicates the user is an owner of the workspace */
 	private boolean owner = false;
+	
+	/* indicates the user should be shown on the project page */
+	private boolean showOnProjectPage = false;
+
+
 
 	/**
 	 * Package protected constructor
@@ -179,6 +184,25 @@ public class GroupWorkspaceUser extends BasePersistent {
 	 */
 	public void setOwner(boolean owner) {
 		this.owner = owner;
+	}
+	
+	/**
+	 * Get show on project page.  If true user will
+	 * be shown on the project page.
+	 * 
+	 * @return
+	 */
+	public boolean getShowOnProjectPage() {
+		return showOnProjectPage;
+	}
+
+	/**
+	 * Set to true if the user should be shown on the project page.
+	 * 
+	 * @param showOnProjectPage
+	 */
+	public void setShowOnProjectPage(boolean showOnProjectPage) {
+		this.showOnProjectPage = showOnProjectPage;
 	}
 
 }
