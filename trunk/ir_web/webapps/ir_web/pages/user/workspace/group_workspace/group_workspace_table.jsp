@@ -99,8 +99,11 @@
                                  <c:url value="/user/getGroupWorkspace.action" var="editGroupWorkspaceUrl">
 						            <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
 						         </c:url>
+						         <c:url value="/user/editGroupWorkspaceProjectPage.action" var="editGroupWorkspaceProjectPageUrl">
+						            <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspace.groupWorkspaceProjectPage.id}"/>
+						         </c:url>
 						         
-						        <a href="${editGroupWorkspaceUrl}">Properties</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.group_workspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
+						        <a href="${editGroupWorkspaceUrl}">Properties</a>&nbsp;/&nbsp;<a href="${editGroupWorkspaceProjectPageUrl}">Edit Project Page</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.user.group_workspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
                              </c:if>
                         </urstb:td>
                     </urstb:tr>
