@@ -64,6 +64,9 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	
 	/* users who are not yet registered or have an email that is not yet registered */
 	private Set<GroupWorkspaceEmailInvite> emailInvites = new HashSet<GroupWorkspaceEmailInvite>();
+	
+	/* project page for the group workspace */
+	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 
 	/* date this record was created */
 	private Timestamp createdDate;
@@ -90,6 +93,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
     public GroupWorkspace(String name) 
     {
     	setName(name);
+    	groupWorkspaceProjectPage = new GroupWorkspaceProjectPage(this, name);
     	createdDate = new Timestamp(new Date().getTime());
     }
     
@@ -481,13 +485,16 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 */
 	public GroupWorkspaceUser getUser(IrUser user)
 	{
-	    for(GroupWorkspaceUser workspaceUser : users)
-	    {
-	    	if( workspaceUser.getUser().equals(user))
-	    	{
-	    		return workspaceUser;
-	    	}
-	    }
+		if(user != null )
+		{	
+	        for(GroupWorkspaceUser workspaceUser : users)
+	        {
+	    	    if( workspaceUser.getUser().equals(user))
+	    	    {
+	    		    return workspaceUser;
+	    	    }
+	        }
+		}
 	    return null;
 	}
 	
@@ -647,6 +654,25 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	void setEmailInvites(
 			Set<GroupWorkspaceEmailInvite> emailInvitedUsers) {
 		this.emailInvites = emailInvitedUsers;
+	}
+	
+	/**
+	 * Get the group workspace project page.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspaceProjectPage getGroupWorkspaceProjectPage() {
+		return groupWorkspaceProjectPage;
+	}
+
+	/**
+	 * Set the group workspace project page.
+	 * 
+	 * @param groupWorkspaceProjectPage
+	 */
+	void setGroupWorkspaceProjectPage(
+			GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
+		this.groupWorkspaceProjectPage = groupWorkspaceProjectPage;
 	}
 
 

@@ -54,6 +54,13 @@
 		          access="field" 
 		          not-null="true"/>
 		
+	    <!-- Researcher information for the user -->
+		<one-to-one class="GroupWorkspaceProjectPage" 
+		    fetch="join"
+			name="groupWorkspaceProjectPage"
+		    cascade="all" 
+			property-ref="groupWorkspace"/>
+		
 	   <!--  Workspace users -->
 		<set name="users" 
 		     inverse="true" 

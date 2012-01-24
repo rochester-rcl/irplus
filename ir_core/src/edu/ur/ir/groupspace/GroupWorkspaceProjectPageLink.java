@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2012 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,42 +14,42 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.researcher;
+package edu.ur.ir.groupspace;
 
 import edu.ur.order.Orderable;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * Represents a personal link for the researcher.
+ * Link for group project page.
  * 
  * @author Nathan Sarr
  *
  */
-public class ResearcherPersonalLink extends BasePersistent implements Orderable {
-	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 560020469821019205L;
+public class GroupWorkspaceProjectPageLink extends BasePersistent implements Orderable {
 
-	/** researcher this link belongs to */
-	private Researcher researcher;
-	
-	/** url this link belongs to for the researcher */
+	// eclipse generated id
+	private static final long serialVersionUID = -259787022852873021L;
+
+	// group project this link belongs to 
+	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
+
+	// string url 
 	private String url;
 	
-	/** determines the order of the link */
+	// determines the order of the link 
 	private int order;
 	
-	/** name given to the link */
+	// name given to the link 
 	private String name;
 	
-	/** description given to the link */
+	// description given to the link 
 	private String description;
 	
 	
 	/**
 	 * Package protected constructor
 	 */
-	ResearcherPersonalLink(){}
+	GroupWorkspaceProjectPageLink(){}
 	
 	/**
 	 * Default constructor 
@@ -58,11 +58,11 @@ public class ResearcherPersonalLink extends BasePersistent implements Orderable 
 	 * @param name - name of the link
 	 * @param url - link to the resource
 	 */
-	public ResearcherPersonalLink(Researcher researcher, String name, String url, int order)
+	public GroupWorkspaceProjectPageLink(GroupWorkspaceProjectPage groupWorkspaceProjectPage, String name, String url, int order)
 	{
 		setOrder(order);
 		setUrl(url);
-		setResearcher(researcher);
+		setGroupWorkspaceProjectPage(groupWorkspaceProjectPage);
 		setName(name);
 	}
 	
@@ -87,7 +87,7 @@ public class ResearcherPersonalLink extends BasePersistent implements Orderable 
 	{
 		int value = 0;
 		value += getName() == null ? 0 : getName().hashCode();
-		value += researcher == null ? 0 : researcher.hashCode();
+		value += groupWorkspaceProjectPage == null ? 0 : groupWorkspaceProjectPage.hashCode();
 		return value;
 		
 	}
@@ -100,37 +100,38 @@ public class ResearcherPersonalLink extends BasePersistent implements Orderable 
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof ResearcherPersonalLink)) return false;
+		if (!(o instanceof GroupWorkspaceProjectPageLink)) return false;
 
-		final ResearcherPersonalLink other = (ResearcherPersonalLink) o;
+		final GroupWorkspaceProjectPageLink other = (GroupWorkspaceProjectPageLink) o;
 
 		if( (other.getName() != null && !other.getName().equals(getName())) ||
 			(other.getName() == null && getName() != null )	) return false;
 		
-		if( (other.getResearcher() != null && !other.getResearcher().equals(getResearcher())) ||
-			(other.getResearcher() == null && getResearcher() != null )	) return false;
+		if( (other.getGroupWorkspaceProjectPage() != null && !other.getGroupWorkspaceProjectPage().equals(getGroupWorkspaceProjectPage())) ||
+			(other.getGroupWorkspaceProjectPage() == null && getGroupWorkspaceProjectPage() != null )	) return false;
 
 		return true;
 	}
-
+	
 	/**
-	 * Researcher this link belongs to.
+	 * Get the group project page for this link.
 	 * 
 	 * @return
 	 */
-	public Researcher getResearcher() {
-		return researcher;
+	public GroupWorkspaceProjectPage getGroupWorkspaceProjectPage() {
+		return groupWorkspaceProjectPage;
 	}
-
+	
 	/**
-	 * Set the researcher this link belongs to.
+	 * Set the group project page for this link.
 	 * 
-	 * @param researcher
+	 * @param groupProjectPage
 	 */
-	public void setResearcher(Researcher researcher) {
-		this.researcher = researcher;
+	void setGroupWorkspaceProjectPage(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
+		this.groupWorkspaceProjectPage = groupWorkspaceProjectPage;
 	}
 
+	
 	/**
 	 * Get the string url value.
 	 * 

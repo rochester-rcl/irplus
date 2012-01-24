@@ -154,4 +154,26 @@
        </property>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="groupWorkspaceProjectPageDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPageDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="groupWorkspaceProjectPageDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPageDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 </beans>

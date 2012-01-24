@@ -206,6 +206,7 @@ CREATE TABLE ir_group_workspace.group_workspace_user
     group_workspace_user_id BIGINT PRIMARY KEY,
     group_workspace_id BIGINT NOT NULL,
     is_owner boolean NOT NULL,
+    show_on_project_page boolean NOT NULL,
     user_id BIGINT NOT NULL,
     version INTEGER,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
@@ -216,10 +217,6 @@ ALTER TABLE ir_group_workspace.group_workspace_user OWNER TO ir_plus;
 -- The group file sequence
 CREATE SEQUENCE ir_group_workspace.group_workspace_user_seq;
 ALTER TABLE ir_group_workspace.group_workspace_user_seq OWNER TO ir_plus;
-
-
-
-
 
 
 -- ---------------------------------------------
@@ -474,4 +471,25 @@ ALTER TABLE ir_group_workspace.group_workspace_file_delete_record_seq OWNER TO i
 
 -- create an index on the personal folder personal folder id
 CREATE INDEX personal_file_user_id_personal_folder_id_idx ON ir_user.personal_file(user_id, personal_folder_id);
+
+-- ---------------------------------------------
+-- group workspace project page information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_project_page
+(
+  group_workspace_project_page_id BIGINT PRIMARY KEY,
+  group_workspace_id BIGINT NOT NULL,
+  name TEXT NOT NULL,
+  lower_case_name TEXT NOT NULL,
+  description TEXT,
+  date_created DATE,
+  version INTEGER,
+  FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
+  UNIQUE (lower_case_name)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page OWNER TO ir_plus;
+
+-- The group space sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_seq ;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_seq OWNER TO ir_plus;
 

@@ -44,6 +44,9 @@
 
 		<property name="owner" column="is_owner" type="boolean"
 			not-null="true" />
+			
+	    <property name="showOnProjectPage" column="show_on_project_page" type="boolean"
+			not-null="true" />
 		
 	    <!-- Workspace this user belongs to -->
 		<many-to-one class="GroupWorkspace" 
