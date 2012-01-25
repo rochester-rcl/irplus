@@ -302,3 +302,17 @@
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page.jsp</result>
         </action>
         
+        <action name="editGroupWorkspaceProjectPageDescription" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="viewDescription">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_description.jsp</result>
+        </action>
+        
+        <action name="saveGroupWorkspaceProjectPageDescription" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="saveDescription">
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page.jsp</result>
+        </action>
+        

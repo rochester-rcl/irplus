@@ -2778,7 +2778,7 @@ CREATE TABLE ir_group_workspace.group_workspace_user
     group_workspace_user_id BIGINT PRIMARY KEY,
     group_workspace_id BIGINT NOT NULL,
     is_owner boolean NOT NULL,
-    show_on_project_page boolean NOT NULL SET DEFAULT FALSE,
+    show_on_project_page boolean NOT NULL DEFAULT FALSE,
     user_id BIGINT NOT NULL,
     version INTEGER,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),

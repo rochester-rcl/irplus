@@ -1,6 +1,9 @@
 package edu.ur.ir.web.action.groupspace;
 
+import org.apache.log4j.Logger;
+
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
@@ -15,7 +18,7 @@ import edu.ur.ir.web.action.UserIdAware;
  * @author Nathan Sarr
  *
  */
-public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  UserIdAware{
+public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  UserIdAware, Preparable{
 
 	/*  eclipse generated id */
 	private static final long serialVersionUID = 1465553406874848632L;
@@ -31,19 +34,16 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	
 	/* user service for dealing with user information */
 	private UserService userService;
-	
-
 
 	/* group workspace project page */
 	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
+	
+	/**  Logger. */
+	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceProjectPage.class);
 
 
 	public String execute()
 	{
-		if( groupWorkspaceProjectPageId != null )
-		{
-		    groupWorkspaceProjectPage = groupWorkspaceProjectPageService.getById(groupWorkspaceProjectPageId, false);
-		}
 		
 		if( groupWorkspaceProjectPage != null )
 		{
@@ -51,6 +51,57 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
 			if( workspaceUser != null && workspaceUser.isOwner())
 			{
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Allows the user to view and edit description.
+	 * 
+	 * @return
+	 */
+	public String viewDescription()
+	{
+
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+		
+	}
+	
+	public String saveDescription()
+	{
+		log.debug("save description for group workspace = " + groupWorkspaceProjectPage);
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
 		        return SUCCESS;
 			}
 			else
@@ -116,5 +167,15 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	
+	public void prepare() throws Exception {
+		log.debug("Prepare called id = " + groupWorkspaceProjectPageId);
+		if( groupWorkspaceProjectPageId != null )
+		{
+		    groupWorkspaceProjectPage = groupWorkspaceProjectPageService.getById(groupWorkspaceProjectPageId, false);
+		    log.debug("Group workspace project page found value  = " + groupWorkspaceProjectPage);
+		}
 	}
 }
