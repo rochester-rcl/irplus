@@ -65,52 +65,14 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
-                <h3>Project Page:&nbsp;${groupWorkspaceProjectPage.name}</h3>
-                 
-                <!--  create the first column -->
-	            <div class="yui-g">
-	            <div class="yui-u first">
-	                <div class="contentContainer">
-	                    <div class="contentBoxTitle">
-	                        <c:url value="/user/editGroupWorkspaceProjectPageDescription.action" var="editGroupWorkspaceProjectPageDescriptionUrl">
-						            <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
-						    </c:url>
-	                        <p><a href="${editGroupWorkspaceProjectPageDescriptionUrl}">Description</a></p>
-	                    </div>
-	                    <div class="contentBoxContent">
-                            ${groupWorkspaceProjectPage.description}
-                        </div>
-                    </div>   
-	                <div class="contentContainer">
-	                    <div class="contentBoxTitle">
-	                        <p><a href="">Members</a></p>
-	                    </div>
-	                    <div class="contentBoxContent">
-                            
-                        </div>
-                    </div>
-                 </div>
-	             <!--  end the first column -->
-	            
-	             <div class="yui-u">
-	                 <div class="contentContainer">
-	                    <div class="contentBoxTitle">
-	                        <p><a href="">Images</a></p>
-	                    </div>
-	                    <div class="contentBoxContent">
-                            
-                        </div>
-                    </div>  
-                    <div class="contentContainer">
-	                    <div class="contentBoxTitle">
-	                        <p><a href="">Research/Publications</a></p>
-	                    </div>
-	                    <div class="contentBoxContent">
-                            
-                        </div>
-                    </div> 
-	             </div>
-            </div>
+                <h3>Edit Description for project: ${groupWorkspaceProjectPage.name}</h3>
+               <form method="post" action="<c:url value="/user/saveGroupWorkspaceProjectPageDescription.action"/>">
+                    <input type="hidden" name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+                    <textarea name="groupWorkspaceProjectPage.description" rows="10" cols="60">${groupWorkspaceProjectPage.description}</textarea>
+                    <input type="submit" value="Submit" />
+
+               </form> 
+                
    
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
