@@ -17,7 +17,6 @@
 package edu.ur.ir.groupspace;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.UniqueNameDAO;
 
 /**
  * Group project page data access layer.
@@ -25,6 +24,6 @@ import edu.ur.dao.UniqueNameDAO;
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceProjectPageDAO extends CrudDAO<GroupWorkspaceProjectPage>, UniqueNameDAO<GroupWorkspaceProjectPage> {
+public interface GroupWorkspaceProjectPageDAO extends CrudDAO<GroupWorkspaceProjectPage> {
 
 }

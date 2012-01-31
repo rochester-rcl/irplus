@@ -7,6 +7,7 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -38,8 +39,16 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	/* group workspace project page */
 	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 	
-	/**  Logger. */
+	/*  Logger. */
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceProjectPage.class);
+	
+	/* id of the group workspace user to add/remove to/from the project page */
+	private Long groupWorkspaceUserId;
+	
+	/* group workspace service */
+	private GroupWorkspaceService groupWorkspaceService;
+	
+	
 
 
 	public String execute()
@@ -92,6 +101,11 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 		
 	}
 	
+	/**
+	 * Save the project page description.
+	 * 
+	 * @return
+	 */
 	public String saveDescription()
 	{
 		log.debug("save description for group workspace = " + groupWorkspaceProjectPage);
@@ -114,6 +128,98 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 			return "notFound";
 		}
 	}
+	
+	/**
+	 * Allow the user to edit the members on the project page.
+	 * 
+	 * @return
+	 */
+	public String viewMembers()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Add a member to the project page.
+	 * 
+	 * @return
+	 */
+	public String addMember()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
+			    if( gwu != null )
+			    {
+			    	gwu.setShowOnProjectPage(true);
+			    	groupWorkspaceService.save(groupWorkspaceProjectPage.getGroupWorkspace());
+			    }
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Add a member to the project page.
+	 * 
+	 * @return
+	 */
+	public String removeMember()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
+			    if( gwu != null )
+			    {
+			    	gwu.setShowOnProjectPage(false);
+			    	groupWorkspaceService.save(groupWorkspaceProjectPage.getGroupWorkspace());
+			    }
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	
 	
 	
 	
@@ -178,4 +284,33 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 		    log.debug("Group workspace project page found value  = " + groupWorkspaceProjectPage);
 		}
 	}
+	
+	/**
+	 * Get the group workspace user id.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceUserId() {
+		return groupWorkspaceUserId;
+	}
+
+	/**
+	 * Set the group workspace user id.
+	 * 
+	 * @param groupWorkspaceUserId
+	 */
+	public void setGroupWorkspaceUserId(Long groupWorkspaceUserId) {
+		this.groupWorkspaceUserId = groupWorkspaceUserId;
+	}
+	
+	/**
+	 * Set the group workspace service.
+	 * 
+	 * @param groupWorkspaceService
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
+	}
+
+
 }

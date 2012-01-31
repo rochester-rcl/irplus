@@ -316,3 +316,24 @@
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page.jsp</result>
         </action>
         
+         <action name="editGroupWorkspaceProjectPageMembers" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="viewMembers">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_members.jsp</result>
+        </action>
+        
+         <action name="addGroupWorkspaceProjectPageMember" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="addMember">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_members.jsp</result>
+        </action>
+        
+         <action name="removeGroupWorkspaceProjectPageMember" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="removeMember">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_members.jsp</result>
+        </action>
+        

@@ -36,7 +36,7 @@
        <td align="left" width="75%">
            <strong>Path:&nbsp;/
 	          <span class="groupImg">&nbsp;</span>
-	          <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaces()">Group Workspaces</a> /
+	          <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaces(false)">Group Workspaces</a> /
 	          <c:if test="${!empty folderPath}">
 	              <span class="groupImg">&nbsp;</span>
                    <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaceById(${groupWorkspace.id})">${groupWorkspace.name}</a>&nbsp;/

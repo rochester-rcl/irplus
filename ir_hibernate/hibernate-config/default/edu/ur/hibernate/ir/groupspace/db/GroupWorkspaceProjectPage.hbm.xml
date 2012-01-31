@@ -41,12 +41,6 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 	
-	    <property name="name" column="name" type="string"
-			not-null="true" access="field" />
-			
-		<property name="lowerCaseName" column="lower_case_name" type="string"
-			not-null="true" access="field" />
-
 		<property name="description" column="description" type="string"
 			not-null="false" />
 			
@@ -63,15 +57,7 @@
 			access="field"
 			not-null="true" 
 			unique="true"/>
-	
-	
 		
 	</class>
-	
-	<!-- named query for getting a groupspace by name -->
-	<query name="getGroupWorkspaceProjectPageByName">
-		from GroupWorkspaceProjectPage as projectPage where
-		projectPage.lowerCaseName = :lowerCaseName
-	</query>
-	
+
 </hibernate-mapping>

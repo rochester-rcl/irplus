@@ -27,7 +27,7 @@
 <fmt:setBundle basename="messages"/>
 <html>
   <head>
-    <title> Edit Project Page:&nbsp;${groupWorkspaceProjectPage.name}</title>
+    <title> Edit Project Page:&nbsp;${groupWorkspaceProjectPage.groupWorkspace.name}</title>
     <c:import url="/inc/meta-frag.jsp"/>
         
     <!-- Core + Skin CSS -->
@@ -65,7 +65,7 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
-                <h3>Edit Description for project: ${groupWorkspaceProjectPage.name}</h3>
+                <h3>Edit Description for project: ${groupWorkspaceProjectPage.groupWorkspace.name}</h3>
                <form method="post" action="<c:url value="/user/saveGroupWorkspaceProjectPageDescription.action"/>">
                     <input type="hidden" name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
                     <textarea name="groupWorkspaceProjectPage.description" rows="10" cols="60">${groupWorkspaceProjectPage.description}</textarea>

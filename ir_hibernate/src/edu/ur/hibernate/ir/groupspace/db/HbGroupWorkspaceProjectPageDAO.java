@@ -1,6 +1,5 @@
 package edu.ur.hibernate.ir.groupspace.db;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -48,12 +47,6 @@ public class HbGroupWorkspaceProjectPageDAO implements GroupWorkspaceProjectPage
 
 	public void makeTransient(GroupWorkspaceProjectPage entity) {
 		hbCrudDAO.makeTransient(entity);
-	}
-
-	public GroupWorkspaceProjectPage findByUniqueName(String name) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("");
-		q.setParameter("lowerCaseName", name.toLowerCase());
-		return (GroupWorkspaceProjectPage)q.uniqueResult();
 	}
 
 }

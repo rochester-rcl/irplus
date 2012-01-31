@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.ur.persistent.CommonPersistent;
+import edu.ur.persistent.BasePersistent;
 
 /**
  * Represents the grouping of information for a group space that can be shown 
@@ -30,7 +30,7 @@ import edu.ur.persistent.CommonPersistent;
  * @author Nathan Sarr
  *
  */
-public class GroupWorkspaceProjectPage extends CommonPersistent {
+public class GroupWorkspaceProjectPage extends BasePersistent {
 	
 	// eclipse generated id
 	private static final long serialVersionUID = -7955753514253869132L;
@@ -41,17 +41,11 @@ public class GroupWorkspaceProjectPage extends CommonPersistent {
 	//description of the project
 	private String description;
 	
-	// name of the project page is public
-	private String name;
-	
 	//indicates the page is public
 	private boolean pagePublic;
 	
 	// pictures for the group workspace
 	private Set<GroupWorkspaceProjectPagePicture> pictures = new HashSet<GroupWorkspaceProjectPagePicture>();
-	
-	// lower case name for the project
-	private String lowerCaseName;
 
 	/* date this record was created */
 	private Timestamp createdDate;
@@ -69,10 +63,10 @@ public class GroupWorkspaceProjectPage extends CommonPersistent {
      * 
      * @param name - name of the group project page.
      */
-    GroupWorkspaceProjectPage(GroupWorkspace groupWorkspace, String name)
+    GroupWorkspaceProjectPage(GroupWorkspace groupWorkspace)
     {
     	setGroupWorkspace(groupWorkspace);
-    	setName(name);
+    	
     	createdDate = new Timestamp(new Date().getTime());
     }
     
@@ -92,32 +86,6 @@ public class GroupWorkspaceProjectPage extends CommonPersistent {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	
-	/**
-	 * Get the name of the project page.
-	 * 
-	 * @see edu.ur.persistent.CommonPersistent#getName()
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Set the name of the project page.
-	 * 
-	 * @see edu.ur.persistent.CommonPersistent#setName(java.lang.String)
-	 */
-	public void setName(String name) {
-		this.name = name;
-		if( name != null )
-		{
-		    this.lowerCaseName = name.toLowerCase();
-		}
-		else
-		{
-			this.lowerCaseName = null;
-		}
 	}
 	
 	/**
@@ -183,7 +151,7 @@ public class GroupWorkspaceProjectPage extends CommonPersistent {
 	public int hashCode()
 	{
 		int value = 0;
-		value += lowerCaseName == null ? 0 : lowerCaseName.hashCode();
+		value +=  getGroupWorkspace().getLowerCaseName() == null ? 0 : getGroupWorkspace().getLowerCaseName().hashCode();
 		return value;
 	}
 	
@@ -199,28 +167,10 @@ public class GroupWorkspaceProjectPage extends CommonPersistent {
 
 		final GroupWorkspaceProjectPage other = (GroupWorkspaceProjectPage) o;
 
-		if( ( lowerCaseName != null && !lowerCaseName.equalsIgnoreCase(other.getLowerCaseName()) ) ||
-			( lowerCaseName == null && other.getLowerCaseName() != null ) ) return false;
+		if( ( getGroupWorkspace().getLowerCaseName() != null && !getGroupWorkspace().getLowerCaseName().equalsIgnoreCase(other.getGroupWorkspace().getLowerCaseName()) ) ||
+			( getGroupWorkspace().getLowerCaseName() == null && other.getGroupWorkspace().getLowerCaseName() != null ) ) return false;
 
 		return true;
-	}
-	
-	/**
-	 * Get the lower case name.
-	 * 
-	 * @return
-	 */
-	public String getLowerCaseName() {
-		return lowerCaseName;
-	}
-
-	/**
-	 * Set the lower case name.
-	 * 
-	 * @param lowerCaseName
-	 */
-	void setLowerCaseName(String lowerCaseName) {
-		this.lowerCaseName = lowerCaseName;
 	}
 	
 	/**
@@ -240,7 +190,5 @@ public class GroupWorkspaceProjectPage extends CommonPersistent {
 	void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
-
-
 
 }
