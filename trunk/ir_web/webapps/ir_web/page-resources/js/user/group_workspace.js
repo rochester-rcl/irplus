@@ -79,7 +79,7 @@ YAHOO.ur.user.group_workspace = {
 	    
 	    if( workspaceId == null || workspaceId == 0 )
 	    {
-	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(false);
 	    }
 	    else
 	    {
@@ -151,7 +151,7 @@ YAHOO.ur.user.group_workspace = {
 	/**
 	 * Get all group workspaces for a user
 	 */
-    getGroupWorkspaces : function ()
+    getGroupWorkspaces : function (allGroups)
     {
 	    // handle a successful return
         var handleSuccess = function(o) 
@@ -179,9 +179,19 @@ YAHOO.ur.user.group_workspace = {
             alert('get workspaces by user id failure '  + o.status + ' status text ' + o.statusText);
         };
     
-        YAHOO.util.Connect.asyncRequest('GET', 
-        		viewGroupWorkspacesAction + '?bustcache=' + new Date().getTime(),
-        {success: handleSuccess, failure: handleFailure});       
+        YAHOO.ur.util.wait.waitDialog.showDialog();
+        if(!allGroups)
+        {
+            YAHOO.util.Connect.asyncRequest('GET', 
+        		    viewGroupWorkspacesAction + '?showOnlyMyGroupWorkspaces=true&bustcache=' + new Date().getTime(),
+             {success: handleSuccess, failure: handleFailure});    
+        }
+        else
+        {
+        	 YAHOO.util.Connect.asyncRequest('GET', 
+         		    viewGroupWorkspacesAction + '?bustcache=' + new Date().getTime(),
+              {success: handleSuccess, failure: handleFailure});    
+        }
     },
 		
 	 /** 
@@ -1603,6 +1613,21 @@ YAHOO.ur.user.group_workspace = {
             document.groupFolders.submit();
         }
     },
+    
+    /**
+     * Show only certain group workspaces for user.
+     */
+    changeGroupWorkspaceDisplay : function ()
+    {
+    	if( document.getElementById('showMyGroupsOnly').checked )
+    	{
+    		YAHOO.ur.user.group_workspace.getGroupWorkspaces(false);
+    	}
+    	else
+    	{
+    		YAHOO.ur.user.group_workspace.getGroupWorkspaces(true);
+    	}
+    },
    
   	
 	// initialize the page
@@ -1642,6 +1667,11 @@ YAHOO.ur.user.group_workspace = {
 	    	 {
 	    		 YAHOO.ur.user.group_workspace.getFolderById(groupWorkspaceFolderId, groupWorkspaceId, -1);
 	    	 }
+	    }
+	    else
+	    {
+	    	
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(false);
 	    }
         
   	}

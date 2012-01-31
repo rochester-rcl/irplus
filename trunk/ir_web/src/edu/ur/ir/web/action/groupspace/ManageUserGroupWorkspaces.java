@@ -117,6 +117,9 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 
     // acl for a group workspace
     private IrAcl groupWorkspaceAcl;
+    
+    // show only the workspaces for this user
+    private boolean showOnlyMyGroupWorkspaces = false;
 
 
 	/**
@@ -145,7 +148,16 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	public String execute()
 	{
 		log.debug("view group workspaces");
-		groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		if( !showOnlyMyGroupWorkspaces )
+		{
+			log.debug("getting all group  workspaces");
+		    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		}
+		else
+		{
+			log.debug("getting group workspaces for all users");
+			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId);
+		}
 		return SUCCESS;
 	}
 	
@@ -221,7 +233,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 			}
 	 	    
         }
-       
+        groupWorkspaceAcl = securityService.getAcl(groupWorkspace);
 	    return SUCCESS;	
 	}
 	
@@ -365,6 +377,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
             groupWorkspaceService.removeUserFromGroup(removeUser, groupWorkspace);
         }
 
+        groupWorkspaceAcl = securityService.getAcl(groupWorkspace);
         tabName = "USERS";
 		return SUCCESS;	
 	}
@@ -401,6 +414,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		GroupWorkspaceEmailInvite invite = groupWorkspaceInviteService.getEmailInviteById(inviteId, false);
 		groupWorkspace.deleteEmailInvite(invite.getInviteToken().getEmail());
 		groupWorkspaceService.save(groupWorkspace);
+		groupWorkspaceAcl = securityService.getAcl(groupWorkspace);
 		tabName = "USERS";
 		return SUCCESS;
 	}
@@ -726,5 +740,23 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public void setTabName(String tabName) {
 		this.tabName = tabName;
+	}
+	
+	/**
+	 * If true only show group workspaces that this user can work within.
+	 * 
+	 * @return
+	 */
+	public boolean getShowOnlyMyGroupWorkspaces() {
+		return showOnlyMyGroupWorkspaces;
+	}
+
+	/**
+	 * Show only group workspaces that users can work within.
+	 * 
+	 * @param showOnlyMyGroupWorkspaces
+	 */
+	public void setShowOnlyMyGroupWorkspaces(boolean showOnlyMyGroupWorkspaces) {
+		this.showOnlyMyGroupWorkspaces = showOnlyMyGroupWorkspaces;
 	}
 }

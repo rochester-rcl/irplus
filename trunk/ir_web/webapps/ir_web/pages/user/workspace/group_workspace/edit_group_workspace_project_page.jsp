@@ -27,7 +27,7 @@
 <fmt:setBundle basename="messages"/>
 <html>
   <head>
-    <title> Edit Project Page:&nbsp;${groupWorkspaceProjectPage.name}</title>
+    <title> Edit Project Page:&nbsp;${groupWorkspaceProjectPage.groupWorkspace.name}</title>
     <c:import url="/inc/meta-frag.jsp"/>
         
     <!-- Core + Skin CSS -->
@@ -65,7 +65,11 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
-                <h3>Project Page:&nbsp;${groupWorkspaceProjectPage.name}</h3>
+                <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
+                   <c:param name="tabName" value="GROUP_WORKSPACE"/>
+                   <c:param name="groupWorkspaceId" value="${groupWorkspaceProjectPage.groupWorkspace.id}"/>
+                </c:url>
+                <h3>Project Page:&nbsp;<a href="${groupWorkspaceUrl}">${groupWorkspaceProjectPage.groupWorkspace.name}</a></h3>
                  
                 <!--  create the first column -->
 	            <div class="yui-g">
@@ -75,18 +79,56 @@
 	                        <c:url value="/user/editGroupWorkspaceProjectPageDescription.action" var="editGroupWorkspaceProjectPageDescriptionUrl">
 						            <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
 						    </c:url>
-	                        <p><a href="${editGroupWorkspaceProjectPageDescriptionUrl}">Description</a></p>
+	                        <p><a href="${editGroupWorkspaceProjectPageDescriptionUrl}">Edit Description</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
-                            ${groupWorkspaceProjectPage.description}
+                            <p>${groupWorkspaceProjectPage.description}</p>
                         </div>
                     </div>   
 	                <div class="contentContainer">
 	                    <div class="contentBoxTitle">
-	                        <p><a href="">Members</a></p>
+	                       <c:url value="/user/editGroupWorkspaceProjectPageMembers.action" var="editGroupWorkspaceProjectPageMembersUrl">
+						            <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						    </c:url>
+	                        <p><a href="${editGroupWorkspaceProjectPageMembersUrl}">Edit Members</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
-                            
+	                        <table class="baseTable">
+                            <c:forEach var="member" items="${groupWorkspaceProjectPage.groupWorkspace.users}">
+                                <c:if test="${member.showOnProjectPage}">
+                                   <tr>
+			                           <td class="baseTableImage"> 
+			                               <c:if test="${!empty(member.user.researcher) && member.user.researcher.public}">
+			                                   <c:if test="${ir:hasThumbnail(member.user.researcher.primaryPicture)}">
+			                                       <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                                       <c:param name="irFileId" value="${member.user.researcher.primaryPicture.id}"/>
+                                                       <c:param name="researcherId" value="${member.user.researcher.id}"/>
+                                                   </c:url>
+                                                   <img class="basic_thumbnail" src="${url}"/>
+                                               </c:if>
+                                              
+                                           </c:if>   
+                                           <c:if test="${!ir:hasThumbnail(member.user.researcher.primaryPicture)}">
+                	                           <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+                                           </c:if>	 												
+	                                   </td>   
+	                                   <td>
+	                                   <c:if test="${!empty(member.user.researcher)  && member.user.researcher.public}">
+	                                       <c:url var="researcherUrl" value="/viewResearcherPage.action">
+                                               <c:param name="researcherId" value="${member.user.researcher.id}"/>
+                                           </c:url>
+	                                       <p><strong><a href="${researcherUrl}">${member.user.firstName}&nbsp;${member.user.lastName}</a></strong>
+	                                           <br><ur:maxText numChars="100" text="${member.user.researcher.researchInterest}"></ur:maxText> 
+	                                       </p>
+	                                   </c:if>
+	                                   <c:if test="${empty(member.user.researcher)  || !member.user.researcher.public}">
+	                                        <p><strong>${member.user.firstName}&nbsp;${member.user.lastName}</strong>
+	                                   </c:if> 
+	                                   </td>     
+	                               </tr>
+                                </c:if>
+                            </c:forEach>
+                            </table>
                         </div>
                     </div>
                  </div>
@@ -95,7 +137,7 @@
 	             <div class="yui-u">
 	                 <div class="contentContainer">
 	                    <div class="contentBoxTitle">
-	                        <p><a href="">Images</a></p>
+	                        <p><a href="">Edit Images</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
                             
@@ -103,7 +145,7 @@
                     </div>  
                     <div class="contentContainer">
 	                    <div class="contentBoxTitle">
-	                        <p><a href="">Research/Publications</a></p>
+	                        <p><a href="">Edit Research/Publications</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
                             

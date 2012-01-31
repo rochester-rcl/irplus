@@ -32,6 +32,7 @@
                 <urstb:td>Edit</urstb:td>
                 <urstb:td>Add File</urstb:td>
                 <urstb:td>Read</urstb:td>
+                <urstb:td>Action</urstb:td>
             </urstb:tr>
         </urstb:thead>
         <urstb:tbody
@@ -89,7 +90,14 @@
                    <c:if test='${ir:entryHasPermission(entry, "GROUP_WORKSPACE_READ")}'>Yes</c:if>
                    <c:if test='${!ir:entryHasPermission(entry, "GROUP_WORKSPACE_READ")}'>No</c:if>
                </urstb:td>
-                        
+               
+               <urstb:td>
+                       <c:url var="removeUserUrl" value="/user/removeGroupWorkspaceUser.action">
+                            <c:param name="removeUserId" value="${entry.sid.id}"/>
+                            <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
+                       </c:url>
+                       <a href="${removeUserUrl}">Remove</a> 
+               </urstb:td>         
                         
            </urstb:tr>
        </urstb:tbody>

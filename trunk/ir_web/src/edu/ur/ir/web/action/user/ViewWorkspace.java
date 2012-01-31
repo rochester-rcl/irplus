@@ -17,8 +17,6 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -26,8 +24,6 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.groupspace.GroupWorkspace;
-import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
@@ -36,7 +32,6 @@ import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.order.OrderType;
 
 /**
  * Action for going to the users workspace.
@@ -86,20 +81,15 @@ UserIdAware {
 	/* service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-	/* list of group workspaces */
-	private List<GroupWorkspace> groupWorkspaces = new LinkedList<GroupWorkspace>();
+
 	
-	/* Service to help deal with group workspace information */
-	private GroupWorkspaceService groupWorkspaceService;
 
 	/* group workspace id */
 	private Long groupWorkspaceId;
 
     /* id of the group workspace folder id*/
     private Long groupWorkspaceFolderId;
-    
-    private int numberOfResultsToShow = 25;
-	private int numberOfPagesToShow = 10;
+
 
 
 	/**
@@ -140,7 +130,6 @@ UserIdAware {
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 				}
 		    }
-		    groupWorkspaces = groupWorkspaceService.getGroupWorkspacesNameOrder(0, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		    return SUCCESS;
 		}
 		else
@@ -297,23 +286,7 @@ UserIdAware {
 		this.tabName = tabName;
 	}
 	
-	/**
-	 * Get the group workspaces to be shown in the interface.
-	 * 
-	 * @return the group workspaces the user owns.
-	 */
-	public List<GroupWorkspace> getGroupWorkspaces() {
-		return groupWorkspaces;
-	}
 	
-	/**
-	 * Set the group workspace service.
-	 * 
-	 * @param groupWorkspaceService
-	 */
-	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
-		this.groupWorkspaceService = groupWorkspaceService;
-	}
 
 	/**
 	 * Get the group workspace id.

@@ -93,7 +93,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
     public GroupWorkspace(String name) 
     {
     	setName(name);
-    	groupWorkspaceProjectPage = new GroupWorkspaceProjectPage(this, name);
+    	groupWorkspaceProjectPage = new GroupWorkspaceProjectPage(this);
     	createdDate = new Timestamp(new Date().getTime());
     }
     
@@ -490,6 +490,27 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	        for(GroupWorkspaceUser workspaceUser : users)
 	        {
 	    	    if( workspaceUser.getUser().equals(user))
+	    	    {
+	    		    return workspaceUser;
+	    	    }
+	        }
+		}
+	    return null;
+	}
+	
+	/**
+	 * Get a workspace user by id.
+	 * 
+	 * @param name - name of the group
+	 * @return group if found otherwise null
+	 */
+	public GroupWorkspaceUser getUser(Long id)
+	{
+		if(id != null )
+		{	
+	        for(GroupWorkspaceUser workspaceUser : users)
+	        {
+	    	    if( workspaceUser.getId().equals(id))
 	    	    {
 	    		    return workspaceUser;
 	    	    }

@@ -31,9 +31,14 @@
            </strong>
    </div>
     <div align="right">
-    Show Groups: 
-    <input type="radio">All</input>
-    <input type="radio">I'm a Member Only</input>
+    <form>
+    Show Only Groups I'm a member of: 
+    <input type="checkbox" id="showMyGroupsOnly" 
+        <c:if test="${showOnlyMyGroupWorkspaces}">
+        checked 
+        </c:if>
+    onclick="javascript:YAHOO.ur.user.group_workspace.changeGroupWorkspaceDisplay()" name="showGroups"/>
+    </form>
     </div>
    
    
