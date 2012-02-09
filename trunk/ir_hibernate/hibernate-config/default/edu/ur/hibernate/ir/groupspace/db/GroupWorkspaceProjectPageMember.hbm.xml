@@ -20,21 +20,21 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for group workspace user.
+	Mapping for group workspace project page member
 	
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.groupspace">
-	<class name="GroupWorkspaceUser" 
+	<class name="GroupWorkspaceProjectPageMember" 
 	    schema="ir_group_workspace"
-	    table="group_workspace_user"
+	    table="group_workspace_project_page_member"
 		lazy="true">
 		
 		<!-- Common id property. -->
-		<id name="id" type="long" column="group_workspace_user_id"
+		<id name="id" type="long" column="group_workspace_project_page_member_id"
 			unsaved-value="0" access="field" >
 			<generator class="sequence" >
-				<param name="sequence">ir_group_workspace.group_workspace_user_seq</param>
+				<param name="sequence">ir_group_workspace.group_workspace_project_page_member_seq</param>
 			</generator>
 		</id>
 
@@ -42,42 +42,30 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 
-		<property name="owner" column="is_owner" type="boolean"
+	    <property name="order" column="member_order" type="int"
 			not-null="true" />
-
+			
+	    <property name="title" column="title" type="string" />
 		
-	    <!-- Workspace this user belongs to -->
-		<many-to-one class="GroupWorkspace" 
-			name="groupWorkspace" 
-			column="group_workspace_id" 
+	    <property name="description" column="description" type="string" />
+		
+	     <!-- Workspace this user belongs to -->
+		 <many-to-one class="GroupWorkspaceProjectPage" 
+			name="groupWorkspaceProjectPage" 
+			column="group_workspace_project_page_id" 
 			insert="true"
 			update="true" 
 			unique="true"/>
 			
-		<!-- Workspace this user belongs to -->
-		<many-to-one class="edu.ur.ir.user.IrUser" 
-			name="user" 
-			column="user_id" 
+		 <!-- Workspace this user belongs to -->
+		 <many-to-one class="GroupWorkspaceUser" 
+			name="groupWorkspaceUser" 
+			column="group_workspace_user_id" 
 			insert="true"
 			update="true" 
 			unique="true"/>	
-		
-		
 
 	 </class>
-		
-	<!--  Get a count of users for a given group workspace-->
-	<query name="groupWorkspaceUserCount">
-	    select count(*) from GroupWorkspaceUser user
-	    where user.groupWorkspace.id = :groupWorkspaceId  
-	</query>
-	
-	<query name="groupWorkspaceUserByUserIdWorkspaceId">
-	    select groupWorkspaceUser from GroupWorkspaceUser as groupWorkspaceUser
-	    where groupWorkspaceUser.user.id = :userId
-		and groupWorkspaceUser.groupWorkspace.id = :workspaceId
-	</query>
-	
 	
 
 	

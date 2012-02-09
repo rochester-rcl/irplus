@@ -85,16 +85,14 @@
 			                    <tr>
 				                    <td class="tdItemFolderLeftBorder">
 				                       
-				                        <c:if test="${!member.showOnProjectPage}">
+				                        
 				                            <c:url value="/user/addGroupWorkspaceProjectPageMember.action" var="addMemberUrl">
 						                        <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
 						                        <c:param name="groupWorkspaceUserId" value="${member.id}"/>
 						                    </c:url>
 			                                <span class="addBtnImg">&nbsp;</span><a href="${addMemberUrl}"> Add</a> 
-			                            </c:if>
-			                             <c:if test="${member.showOnProjectPage}">
-			                                 Added
-			                             </c:if>
+			                           
+			                             
 				                    </td>
 				
 				                    <td class="tdItemFolderRightBorder">
@@ -110,7 +108,7 @@
 	                <div class="yui-u">
 	                    <h3>Currently On Project Page</h3>
 	                    <!-- Table for members in the workspace  -->            
-                        <table class="itemFolderTable" width="100%">
+                        <table class="itemSelectTable" width="100%">
 	                        <thead>
 		                        <tr>
 			                        <th class="thItemFolder" width="20%">Add</th>
@@ -118,22 +116,35 @@
 		                        </tr>
 	                        </thead>
 	                        <tbody>
-		                        <c:forEach var="member" items="${groupWorkspaceProjectPage.groupWorkspace.users}">
-			                    <c:if test="${member.showOnProjectPage}">
+		                        <c:forEach var="member" items="${groupWorkspaceProjectPage.membersByOrder}">
+			                    
 			                        <c:url value="/user/removeGroupWorkspaceProjectPageMember.action" var="removeMemberUrl">
 						                <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
-						                <c:param name="groupWorkspaceUserId" value="${member.id}"/>
+						                <c:param name="groupWorkspaceUserId" value="${member.groupWorkspaceUser.id}"/>
 						            </c:url>
 			                    <tr>
+			                       
 				                    <td class="tdItemFolderLeftBorder">
 			                            <span class="deleteBtnImg">&nbsp;</span><a href="${removeMemberUrl}"> Remove </a> 
 				                    </td>
-				
 				                    <td class="tdItemFolderRightBorder">
-	                 	               <a href="">${member.user.firstName} &nbsp; ${member.user.lastName}</a>
+				                      <c:url value="/user/moveGroupWorkspaceProjectMemberUp.action" var="moveMemberUpUrl">
+						                <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						                <c:param name="groupWorkspaceUserId" value="${member.groupWorkspaceUser.id}"/>
+						              </c:url>
+						              <a href="${moveMemberUpUrl}"><img class="tableImg" alt="up" 
+									          src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_up.gif" /></a>  
+									  <c:url value="/user/moveGroupWorkspaceProjectMemberDown.action" var="moveMemberDownUrl">
+						                <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						                <c:param name="groupWorkspaceUserId" value="${member.groupWorkspaceUser.id}"/>
+						              </c:url>
+						              <a href="${moveMemberDownUrl}"><img class="tableImg" alt="down" 
+									          src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_down.gif" /></a>
+	                 	              <a href="">${member.groupWorkspaceUser.user.firstName} &nbsp; ${member.groupWorkspaceUser.user.lastName} &nbsp; ${member.order} </a>
 				                    </td>
+				                    
 			                    </tr>
-			                    </c:if> 
+			                    
 		                        </c:forEach>
 	                        </tbody>
                         </table>

@@ -58,6 +58,19 @@
 			not-null="true" 
 			unique="true"/>
 		
+	    <!--  Project page members -->
+		<set name="members" 
+		     inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all, delete-orphan" 
+		     schema="ir_group_workspace"
+		     access="field" 
+			 lazy="true"
+			 fetch="subselect">
+			<key column="group_workspace_project_page_id" not-null="true"/>
+			<one-to-many class="GroupWorkspaceProjectPageMember" />
+		</set>
+		
 	</class>
 
 </hibernate-mapping>

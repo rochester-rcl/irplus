@@ -111,6 +111,7 @@
 			<class name="edu.ur.ir.groupspace.GroupWorkspaceFileTest"/>
 			<class name="edu.ur.ir.groupspace.GroupWorkspaceFolderTest"/>
 			<class name="edu.ur.ir.groupspace.GroupWorkspaceTest"/>
+			<class name="edu.ur.ir.groupspace.GroupWorkspaceProjectPageTest"/>
 			
 		</classes>
 	</test>

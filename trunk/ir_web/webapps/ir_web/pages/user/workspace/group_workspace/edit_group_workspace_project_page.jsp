@@ -94,39 +94,39 @@
 	                    </div>
 	                    <div class="contentBoxContent">
 	                        <table class="baseTable">
-                            <c:forEach var="member" items="${groupWorkspaceProjectPage.groupWorkspace.users}">
-                                <c:if test="${member.showOnProjectPage}">
+                            <c:forEach var="member" items="${groupWorkspaceProjectPage.members}">
+                               
                                    <tr>
 			                           <td class="baseTableImage"> 
-			                               <c:if test="${!empty(member.user.researcher) && member.user.researcher.public}">
-			                                   <c:if test="${ir:hasThumbnail(member.user.researcher.primaryPicture)}">
+			                               <c:if test="${!empty(member.groupWorkspaceUser.user.researcher) && member.groupWorkspaceUser.user.researcher.public}">
+			                                   <c:if test="${ir:hasThumbnail(member.groupWorkspaceUser.user.researcher.primaryPicture)}">
 			                                       <c:url var="url" value="/researcherThumbnailDownloader.action">
-                                                       <c:param name="irFileId" value="${member.user.researcher.primaryPicture.id}"/>
-                                                       <c:param name="researcherId" value="${member.user.researcher.id}"/>
+                                                       <c:param name="irFileId" value="${member.groupWorkspaceUser.user.researcher.primaryPicture.id}"/>
+                                                       <c:param name="researcherId" value="${member.groupWorkspaceUser.user.researcher.id}"/>
                                                    </c:url>
                                                    <img class="basic_thumbnail" src="${url}"/>
                                                </c:if>
                                               
                                            </c:if>   
-                                           <c:if test="${!ir:hasThumbnail(member.user.researcher.primaryPicture)}">
+                                           <c:if test="${!ir:hasThumbnail(member.groupWorkspaceUser.user.researcher.primaryPicture)}">
                 	                           <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
                                            </c:if>	 												
 	                                   </td>   
 	                                   <td>
-	                                   <c:if test="${!empty(member.user.researcher)  && member.user.researcher.public}">
+	                                   <c:if test="${!empty(member.groupWorkspaceUser.user.researcher)  && member.groupWorkspaceUser.user.researcher.public}">
 	                                       <c:url var="researcherUrl" value="/viewResearcherPage.action">
-                                               <c:param name="researcherId" value="${member.user.researcher.id}"/>
+                                               <c:param name="researcherId" value="${member.groupWorkspaceUser.user.researcher.id}"/>
                                            </c:url>
-	                                       <p><strong><a href="${researcherUrl}">${member.user.firstName}&nbsp;${member.user.lastName}</a></strong>
-	                                           <br><ur:maxText numChars="100" text="${member.user.researcher.researchInterest}"></ur:maxText> 
+	                                       <p><strong><a href="${researcherUrl}">${member.groupWorkspaceUser.user.firstName}&nbsp;${member.groupWorkspaceUser.user.lastName}</a></strong>
+	                                           <br><ur:maxText numChars="100" text="${member.groupWorkspaceUser.user.researcher.researchInterest}"></ur:maxText> 
 	                                       </p>
 	                                   </c:if>
-	                                   <c:if test="${empty(member.user.researcher)  || !member.user.researcher.public}">
-	                                        <p><strong>${member.user.firstName}&nbsp;${member.user.lastName}</strong>
+	                                   <c:if test="${empty(member.groupWorkspaceUser.user.researcher)  || !member.groupWorkspaceUser.user.researcher.public}">
+	                                        <p><strong>${member.groupWorkspaceUser.user.firstName}&nbsp;${member.groupWorkspaceUser.user.lastName}</strong>
 	                                   </c:if> 
 	                                   </td>     
 	                               </tr>
-                                </c:if>
+                                
                             </c:forEach>
                             </table>
                         </div>

@@ -2778,7 +2778,6 @@ CREATE TABLE ir_group_workspace.group_workspace_user
     group_workspace_user_id BIGINT PRIMARY KEY,
     group_workspace_id BIGINT NOT NULL,
     is_owner boolean NOT NULL,
-    show_on_project_page boolean NOT NULL DEFAULT FALSE,
     user_id BIGINT NOT NULL,
     version INTEGER,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
@@ -2855,7 +2854,26 @@ ALTER TABLE ir_group_workspace.group_workspace_project_page OWNER TO ir_plus;
 CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_seq ;
 ALTER TABLE ir_group_workspace.group_workspace_project_page_seq OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- group workspace project page information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_project_page_member
+(
+  group_workspace_project_page_member_id BIGINT PRIMARY KEY,
+  group_workspace_project_page_id BIGINT NOT NULL,
+  group_workspace_user_id BIGINT NOT NULL,
+  member_order INT NOT NULL,
+  title TEXT,
+  description TEXT,
+  version INTEGER,
+  FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+  FOREIGN KEY (group_workspace_user_id) REFERENCES ir_group_workspace.group_workspace_user (group_workspace_user_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_member OWNER TO ir_plus;
 
+-- The group space sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_member_seq ;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_member_seq OWNER TO ir_plus;
 
 -- ----------------------------------------------
 -- **********************************************
