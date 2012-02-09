@@ -40,10 +40,6 @@ public class GroupWorkspaceUser extends BasePersistent {
 	/* indicates the user is an owner of the workspace */
 	private boolean owner = false;
 	
-	/* indicates the user should be shown on the project page */
-	private boolean showOnProjectPage = false;
-
-
 
 	/**
 	 * Package protected constructor
@@ -117,15 +113,12 @@ public class GroupWorkspaceUser extends BasePersistent {
 	{
 		if (this == o) return true;
 		if (!(o instanceof GroupWorkspaceUser)) return false;
-
 		final GroupWorkspaceUser other = (GroupWorkspaceUser) o;
 
 		if( ( user != null && !user.equals(other.getUser()) ) ||
 			( user == null && other.getUser() != null ) ) return false;
-
 		if( ( groupWorkspace != null && !groupWorkspace.equals(other.getGroupWorkspace()) ) ||
 			( groupWorkspace == null && other.getGroupWorkspace() != null ) ) return false;
-
 		return true;
 	}
 	
@@ -137,6 +130,10 @@ public class GroupWorkspaceUser extends BasePersistent {
 	{
 		StringBuffer sb = new StringBuffer("[ Group workspace user  id = ");
 		sb.append(id);
+		sb.append(" user = ");
+		sb.append(user);
+		sb.append(" group workspace = ");
+		sb.append(groupWorkspace);
 		sb.append("]");
 		return sb.toString();
 	}
@@ -186,23 +183,4 @@ public class GroupWorkspaceUser extends BasePersistent {
 		this.owner = owner;
 	}
 	
-	/**
-	 * Get show on project page.  If true user will
-	 * be shown on the project page.
-	 * 
-	 * @return
-	 */
-	public boolean getShowOnProjectPage() {
-		return showOnProjectPage;
-	}
-
-	/**
-	 * Set to true if the user should be shown on the project page.
-	 * 
-	 * @param showOnProjectPage
-	 */
-	public void setShowOnProjectPage(boolean showOnProjectPage) {
-		this.showOnProjectPage = showOnProjectPage;
-	}
-
 }

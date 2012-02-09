@@ -141,7 +141,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	public int hashCode()
 	{
 		int value = 0;
-		value += name == null ? 0 : name.hashCode();
+		value += lowerCaseName == null ? 0 : lowerCaseName.hashCode();
 		return value;
 	}
 	
@@ -527,6 +527,11 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 */
 	public boolean remove(GroupWorkspaceUser groupWorkspaceUser)
 	{
+		GroupWorkspaceProjectPageMember member = groupWorkspaceProjectPage.getMember(groupWorkspaceUser);
+		if( member != null )
+		{
+		    groupWorkspaceProjectPage.removeMember(member);
+		}
 		return users.remove(groupWorkspaceUser);
 	}
 	

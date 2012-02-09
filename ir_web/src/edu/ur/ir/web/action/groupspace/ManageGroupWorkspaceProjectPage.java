@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageMember;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
@@ -171,8 +172,8 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
 			    if( gwu != null )
 			    {
-			    	gwu.setShowOnProjectPage(true);
-			    	groupWorkspaceService.save(groupWorkspaceProjectPage.getGroupWorkspace());
+			    	groupWorkspaceProjectPage.addMember(gwu);
+			    	groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
 			    }
 		        return SUCCESS;
 			}
@@ -203,8 +204,74 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
 			    if( gwu != null )
 			    {
-			    	gwu.setShowOnProjectPage(false);
-			    	groupWorkspaceService.save(groupWorkspaceProjectPage.getGroupWorkspace());
+			    	groupWorkspaceProjectPage.removeMember(groupWorkspaceProjectPage.getMember(gwu));
+			    	groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
+			    }
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Move a project member up on the project page.
+	 * 
+	 * @return
+	 */
+	public String moveMemberUp()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
+			    if( gwu != null )
+			    {
+			    	GroupWorkspaceProjectPageMember gwppm = groupWorkspaceProjectPage.getMember(gwu);
+			    	groupWorkspaceProjectPage.moveMemberUp(gwppm);
+			    	groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
+			    }
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Move a project member up on the project page.
+	 * 
+	 * @return
+	 */
+	public String moveMemberDown()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
+			    if( gwu != null )
+			    {
+			    	GroupWorkspaceProjectPageMember gwppm = groupWorkspaceProjectPage.getMember(gwu);
+			    	groupWorkspaceProjectPage.moveMemberDown(gwppm);
+			    	groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
 			    }
 		        return SUCCESS;
 			}

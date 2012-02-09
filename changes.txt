@@ -11,7 +11,7 @@ IR+ changes 2.1 to 3.0
    - allows administrators to delete an invite
    - allows administrators to see list of named files shared
 - Updated to Lucene version 3.5
-- Updated to Struts 2.3.1.1
+- Updated to Struts 2.3.1.2
 - Updated to load user id when going to approve user affiliations - fixes menu bar
 - Updated to YUI 2.9.0 
 - Updated to PDF box 1.6.0
@@ -43,9 +43,12 @@ IR+ changes 2.1 to 3.0
 - Updated to now properly use the default interceptor stack
 - Updated to correctly forward to action not found if user tries to enter an action that does not exist
 - Updated user admin to view all groups a user belongs to
-- Fixed issue realted to deleting a file in shared file inbox
+- Fixed issue related to deleting a file in shared file in-box
 - Updated to only use one ivysettings.xml file
-- Added abiity to re-index all users with a workspace in administration section
+- Added ability to re-index all users with a workspace in administration section
+- Added ability to send email notifications to collaborators when a new version of a file is added in
+  personal workspace.
+- Added processing window when opening folder
 
 [ur_persistence_util]
 =============================

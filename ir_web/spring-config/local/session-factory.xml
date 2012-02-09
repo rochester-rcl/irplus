@@ -130,6 +130,7 @@
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceEmailInvite.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFileDeleteRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPage.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageMember.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>
