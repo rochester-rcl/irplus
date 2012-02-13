@@ -19,30 +19,28 @@ package edu.ur.ir.groupspace;
 import java.io.Serializable;
 
 /**
- * Service layer for group project page information
+ * Service for dealing with project page member information.
  * 
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceProjectPageService extends Serializable{
+public interface GroupWorkspaceProjectPageMemberService extends Serializable {
 	
 	/**
-	 * Save the group workspace project page.
+	 * Save the group workspace project page member.
 	 * 
 	 * @param projectPage
 	 */
-	public void save(GroupWorkspaceProjectPage projectPage);
+	public void save(GroupWorkspaceProjectPageMember projectPage);
 
 	/**
-	 * Get the group workspace project page by i.d
+	 * Get the group workspace project page member by id
 	 * 
 	 * @param id - id of the group workspace
 	 * @param lock - upgrade the lock mode for the object.
 	 * 
 	 * @return the group workspace if found otherwise null
 	 */
-	public GroupWorkspaceProjectPage getById(Long id,  boolean lock);
-	
-
+	public GroupWorkspaceProjectPageMember getById(Long id,  boolean lock);
 
 }

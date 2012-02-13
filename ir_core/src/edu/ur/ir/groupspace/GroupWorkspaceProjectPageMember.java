@@ -134,7 +134,7 @@ public class GroupWorkspaceProjectPageMember extends BasePersistent implements O
 	 * 
 	 * @param order
 	 */
-	public void setOrder(int order) {
+	void setOrder(int order) {
 	    this.order = order;
 	}
 	

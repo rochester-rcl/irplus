@@ -1,3 +1,19 @@
+/**  
+   Copyright 2008-2012 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
 package edu.ur.ir.web.action.groupspace;
 
 import org.apache.log4j.Logger;
@@ -7,8 +23,8 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageMember;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageMemberService;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
-import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -40,15 +56,21 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	/* group workspace project page */
 	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 	
+	/* group workspace project page member being edited */
+	private GroupWorkspaceProjectPageMember member;
+	
+	/* id of the member to load */
+	private Long memberId;
+
+	/* group workspace project page member service */
+    private GroupWorkspaceProjectPageMemberService groupWorkspaceProjectPageMemberService;
+
+
 	/*  Logger. */
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceProjectPage.class);
 	
 	/* id of the group workspace user to add/remove to/from the project page */
 	private Long groupWorkspaceUserId;
-	
-	/* group workspace service */
-	private GroupWorkspaceService groupWorkspaceService;
-	
 	
 
 
@@ -56,6 +78,31 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	{
 		
 		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Edit a group workspace member
+	 * @return
+	 */
+	public String editMember()
+	{
+		if( member != null )
 		{
 			IrUser user = userService.getUser(userId, false);
 			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
@@ -131,6 +178,34 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	}
 	
 	/**
+	 * Save the updated member data.
+	 * 
+	 * @return
+	 */
+	public String saveMemberData()
+	{
+		log.debug("save member data for member  = " + member);
+		if( member != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = member.getGroupWorkspaceProjectPage().getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				groupWorkspaceProjectPageMemberService.save(member);
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
 	 * Allow the user to edit the members on the project page.
 	 * 
 	 * @return
@@ -172,7 +247,7 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 				GroupWorkspaceUser gwu = groupWorkspaceProjectPage.getGroupWorkspace().getUser(groupWorkspaceUserId);
 			    if( gwu != null )
 			    {
-			    	groupWorkspaceProjectPage.addMember(gwu);
+			    	member = groupWorkspaceProjectPage.addMember(gwu);
 			    	groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
 			    }
 		        return SUCCESS;
@@ -350,6 +425,14 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 		    groupWorkspaceProjectPage = groupWorkspaceProjectPageService.getById(groupWorkspaceProjectPageId, false);
 		    log.debug("Group workspace project page found value  = " + groupWorkspaceProjectPage);
 		}
+		if( memberId != null )
+		{
+			member = groupWorkspaceProjectPageMemberService.getById(memberId, false);
+			if( member != null )
+			{
+				groupWorkspaceProjectPage = member.getGroupWorkspaceProjectPage();
+			}
+		}
 	}
 	
 	/**
@@ -370,13 +453,33 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 		this.groupWorkspaceUserId = groupWorkspaceUserId;
 	}
 	
+
+	
 	/**
-	 * Set the group workspace service.
+	 * Get the project page member being edited.
 	 * 
-	 * @param groupWorkspaceService
+	 * @return
 	 */
-	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
-		this.groupWorkspaceService = groupWorkspaceService;
+	public GroupWorkspaceProjectPageMember getMember() {
+		return member;
+	}
+	
+	/**
+	 * Set the id of the member to load
+	 * @param memberId
+	 */
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+
+	/**
+	 * Set the group workspace project page member service.
+	 * 
+	 * @param groupWorkspaceProjectPageMemberService
+	 */
+	public void setGroupWorkspaceProjectPageMemberService(
+			GroupWorkspaceProjectPageMemberService groupWorkspaceProjectPageMemberService) {
+		this.groupWorkspaceProjectPageMemberService = groupWorkspaceProjectPageMemberService;
 	}
 
 

@@ -994,6 +994,14 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- Group workspace project page member service  -->
+   <!-- ****************************************** --> 
+    <bean id="groupWorkspaceProjectPageMemberService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageMemberService">
+       <property name="groupWorkspaceProjectPageMemberDAO" ref="groupWorkspaceProjectPageMemberDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
    <!--  Service that deals with importing marc    -->
    <!--     files                                  -->
    <!-- ****************************************** --> 
