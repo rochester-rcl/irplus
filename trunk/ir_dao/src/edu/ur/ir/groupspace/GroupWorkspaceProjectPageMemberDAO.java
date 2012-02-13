@@ -16,33 +16,11 @@
 
 package edu.ur.ir.groupspace;
 
-import java.io.Serializable;
+import edu.ur.dao.CrudDAO;
 
 /**
- * Service layer for group project page information
+ * Group workspace project page member data access object.
  * 
  * @author Nathan Sarr
- *
  */
-public interface GroupWorkspaceProjectPageService extends Serializable{
-	
-	/**
-	 * Save the group workspace project page.
-	 * 
-	 * @param projectPage
-	 */
-	public void save(GroupWorkspaceProjectPage projectPage);
-
-	/**
-	 * Get the group workspace project page by i.d
-	 * 
-	 * @param id - id of the group workspace
-	 * @param lock - upgrade the lock mode for the object.
-	 * 
-	 * @return the group workspace if found otherwise null
-	 */
-	public GroupWorkspaceProjectPage getById(Long id,  boolean lock);
-	
-
-
-}
+public interface GroupWorkspaceProjectPageMemberDAO extends CrudDAO<GroupWorkspaceProjectPageMember> {}

@@ -33,7 +33,7 @@ public class DefaultGroupWorkspaceProjectPageService implements GroupWorkspacePr
 	
 	// data access for group workspace project page info
 	private GroupWorkspaceProjectPageDAO groupWorkspaceProjectPageDAO;
-
+	
 
 	/**
 	 * Get the group workspace project page by i.d

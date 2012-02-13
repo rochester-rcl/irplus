@@ -69,8 +69,20 @@
                    <c:param name="tabName" value="GROUP_WORKSPACE"/>
                    <c:param name="groupWorkspaceId" value="${groupWorkspaceProjectPage.groupWorkspace.id}"/>
                 </c:url>
-                <h3>Project Page:&nbsp;<a href="${groupWorkspaceUrl}">${groupWorkspaceProjectPage.groupWorkspace.name}</a></h3>
+                <h3>Project Page:&nbsp;<a href="${groupWorkspaceUrl}">${groupWorkspaceProjectPage.groupWorkspace.name}</a>
                  
+                   <input type="radio" id="researcher_page_off" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.confirmPrivateDialog.showDialog();"
+	               <c:if test="${!groupWorkspaceProjectPage.pagePublic}">
+	                   checked
+	               </c:if>
+	               /> <c:if test="${!groupWorkspaceProjectPage.pagePublic}"><span class="errorMessage">OFF</span></c:if> <c:if test="${groupWorkspaceProjectPage.pagePublic}">OFF</c:if>
+	               &nbsp;    	
+	               <input type="radio" id="researcher_page_on" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.confirmPublicDialog.showDialog();"
+	                   <c:if test="${groupWorkspaceProjectPage.pagePublic}">
+	            			checked
+	                   </c:if>
+	                /><c:if test="${groupWorkspaceProjectPage.pagePublic}"><span class="greenMessage">ON</span></c:if> <c:if test="${!groupWorkspaceProjectPage.pagePublic}">ON</c:if>
+                </h3>
                 <!--  create the first column -->
 	            <div class="yui-g">
 	            <div class="yui-u first">
@@ -94,7 +106,7 @@
 	                    </div>
 	                    <div class="contentBoxContent">
 	                        <table class="baseTable">
-                            <c:forEach var="member" items="${groupWorkspaceProjectPage.members}">
+                            <c:forEach var="member" items="${groupWorkspaceProjectPage.membersByOrder}">
                                
                                    <tr>
 			                           <td class="baseTableImage"> 
@@ -113,19 +125,32 @@
                                            </c:if>	 												
 	                                   </td>   
 	                                   <td>
+	                                   <c:url var="editMemberUrl" value="/user/editGroupWorkspaceProjectPageMember.action">
+                                           <c:param name="memberId" value="${member.id}"/>
+                                       </c:url>
+	                                   <p><a href="${editMemberUrl}">${member.groupWorkspaceUser.user.firstName}&nbsp;${member.groupWorkspaceUser.user.lastName}</a></p>
+	                                   <p><strong>Title: </strong>${member.title}</p>
+	                                   
+	                                   <c:if test="${!empty(member.description)}" >
+	                                       <p><strong>Description:</strong>${member.description}</p>
+	                                   </c:if>
+	                                   
 	                                   <c:if test="${!empty(member.groupWorkspaceUser.user.researcher)  && member.groupWorkspaceUser.user.researcher.public}">
 	                                       <c:url var="researcherUrl" value="/viewResearcherPage.action">
                                                <c:param name="researcherId" value="${member.groupWorkspaceUser.user.researcher.id}"/>
                                            </c:url>
-	                                       <p><strong><a href="${researcherUrl}">${member.groupWorkspaceUser.user.firstName}&nbsp;${member.groupWorkspaceUser.user.lastName}</a></strong>
-	                                           <br><ur:maxText numChars="100" text="${member.groupWorkspaceUser.user.researcher.researchInterest}"></ur:maxText> 
-	                                       </p>
+	                                       <strong><a href="${researcherUrl}">Researcher Page</a></strong>
 	                                   </c:if>
-	                                   <c:if test="${empty(member.groupWorkspaceUser.user.researcher)  || !member.groupWorkspaceUser.user.researcher.public}">
-	                                        <p><strong>${member.groupWorkspaceUser.user.firstName}&nbsp;${member.groupWorkspaceUser.user.lastName}</strong>
-	                                   </c:if> 
-	                                   </td>     
+	                                 
+	                                   </td>
+	                                   
+	                                    
+	                                   
 	                               </tr>
+	                               <tr>
+	                                   <td colspan="2"><hr/></td>
+	                               </tr>
+	                               
                                 
                             </c:forEach>
                             </table>

@@ -140,7 +140,7 @@
 						              </c:url>
 						              <a href="${moveMemberDownUrl}"><img class="tableImg" alt="down" 
 									          src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_down.gif" /></a>
-	                 	              <a href="">${member.groupWorkspaceUser.user.firstName} &nbsp; ${member.groupWorkspaceUser.user.lastName} &nbsp; ${member.order} </a>
+	                 	              <a href="">${member.groupWorkspaceUser.user.firstName}&nbsp;${member.groupWorkspaceUser.user.lastName} </a>
 				                    </td>
 				                    
 			                    </tr>
