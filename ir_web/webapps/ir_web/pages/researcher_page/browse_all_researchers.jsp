@@ -177,11 +177,11 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                 <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                           <img class="basic_thumbnail" src="${url}"/>
+                                                           <img  src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.public}">
-	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+	                                                      <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
@@ -333,11 +333,11 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                  <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                            <img class="basic_thumbnail" src="${url}"/>
+                                                            <img src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">
-	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+	                                                      <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>

@@ -80,7 +80,7 @@
                                         <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                         <c:param name="researcherId" value="${researcher.id}"/>
                                    </c:url>
-                                   <img class="centered_thumbnail" src="${url}"/>
+                                   <img src="${url}"/>
                                </c:if>	    
 								
 						        <c:if test="${researcher.primaryPicture == null }">
