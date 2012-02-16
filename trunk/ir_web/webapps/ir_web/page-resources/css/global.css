@@ -21,6 +21,13 @@
 
 /* set the thumbnail and general picture sizes */
 
+
+.researcherTableImage
+{
+	width: 120px;
+}
+
+
 .basic_thumbnail
 {
 	height: 66px;
@@ -29,8 +36,6 @@
 
 .centered_thumbnail
 {
-	height: 66px;
-	width: 100px;
 	align: middle;
 }
 
