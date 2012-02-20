@@ -34,6 +34,37 @@ ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
 ALTER TABLE ir_invite.invite_token ADD COLUMN invite_message TEXT;
 
 -- ---------------------------------------------
+-- Add new roles and give them to all administrators
+-- ---------------------------------------------
+
+insert into ir_user.role (role_id, version, name, description)
+select nextval('ir_user.role_seq'), 0, 'ROLE_AFFLIATION_APPROVER', 
+'Indicates the user can approve user affilations';
+
+insert into ir_user.role (role_id, version, name, description)
+select nextval('ir_user.role_seq'), 0, 'ROLE_GROUP_WORKSPACE_CREATOR', 
+'Indicates the user can create group workspaces';
+
+
+insert into ir_user.user_role(user_id, role_id)
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.user_id in ( select ir_user.user_id from ir_user.ir_user, ir_user.user_role, ir_user.role
+where ir_user.user_id = user_role.user_id
+and user_role.role_id = role.role_id
+and role.name = 'ROLE_ADMIN') 
+and ir_user.role.name ='ROLE_AFFLIATION_APPROVER';
+
+insert into ir_user.user_role(user_id, role_id)
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.user_id in ( select ir_user.user_id from ir_user.ir_user, ir_user.user_role, ir_user.role
+where ir_user.user_id = user_role.user_id
+and user_role.role_id = role.role_id
+and role.name = 'ROLE_ADMIN') 
+and ir_user.role.name ='ROLE_GROUP_WORKSPACE_CREATOR';
+
+-- ---------------------------------------------
 -- Invite info for folder data
 -- ---------------------------------------------
 
@@ -492,4 +523,12 @@ ALTER TABLE ir_group_workspace.group_workspace_project_page OWNER TO ir_plus;
 -- The group space sequence
 CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_seq ;
 ALTER TABLE ir_group_workspace.group_workspace_project_page_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- group workspace project page information
+-- ---------------------------------------------
+ALTER TABLE ir_user.affiliation ADD COLUMN is_workspace_creator BOOLEAN;
+UPDATE ir_user.affiliation SET is_workspace_creator = FALSE;
+ALTER TABLE ir_user.affiliation ALTER COLUMN is_workspace_creator SET NOT NULL;
 

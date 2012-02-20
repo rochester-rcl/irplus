@@ -833,6 +833,7 @@ CREATE TABLE ir_user.affiliation
   description text,
   is_author BOOLEAN NOT NULL,
   is_researcher BOOLEAN NOT NULL,
+  is_workspace_creator BOOLEAN NOT NULL,
   needs_approval BOOLEAN NOT NULL,
   CONSTRAINT affiliation_pkey PRIMARY KEY (affiliation_id),
   CONSTRAINT affiliation_name_key UNIQUE (name)
