@@ -46,6 +46,7 @@
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					<urstb:td>Author Permission</urstb:td>
+					<urstb:td>Workspace Creator Permission</urstb:td>
 					<urstb:td>Researcher Permission</urstb:td>
 					<urstb:td>Approval Required</urstb:td>
 					<urstb:td>Description</urstb:td>
@@ -73,6 +74,10 @@
 	                         <urstb:td>
 		                        <input type="checkbox" disabled="disabled" 
                                <c:if test='${affiliation.author}'>checked="checked"</c:if>/>
+	                        </urstb:td>
+	                         <urstb:td>
+			                   <input type="checkbox" disabled="disabled" 
+                               <c:if test='${affiliation.workspaceCreator}'>checked="checked"</c:if>/>
 	                        </urstb:td>
 	                        <urstb:td>
 			                   <input type="checkbox" disabled="disabled" 

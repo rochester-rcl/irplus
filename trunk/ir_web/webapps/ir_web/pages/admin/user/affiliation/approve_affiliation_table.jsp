@@ -81,7 +81,7 @@
 			                   ${pendingUser.lastName} 
 	                        </urstb:td>
 	                         <urstb:td>
-			                   ${pendingUser.defaultEmail} 
+			                   ${pendingUser.defaultEmail.email} 
 	                        </urstb:td>
 	                        <urstb:td>
 			                     <select id="affiliation_id" name="affiliationId" />
