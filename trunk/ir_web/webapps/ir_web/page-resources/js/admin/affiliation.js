@@ -260,11 +260,21 @@ YAHOO.ur.affiliation = {
     {
         var authorPermission = document.getElementById('newAffiliationForm_author');
         var researcherPermission = document.getElementById('newAffiliationForm_researcher');
+        var workspaceCreatorPermission = document.getElementById('newAffiliationForm_workspaceCreator');
 	    if (permission.id == 'newAffiliationForm_author') 
 	    {
 		    if (!permission.checked) 
 		    {
-		         researcherPermission.checked=false;
+		         researcherPermission.checked = false;
+		         workspaceCreatorPermission.checked = false;
+		    }
+	    }
+	    
+	    if (permission.id == 'newAffiliationForm_workspaceCreator') 
+	    {
+		    if (permission.checked) 
+		    {
+		    	authorPermission.checked = true;
 		    }
 	    }
 	

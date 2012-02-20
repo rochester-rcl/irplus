@@ -119,7 +119,11 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 				{
 					user.createResearcher();
 				}
-			}			
+			}	
+			if( affiliation.getWorkspaceCreator() )
+			{
+				user.addRole(roleService.getRole(IrRole.GROUP_WORKSPACE_CREATOR_ROLE));
+			}
 
 			user.setAffiliationApproved(true);
 			userService.makeUserPersistent(user);

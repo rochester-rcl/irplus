@@ -116,12 +116,12 @@
                                                        <c:param name="irFileId" value="${member.groupWorkspaceUser.user.researcher.primaryPicture.id}"/>
                                                        <c:param name="researcherId" value="${member.groupWorkspaceUser.user.researcher.id}"/>
                                                    </c:url>
-                                                   <img class="basic_thumbnail" src="${url}"/>
+                                                   <img  src="${url}"/>
                                                </c:if>
                                               
                                            </c:if>   
                                            <c:if test="${!ir:hasThumbnail(member.groupWorkspaceUser.user.researcher.primaryPicture)}">
-                	                           <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+                	                           <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
                                            </c:if>	 												
 	                                   </td>   
 	                                   <td>

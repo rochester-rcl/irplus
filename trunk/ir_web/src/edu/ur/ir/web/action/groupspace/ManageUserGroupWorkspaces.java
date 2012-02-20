@@ -274,7 +274,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		log.debug("creating a group space with name = " + name);
 		IrUser user = userService.getUser(userId, false);
 		
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) )
+		if( user == null || (!user.hasRole(IrRole.ADMIN_ROLE) && !user.hasRole(IrRole.GROUP_WORKSPACE_CREATOR_ROLE)) )
 		{
 			return "accessDenied";
 		}
