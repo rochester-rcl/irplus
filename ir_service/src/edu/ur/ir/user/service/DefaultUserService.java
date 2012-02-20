@@ -987,12 +987,12 @@ public class DefaultUserService implements UserService {
 	 * @param user User whose affiliation needs to be verified
 	 */
 	public void sendAffiliationVerificationEmailForUser(IrUser user) {
-		List<IrUser> admins = getUserByRole(IrRole.ADMIN_ROLE);
+		List<IrUser> approvers = getUserByRole(IrRole.APPROVE_USER_AFFILIATION_ROLE);
 		
 		List<String> toAddresses = new ArrayList<String>();
 		
-		for (IrUser admin: admins) {
-			toAddresses.add((String)(admin.getDefaultEmail().getEmail()));
+		for (IrUser approver: approvers) {
+			toAddresses.add((String)(approver.getDefaultEmail().getEmail()));
 		}
 		
 		SimpleMailMessage message = new SimpleMailMessage(affiliationVerificationMessage);

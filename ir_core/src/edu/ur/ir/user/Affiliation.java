@@ -26,18 +26,19 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class Affiliation extends CommonPersistent {
 	
-	/**
-	 * Eclipse generated id.
-	 */
+	// Eclipse generated id.
 	private static final long serialVersionUID = 6616903691007174887L;
 
-	/**  Indicates whether the affiliation has a author permissions */
+	//  Indicates whether the affiliation has a author permissions 
 	private boolean author = false;
 
-	/**  Indicates whether the affiliation has a researcher permissions */
+	//  Indicates whether the affiliation has a researcher permissions 
 	private boolean researcher = false;
 	
-	/**  Indicates whether the affiliation needs to be approved by the admin */
+	//  Indicates whether the affiliation has create group workspace permissions 
+	private boolean workspaceCreator = false;
+	
+	//  Indicates whether the affiliation needs to be approved by the admin 
 	private boolean needsApproval = false;
 
 	/**
@@ -129,16 +130,59 @@ public class Affiliation extends CommonPersistent {
 		return sb.toString();
 	}
 
+	/**
+	 * If set to true a user with this affiliation has to be approved.
+	 * 
+	 * @return
+	 */
 	public boolean isNeedsApproval() {
 		return needsApproval;
 	}
 	
+	/**
+	 * If true the user needs approval for this type of affilation.
+	 * 
+	 * @return
+	 */
 	public boolean getNeedsApproval()
 	{
 		return needsApproval;
 	}
 
+	/**
+	 * Set the needs approval flag - if true user needs approval for
+	 * the given affiliation.
+	 * 
+	 * @param needsApproval
+	 */
 	public void setNeedsApproval(boolean needsApproval) {
 		this.needsApproval = needsApproval;
+	}
+	
+	/**
+	 * Returns true if the user has workspace creator privileges
+	 * 
+	 * @return
+	 */
+	public boolean isWorkspaceCreator() {
+		return workspaceCreator;
+	}
+	
+	/**
+	 * Get workspace creator privileges.
+	 * 
+	 * @return
+	 */
+	public boolean getWorkspaceCreator() {
+		return workspaceCreator;
+	}
+
+	/**
+	 * Set workspace creator privileges
+	 * 
+	 * @param workspaceCreator
+	 */
+	public void setWorkspaceCreator(boolean workspaceCreator) {
+		this.workspaceCreator = workspaceCreator;
 	}
 }

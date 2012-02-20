@@ -43,7 +43,7 @@
    
    
   <div align="right">
-      <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
+      <c:if test='${ir:userHasRole("ROLE_GROUP_WORKSPACE_CREATOR", "OR")}'>
 	           <button class="ur_button" 
  		               onmouseover="this.className='ur_buttonover';"
  		               onmouseout="this.className='ur_button';"

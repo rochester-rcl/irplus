@@ -53,6 +53,10 @@
 		<property name="researcher" column="is_researcher" 
 		     type="boolean" not-null="true"
 			 access="field" />
+	
+	    <property name="workspaceCreator" column="is_workspace_creator" 
+		     type="boolean" not-null="true"
+			 access="field" />
 
 		<property name="needsApproval" column="needs_approval" 
 		     type="boolean" not-null="true"

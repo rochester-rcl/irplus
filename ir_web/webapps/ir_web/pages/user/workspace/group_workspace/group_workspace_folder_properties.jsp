@@ -127,12 +127,12 @@
                                         <c:param name="irFileId" value="${entry.sid.researcher.primaryPicture.id}"/>
                                         <c:param name="researcherId" value="${entry.sid.researcher.id}"/>
                                     </c:url>
-                                    <img class="basic_thumbnail" src="${url}"/>
+                                    <img src="${url}"/>
                                    
                                 </c:if>
                                 
                                  <c:if test="${entry.sid.researcher.primaryPicture == null}">
-                	                 <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
+                	                 <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
                                  </c:if>	
                                   <br/> 
                                   <c:url var="editUserPermissions" value="/user/editUserGroupFolderPermissions.action">
