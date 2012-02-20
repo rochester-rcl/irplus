@@ -482,7 +482,7 @@ YAHOO.ur.user.group_workspace = {
          if( other == null )
          {
              //path to look at properties for a file
-             filePropertiesUrl = basePath + 'user/viewPersonalFile.action?personalFileId='+ fileId;
+             filePropertiesUrl = basePath + 'user/viewGroupWorkspaceFileProperties.action?groupWorkspaceFileId='+ fileId;
                 
              /*
                 Instantiate the menu.  The first argument passed to the 
@@ -529,7 +529,7 @@ YAHOO.ur.user.group_workspace = {
                   dropMenu.addItem({ text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" });
               }
               
-              dropMenu.addItem({ text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: "javascript:alert('Properties')" });
+              dropMenu.addItem({ text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: filePropertiesUrl });
               
               if( canEdit )
               {
