@@ -68,6 +68,14 @@
 	             <c:if test="${affiliation.author}">checked="checked"</c:if>
 	             value="true"/> Assign Author permission </td>
 	         </tr>
+	          <tr>
+	             <td colspan="2" align="left"> <input type="checkbox" id="newAffiliationForm_workspaceCreator" 
+	                 name="workspaceCreator" 
+	                 onclick="YAHOO.ur.affiliation.autoCheckPermission(this);"
+	                 <c:if test="${affiliation.workspaceCreator}">checked="checked"</c:if>
+	             value="true"/>
+	             Assign Create Group Workspace permission</td>
+	         </tr>
 		     <tr>
 	             <td colspan="2" align="left"> <input type="checkbox" id="newAffiliationForm_researcher" 
 	                 name="researcher" 
