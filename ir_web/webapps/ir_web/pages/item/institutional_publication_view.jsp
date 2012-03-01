@@ -202,7 +202,7 @@
 				              method="post" action="<c:url value="/admin/viewMoveInstitutionalItemLocations.action"/>">
 								
 								<input type="hidden" id="move_items_destination_id" name="destinationId" value="${institutionalItem.institutionalCollection.id}"/>
-								<input type="hidden" id="move_items_item_ids" name="itemIds" value="${institutionalItemId}"/>
+								<input type="hidden" id="move_items_item_ids" name="itemIds" value="${institutionalItem.id}"/>
 				            </form>  
 		 				
 		 		   </c:if>
