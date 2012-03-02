@@ -526,7 +526,7 @@ YAHOO.ur.user.group_workspace = {
               
               if( canEdit )
               {
-                  dropMenu.addItem({ text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('Move')" });
+                  dropMenu.addItem({ text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:YAHOO.ur.user.group_workspace.moveSingle('group_file_checkbox_"+ fileId +"')" });
               }
               
               dropMenu.addItem({ text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: filePropertiesUrl });
@@ -1066,7 +1066,7 @@ YAHOO.ur.user.group_workspace = {
              */
              dropMenu.addItems([
                  { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:YAHOO.ur.user.group_workspace.editFolder(" + folderId + ")" },
-                 { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:alert('move')" },
+                 { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url:  "javascript:YAHOO.ur.user.group_workspace.moveSingle('group_folder_checkbox_"+ folderId +"')" },
                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.user.group_workspace.deleteSingleConfirm('group_folder_checkbox_"+ folderId +"')" }
              ]);
                
@@ -1309,6 +1309,19 @@ YAHOO.ur.user.group_workspace = {
 	    uploadError.innerHtml = '';
    },
    
+   /**
+    * Select and move the folder or file 
+    */
+   moveSingle : function(elementId)
+   {
+      //uncheck all the ones that have been checked
+      checked = document.groupFolders.checkAllSetting.checked = false;
+      YAHOO.ur.user.group_workspace.setCheckboxes();
+  
+      element = document.getElementById(elementId);
+      element.checked=true;
+      YAHOO.ur.user.group_workspace.moveFolderData();
+   },
    
    /**
     * Select and delete the folder or file 
