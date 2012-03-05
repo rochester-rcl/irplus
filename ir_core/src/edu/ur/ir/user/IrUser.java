@@ -169,6 +169,10 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	private Timestamp mostRecentLoginDate;
 
 
+	// show only group workspaces the user is a member of
+	private boolean showOnlyMyGroupWorkspaces = false;
+	
+
 
 	/**
 	 * Default Constructor. 
@@ -1838,6 +1842,27 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 			setLastLoginDate(mostRecentLoginDate);
 		}
 		this.mostRecentLoginDate = mostRecentLoginDate;
+	}
+	
+	/**
+	 * If true user only wants to see the group workspaces
+	 * they belong to.
+	 * 
+	 * @return true if the user only wants to see the group
+	 * workspaces they belong to
+	 */
+	public boolean getShowOnlyMyGroupWorkspaces() {
+		return showOnlyMyGroupWorkspaces;
+	}
+
+	/**
+	 * Set to true user only wants to see the group workspaces
+	 * they belong to.
+	 * 
+	 * @param showOnlyMyGroupWorkspaces
+	 */
+	public void setShowOnlyMyGroupWorkspaces(boolean showOnlyMyGroupWorkspaces) {
+		this.showOnlyMyGroupWorkspaces = showOnlyMyGroupWorkspaces;
 	}
 	
 }

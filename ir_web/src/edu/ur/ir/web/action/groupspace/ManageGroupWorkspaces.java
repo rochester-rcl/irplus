@@ -24,6 +24,7 @@ import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -74,6 +75,11 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 
 	/* Message that can be displayed to the user. */
 	private String message;
+	
+	/* ACL service */
+	private  SecurityService securityService;
+
+
 
 	/**
 	 * Default constructor
@@ -151,8 +157,20 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		GroupWorkspace other = groupWorkspaceService.get(name);
 		if( other == null )
 		{
-			groupWorkspace = new GroupWorkspace(name, description);
-		    groupWorkspaceService.save(groupWorkspace);
+			if( !name.trim().equals("") )
+			{
+			    groupWorkspace = new GroupWorkspace(name, description);
+		        groupWorkspaceService.save(groupWorkspace);
+		        securityService.assignOwnerPermissions(groupWorkspace, user);
+			}
+			else
+			{
+				success = false;
+				message = getText("groupSpaceNameError", 
+				"Group workspace name cannot be empty");
+				addFieldError("groupWorkspaceAlreadyExists", message);
+			}
+			
 		} 
 		else
 		{
@@ -177,9 +195,19 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		GroupWorkspace other = groupWorkspaceService.get(name);
 		if( other == null )
 		{
-			groupWorkspace.setName(name);
-			groupWorkspace.setDescription(description);
-			groupWorkspaceService.save(groupWorkspace);
+			if( !name.trim().equals("") )
+			{
+			    groupWorkspace.setName(name);
+			    groupWorkspace.setDescription(description);
+			    groupWorkspaceService.save(groupWorkspace);
+			}
+			else
+			{
+				success = false;
+				message = getText("groupSpaceNameError", 
+						"Group workspace name cannot be empty");
+				    addFieldError("groupWorkspaceAlreadyExists", message);
+			}
 		}
 		else
 		{
@@ -303,4 +331,13 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		this.id = id;
 	}
 
+	
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }

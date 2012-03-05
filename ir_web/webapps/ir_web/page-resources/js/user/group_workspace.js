@@ -21,13 +21,15 @@
 YAHOO.namespace("ur.user.group_workspace");
 
 
-//actions for adding,updating and removing content types
+//actions for adding,updating and removing group workspaces 
 var updateGroupWorkspaceAction = basePath + 'user/updateGroupWorkspace.action';
 var newGroupWorkspaceAction = basePath + 'user/createGroupWorkspace.action';
 var deleteGroupWorkspaceAction = basePath + 'user/deleteGroupWorkspace.action';
 var getGroupWorkspaceAction = basePath + 'user/getGroupWorkspace.action';
 var viewGroupWorkspaceFolderAction =  basePath + 'user/viewGroupWorkspaceFolders.action';
 var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
+
+var showOnlyUserWorkspaces = basePath + '/user/showOnlyUsersGroupWorkspaces.action';
 
 //If there is no bookmarked state, assign the default state:
 var groupWorkspaceState = "0";
@@ -79,7 +81,7 @@ YAHOO.ur.user.group_workspace = {
 	    
 	    if( workspaceId == null || workspaceId == 0 )
 	    {
-	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(false);
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
 	    }
 	    else
 	    {
@@ -151,7 +153,7 @@ YAHOO.ur.user.group_workspace = {
 	/**
 	 * Get all group workspaces for a user
 	 */
-    getGroupWorkspaces : function (allGroups)
+    getGroupWorkspaces : function ()
     {
 	    // handle a successful return
         var handleSuccess = function(o) 
@@ -180,18 +182,10 @@ YAHOO.ur.user.group_workspace = {
         };
     
         YAHOO.ur.util.wait.waitDialog.showDialog();
-        if(!allGroups)
-        {
-            YAHOO.util.Connect.asyncRequest('GET', 
-        		    viewGroupWorkspacesAction + '?showOnlyMyGroupWorkspaces=true&bustcache=' + new Date().getTime(),
-             {success: handleSuccess, failure: handleFailure});    
-        }
-        else
-        {
-        	 YAHOO.util.Connect.asyncRequest('GET', 
+        YAHOO.util.Connect.asyncRequest('GET', 
          		    viewGroupWorkspacesAction + '?bustcache=' + new Date().getTime(),
               {success: handleSuccess, failure: handleFailure});    
-        }
+        
     },
 		
 	 /** 
@@ -398,6 +392,15 @@ YAHOO.ur.user.group_workspace = {
 	deleteGroupWorkspace : function(id)
 	{
 		document.getElementById('groupWorkspaceDeleteId').value=id;
+		if( document.getElementById('showMyGroupsOnly').checked )
+		{
+			document.deleteGroupWorkspace.showOnlyMyGroupWorkspaces.value = "true";
+		}
+		else
+		{
+			document.deleteGroupWorkspace.showOnlyMyGroupWorkspaces.value = "false";
+		}
+		alert(document.deleteGroupWorkspace.showOnlyMyGroupWorkspaces.value);
 		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.showDialog();
 	},
 	
@@ -1634,11 +1637,11 @@ YAHOO.ur.user.group_workspace = {
     {
     	if( document.getElementById('showMyGroupsOnly').checked )
     	{
-    		YAHOO.ur.user.group_workspace.getGroupWorkspaces(false);
+    		window.location = showOnlyUserWorkspaces + "?showOnlyMyGroupWorkspaces=true";
     	}
     	else
     	{
-    		YAHOO.ur.user.group_workspace.getGroupWorkspaces(true);
+    		window.location = showOnlyUserWorkspaces + "?showOnlyMyGroupWorkspaces=false";
     	}
     },
    
@@ -1684,7 +1687,7 @@ YAHOO.ur.user.group_workspace = {
 	    else
 	    {
 	    	
-	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(false);
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
 	    }
         
   	}

@@ -33,6 +33,13 @@ ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
 -- add message column
 ALTER TABLE ir_invite.invite_token ADD COLUMN invite_message TEXT;
 
+-- add show only users group workspaces
+ALTER TABLE ir_user.ir_user ADD COLUMN show_only_my_group_workspaces BOOLEAN;
+UPDATE ir_user.ir_user set show_only_my_group_workspaces = FALSE;
+ALTER TABLE ir_user.ir_user ALTER COLUMN show_only_my_group_workspaces SET NOT NULL;
+
+ALTER TABLE ir_user.personal_file DROP CONSTRAINT personal_file_user_id_key;
+ALTER TABLE ir_user.personal_file ADD CONSTRAINT personal_file_user_id_versioned_file_id_key UNIQUE (user_id, versioned_file_id);
 -- ---------------------------------------------
 -- Add new roles and give them to all administrators
 -- ---------------------------------------------

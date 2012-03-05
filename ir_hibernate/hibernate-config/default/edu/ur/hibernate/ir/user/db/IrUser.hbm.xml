@@ -83,9 +83,12 @@
 		<property name="passwordEncoding" column="password_encoding" type="string"
 			not-null="true" access="field" />
 
-		<property name="accountExpired" column="account_expired" 
+		<property name="showOnlyMyGroupWorkspaces" column="show_only_my_group_workspaces" 
+		     type="boolean" access="field" />
+	
+	    <property name="accountExpired" column="account_expired" 
 		     type="boolean" not-null="true"
-			 access="field" />
+			 access="field" /> 
 	
 	    <property name="accountLocked" column="account_locked" 
 		     type="boolean" not-null="true"

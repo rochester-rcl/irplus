@@ -34,7 +34,7 @@
     <form>
     Show Only Groups I'm a member of: 
     <input type="checkbox" id="showMyGroupsOnly" 
-        <c:if test="${showOnlyMyGroupWorkspaces}">
+        <c:if test="${user.showOnlyMyGroupWorkspaces}">
         checked 
         </c:if>
     onclick="javascript:YAHOO.ur.user.group_workspace.changeGroupWorkspaceDisplay()" name="showGroups"/>

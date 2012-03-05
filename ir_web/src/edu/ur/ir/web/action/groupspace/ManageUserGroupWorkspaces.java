@@ -120,7 +120,18 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
     
     // show only the workspaces for this user
     private boolean showOnlyMyGroupWorkspaces = false;
+    
+    private IrUser user;
 
+
+	/**
+	 * Get the user
+	 * 
+	 * @return
+	 */
+	public IrUser getUser() {
+		return user;
+	}
 
 	/**
 	 * Get the group workspace access control list.
@@ -139,6 +150,19 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
+	
+	/**
+	 * Set flag true/false to only show group workspaces the user belongs to
+	 * @return
+	 */
+	public String showOnlyUsersGroupWorkspaces()
+	{
+		user = userService.getUser(userId, false);
+		log.debug("setting value to " + this.showOnlyMyGroupWorkspaces );
+		user.setShowOnlyMyGroupWorkspaces(this.showOnlyMyGroupWorkspaces);
+		userService.makeUserPersistent(user);
+		return SUCCESS;
+	}
 
 	/**
 	 * Initial load of all group spaces
@@ -148,7 +172,8 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	public String execute()
 	{
 		log.debug("view group workspaces");
-		if( !showOnlyMyGroupWorkspaces )
+		user = userService.getUser(userId, false);
+		if( !user.getShowOnlyMyGroupWorkspaces())
 		{
 			log.debug("getting all group  workspaces");
 		    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
@@ -171,7 +196,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		log.debug("get a group space with id = " +  groupWorkspaceId);
 		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		
-		IrUser user = userService.getUser(userId, false);
+		user = userService.getUser(userId, false);
 		// only owners and admins can delete  group workspaces
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
 		
@@ -195,7 +220,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String inviteUsers()
 	{
-        IrUser user = userService.getUser(userId, false);
+        user = userService.getUser(userId, false);
 		
 		if( groupWorkspaceId == null )
 		{
@@ -245,7 +270,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	public String delete()
 	{
 		log.debug("deleting a group space with id = " +  groupWorkspaceId);
-		IrUser user = userService.getUser(userId, false);
+		user = userService.getUser(userId, false);
 		// only owners and admins can delete  group workspaces
 		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId,false);
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
@@ -258,7 +283,16 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		} catch (PermissionNotGrantedException e) {
 			return "accessDenied";
 		}
-	    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		if( !user.getShowOnlyMyGroupWorkspaces())
+		{
+			log.debug("getting all group  workspaces");
+		    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		}
+		else
+		{
+			log.debug("getting group workspaces for all users");
+			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId);
+		}
 
 		return "deleted";
 	}
@@ -272,7 +306,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	public String create() throws DuplicateNameException
 	{
 		log.debug("creating a group space with name = " + name);
-		IrUser user = userService.getUser(userId, false);
+		user = userService.getUser(userId, false);
 		
 		if( user == null || (!user.hasRole(IrRole.ADMIN_ROLE) && !user.hasRole(IrRole.GROUP_WORKSPACE_CREATOR_ROLE)) )
 		{
@@ -281,10 +315,20 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		GroupWorkspace other = groupWorkspaceService.get(name);
 		if( other == null )
 		{
-			groupWorkspace = new GroupWorkspace(name, description);
-			groupWorkspace.add(user, true);
-		    groupWorkspaceService.save(groupWorkspace);
-		    securityService.assignOwnerPermissions(groupWorkspace, user);
+			if( !name.trim().equals("") )
+			{
+			    groupWorkspace = new GroupWorkspace(name, description);
+			    groupWorkspace.add(user, true);
+		        groupWorkspaceService.save(groupWorkspace);
+		        securityService.assignOwnerPermissions(groupWorkspace, user);
+			}
+			else
+			{
+				success = false;
+				message = getText("groupSpaceNameError", 
+				"Group workspace name cannot be empty");
+				addFieldError("groupWorkspaceAlreadyExists", message);
+			}
 		} 
 		else
 		{
@@ -307,7 +351,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		log.debug("updating group space  = " + name + " id = " + groupWorkspaceId);
 		groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		
-		IrUser user = userService.getUser(userId, false);
+		user = userService.getUser(userId, false);
 		// only owners and admins can delete  group workspaces
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
 		
@@ -325,9 +369,19 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		GroupWorkspace other = groupWorkspaceService.get(name);
 		if( other == null )
 		{
-			groupWorkspace.setName(name);
-			groupWorkspace.setDescription(description);
-			groupWorkspaceService.save(groupWorkspace);
+			if( !name.trim().equals("") )
+			{
+			    groupWorkspace.setName(name);
+			    groupWorkspace.setDescription(description);
+			    groupWorkspaceService.save(groupWorkspace);
+			}
+			else
+			{
+				success = false;
+				message = getText("groupSpaceNameError", 
+				"Group workspace name cannot be empty");
+				addFieldError("groupWorkspaceAlreadyExists", message);
+			}
 		}
 		else
 		{
@@ -348,7 +402,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String removeUser()
 	{
-        IrUser user = userService.getUser(userId, false);
+        user = userService.getUser(userId, false);
 		
 		if( groupWorkspaceId == null )
 		{
@@ -389,7 +443,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String removeInvite()
 	{
-		IrUser user = userService.getUser(userId, false);
+		user = userService.getUser(userId, false);
 			
 		if( groupWorkspaceId == null )
 		{

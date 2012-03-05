@@ -22,7 +22,18 @@
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_table.jsp</result>
-        </action>
+       </action>
+       
+       <action name="showOnlyUsersGroupWorkspaces" 
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces"
+            method="showOnlyUsersGroupWorkspaces">
+            <interceptor-ref  name="crudStack"/>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">workspace.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="tabName">GROUP_WORKSPACE</param>
+        	</result>
+       </action>
        
         <!--  This handles update, save and delete -->
         <action name="*GroupWorkspace" 
