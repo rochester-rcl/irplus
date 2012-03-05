@@ -52,6 +52,10 @@
   </div>
   <br/>
  
+  <div align="right">
+      <c:import url="/pages/user/workspace/group_workspace/browse_group_workspaces_pager.jsp"/>
+      <br/>
+  </div>
                
   <div class="dataTable">
        
@@ -116,3 +120,8 @@
         </urstb:table>
     </form>
 </div>
+
+  <div align="right">
+      <c:import url="/pages/user/workspace/group_workspace/browse_group_workspaces_pager.jsp"/>
+      <br/>
+  </div>
