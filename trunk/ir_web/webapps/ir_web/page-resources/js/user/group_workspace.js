@@ -81,7 +81,7 @@ YAHOO.ur.user.group_workspace = {
 	    
 	    if( workspaceId == null || workspaceId == 0 )
 	    {
-	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(0, 1, 1);
 	    }
 	    else
 	    {
@@ -153,7 +153,7 @@ YAHOO.ur.user.group_workspace = {
 	/**
 	 * Get all group workspaces for a user
 	 */
-    getGroupWorkspaces : function ()
+    getGroupWorkspaces : function (rowStart, startPageNumber, currentPageNumber)
     {
 	    // handle a successful return
         var handleSuccess = function(o) 
@@ -183,7 +183,10 @@ YAHOO.ur.user.group_workspace = {
     
         YAHOO.ur.util.wait.waitDialog.showDialog();
         YAHOO.util.Connect.asyncRequest('GET', 
-         		    viewGroupWorkspacesAction + '?bustcache=' + new Date().getTime(),
+         		    viewGroupWorkspacesAction + '?&rowStart=' + rowStart 
+    					+ '&startPageNumber=' + startPageNumber 
+    					+ '&currentPageNumber=' + currentPageNumber 
+    					+ '&bustcache=' + new Date().getTime(),
               {success: handleSuccess, failure: handleFailure});    
         
     },
@@ -1687,7 +1690,7 @@ YAHOO.ur.user.group_workspace = {
 	    else
 	    {
 	    	
-	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(0, 1, 1);
 	    }
         
   	}

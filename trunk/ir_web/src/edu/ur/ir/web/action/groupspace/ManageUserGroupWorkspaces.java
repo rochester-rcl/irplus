@@ -122,7 +122,21 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
     private boolean showOnlyMyGroupWorkspaces = false;
     
     private IrUser user;
+    
+	/** Total number of researchers */
+	private int totalHits;
+	
+	/** Row End */
+	private int rowEnd;
 
+
+	/**
+	 * Get the row end.
+	 * @return
+	 */
+	public int getRowEnd() {
+		return rowEnd;
+	}
 
 	/**
 	 * Get the user
@@ -147,8 +161,9 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public ManageUserGroupWorkspaces()
 	{
-		numberOfResultsToShow = 25;
-		numberOfPagesToShow = 10;
+
+		numberOfResultsToShow = 2;
+		numberOfPagesToShow = 20;
 	}
 	
 	/**
@@ -171,6 +186,9 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String execute()
 	{
+		log.debug("Browse researcher called ");
+		rowEnd = rowStart + numberOfResultsToShow;
+		
 		log.debug("view group workspaces");
 		user = userService.getUser(userId, false);
 		if( !user.getShowOnlyMyGroupWorkspaces())
@@ -182,6 +200,13 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		{
 			log.debug("getting group workspaces for all users");
 			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId);
+		}
+		
+		totalHits = groupWorkspaceService.getCount().intValue();
+		
+		if(rowEnd > totalHits)
+		{
+			rowEnd = totalHits;
 		}
 		return SUCCESS;
 	}
