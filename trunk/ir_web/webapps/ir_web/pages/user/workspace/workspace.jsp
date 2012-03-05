@@ -548,6 +548,7 @@
 		                action="/user/deleteGroupWorkspace.action">
 			   <p>Are you sure you wish to delete the selected group workspace?</p>
 			   <input type="hidden" id="groupWorkspaceDeleteId" name="groupWorkspaceId" value=""/>
+			   <input type="hidden"  name="showOnlyMyGroupWorkspaces"  value="false"/>
 		    </form>
 		</div>
      </div>

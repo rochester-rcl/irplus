@@ -886,6 +886,7 @@ CREATE TABLE ir_user.ir_user
   most_recent_login_date TIMESTAMP WITH TIME ZONE,
   self_registered BOOLEAN,
   phone_number TEXT,
+  show_only_my_group_workspaces BOOLEAN NOT NULL,
   account_expired BOOLEAN NOT NULL,
   account_locked BOOLEAN NOT NULL,
   credentials_expired BOOLEAN NOT NULL,
@@ -2486,7 +2487,7 @@ CREATE TABLE ir_user.personal_file
     FOREIGN KEY (personal_folder_id) REFERENCES ir_user.personal_folder (personal_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    UNIQUE(user_id, personal_folder_id, versioned_file_id)
+    UNIQUE(user_id, versioned_file_id)
 );
 ALTER TABLE ir_user.personal_file OWNER TO ir_plus;
 

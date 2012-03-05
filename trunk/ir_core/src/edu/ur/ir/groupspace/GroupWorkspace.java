@@ -92,6 +92,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
      */
     public GroupWorkspace(String name) 
     {
+    	
     	setName(name);
     	groupWorkspaceProjectPage = new GroupWorkspaceProjectPage(this);
     	createdDate = new Timestamp(new Date().getTime());
@@ -127,6 +128,10 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	 * @param name
 	 */
 	public void setName(String name) {
+		if( name == null || name.trim().equals(""))
+    	{
+    		throw new IllegalStateException("Group workspace name cannot be null");
+    	}
 		this.name = name.trim();
 		lowerCaseName = this.name.toLowerCase();
 	}
