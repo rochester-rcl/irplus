@@ -183,7 +183,7 @@ YAHOO.ur.user.group_workspace = {
     
         YAHOO.ur.util.wait.waitDialog.showDialog();
         YAHOO.util.Connect.asyncRequest('GET', 
-         		    viewGroupWorkspacesAction + '?&rowStart=' + rowStart 
+         		    viewGroupWorkspacesAction + '?rowStart=' + rowStart 
     					+ '&startPageNumber=' + startPageNumber 
     					+ '&currentPageNumber=' + currentPageNumber 
     					+ '&bustcache=' + new Date().getTime(),
