@@ -147,4 +147,19 @@
 		order by groupWorkspace.lowerCaseName asc
 	</query>
 	
+		<!--  get groupspaces for a given user by user id and name ascending  -->
+	<query name="groupWorkspaceByUserIdNameDesc">
+	    select groupWorkspace from GroupWorkspace as groupWorkspace
+	    join groupWorkspace.users as workspaceUser
+	    where workspaceUser.user.id = :userId
+		order by groupWorkspace.lowerCaseName desc
+	</query>
+	
+		<!--  Get a count of groupspaces in the system -->
+	<query name="groupWorkspaceCountByUserId">
+	    select count(*) from GroupWorkspace as groupWorkspace
+	    join groupWorkspace.users as workspaceUser
+	    where workspaceUser.user.id = :userId
+	</query>
+	
 </hibernate-mapping>

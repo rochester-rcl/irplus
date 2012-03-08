@@ -195,19 +195,22 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		{
 			log.debug("getting all group  workspaces");
 		    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		    totalHits = groupWorkspaceService.getCount().intValue();
 		}
 		else
 		{
 			log.debug("getting group workspaces for all users");
-			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId);
+			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId, rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+			totalHits = groupWorkspaceService.getCount(userId).intValue();
 		}
 		
-		totalHits = groupWorkspaceService.getCount().intValue();
+		log.debug("total testing hits = " + totalHits);
 		
 		if(rowEnd > totalHits)
 		{
 			rowEnd = totalHits;
 		}
+		log.debug("row end = " + rowEnd);
 		return SUCCESS;
 	}
 	
@@ -301,7 +304,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		GroupWorkspaceUser workspaceUser = groupWorkspace.getUser(user);
 		
 		log.debug("workspace user = " + workspaceUser);
-		
+		rowEnd = rowStart + numberOfResultsToShow;
 	    
 	    try {
 			groupWorkspaceService.delete(groupWorkspace, user);
@@ -312,13 +315,19 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		{
 			log.debug("getting all group  workspaces");
 		    groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		    totalHits = groupWorkspaceService.getCount().intValue();
 		}
 		else
 		{
 			log.debug("getting group workspaces for all users");
-			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId);
+			groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesForUser(userId, rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+			totalHits = groupWorkspaceService.getCount(userId).intValue();
 		}
 
+		if(rowEnd > totalHits)
+		{
+			rowEnd = totalHits;
+		}
 		return "deleted";
 	}
 	
@@ -503,7 +512,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 * @see edu.ur.ir.web.table.Pager#getTotalHits()
 	 */
 	public int getTotalHits() {
-		return groupWorkspaceService.getCount().intValue();
+		return totalHits;
 	}
 
 	/**

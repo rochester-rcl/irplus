@@ -27,9 +27,9 @@ var newGroupWorkspaceAction = basePath + 'user/createGroupWorkspace.action';
 var deleteGroupWorkspaceAction = basePath + 'user/deleteGroupWorkspace.action';
 var getGroupWorkspaceAction = basePath + 'user/getGroupWorkspace.action';
 var viewGroupWorkspaceFolderAction =  basePath + 'user/viewGroupWorkspaceFolders.action';
-var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
+var viewGroupWorkspacesAction = basePath + 'user/viewGroupWorkspaces.action';
 
-var showOnlyUserWorkspaces = basePath + '/user/showOnlyUsersGroupWorkspaces.action';
+var showOnlyUserWorkspaces = basePath + 'user/showOnlyUsersGroupWorkspaces.action';
 
 //If there is no bookmarked state, assign the default state:
 var groupWorkspaceState = "0";
@@ -452,9 +452,15 @@ YAHOO.ur.user.group_workspace = {
 	    };
 
 	    YAHOO.ur.user.group_workspace.destroyFolderMenus();
-        YAHOO.util.Connect.asyncRequest('GET', viewGroupWorkspaceFolderAction + 
+	    
+	    // this prevents the back button from causing a null or empty work space from
+	    // being loaded
+	    if( workspaceId != null && workspaceId > 0 )
+	    {
+            YAHOO.util.Connect.asyncRequest('GET', viewGroupWorkspaceFolderAction + 
         		'?groupWorkspaceId=' + workspaceId +  '&bustcache=' + new Date().getTime(),
-          {success: handleSuccess, failure: handleFailure});
+              {success: handleSuccess, failure: handleFailure});
+	    }
     },
     
     /** 
@@ -577,9 +583,18 @@ YAHOO.ur.user.group_workspace = {
      */ 
     insertHiddenGroupWorkspaceFolderInfo : function()
     {
-        var parentFolderId = document.getElementById('groupFoldersParentFolderId').value;
-        var groupWorkspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
-        
+    	var parentFolderId = null;
+    	if( document.getElementById('groupFoldersParentFolderId') != null )
+    	{
+            parentFolderId = document.getElementById('groupFoldersParentFolderId').value;
+    	}
+    	
+    	var groupWorkspaceId = null;
+    	if( document.getElementById('groupFoldersGroupWorkspaceId') != null )
+    	{
+            groupWorkspaceId = document.getElementById('groupFoldersGroupWorkspaceId').value;
+    	}
+    	
         // set top level variables
         document.getElementById("groupWorkspaceFormGroupWorkspaceId").value = groupWorkspaceId;
 	    document.getElementById("groupWorkspaceFormGroupWorkspaceFolderId").value = parentFolderId;
@@ -896,8 +911,8 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.destroyFolderMenus();
     
       
-	    // execute the transaction
- 	    
+	  
+	   // execute the transaction 
        var getFoldersAction = viewGroupWorkspaceFolderAction + 
            '?parentFolderId=' + folderId + "&groupWorkspaceId=" + workspaceId + 
            '&bustcache='+new Date().getTime();
@@ -1678,6 +1693,7 @@ YAHOO.ur.user.group_workspace = {
      
 	    if( groupWorkspaceId != null && groupWorkspaceId > 0 )
 	    {
+	    	
 	    	 if( groupWorkspaceFolderId == null && groupWorkspaceFolderId < 0 )
 	    	 { 
 	    	     YAHOO.ur.user.group_workspace.getGroupWorkspaceById(groupWorkspaceId);
@@ -1689,7 +1705,6 @@ YAHOO.ur.user.group_workspace = {
 	    }
 	    else
 	    {
-	    	
 	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces(0, 1, 1);
 	    }
         

@@ -70,6 +70,13 @@ public interface GroupWorkspaceService extends Serializable{
     public Long getCount();
     
     /**
+     * Get a count of the group spaces in the system that a particular user belongs to.
+     * 
+     * @return - count of group spaces in the system the user belongs to
+     */
+    public Long getCount(Long userId);
+    
+    /**
      * Get the group space based on id.
      * 
      * @param id - id of the group space
@@ -99,7 +106,7 @@ public interface GroupWorkspaceService extends Serializable{
 	 * 
 	 * @return - list of all groups the user belongs to.
 	 */
-	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId);
+	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId, int rowStart, int numberOfResultsToShow, OrderType orderType);
 	
     /**
      * Get the group workspace user for the given user id and group workspace id.

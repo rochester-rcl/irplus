@@ -32,6 +32,15 @@ import edu.ur.order.OrderType;
  */
 public interface GroupWorkspaceDAO extends CrudDAO<GroupWorkspace>, CountableDAO, UniqueNameDAO<GroupWorkspace>
 {
+	
+	/**
+	 * Get the count of group workspaces the user belongs to
+	 * 
+	 * @param userId - id of the user
+	 * @return the number of group workspaces the user belongs to
+	 */
+	public Long getCount(Long userId);
+	
 	/**
 	 * Get the list of group spaces.
 	 * 
@@ -48,8 +57,11 @@ public interface GroupWorkspaceDAO extends CrudDAO<GroupWorkspace>, CountableDAO
 	 * Get all group workspaces for a given user - this includes groups they own or belong to a group within the workspace.
 	 * 
 	 * @param userId - id of the user to get the group workspaces for
+	 * @param rowStart - start position
+	 * @param numberOfResultsToShow - number of rows to grab.
+	 * @param sortType - Order (Desc/Asc) 
 	 * 
 	 * @return - list of all groups the user belongs to.
 	 */
-	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId);
+	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId, int rowStart, int numberOfResultsToShow, OrderType orderType );
 }

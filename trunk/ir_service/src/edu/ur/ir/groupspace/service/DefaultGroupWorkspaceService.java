@@ -185,9 +185,9 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
 	 * 
 	 * @return - list of all groups the user belongs to.
 	 */
-	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId)
+	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId, int rowStart, int numberOfResultsToShow, OrderType orderType)
 	{
-		return groupWorkspaceDAO.getGroupWorkspacesForUser(userId);
+		return groupWorkspaceDAO.getGroupWorkspacesForUser(userId, rowStart, numberOfResultsToShow, orderType);
 	}
 	
 	/**
@@ -282,6 +282,16 @@ public class DefaultGroupWorkspaceService implements GroupWorkspaceService {
         }
 		
 	}
+	
+    /**
+     * Get a count of the group spaces in the system that a particular user belongs to.
+     * 
+     * @return - count of group spaces in the system the user belongs to
+     */
+    public Long getCount(Long userId)
+    {
+    	return groupWorkspaceDAO.getCount(userId);
+    }
 	
 	/**
 	 * Add a user to the group workspace with the given permissions.
