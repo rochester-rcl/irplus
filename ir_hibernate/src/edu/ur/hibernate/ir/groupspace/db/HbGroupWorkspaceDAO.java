@@ -146,12 +146,34 @@ public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 	 * @return - list of all groups the user belongs to.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId)
+	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId, int rowStart, int numberOfResultsToShow, OrderType orderType)
 	{
 	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
-	    Query q = session.getNamedQuery("groupWorkspaceByUserIdNameAsc");
+	    Query q = null;
+	    if(orderType.equals(OrderType.ASCENDING_ORDER))
+		{
+		    q = session.getNamedQuery("groupWorkspaceByUserIdNameAsc");
+		} 
+		else
+		{
+		    q = session.getNamedQuery("groupWorkspaceByUserIdNameDesc");
+		} 	    	
+	    	
 	    q.setParameter("userId", userId);
+	    q.setFirstResult(rowStart);
+	    q.setMaxResults(numberOfResultsToShow);
+		q.setFetchSize(numberOfResultsToShow);
 	    return q.list();
+	}
+
+	
+	/**
+	 * Get the count of group workspaces for the given user id.
+	 */
+	public Long getCount(Long userId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceCountByUserId");
+		q.setParameter("userId", userId);
+		return (Long)q.uniqueResult();
 	}
 
 

@@ -34,6 +34,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserManager;
+import edu.ur.order.OrderType;
 
 /**
  * Group space data access object test.
@@ -116,7 +117,7 @@ public class GroupWorkspaceDAOTest {
  		GroupWorkspaceUser workspaceUser = other.getUser(user);
  		assert workspaceUser != null : "Workspace user for " + user + " should not be null";
  		assert workspaceUser.isOwner() : "Workspace user  " + workspaceUser + " should be owner of project but is not";
- 		List<GroupWorkspace> workspaces = groupWorkspaceDAO.getGroupWorkspacesForUser(user.getId());
+ 		List<GroupWorkspace> workspaces = groupWorkspaceDAO.getGroupWorkspacesForUser(user.getId(), 0, 20, OrderType.ASCENDING_ORDER);
  		assert workspaces.size() == 1 : "Should find one workspace but found " + workspaces.size();
  		assert workspaces.contains(other) : "List should contain " + other + " but does not";
         tm.commit(ts);        
