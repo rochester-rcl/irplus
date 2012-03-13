@@ -1981,6 +1981,7 @@ CREATE TABLE ir_repository.repository
   researcher_index_folder TEXT,
   user_workspace_index_folder TEXT,
   institutional_collection_index_folder TEXT,
+  group_workspace_index_folder TEXT,
   user_group_index_folder TEXT,
   default_handle_authority_id BIGINT,
   last_email_subscriber_process_sent_date TIMESTAMP WITH TIME ZONE,
@@ -2592,12 +2593,12 @@ insert into
 ir_user.ir_user ( user_id, user_password, password_encoding, default_email_id, username, 
 first_name, lower_case_first_name, last_name, lower_case_last_name, 
 version, account_expired, account_locked, credentials_expired, 
-force_change_password, affiliation_approved, self_registered, created_date, re_build_user_workspace_index)  
+force_change_password, affiliation_approved, self_registered, created_date, re_build_user_workspace_index, show_only_my_group_workspaces)  
 values (nextval('ir_user.ir_user_seq'), 
       'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'System', 
       'system', 'Admin', 'admin', 0, false, 
 
-false, false, false, true, false, date(now()), false);
+false, false, false, true, false, date(now()), false, true);
 
 insert into ir_user.user_email(user_email_id, version, email, lower_case_email, user_id, isVerified) values 
 

@@ -40,84 +40,77 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class Repository extends CommonPersistent {
 	
-	/** Default repository id  */
+	// Default repository id  
 	public static final long DEFAULT_REPOSITORY_ID = 1l;
 	
-	/** Logger */
+	// Logger 
 	private static final Logger log = Logger.getLogger(Repository.class);
 	
-	/**  Current location where files should be stored  */
+	//  Current location where files should be stored  
 	private FileDatabase fileDatabase;
 	
-	/** The institution that this repository belongs to. */
+	// The institution that this repository belongs to. 
 	private String institutionName;
 	
-	/** indicates that the repository has been initialzed for the first time
-	 * generally only used in main application to determine if file system locations
-	 * need to be created. 
-	 **/
+	// indicates that the repository has been initialzed for the first time
+	// generally only used in main application to determine if file system locations
+	// need to be created. 
 	private boolean initalized = false;
 	
-	/** 
-	 * Set of pictures for the institution this is to show the pictures
-	 * for the institution.  This is just a set of files so it is up to the 
-	 * client to determine if the files are appropriate for this set.
-	 */
+	// Set of pictures for the institution this is to show the pictures
+	// for the institution.  This is just a set of files so it is up to the 
+	// client to determine if the files are appropriate for this set.
 	private Set<IrFile> pictures = new HashSet<IrFile>();
 	
-	/**
-	 * Set of top level collections that belong to this
-	 * institutional repository.
-	 *  
-	 */
+	// Set of top level collections that belong to this
+	// institutional repository.
 	private Set<InstitutionalCollection> institutionalCollections = new HashSet<InstitutionalCollection>();
 	
-	/**  Generated unique id. */
+	//  Generated unique id. 
 	private static final long serialVersionUID = 5333030801530312407L;
 	
-	/** Folder containing the name index for names of people in the system*/ 
+	// Folder containing the name index for names of people in the system 
 	private String nameIndexFolder;
 	
-	/** Folder containing the index for users in the system*/ 
+	// Folder containing the index for users in the system
 	private String userIndexFolder;
 	
-	/** Folder containing the index for institutional items in the repository */
+	// Folder containing the index for institutional items in the repository 
 	private String institutionalItemIndexFolder;
 	
-	/** Folder containing the index for researcher in the system*/ 
+	// Folder containing the index for researcher in the system 
 	private String researcherIndexFolder;
 	
-	/** Folder containing all user workspace indexes*/ 
+	// Folder containing all user workspace indexes 
 	private String userWorkspaceIndexFolder;
 	
-	/** Folder to hold collection index information */
+	// Folder to hold collection index information 
 	private String institutionalCollectionIndexFolder;
+	
+	// Folder location to hold group workspace index information
+	private String groupWorkspaceIndexFolder;
 
-	/** group index folder */
+	// group index folder 
 	private String userGroupIndexFolder;
 	
-	/** default license for the repository */
+	// default license for the repository */
 	private LicenseVersion defaultLicense;
 	
- 	/**   Default handle name authority to use when assigning handle values  */
+	//   Default handle name authority to use when assigning handle values  */
 	private HandleNameAuthority defaultHandleNameAuthority;
 	
-	/** last date the email process ran to send subscribers new collection items */
+	// last date the email process ran to send subscribers new collection items */
 	private Timestamp lastSubscriptionProcessEmailDate;
 	
-	/** indicates that sending emails should be stoped - default is false*/
+	// indicates that sending emails should be stoped - default is false*/
 	private boolean suspendSubscriptionEmails = false;
 	
-	/**
-	 * Once a license has been used, it is then retired - so it can no longer be used
-	 * again.
-	 */
+	// Once a license has been used, it is then retired - so it can no longer be used
+	// again.
 	private Set<RetiredRepositoryLicense> retiredLicenses = new HashSet<RetiredRepositoryLicense>();
 	
 
-	/**
-     * Default constructor
-     */
+    // Default constructor
     public Repository(){}
     
     /**
@@ -733,5 +726,23 @@ public class Repository extends CommonPersistent {
 	 */
 	public void setRetiredLicenses(Set<RetiredRepositoryLicense> retiredLicenses) {
 		this.retiredLicenses = retiredLicenses;
+	}
+	
+	/**
+	 * Get the location where the group workspace index folders will be stored.
+	 * 
+	 * @return
+	 */
+	public String getGroupWorkspaceIndexFolder() {
+		return groupWorkspaceIndexFolder;
+	}
+
+	/**
+	 * Set the location where the group workspace index folders will be stored.
+	 * 
+	 * @param groupWorkspaceIndexFolder
+	 */
+	public void setGroupWorkspaceIndexFolder(String groupWorkspaceIndexFolder) {
+		this.groupWorkspaceIndexFolder = groupWorkspaceIndexFolder;
 	}
 }

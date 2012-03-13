@@ -33,6 +33,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
@@ -140,7 +141,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		try {
 			directory = FSDirectory.open(userIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(USER_ID, userId.toString());
+			Term term = new Term(USER_ID, NumericUtils.longToPrefixCoded(userId));
 			writer.deleteDocuments(term);
 			
 		} catch (IOException e) {
@@ -333,7 +334,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		Document doc = new Document();
         
 	    doc.add(new Field(USER_ID, 
-	    		user.getId().toString(), 
+	    		 NumericUtils.longToPrefixCoded(user.getId()), 
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
 	    

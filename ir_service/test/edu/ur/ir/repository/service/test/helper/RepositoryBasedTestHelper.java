@@ -105,6 +105,9 @@ public class RepositoryBasedTestHelper {
 	
 		// location to store institutional collection index folders
 		String userGroupIndexFolder = properties.getProperty("user_group_index_folder");
+		
+		// location to store group workspace index 
+		String groupWorkspaceIndexFolder = properties.getProperty("group_workspace_index_folder");
 
 		// create each of the folders
 		File f = new File(nameIndexFolder);
@@ -167,6 +170,16 @@ public class RepositoryBasedTestHelper {
 			}
 		}
 		
+		f = new File(groupWorkspaceIndexFolder);
+		if( !f.exists() )
+		{
+			try {
+				FileUtils.forceMkdir(f);
+			} catch (IOException e) {
+				throw new IllegalStateException(e);
+			}
+		}
+		
 		String defaultFolderDispalyName = "default_folder";
 
 		// create the file server
@@ -200,6 +213,9 @@ public class RepositoryBasedTestHelper {
 
 		//set the user group index folders location
 		repository.setUserGroupIndexFolder(userGroupIndexFolder);
+		
+		// set the group workspace index folder
+		repository.setGroupWorkspaceIndexFolder(groupWorkspaceIndexFolder);
 		
 		repositoryService.saveRepository(repository);
 		

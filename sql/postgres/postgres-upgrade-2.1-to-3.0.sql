@@ -23,6 +23,8 @@ ALTER TABLE ir_repository.repository ADD COLUMN institutional_collection_index_f
 -- create the institutional collection index folder
 ALTER TABLE ir_repository.repository ADD COLUMN user_group_index_folder TEXT;
 
+-- create the group workspace index folder
+ALTER TABLE ir_repository.repository ADD COLUMN group_workspace_index_folder TEXT;
 
 -- add invite info created date
 ALTER TABLE ir_user.invite_info ADD COLUMN created_date TIMESTAMP WITH TIME ZONE;

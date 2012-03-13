@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2012 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
    limitations under the License.
 */  
 
-
-package edu.ur.ir.user.service;
+package edu.ur.ir.groupspace.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,56 +35,53 @@ import org.apache.lucene.util.Version;
 
 import edu.ur.ir.SearchHelper;
 import edu.ur.ir.SearchResults;
-import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.UserService;
-import edu.ur.ir.user.UserSearchService;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceSearchService;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
+
 
 /**
- * Default implementation of user search service.
+ * Default implementation for the gorup workspace search service.
  * 
  * @author Nathan Sarr
  *
  */
-public class DefaultUserSearchService implements UserSearchService{
-	
-	/** eclipse generated id */
-	private static final long serialVersionUID = -4995845331563910038L;
+public class DefaultGroupWorkspaceSearchService implements GroupWorkspaceSearchService{
 
-	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserSearchService.class);
+	// eclipse generated id
+	private static final long serialVersionUID = -7867033472526750057L;
+
+	// File system service for loading file system objects 
+	private GroupWorkspaceService groupWorkspaceService;
+
+	// Fields to be searched   
+	private String[] fields = {DefaultGroupWorkspaceIndexService.GROUP_NAME,
+			DefaultGroupWorkspaceIndexService.GROUP_DESCRIPTION};
 	
-	/** File system service for loading file system objects */
-	private UserService userService;
-	
-	/** Fields to be searched   */
-	private String[] fields = {DefaultUserIndexService.USER_NAME,
-			DefaultUserIndexService.USER_FIRST_NAME,
-			DefaultUserIndexService.USER_LAST_NAME,
-			DefaultUserIndexService.USER_EMAILS,
-			DefaultUserIndexService.USER_DEPARTMENTS,
-			DefaultUserIndexService.USER_NAMES};
-	
-	/** Analyzer for dealing with analyzing the search */
+	// Analyzer for dealing with analyzing the search 
 	private transient Analyzer analyzer;
-
-
-	public SearchResults<IrUser> search(File userIndexFolder, String query,
-			int offset, int numResults) {
-		SearchResults<IrUser> searchResults = new SearchResults<IrUser>();
+	
+	//  Get the logger for this class 
+	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceSearchService.class);
+	
+	
+	public SearchResults<GroupWorkspace> search(File indexFolder, String query,
+			int offset, int numResults) 
+	{
+		SearchResults<GroupWorkspace> searchResults = new SearchResults<GroupWorkspace>();
 		searchResults.setOriginalQuery(query);
 		query = SearchHelper.prepareMainSearchString(query, true);
-		ArrayList<IrUser> users = new ArrayList<IrUser>();
+		ArrayList<GroupWorkspace> groupWorkspaces = new ArrayList<GroupWorkspace>();
 		if( log.isDebugEnabled())
 		{
 			log.debug("User search results executing query " + query 
-					+ " on index " + userIndexFolder.getAbsolutePath());
+					+ " on index " + indexFolder.getAbsolutePath());
 		}
 		
-		String indexFolder = userIndexFolder.getAbsolutePath();
 		IndexSearcher searcher = null;
 		IndexReader reader = null;
 		try {
-			FSDirectory directory = FSDirectory.open(new File(indexFolder));
+			FSDirectory directory = FSDirectory.open(indexFolder);
 			reader = IndexReader.open(directory, true);
 			searcher = new IndexSearcher(reader);
 			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
@@ -106,10 +102,10 @@ public class DefaultUserSearchService implements UserSearchService{
 				}
 				
 				Document d = searcher.doc(hits.scoreDocs[position].doc);
-				Long userId = NumericUtils.prefixCodedToLong(d.get(DefaultUserIndexService.USER_ID));
-				log.debug( "user id = " + userId);
-				IrUser user = userService.getUser(userId, false);
-				users.add(user);
+				Long groupWorkspaceId = NumericUtils.prefixCodedToLong(d.get(DefaultGroupWorkspaceIndexService.ID));
+				log.debug( "group workspace id = " + groupWorkspaceId);
+				GroupWorkspace groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+				groupWorkspaces.add(groupWorkspace);
 				addedResults += 1;
 				position += 1;
 			}
@@ -135,27 +131,28 @@ public class DefaultUserSearchService implements UserSearchService{
 				}
 			}
 		}
-		searchResults.setObjects(users);
+		searchResults.setObjects(groupWorkspaces);
 		return searchResults;
 	}
-
+	
 	/**
-	 * Set the user service to access user information.
+	 * Set the group workspace service.
 	 * 
-	 * @param userService
+	 * @param groupWorkspaceService
 	 */
-	public void setUserService(UserService userService) {
-		this.userService = userService;
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) 
+	{
+		this.groupWorkspaceService = groupWorkspaceService;
 	}
-
-
-
+	
 	/**
 	 * Set the analyzer for searching the index.
 	 * 
 	 * @param analyzer
 	 */
-	public void setAnalyzer(Analyzer analyzer) {
+	public void setAnalyzer(Analyzer analyzer) 
+	{
 		this.analyzer = analyzer;
 	}
+
 }

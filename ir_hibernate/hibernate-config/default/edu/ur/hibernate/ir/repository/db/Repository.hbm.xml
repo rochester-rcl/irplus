@@ -84,6 +84,10 @@
 		<!-- folder for indexed researcher data -->
 		<property name="researcherIndexFolder" column="researcher_index_folder" type="string"
 			not-null="false" />
+		
+				<!-- folder for indexed researcher data -->
+		<property name="groupWorkspaceIndexFolder" column="group_workspace_index_folder" type="string"
+			not-null="false" />
 			
 		<!-- Default file database for the repository to files-->
 		<many-to-one class="edu.ur.file.db.DefaultFileDatabase" cascade="save-update"
