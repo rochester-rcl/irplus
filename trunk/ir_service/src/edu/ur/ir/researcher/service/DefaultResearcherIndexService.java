@@ -176,7 +176,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * 
 	 * @see edu.ur.ir.researcher.ResearcherIndexService#deleteFromIndex(edu.ur.ir.researcher.Researcher, java.io.File)
 	 */
-	public void deleteFromIndex(Long researcherId, File researcherIndexFolder) {
+	public void deleteFromIndex(Long researcherId, File researcherIndexFolder) 
+	{
 		if( log.isDebugEnabled() )
 		{
 			log.debug("deleting researcher id : " + researcherId + " from index folder " + researcherIndexFolder.getAbsolutePath());
@@ -191,22 +192,29 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		
 		Directory directory = null;
 		IndexWriter writer = null;
-		try {
+		try 
+		{
 			directory = FSDirectory.open(researcherIndexFolder);
 			writer = getWriter(directory);
 			Term term = new Term(ID, NumericUtils.longToPrefixCoded(researcherId));
 			writer.deleteDocuments(term);
 			writer.commit();
 			
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			log.error(e);
 			errorEmailService.sendError(e);
 		}
-		finally {
+		finally 
+		{
 			if (writer != null) {
-			    try {
+			    try 
+			    {
 				    writer.close();
-			    } catch (Exception e) {
+			    } 
+			    catch (Exception e) 
+			    {
 				    log.error(e);
 			    }
 		    }
@@ -241,7 +249,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * @see edu.ur.ir.researcher.ResearcherIndexService#updateIndex(edu.ur.ir.researcher.Researcher, java.io.File)
 	 */
 	public void updateIndex(Researcher researcher, File researcherIndexFolder)
-			throws NoIndexFoundException {
+			throws NoIndexFoundException 
+	{
 		if( log.isDebugEnabled() )
 		{
 			log.debug("updating index for researcher: " + researcher + " in index folder " + researcherIndexFolder.getAbsolutePath());
@@ -261,26 +270,33 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		log.debug("write document to directory " + directoryPath );
 		Directory directory = null;
 		IndexWriter writer = null;
-		try {
+		try 
+		{
 			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			log.error(e);
 			errorEmailService.sendError(e);
 		}
 		finally
 		{
-			if (writer != null) {
-			    try {
+			if (writer != null) 
+			{
+			    try 
+			    {
 				    writer.close();
-			    } catch (Exception e) {
+			    } catch (Exception e) 
+			    {
 				    log.error(e);
 			    }
 		    }
 		    writer = null;
-		    try {
+		    try 
+		    {
 				IndexWriter.unlock(directory);
 			} 
 	    	catch (IOException e1)
@@ -294,7 +310,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		    	{
 		    		directory.close();
 		    	}
-		    	catch (Exception e) {
+		    	catch (Exception e) 
+		    	{
 				    log.error(e);
 			    }
 		    }
@@ -307,7 +324,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * @see edu.ur.ir.researcher.ResearcherIndexService#addResearchers(java.util.List, java.io.File, boolean)
 	 */
 	public void addResearchers(List<Researcher> researchers, File researcherIndexFolder,
-			boolean overwriteExistingIndex) {
+			boolean overwriteExistingIndex) 
+	{
 			
 	    LinkedList<Document> docs = new LinkedList<Document>();
 			
@@ -319,7 +337,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			
 		IndexWriter writer = null;
 		Directory directory = null;
-		try {
+		try 
+		{
 			directory = FSDirectory.open(researcherIndexFolder);
 			
 			if(overwriteExistingIndex)
@@ -345,14 +364,18 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		finally 
 		{
 			if (writer != null) {
-			    try {
+			    try 
+			    {
 				    writer.close();
-			    } catch (Exception e) {
+			    } 
+			    catch (Exception e) 
+			    {
 				    log.error(e);
 			    }
 		    }
 		    writer = null;
-		    try {
+		    try 
+		    {
 				IndexWriter.unlock(directory);
 			} 
 	    	catch (IOException e1)
@@ -435,7 +458,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    }
 	    
 	    StringBuffer departmentNames = new StringBuffer();
-    	for (Department d : researcher.getUser().getDepartments()) {
+    	for (Department d : researcher.getUser().getDepartments()) 
+    	{
 	    	departmentNames.append(d.getName());
 	    	departmentNames.append(SEPERATOR);
     	}
@@ -521,7 +545,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * 
 	 * @return
 	 */
-	public ErrorEmailService getErrorEmailService() {
+	public ErrorEmailService getErrorEmailService() 
+	{
 		return errorEmailService;
 	}
 
@@ -530,7 +555,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * 
 	 * @param errorEmailService
 	 */
-	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+	public void setErrorEmailService(ErrorEmailService errorEmailService) 
+	{
 		this.errorEmailService = errorEmailService;
 	}
 

@@ -1024,5 +1024,21 @@
 	    <property name="seriesService" ref="seriesService"/>
 	    <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!--  group workspace index service             -->
+   <!--  used for searching for group workspaces   -->
+   <!-- ****************************************** --> 
+   <bean id="groupWorkspaceIndexService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceIndexService">
+       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+   </bean>
+   
+   <bean id="groupWorkspaceSearchService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceSearchService">
+       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
+   </bean>
 
 </beans>

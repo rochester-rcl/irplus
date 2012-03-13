@@ -65,6 +65,7 @@
 		    
 		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemServiceTest"/>
 		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceInviteServiceTest"/>
+		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceSearchServiceTest"/>
 		    
 
 		</classes>
