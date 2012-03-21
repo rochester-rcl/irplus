@@ -1,4 +1,4 @@
-<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
+<jsp:directive.page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" />
 
 
 <!--  
@@ -26,13 +26,8 @@
    <p class="errorMessage" id="upload_error"><ir:printError errors="${fieldErrors}" 
 	key="researcherPictureUploadError"/></p>
 </div>
-
+<input type="hidden" id="picture_added" value="${added}"/>
 <table class="formTable">
-    <tr>
-        <td>
-        <input type="hidden" id="picture_added" value="${added}"/>	
-        </td>
-    </tr>   
     <tr>       
         <td align="left" class="label">File:*</td>
         <td align="left" class="input"><input type="file" name="file"
