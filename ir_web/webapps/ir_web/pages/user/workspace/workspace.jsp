@@ -154,7 +154,6 @@
 	                      </form>
 	                      <div id="group_workspaces" class="hidden">
 	                           
-	                           <c:import url="group_workspace/group_workspace_table.jsp"/>
 	                      </div>
 	                  </div>
 	                  <!-- end group workspaces -->
