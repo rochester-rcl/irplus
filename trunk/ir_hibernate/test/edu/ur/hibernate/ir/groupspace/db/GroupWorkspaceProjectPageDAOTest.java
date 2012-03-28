@@ -46,24 +46,28 @@ public class GroupWorkspaceProjectPageDAOTest {
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
+	// group workspace data access
 	GroupWorkspaceDAO groupWorkspaceDAO = (GroupWorkspaceDAO) ctx
 	.getBean("groupWorkspaceDAO");
 	
+	// group workspace project page data access
 	GroupWorkspaceProjectPageDAO groupWorkspaceProjectPageDAO = (GroupWorkspaceProjectPageDAO) ctx
 	.getBean("groupWorkspaceProjectPageDAO");
-	
-	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
-	.getBean("transactionManager");
-	
+
 	// group workspace user data access
 	GroupWorkspaceUserDAO groupWorkspaceUserDAO = (GroupWorkspaceUserDAO) ctx
 	.getBean("groupWorkspaceUserDAO");
 
 	
+	// transaction manager
+	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
+	.getBean("transactionManager");
+	
+	// transaction management
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
 	
-    /** User data access */
+    // User data access 
     IrUserDAO userDAO= (IrUserDAO) ctx.getBean("irUserDAO");
 
     

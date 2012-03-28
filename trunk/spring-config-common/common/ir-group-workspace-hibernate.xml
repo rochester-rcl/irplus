@@ -198,4 +198,26 @@
        </property>
    </bean>
    
+     <!-- ****************************************** --> 
+   <!-- Group workspace project page image information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="groupWorkspaceProjectPageImageDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPageImageDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="groupWorkspaceProjectPageImageDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPageImageDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 </beans>

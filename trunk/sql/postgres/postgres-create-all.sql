@@ -2878,6 +2878,27 @@ ALTER TABLE ir_group_workspace.group_workspace_project_page_member OWNER TO ir_p
 CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_member_seq ;
 ALTER TABLE ir_group_workspace.group_workspace_project_page_member_seq OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- Group workspace project page image Information
+-- ---------------------------------------------
+-- Create a new table to hold group workspace project page 
+-- pictures in the system
+CREATE TABLE ir_group_workspace.group_workspace_project_page_image
+(
+  group_workspace_project_page_image_id BIGINT PRIMARY KEY,
+  group_workspace_project_page_id BIGINT NOT NULL,
+  ir_file_id BIGINT NOT NULL,
+  image_order BIGINT NOT NULL,
+  version INTEGER,
+  FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+  FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_image OWNER TO ir_plus;
+
+-- The group space sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_image_seq ;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_image_seq OWNER TO ir_plus;
+
 -- ----------------------------------------------
 -- **********************************************
        

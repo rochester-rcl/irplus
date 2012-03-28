@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2012 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
    limitations under the License.
 */  
 
-
-package edu.ur.ir.web.action.researcher;
+package edu.ur.ir.web.action.groupspace;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,36 +27,39 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.researcher.Researcher;
-import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.researcher.ResearcherPictureFileDownload;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
- * Write the researcher picture file out to a stream
+ * Group workspace image file download
  * 
- * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-public class ResearcherPictureFileDownload extends ActionSupport 
+public class GroupWorkspaceProjectPageImageFileDownload  extends ActionSupport 
 implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
-	
 	// Eclipse generated id
-	private static final long serialVersionUID = -6039053858718096614L;	
-
+	private static final long serialVersionUID = -8296841373758041431L;
+	
 	//  Logger for file upload */
 	private static final Logger log = Logger.getLogger(ResearcherPictureFileDownload.class);
-	
-	//  The new researcher */
-	private Researcher researcher;
-	
-	// Id of researcher */
-	private Long researcherId;
 
-	// Service for dealing with researcher */
-	private ResearcherService researcherService;
+	// Id of group workspace */
+	private Long groupWorkspaceId;
+
+	// Service for dealing with group workspaces */
+	private GroupWorkspaceService groupWorkspaceService;
 	
+	// Service to deal with user information
+	private UserService userService;
+
 	//  Servlet response to write to */
 	private transient HttpServletResponse response;
 	
@@ -82,22 +84,28 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
     	
     	if( log.isDebugEnabled())
     	{
-	        log.debug("Trying to download researcher picture");
+	        log.debug("Trying to download group workspace project page picture");
     	}
 	    
 	    // make sure this is a picture in the researcher - otherwise anyone could get
 	    // to the files.
-		researcher = researcherService.getResearcher(researcherId, false);
-		if( researcher != null && 
-				(researcher.isPublic() || researcher.getUser().getId().equals(userId)))
+		GroupWorkspace groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+		GroupWorkspaceProjectPage groupWorkspaceProjectPage = null;
+		IrUser user = userService.getUser(userId, false);
+		
+		if(groupWorkspace != null)
+		{
+			groupWorkspaceProjectPage = groupWorkspace.getGroupWorkspaceProjectPage();
+		}
+		
+		if( groupWorkspaceProjectPage != null && 
+				(groupWorkspaceProjectPage.getPagePublic() || groupWorkspace.getUser(user) != null ))
 		{
 			// causes a load form the database;
-		    IrFile irFile = researcher.getPicture(irFileId);
-		    
-		    if (irFile == null) {
-		        if (researcher.getPrimaryPicture().getId().equals(irFileId)) {
-		    	    irFile = researcher.getPrimaryPicture();
-		        }
+		    IrFile irFile = null;
+		    if( groupWorkspaceProjectPage.getImageByFileId(irFileId) != null )
+		    {
+		    	irFile = groupWorkspaceProjectPage.getImageByFileId(irFileId).getImageFile();
 		    }
 		    
 		    if( irFile != null )
@@ -108,12 +116,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
                 {
                     log.debug("Found ir File " + irFile);
                 }
-           
                 webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
-		
 		    }
 		}
-        
         return SUCCESS;
     }
 	
@@ -123,15 +128,6 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	 */
 	public void setServletResponse(HttpServletResponse arg0) {
 		this.response = arg0;
-	}
-
-	/**
-	 * Set the researcher service.
-	 * 
-	 * @param researcherService
-	 */
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
 	}
 
 	/**
@@ -160,12 +156,39 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	}
 
 	/**
-	 * Set the researcher id.
+	 * Get the group workspace id.
 	 * 
-	 * @param researcherId
+	 * @return
 	 */
-	public void setResearcherId(Long researcherId) {
-		this.researcherId = researcherId;
+	public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
+
+	/**
+	 * Set the group workspace id.
+	 * 
+	 * @param groupWorkspaceId
+	 */
+	public void setGroupWorkspaceId(Long groupWorkspaceId) {
+		this.groupWorkspaceId = groupWorkspaceId;
+	}
+
+	/**
+	 * Set the group workspace service.
+	 * 
+	 * @param groupWorkspaceService
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
+	}
+
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 	/* (non-Javadoc)
@@ -174,5 +197,4 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
-
 }

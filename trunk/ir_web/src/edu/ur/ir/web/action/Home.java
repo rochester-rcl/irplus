@@ -304,7 +304,7 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 		this.newsService = newsService;
 	}
 
-	public int getResearcherCount() {
+	public int getTotalResearcherCount() {
 		return researcherCount;
 	}
 	

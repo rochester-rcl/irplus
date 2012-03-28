@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import edu.ur.ir.file.IrFile;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.persistent.BasePersistent;
 
@@ -49,7 +50,7 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	private boolean pagePublic;
 	
 	// pictures for the group workspace
-	private Set<GroupWorkspaceProjectPagePicture> pictures = new HashSet<GroupWorkspaceProjectPagePicture>();
+	private Set<GroupWorkspaceProjectPageImage> images = new HashSet<GroupWorkspaceProjectPageImage>();
 
 	/* date this record was created */
 	private Timestamp createdDate;
@@ -96,6 +97,67 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
     	members.add(member);
     	return member;
     }
+    
+    /**
+     * Add an image to the group workspace project page.  
+     * 
+     * @param irFile - image file
+     */
+    public GroupWorkspaceProjectPageImage addImage(IrFile irFile)
+    {
+    	
+    	int order = images.size() + 1;
+    	GroupWorkspaceProjectPageImage image = new GroupWorkspaceProjectPageImage(this, irFile);
+    	image.setImageOrder(order);
+    	images.add(image);
+    	return image;
+    }
+    
+    /**
+     * Get the group worspace project image by the ir file id.
+     * 
+     * @param id - ir file id
+     * @return the image or null if the image is not found
+     */
+    public GroupWorkspaceProjectPageImage getImageByIrFileId(Long id)
+    {
+    	System.out.println("num images = " + images.size());
+    	for(GroupWorkspaceProjectPageImage image : images)
+    	{
+    		System.out.println("Checking id = " + id + " image file id = " +image.getImageFile().getId() );
+    		if( image.getImageFile().getId().equals(id))
+    		{
+    			return image;
+    		}
+    	}
+    	return null;
+    }
+    
+    /**
+     * Remove the image from the list of images.  This also updates the order 
+     * of all images in the list.
+     * 
+     * @param image
+     * @return true if the image was removed
+     */
+    public boolean remove(GroupWorkspaceProjectPageImage image)
+    {
+    	int order = image.getOrder();
+    	boolean removed = false;
+        removed = images.remove(image);	
+        if( removed )
+        {
+        	for(GroupWorkspaceProjectPageImage anImage :images)
+        	{
+        	    if( anImage.getOrder() > order )
+        	    {
+        	    	anImage.setImageOrder(anImage.getOrder() - 1 );
+        	    }
+        	}
+        }
+        return removed;
+    }
+    
     
     /**
      * Get the group workspace project page member using the group workspace user.
@@ -186,6 +248,73 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
     	}
     }
     
+    /**
+     * Get the group workspace project page image by file id.
+     * 
+     * @param irFileId - id of the file
+     * @return Group Workspace project apge image
+     */
+    public GroupWorkspaceProjectPageImage getImageByFileId(Long irFileId)
+    {
+    	for(GroupWorkspaceProjectPageImage image : images)
+    	{
+    		if( image.getImageFile().getId().equals(irFileId))
+    		{
+    			return image;
+    		}
+    	}
+    	return null;
+    }
+    
+    
+    /**
+     * Move a group workspace project page image up.
+     * 
+     * @param member
+     */
+    public void moveImageUp(GroupWorkspaceProjectPageImage image)
+    {
+    	// image is in the list
+    	// number of images is greater than one
+    	// and is not the first one in the list already
+    	if(images.contains(image) && (images.size() > 1) && (image.getOrder() != 1 ))
+    	{
+    		for(GroupWorkspaceProjectPageImage anImage : images)
+    		{
+    			if(anImage.getOrder() == (image.getOrder() - 1) )
+    			{
+    				anImage.setOrder(anImage.getOrder() + 1);
+    			}
+    		}
+    		image.setOrder(image.getOrder() - 1);
+    	}
+    	
+    }
+    
+    /**
+     * Move a group workspace project page image down - sets the one above down in the list
+     * 
+     * @param member
+     */
+    public void moveImageDown(GroupWorkspaceProjectPageImage image)
+    {
+    	// image is in the list
+    	// number of images is greater than one
+    	// and is not the last one in the list already
+    	if(images.contains(image) && (images.size() > 1) && (image.getOrder() < images.size() ) )
+    	{
+    		for(GroupWorkspaceProjectPageImage anImage : images)
+    		{
+    			if(anImage.getOrder() == (image.getOrder() + 1) )
+    			{
+    				anImage.setOrder(anImage.getOrder() - 1);
+    			}
+    		}
+    		image.setOrder(image.getOrder() + 1);
+    	}
+    }
+    
+    
 	/**
 	 * Get the description.
 	 * 
@@ -245,8 +374,8 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	 * 
 	 * @return
 	 */
-	public Set<GroupWorkspaceProjectPagePicture> getPictures() {
-		return pictures;
+	public Set<GroupWorkspaceProjectPageImage> getImages() {
+		return Collections.unmodifiableSet(images);
 	}
 
 	/**
@@ -254,8 +383,8 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	 * 
 	 * @param pictures
 	 */
-	void setPictures(Set<GroupWorkspaceProjectPagePicture> pictures) {
-		this.pictures = pictures;
+	void setImages(Set<GroupWorkspaceProjectPageImage> pictures) {
+		this.images = pictures;
 	}
 	
 	/**

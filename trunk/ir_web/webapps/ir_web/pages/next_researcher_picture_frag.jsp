@@ -54,23 +54,19 @@
 	</table>
 	</c:forEach>
 	
-	<c:if test="${researcherCount > 2}">
-	<table class="buttonTable">
-	    <tr>
-	        <td class="leftButton">
+	<c:if test="${totalResearcherCount > 2}">
+	<div class="button_next_left">
 	            <button class="ur_button" 
 		            onmouseover="this.className='ur_buttonover';"
 	 		        onmouseout="this.className='ur_button';"
 	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentResearcherLocation}, 'PREV');">&lt; Previous</button>
-	 		</td>
-	 		<td class="rightButton">
+	</div>
+	<div class="button_next_right">
 	 		    <button class="ur_button" 
 		            onmouseover="this.className='ur_buttonover';"
 	 		        onmouseout="this.className='ur_button';"
 	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentResearcherLocation}, 'NEXT');">Next &gt;</button>
-	        </td>
-	     </tr>
-	</table>
+	</div>
 	</c:if>
 </c:if>
 

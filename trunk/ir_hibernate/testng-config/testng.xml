@@ -125,6 +125,8 @@
 		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceEmailInviteDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDeleteRecordDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceProjectPageDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceProjectPageImageDAOTest"/>
 		     
 		     <class name="edu.ur.hibernate.ir.invite.db.InviteTokenDAOTest"/>
 

@@ -28,22 +28,18 @@
  
     <img class="repository_image"  src="${pictureUrl}"/>
     <c:if test="${numResearcherPictures > 1}">
-    <table class="buttonTable">
-        <tr>
-            <td class="leftButton">
+    <div class="button_next_left">
                 <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
  		            onclick="javascript:YAHOO.ur.researcher.page.getResearcherPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
- 		    </td>
- 		    <td class="rightButton">
+ 	</div>
+ 	<div class="button_next_right">
  		        <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
  		            onclick="javascript:YAHOO.ur.researcher.page.getResearcherPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
-            </td>
-         </tr>
-    </table>
+    </div>
     </c:if>
 </c:if>
 

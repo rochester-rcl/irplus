@@ -496,6 +496,27 @@
             method="xml">
             <result name="success" type="no-op"/>
         </action>
+        
+        <!--  ************************************ -->
+        <!--    Group workspace actions         -->
+        <!--  ************************************ -->
+        
+        <!-- Download group workspace project page image  -->
+        <action name="downloadGroupWorkspaceProjectPageImage"
+            class="edu.ur.ir.web.action.groupspace.GroupWorkspaceProjectPageImageFileDownload">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+        </action>
+        
+        <!-- Next group workspace project page image  -->
+        <action name="nextGroupWorkspaceProjectPageImage"
+            class="edu.ur.ir.web.action.groupspace.GroupWorkspaceProjectPageView" 
+            method="getImage">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/next_group_workspace_project_page_picture_frag.jsp</result>
+        </action>  
          
     </package>
          

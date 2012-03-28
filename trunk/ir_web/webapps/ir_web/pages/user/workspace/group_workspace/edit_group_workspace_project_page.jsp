@@ -53,6 +53,7 @@
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	<ur:js src="page-resources/js/util/ur_table.js"/>
  	
+ 	<ur:js src="page-resources/js/user/edit_group_workspace_project_page.js"/>
   </head>
     
    <body class="yui-skin-sam">
@@ -65,6 +66,7 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
+                <input id="group_workspace_id" type ="hidden" value="${groupWorkspaceProjectPage.groupWorkspace.id}"/>
                 <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
                    <c:param name="tabName" value="GROUP_WORKSPACE"/>
                    <c:param name="groupWorkspaceId" value="${groupWorkspaceProjectPage.groupWorkspace.id}"/>
@@ -162,10 +164,13 @@
 	             <div class="yui-u">
 	                 <div class="contentContainer">
 	                    <div class="contentBoxTitle">
-	                        <p><a href="">Edit Images</a></p>
+	                        <c:url value="/user/editGroupWorkspaceProjectPageImages.action" var="editGroupWorkspaceProjectPageImagesUrl">
+						        <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						    </c:url>
+	                        <p><a href="${editGroupWorkspaceProjectPageImagesUrl}">Edit Images</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
-                            
+                            <div id="group_workspace_project_page_image"> </div>
                         </div>
                     </div>  
                     <div class="contentContainer">
@@ -173,7 +178,8 @@
 	                        <p><a href="">Edit Research/Publications</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
-                            
+                            <p>
+                            </p>
                         </div>
                     </div> 
 	             </div>

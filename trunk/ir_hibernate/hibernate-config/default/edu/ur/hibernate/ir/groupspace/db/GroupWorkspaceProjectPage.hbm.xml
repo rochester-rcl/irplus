@@ -71,6 +71,20 @@
 			<one-to-many class="GroupWorkspaceProjectPageMember" />
 		</set>
 		
+		<!--  Project page images -->
+		<set name="images" 
+		     inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all, delete-orphan" 
+		     schema="ir_group_workspace"
+		     access="field" 
+		     order-by="image_order"
+			 lazy="true"
+			 fetch="subselect">
+			<key column="group_workspace_project_page_id" not-null="true"/>
+			<one-to-many class="GroupWorkspaceProjectPageImage" />
+		</set>
+		
 	</class>
 
 </hibernate-mapping>

@@ -27,19 +27,36 @@ import edu.ur.persistent.BasePersistent;
  * @author Nathan Sarr
  *
  */
-public class GroupWorkspaceProjectPagePicture extends BasePersistent implements Orderable{
+public class GroupWorkspaceProjectPageImage extends BasePersistent implements Orderable{
 	
 	// eclipse generated id
 	private static final long serialVersionUID = -3233523513827689568L;
 	
 	// determines the order of the picture 
-	private int order;
+	private int imageOrder;
 	
 	// the group project page this picture belongs to
 	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 	
 	// image file
 	private IrFile imageFile;
+	
+	/**
+	 * Default constructor
+	 */
+	GroupWorkspaceProjectPageImage(){}
+	
+	/**
+	 * Constructor 
+	 * 
+	 * @param groupWorkspaceProjectPage - group workspace project page
+	 * @param imageFile image file
+	 */
+	GroupWorkspaceProjectPageImage(GroupWorkspaceProjectPage groupWorkspaceProjectPage, IrFile imageFile )
+	{
+		this.setGroupWorkspaceProjectPage(groupWorkspaceProjectPage);
+		this.setImageFile(imageFile);
+	}
 
 	/**
 	 * Get the group project page.
@@ -55,7 +72,7 @@ public class GroupWorkspaceProjectPagePicture extends BasePersistent implements 
 	 * 
 	 * @param groupWorkspaceProjectPage
 	 */
-	public void setGroupWorkspaceProjectPage(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
+	void setGroupWorkspaceProjectPage(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
 		this.groupWorkspaceProjectPage = groupWorkspaceProjectPage;
 	}
 
@@ -65,7 +82,18 @@ public class GroupWorkspaceProjectPagePicture extends BasePersistent implements 
 	 * @see edu.ur.order.Orderable#getOrder()
 	 */
 	public int getOrder() {
-		return order;
+		return imageOrder;
+	}
+	
+	
+	/**
+	 * Set the order.
+	 * 
+	 * @param order
+	 */
+	public void setOrder(int order)
+	{
+		this.imageOrder = order;
 	}
 
 	/**
@@ -73,8 +101,18 @@ public class GroupWorkspaceProjectPagePicture extends BasePersistent implements 
 	 * 
 	 * @param order
 	 */
-	public void setOrder(int order) {
-		this.order = order;
+	public void setImageOrder(int imageOrder) {
+		this.imageOrder = imageOrder;
+	}
+	
+	/**
+	 * Get the image order value.
+	 * 
+	 * @return
+	 */
+	public int getImageOrder()
+	{
+		return imageOrder;
 	}
 	
 	/**
@@ -91,11 +129,8 @@ public class GroupWorkspaceProjectPagePicture extends BasePersistent implements 
 	 * 
 	 * @param imageFile
 	 */
-	public void setImageFile(IrFile imageFile) {
+	void setImageFile(IrFile imageFile) {
 		this.imageFile = imageFile;
 	}
-
-
-	
 
 }

@@ -19,28 +19,33 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:if test="${repositoryImageFile.id > 0}">
-    <c:url var="pictureUrl" value="/downloadRepositoryPicture.action">
-        <c:param name="irFileId" value="${repositoryImageFile.id}"/>
+<c:if test="${irFile.id > 0}">
+    <c:url var="imageUrl" value="/downloadGroupWorkspaceProjectPageImage.action">
+        <c:param name="irFileId" value="${irFile.id}"/>
+        <c:param name="groupWorkspaceId" value="${groupWorkspace.id}"/>
     </c:url>
     
-   <img class="repository_image picture_module_size" src="${pictureUrl}"/>
-   
-   <c:if test="${numRepositoryPictures > 1}"> 
-       <div class="button_next_left">
-                <button class="ur_button" 
+ 
+    <img class="repository_image"  src="${imageUrl}"/>
+    <c:if test="${numImages > 1}">
+      <div class="button_next_left">
+        <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
- 		            onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentRepositoryPictureLocation}, 'PREV');">&lt; Previous</button>
-       </div>
-       <div class="button_next_right">
- 		        <button class="ur_button" 
+ 		            onclick="javascript:YAHOO.ur.edit.group_workspace_project_page.getImage(${currentLocation}, 'PREV');">&lt; Previous</button>
+      </div>
+      <div class="button_next_right">
+ 		<button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
- 		            onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentRepositoryPictureLocation}, 'NEXT');">Next &gt;</button>
-       </div>
+ 		            onclick="javascript:YAHOO.ur.edit.group_workspace_project_page.getImage(${currentLocation}, 'NEXT');">Next &gt;</button>
+      </div>
     </c:if>
 </c:if>
-<c:if test="${repositoryImageFile == null }">
-    <p>There are no pictures to display</p>
+
+
+<c:if test="${irFile == null }">
+    
+     <img class="repository_image picture_module_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg"/>
 </c:if>
+
