@@ -232,6 +232,32 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	}
 	
 	/**
+	 * View the images for a group workspace project page
+	 * @return
+	 */
+	public String viewImages()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+
+	/**
 	 * Add a member to the project page.
 	 * 
 	 * @return

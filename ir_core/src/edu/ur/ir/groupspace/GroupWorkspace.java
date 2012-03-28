@@ -504,10 +504,10 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	}
 	
 	/**
-	 * Get a workspace user by id.
+	 * Get a workspace group workspace user id of the group workspace user id.
 	 * 
-	 * @param name - name of the group
-	 * @return group if found otherwise null
+	 * @param id - of the group workspace user
+	 * @return
 	 */
 	public GroupWorkspaceUser getUser(Long id)
 	{

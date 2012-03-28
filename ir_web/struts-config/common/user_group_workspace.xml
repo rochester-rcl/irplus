@@ -320,13 +320,7 @@
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_description.jsp</result>
         </action>
         
-        <action name="saveGroupWorkspaceProjectPageMemberInfo" 
-            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
-            method="saveMemberData">
-            <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page.jsp</result>
-        </action>
-        
+
         <action name="saveGroupWorkspaceProjectPageDescription" 
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
             method="saveDescription">
@@ -334,7 +328,17 @@
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page.jsp</result>
         </action>
         
-         <action name="editGroupWorkspaceProjectPageMembers" 
+        <!--  ************************************ -->
+       <!-- Manage group workspace project page members actions -->
+       <!--  ************************************ -->
+        <action name="saveGroupWorkspaceProjectPageMemberInfo" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="saveMemberData">
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page.jsp</result>
+        </action>
+        
+        <action name="editGroupWorkspaceProjectPageMembers" 
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
             method="viewMembers">
             <interceptor-ref name="editStack"/>
@@ -375,4 +379,37 @@
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_members.jsp</result>
         </action>
+        
+       <!--  ************************************ -->
+       <!-- Manage group workspace project page image actions -->
+       <!--  ************************************ -->
+       <action name="editGroupWorkspaceProjectPageImages" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="viewImages">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_images.jsp</result>
+        </action>
+        
+        <action name="getGroupWorkspaceProjectPageImagesTable" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
+            method="viewImages">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_project_page_image_table.jsp</result>
+        </action>
+
+        <action name="uploadGroupWorkspaceProjectPageImage"
+            class="edu.ur.ir.web.action.groupspace.UploadGroupWorkspaceProjectPageImage"
+            method="addNewPicture">
+            <interceptor-ref name="urUploadStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/upload_group_workspace_project_page_image_frag.jsp</result>
+        </action>
+        
+         <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
+        <action name="groupWorkspaceProjectPageThumbnailDownloader" 
+            class="edu.ur.ir.web.action.groupspace.GroupWorkspaceThumbnailDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>          
+        
         
