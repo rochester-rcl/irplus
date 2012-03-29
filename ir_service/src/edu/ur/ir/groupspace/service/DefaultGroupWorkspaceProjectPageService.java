@@ -18,7 +18,9 @@ package edu.ur.ir.groupspace.service;
 
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageImage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
+import edu.ur.ir.repository.RepositoryService;
 
 /**
  * Default implementation of the group workspace group project page service.
@@ -34,6 +36,9 @@ public class DefaultGroupWorkspaceProjectPageService implements GroupWorkspacePr
 	// data access for group workspace project page info
 	private GroupWorkspaceProjectPageDAO groupWorkspaceProjectPageDAO;
 	
+	// service to deal with repository information.
+	private RepositoryService repositoryService;
+
 
 	/**
 	 * Get the group workspace project page by i.d
@@ -74,6 +79,35 @@ public class DefaultGroupWorkspaceProjectPageService implements GroupWorkspacePr
 	public void setGroupWorkspaceProjectPageDAO(
 			GroupWorkspaceProjectPageDAO groupWorkspaceProjectPageDAO) {
 		this.groupWorkspaceProjectPageDAO = groupWorkspaceProjectPageDAO;
+	}
+
+	/**
+	 * Delete the group workspace project page image.  This also removes the file from the 
+	 * repository.
+	 * 
+	 * @param groupWorkspaceProjectPageImage
+	 */
+	public void delete(
+			GroupWorkspaceProjectPageImage groupWorkspaceProjectPageImage) {
+		if( groupWorkspaceProjectPageImage != null )
+		{
+		    GroupWorkspaceProjectPage projectPage = groupWorkspaceProjectPageImage.getGroupWorkspaceProjectPage();
+		    if( projectPage.remove(groupWorkspaceProjectPageImage) )
+		    {
+		    	groupWorkspaceProjectPageDAO.makePersistent(projectPage);
+			    repositoryService.deleteIrFile(groupWorkspaceProjectPageImage.getImageFile());
+		    }
+		}
+		
+	}
+	
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 	
 	

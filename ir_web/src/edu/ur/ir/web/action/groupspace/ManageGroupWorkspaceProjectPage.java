@@ -22,6 +22,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageImage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageMember;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageMemberService;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
@@ -61,10 +62,12 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	
 	/* id of the member to load */
 	private Long memberId;
+	
+	// id of the image
+	private Long imageId;
 
 	/* group workspace project page member service */
     private GroupWorkspaceProjectPageMemberService groupWorkspaceProjectPageMemberService;
-
 
 	/*  Logger. */
 	private static final Logger log = Logger.getLogger(ManageGroupWorkspaceProjectPage.class);
@@ -243,6 +246,100 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
 			if( workspaceUser != null && workspaceUser.isOwner())
 			{
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Move the group workspace project page image up.
+	 * 
+	 * @return
+	 */
+	public String moveImageUp()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				if( imageId != null )
+				{
+					GroupWorkspaceProjectPageImage image = groupWorkspaceProjectPage.getById(imageId);
+				    groupWorkspaceProjectPage.moveImageUp(image);
+				    groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
+				}
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Move group workspace project page image down.
+	 * 
+	 * @return
+	 */
+	public String moveImageDown()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				if( imageId != null )
+				{
+					GroupWorkspaceProjectPageImage image = groupWorkspaceProjectPage.getById(imageId);
+				    groupWorkspaceProjectPage.moveImageDown(image);
+				    groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
+				}
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
+	}
+	
+	/**
+	 * Delete images from the group workspace.
+	 * 
+	 * @return
+	 */
+	public String deleteImage()
+	{
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				if( imageId != null )
+				{
+				    groupWorkspaceProjectPageService.delete(groupWorkspaceProjectPage.getById(imageId));
+				}
 		        return SUCCESS;
 			}
 			else
@@ -507,6 +604,25 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 			GroupWorkspaceProjectPageMemberService groupWorkspaceProjectPageMemberService) {
 		this.groupWorkspaceProjectPageMemberService = groupWorkspaceProjectPageMemberService;
 	}
+	
+	/**
+	 * Get the image id.
+	 * 
+	 * @return
+	 */
+	public Long getImageId() {
+		return imageId;
+	}
+
+	/**
+	 * Set the image id.
+	 * 
+	 * @param imageId
+	 */
+	public void setImageId(Long imageId) {
+		this.imageId = imageId;
+	}
+
 
 
 }

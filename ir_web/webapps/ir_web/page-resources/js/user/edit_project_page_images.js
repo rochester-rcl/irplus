@@ -12,11 +12,11 @@ YAHOO.ur.edit.project_page_image =
 		/*
 		 * Get the project page images
 		 */
-		getImages : function(projectPageId)
+		getImages : function(groupWorksapceProjectPageId)
 		{
 		  // action to get repository pictures
 		   var getImagesAction = 
-		       basePath + 'user/getGroupWorkspaceProjectPageImages.action';
+		       basePath + 'user/getGroupWorkspaceProjectPageImagesTable.action';
 		
 			var callback =
 			{	 
@@ -26,7 +26,7 @@ YAHOO.ur.edit.project_page_image =
 		            // occurred
 		            if( !urUtil.checkTimeOut(o.responseText) )
 		            {       		    
-			            var divToUpdate = document.getElementById('project_page_images');
+			            var divToUpdate = document.getElementById('group_workspace_project_page_images');
 			            divToUpdate.innerHTML = o.responseText; 
 			        }
 			    },
@@ -42,10 +42,21 @@ YAHOO.ur.edit.project_page_image =
 			 *  Get the set of pictures for the researcher
 			 */
 		    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-		        getImagesAction + '?projectPageId='+ projectPageId +
+		        getImagesAction + '?groupWorkspaceProjectPageId='+ groupWorksapceProjectPageId +
 		        '&bustcache='+new Date().getTime(), callback, null);
 		},
 		
+		 /** 
+		  * clear out any form data messages or input
+		  * in the upload picture form
+		  */
+		clearUploadPictureForm : function()
+		{
+			document.getElementById('image_file_name').value = "";
+	        // clear out any errors
+	        var div = document.getElementById('upload_error');
+	        div.innerHTML = "";
+		},
 
     /**
 	 * Creates a YUI new researcher modal dialog for when a user wants to  
@@ -82,8 +93,8 @@ YAHOO.ur.edit.project_page_image =
 		        uploadForm.innerHTML = o.responseText;
 		    
 		        // determine if the add/edit was a success
-		        var success = document.getElementById("picture_added").value;
-		        var proejctPageId = document.getElementById("project_page_id").value;
+		        var success = document.getElementById("image_added").value;
+		        var groupWorkspaceProjectPageId = document.getElementById("group_workspace_project_page_id").value;
 		  
 		        //if the content type was not added then show the user the error message.
 		        // received from the server
@@ -95,8 +106,8 @@ YAHOO.ur.edit.project_page_image =
 		        {
 		            // we can clear the upload form and get the pictures
 		        	YAHOO.ur.edit.project_page_image.uploadProjectPageImageDialog.hide();
-		        	YAHOO.ur.edit.project_page_image.clearUploadPictureForm();
-		        	YAHOO.ur.edit.project_page_image.getImages(projectPageId);
+		        	YAHOO.ur.edit.project_page_image.clearUploadImageForm();
+		        	YAHOO.ur.edit.project_page_image.getImages(groupWorkspaceProjectPageId);
 		        }
 		    }
 		};
@@ -179,6 +190,45 @@ YAHOO.ur.edit.project_page_image =
         var div = document.getElementById('upload_error');
         div.innerHTML = "";
 	},
+	
+	/*
+	 * Delete the selected picture
+	 */
+	deleteImage : function(groupWorkspaceProjectPageId, imageId)
+	{
+	   // action to get repository pictures
+	   var deletePictureAction = 
+	       basePath + 'user/deleteGroupWorkspaceProjectPageImage.action';
+		
+		var callback = 
+		{
+		    success : function(o) 
+		    {
+			    // check for the timeout - forward user to login page if timeout
+	            // occurred
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('group_workspace_project_page_images');
+		            divToUpdate.innerHTML = o.responseText;
+		        } 
+		    },
+		    
+		    failure : function(o) 
+			{
+		    	alert(o.responseText);
+			    alert('Could not delete group workspace project page image ' 
+			        + o.status + ' status text ' + o.statusText );
+			}
+		}		
+
+		/*
+		 *  Post the delete for the set of pictures
+		 */
+	    var transaction = YAHOO.util.Connect.asyncRequest('POST', 
+	        deletePictureAction, callback, 'imageId='+ imageId + 
+	        '&groupWorkspaceProjectPageId='+ groupWorkspaceProjectPageId);
+	},
+	
 	
 	// initialize the page
 	// this is called once the dom has

@@ -121,15 +121,32 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
      */
     public GroupWorkspaceProjectPageImage getImageByIrFileId(Long id)
     {
-    	System.out.println("num images = " + images.size());
     	for(GroupWorkspaceProjectPageImage image : images)
     	{
-    		System.out.println("Checking id = " + id + " image file id = " +image.getImageFile().getId() );
     		if( image.getImageFile().getId().equals(id))
     		{
     			return image;
     		}
     	}
+    	return null;
+    }
+    
+    /**
+     * Get the group workspace project page image by id.
+     * 
+     * @param imageId - id of the project page image
+     * @return 
+     */
+    public GroupWorkspaceProjectPageImage getById(Long imageId)
+    {
+    	for(GroupWorkspaceProjectPageImage image : images )
+    	{
+    		if( image.getId().equals(imageId))
+    		{
+    			return image;
+    		}
+    	}
+    	
     	return null;
     }
     
@@ -457,6 +474,19 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	    theMembers.addAll(members);
 	    Collections.sort(theMembers, new AscendingOrderComparator());
 	    return Collections.unmodifiableList(theMembers);
+	}
+	
+	/**
+	 * Get the images by order.
+	 * 
+	 * @return
+	 */
+	public List<GroupWorkspaceProjectPageImage> getImagesByOrder()
+	{
+		List<GroupWorkspaceProjectPageImage> theImages = new LinkedList<GroupWorkspaceProjectPageImage>();
+	    theImages.addAll(images);
+	    Collections.sort(theImages, new AscendingOrderComparator());
+	    return Collections.unmodifiableList(theImages);
 	}
 
 	/**

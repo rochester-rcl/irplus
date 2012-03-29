@@ -65,12 +65,19 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
+                      <c:url value="/user/editGroupWorkspaceProjectPage.action" var="editProjectPageUrl">
+				          <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+				      </c:url>
+                      <h3> <a href="${editProjectPageUrl}">${groupWorkspaceProjectPage.groupWorkspace.name} </a> &gt; Edit Images </h3>
+            		  <input type="hidden" id="group_workspace_project_page_id" name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+            
                       <button class="ur_button" 
  		                        onmouseover="this.className='ur_buttonover';"
  		                        onmouseout="this.className='ur_button';"
  		                        id="showUploadImage">Add Image</button>        
-             
-                      <c:import url="group_workspace_project_page_image_table_frag.jsp"/>
+                      <div id="group_workspace_project_page_images">
+                          <c:import url="group_workspace_project_page_image_table_frag.jsp"/>
+                      </div>
             
             </div>
             <!--  end body -->

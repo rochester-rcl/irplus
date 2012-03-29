@@ -463,7 +463,7 @@ YAHOO.ur.edit.researcher =
 	},
 	
 	/*
-	 * Gets the pictures after a modification has occured
+	 * Delete the selected researcher picture
 	 */
 	deletePicture : function(researcherId, irFileId, primaryPicture)
 	{
@@ -476,8 +476,8 @@ YAHOO.ur.edit.researcher =
 		{
 		    success : function(o) 
 		    {
-			    // check for the timeout - forward user to login page if timout
-	            // occured
+			    // check for the timeout - forward user to login page if timeout
+	            // occurred
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {       		    
 		            var divToUpdate = document.getElementById('researcher_pictures');
