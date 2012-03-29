@@ -47,6 +47,9 @@
 		<property name="createdDate" column="date_created" type="timestamp" 
 		          access="field" 
 		          not-null="true"/>
+		
+		<property name="pagePublic" column="is_public" type="boolean"
+			not-null="true" access="field" /> 
 		          
 	    <!-- Group This folder belongs to -->
 		<many-to-one class="GroupWorkspace" 

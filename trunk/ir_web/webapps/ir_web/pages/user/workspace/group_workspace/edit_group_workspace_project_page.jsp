@@ -67,24 +67,15 @@
             <!--  this is the body of the page -->
             <div id="bd">
                 <input id="group_workspace_id" type ="hidden" value="${groupWorkspaceProjectPage.groupWorkspace.id}"/>
+                <input id="group_workspace_project_page_id" type ="hidden" value="${groupWorkspaceProjectPage.id}"/>
                 <c:url var="groupWorkspaceUrl" value="/user/workspace.action">
                    <c:param name="tabName" value="GROUP_WORKSPACE"/>
                    <c:param name="groupWorkspaceId" value="${groupWorkspaceProjectPage.groupWorkspace.id}"/>
                 </c:url>
-                <h3>Project Page:&nbsp;<a href="${groupWorkspaceUrl}">${groupWorkspaceProjectPage.groupWorkspace.name}</a>
-                 
-                   <input type="radio" id="researcher_page_off" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.confirmPrivateDialog.showDialog();"
-	               <c:if test="${!groupWorkspaceProjectPage.pagePublic}">
-	                   checked
-	               </c:if>
-	               /> <c:if test="${!groupWorkspaceProjectPage.pagePublic}"><span class="errorMessage">OFF</span></c:if> <c:if test="${groupWorkspaceProjectPage.pagePublic}">OFF</c:if>
-	               &nbsp;    	
-	               <input type="radio" id="researcher_page_on" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.confirmPublicDialog.showDialog();"
-	                   <c:if test="${groupWorkspaceProjectPage.pagePublic}">
-	            			checked
-	                   </c:if>
-	                /><c:if test="${groupWorkspaceProjectPage.pagePublic}"><span class="greenMessage">ON</span></c:if> <c:if test="${!groupWorkspaceProjectPage.pagePublic}">ON</c:if>
-                </h3>
+                
+                <div id="group_workspace_project_page_status">
+                <c:import url="edit_group_workspace_project_page_status.jsp"/>
+	            </div>
                 <!--  create the first column -->
 	            <div class="yui-g">
 	            <div class="yui-u first">
@@ -190,6 +181,24 @@
         
         </div>
         <!-- end doc -->
+        
+               <!--  public page confirm dialog -->
+       <div id="confirmPublicDialog" class="hidden">
+          <div class="hd">Turn Group Workspace Project Page ON</div>
+          <div class="bd">
+              <p>This will make this page available to the public and search engines</p>
+          </div>
+       </div>
+       <!--  end public page confirm dialog -->
+       
+        <!--  private page confirm dialog -->
+       <div id="confirmPrivateDialog" class="hidden">
+          <div class="hd">Turn Group Workspace Project Page OFF</div>
+          <div class="bd">
+              <p>This will make this project page hidden from the public</p>
+          </div>
+       </div>
+       <!--  end private page confirm dialog -->
         
         
     </body>

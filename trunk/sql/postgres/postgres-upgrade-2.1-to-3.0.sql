@@ -519,13 +519,11 @@ CREATE TABLE ir_group_workspace.group_workspace_project_page
 (
   group_workspace_project_page_id BIGINT PRIMARY KEY,
   group_workspace_id BIGINT NOT NULL,
-  name TEXT NOT NULL,
-  lower_case_name TEXT NOT NULL,
+  is_public BOOLEAN NOT NULL,
   description TEXT,
   date_created DATE,
   version INTEGER,
-  FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
-  UNIQUE (lower_case_name)
+  FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id)
 );
 ALTER TABLE ir_group_workspace.group_workspace_project_page OWNER TO ir_plus;
 

@@ -2846,6 +2846,7 @@ CREATE TABLE ir_group_workspace.group_workspace_project_page
 (
   group_workspace_project_page_id BIGINT PRIMARY KEY,
   group_workspace_id BIGINT NOT NULL,
+  is_public BOOLEAN NOT NULL,
   description TEXT,
   date_created DATE,
   version INTEGER,
