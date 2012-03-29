@@ -75,6 +75,8 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	/* id of the group workspace user to add/remove to/from the project page */
 	private Long groupWorkspaceUserId;
 	
+	private boolean isPublic;
+
 
 
 	public String execute()
@@ -150,6 +152,35 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 			return "notFound";
 		}
 		
+	}
+	
+	/**
+	 * Set the page permissions - public or private
+	 * 
+	 * @return
+	 */
+	public String setPagePermission()
+	{
+		log.debug("group workspace project page = " + groupWorkspaceProjectPage);
+		if( groupWorkspaceProjectPage != null )
+		{
+			IrUser user = userService.getUser(userId, false);
+			GroupWorkspaceUser workspaceUser = groupWorkspaceProjectPage.getGroupWorkspace().getUser(user);
+			if( workspaceUser != null && workspaceUser.isOwner())
+			{
+				groupWorkspaceProjectPage.setPagePublic(isPublic);
+				groupWorkspaceProjectPageService.save(groupWorkspaceProjectPage);
+		        return SUCCESS;
+			}
+			else
+			{
+				return "accessDenied";
+			}
+		}
+		else
+		{
+			return "notFound";
+		}
 	}
 	
 	/**
@@ -621,6 +652,15 @@ public class ManageGroupWorkspaceProjectPage extends ActionSupport implements  U
 	 */
 	public void setImageId(Long imageId) {
 		this.imageId = imageId;
+	}
+
+	/**
+	 * Set to true if the page should be public otherwise false.
+	 * 
+	 * @param isPublic
+	 */
+	public void setIsPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
 
 
