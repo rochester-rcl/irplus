@@ -17,8 +17,7 @@
 
 package edu.ur.ir.web.action.groupspace;
 
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -172,15 +171,11 @@ extends ActionSupport implements UserIdAware {
 		{
 			return "notFound";
 		}
-
-	    
-    	Set<GroupWorkspaceProjectPageImage> imageSet =  projectPage.getImages();
-    	LinkedList<GroupWorkspaceProjectPageImage> images = new LinkedList<GroupWorkspaceProjectPageImage>();
-        images.addAll(imageSet);
-        numImages = images.size();
-        
+    	
+    	List<GroupWorkspaceProjectPageImage> images = projectPage.getImagesByOrder();
         if( images != null && images.size() > 0 )
         {
+        	numImages = images.size();
     	    if( images.size() == 1 )
     	    {
     	    	currentLocation = 0;

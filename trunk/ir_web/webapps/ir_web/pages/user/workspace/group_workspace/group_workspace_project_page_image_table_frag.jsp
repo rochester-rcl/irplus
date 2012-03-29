@@ -39,7 +39,7 @@
                       oddRowClass="odd"
                       evenRowClass="even"
                       currentRowClassVar="rowClass"
-                      collection="${groupWorkspaceProjectPage.images}">
+                      collection="${groupWorkspaceProjectPage.imagesByOrder}">
                       <urstb:tr 
                           cssClass="${rowClass}"
                           onMouseOver="this.className='highlight'"
@@ -54,22 +54,30 @@
                                    <img class="basic_thumbnail" src="${url}"/>
                                    <br/>
                                </c:if>
-                               File Location: ${image.imageFile.fileInfo.fullPath}
+                               Order: ${image.order} File Location: ${image.imageFile.fileInfo.fullPath}
                           </urstb:td>
 
                           <urstb:td>
-                             <button class="ur_button"
-					              onmouseover="this.className='ur_buttonover';"
-					              onmouseout="this.className='ur_button';"
-					              onclick="javascript:YAHOO.ur.edit.institution.collection.confirmPictureDelete(${image.id}, ${image.imageFile.id}, false);"
-					              id="deleteCollectionPictureConfirm">Move</button>
+                             <c:url value="/user/moveGroupWorkspaceProjectPageImageUp.action" var="moveImageUpUrl">
+						                <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						                <c:param name="imageId" value="${image.id}"/>
+						              </c:url>
+						              <a href="${moveImageUpUrl}"><img class="tableImg" alt="up" 
+									          src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_up.gif" /></a>  
+									  <c:url value="/user/moveGroupWorkspaceProjectPageImageDown.action" var="moveImageDownUrl">
+						                <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						                <c:param name="imageId" value="${image.id}"/>
+						              </c:url>
+						              <a href="${moveImageDownUrl}"><img class="tableImg" alt="down" 
+									          src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_down.gif" /></a>
+	                 	            
                           </urstb:td>
                           
                           <urstb:td >
                              <button class="ur_button"
 					              onmouseover="this.className='ur_buttonover';"
 					              onmouseout="this.className='ur_button';"
-					              onclick="javascript:YAHOO.ur.edit.institution.collection.confirmPictureDelete(${image.id}, ${image.imageFile.id}, false);"
+					              onclick="javascript:YAHOO.ur.edit.project_page_image.deleteImage(${groupWorkspaceProjectPage.id}, ${image.id});"
 					              id="deleteCollectionPictureConfirm">Delete</button>
                           </urstb:td>                        
 

@@ -44,5 +44,12 @@ public interface GroupWorkspaceProjectPageService extends Serializable{
 	public GroupWorkspaceProjectPage getById(Long id,  boolean lock);
 	
 
+	/**
+	 * Delete the group workspace project page image.  This also removes the file from the 
+	 * repository.
+	 * 
+	 * @param groupWorkspaceProjectPageImage
+	 */
+	public void delete(GroupWorkspaceProjectPageImage groupWorkspaceProjectPageImage);
 
 }
