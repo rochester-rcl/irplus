@@ -76,13 +76,13 @@
 	<query name="getResearcherInstitutionalItemCount">
 		select count(*) 
 		from ResearcherInstitutionalItem as ResearcherInstitutionalItem where
-		ResearcherInstitutionalItem.institutionalItem.id = ?
+		ResearcherInstitutionalItem.institutionalItem.id = :institutionalItemId
 	</query>
 
 	<!-- named query for getting the researcher using this publication-->
 	<query name="getResearcherInstitutionalItem">
 		from ResearcherInstitutionalItem as ResearcherInstitutionalItem where
-		ResearcherInstitutionalItem.institutionalItem.id = ?
+		ResearcherInstitutionalItem.institutionalItem.id = :institutionalItemId
 	</query>	
     
 </hibernate-mapping>

@@ -17,21 +17,16 @@
 
 package edu.ur.hibernate.ir.researcher.db;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherDAO;
 import edu.ur.order.OrderType;
@@ -102,7 +97,7 @@ public class HbResearcherDAO implements ResearcherDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Researcher> getAllPublicResearchers() {
-		return (List<Researcher>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllPublicResearchers");
+		return (List<Researcher>) hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllPublicResearchers").list();
 	}
 	
 
@@ -118,25 +113,20 @@ public class HbResearcherDAO implements ResearcherDAO {
 	public List<Researcher> getResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType) {
 		
 		log.debug("order type = " + orderType);
-		List<Researcher> researchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-		        Query q = null;
-		        if (orderType.equals(OrderType.ASCENDING_ORDER)) {
-		        	q = session.getNamedQuery("getAllResearcherByLastFirstNameAsc");
-		        } else {
-		        	q = session.getNamedQuery("getAllResearcherByLastFirstNameDesc");
-		        }
-		        
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setReadOnly(true);
-			    q.setFetchSize(maxResults);
-	            return q.list();
-            }
-        });
 
-        return researchers;
+		Query q = null;
+		if (orderType.equals(OrderType.ASCENDING_ORDER)) {
+		    q =  hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherByLastFirstNameAsc");
+		} else {
+		    q =  hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherByLastFirstNameDesc");
+		}
+		        
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setReadOnly(true);
+		q.setFetchSize(maxResults);
+	    return q.list();
+   
 	}
 	
 	/**
@@ -148,39 +138,31 @@ public class HbResearcherDAO implements ResearcherDAO {
      * @return List of researchers 
      */
 	@SuppressWarnings("unchecked")
-	public List<Researcher> getPublicResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType) {
-		List<Researcher> researchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-		        Query q = null;
-		        if (orderType.equals(OrderType.ASCENDING_ORDER)) {
-		        	q = session.getNamedQuery("getAllPublicResearcherByLastFirstNameAsc");
-		        } else {
-		        	q = session.getNamedQuery("getAllPublicResearcherByLastFirstNameDesc");
-		        }
+	public List<Researcher> getPublicResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType) 
+	{
+	    Query q = null;
+		if (orderType.equals(OrderType.ASCENDING_ORDER)) {
+		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllPublicResearcherByLastFirstNameAsc");
+		} else {
+		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllPublicResearcherByLastFirstNameDesc");
+		}
 		        
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setReadOnly(true);
-			    q.setFetchSize(maxResults);
-	            return q.list();
-            }
-        });
-
-        return researchers;
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setReadOnly(true);
+		q.setFetchSize(maxResults);
+	    return q.list();
+   
 	}
 
-	
 	/**
 	 * Get a count of public researchers
 	 * 
 	 * @see edu.ur.ir.researcher.ResearcherDAO#getPublicResearcherCount()
 	 */
 	public Long getPublicResearcherCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("publicResearcherCount"));
-
+		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("publicResearcherCount").uniqueResult();
 	}
-
 
 	/**
 	 * Get researchers by given ids
@@ -189,20 +171,13 @@ public class HbResearcherDAO implements ResearcherDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Researcher> getResearchers(final List<Long> researcherIds) {
-		
 		List<Researcher> foundResearchers = new LinkedList<Researcher>();
 		if( researcherIds.size() > 0 )
         {
-			foundResearchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-		    public Object doInHibernate(Session session)
-                throws HibernateException, SQLException {
-                    Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                    criteria.add(Restrictions.in("id",researcherIds));
-                return criteria.list();
-                }
-             });
+          Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
+          criteria.add(Restrictions.in("id",researcherIds));
+          foundResearchers = criteria.list();
         }
 		return foundResearchers;
-
 	}
 }

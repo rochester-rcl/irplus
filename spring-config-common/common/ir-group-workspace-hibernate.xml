@@ -220,4 +220,116 @@
        </property>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page folder	       -->
+   <!-- ****************************************** --> 
+
+   <bean id="groupWorkspaceProjectPageFolderDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPageFolderDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="groupWorkspaceProjectPageFolderDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPageFolderDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>   
+
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page file	       -->
+   <!-- ****************************************** --> 
+
+   <bean id="groupWorkspaceProjectPageFileDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPageFileDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="groupWorkspaceProjectPageFileDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPageFileDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page publication   -->
+   <!-- ****************************************** --> 
+
+   <bean id="groupWorkspaceProjectPagePublicationDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPagePublicationDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="groupWorkspaceProjectPagePublicationDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPagePublicationDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>   
+
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page filesystem link -->
+   <!-- ****************************************** --> 
+
+   <bean id="groupWorkspaceProjectPageFileSystemLinkDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPageFileSystemLinkDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="groupWorkspaceProjectPageFileSystemLinkDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPageFileSystemLinkDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>   
+
+   
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page institutional Item -->
+   <!-- ****************************************** -->
+
+   <bean id="groupWorkspaceProjectPageInstitutionalItemDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceProjectPageInstitutionalItemDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="groupWorkspaceProjectPageInstitutionalItemDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceProjectPageInstitutionalItemDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean> 
+   
+   
 </beans>

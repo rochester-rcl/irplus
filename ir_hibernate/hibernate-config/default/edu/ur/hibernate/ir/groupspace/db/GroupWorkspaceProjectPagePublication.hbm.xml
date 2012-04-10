@@ -20,20 +20,21 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for a researcher publication.
+	Mapping for a group workspace project page publication.
 	
-	@author Sharmila Ranganathan
+	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.researcher">
+<hibernate-mapping package="edu.ur.ir.groupspace">
 
-	<class name="ResearcherPublication" schema="ir_researcher" table="researcher_publication"
+	<class name="GroupWorkspaceProjectPagePublication" schema="ir_group_workspace" 
+	    table="group_workspace_project_page_publication"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="researcher_publication_id"
+		<id name="id" type="long" column="group_workspace_project_page_publication_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_researcher.researcher_publication_seq</param>
+				<param name="sequence">ir_group_workspace.group_workspace_project_page_publication_seq</param>
 			</generator>
 		</id>
 
@@ -44,7 +45,7 @@
 		<property name="versionNumber" column="version_number" type="int"
 			not-null="true" access="field" />
 			
-        <!--  The publication this researcher holds -->
+        <!--  The publication this project page holds -->
         <many-to-one name="publication" 
               class="edu.ur.ir.item.GenericItem" 
               unique="true" 
@@ -53,29 +54,29 @@
               not-null="true" 
               access="field"/>
         
-        <!--  The researcher folder -->
-        <many-to-one name="parentFolder" class="ResearcherFolder" 
+        <!--  The project page folder -->
+        <many-to-one name="parentFolder" class="GroupWorkspaceProjectPageFolder" 
               unique="true" 
-              column="researcher_folder_id" 
+              column="group_workspace_project_page_folder_id" 
               cascade="save-update"
               access="field"/>
 
-        <!--  The researcher who owns this file -->
-        <many-to-one name="researcher" 
-              class="Researcher" 
+        <!--  The group workspace project page who owns this file -->
+        <many-to-one name="groupWorkspaceProjectPage" 
+              class="GroupWorkspaceProjectPage" 
               unique="true" 
-              column="researcher_id" 
+              column="group_workspace_project_page_id" 
               not-null="true" 
               access="field"/>
 
         
 	</class>
 
-	  <!-- named query for getting the count of item being used in researcher publication-->
-	<query name="getResearcherPublicationCount">
+	  <!-- named query for getting the count of item being used in group workspace project page publication-->
+	<query name="getGroupWorkspaceProjectPagePublicationCount">
 		select count(*) 
-		from ResearcherPublication as ResearcherPublication where
-		ResearcherPublication.publication.id = :itemId
+		from GroupWorkspaceProjectPagePublication as pagePublication where
+		pagePublication.publication.id = :itemId
 	</query>
 	
     

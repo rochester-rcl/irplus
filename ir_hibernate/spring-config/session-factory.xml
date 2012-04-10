@@ -132,6 +132,12 @@
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPage.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageMember.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageImage.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageFileSystemLink.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageFolder.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageInstitutionalItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPagePublication.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>

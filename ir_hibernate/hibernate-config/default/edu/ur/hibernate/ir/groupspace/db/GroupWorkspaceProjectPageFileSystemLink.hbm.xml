@@ -16,67 +16,58 @@
    limitations under the License.
 -->   
 
-
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for a researcher publication.
+	Mapping for a group workspace project page file system  link.
 	
-	@author Sharmila Ranganathan
+	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.researcher">
+<hibernate-mapping package="edu.ur.ir.groupspace">
 
-	<class name="ResearcherPublication" schema="ir_researcher" table="researcher_publication"
+	<class name="GroupWorkspaceProjectPageFileSystemLink" schema="ir_group_workspace" 
+	    table="group_workspace_project_page_file_system_link"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="researcher_publication_id"
+		<id name="id" type="long" column="group_workspace_project_page_file_system_link_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_researcher.researcher_publication_seq</param>
+				<param name="sequence">ir_group_workspace.group_workspace_project_page_file_system_link_seq</param>
 			</generator>
 		</id>
 
 		<!-- A versioned entity. -->
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
-		
-		<property name="versionNumber" column="version_number" type="int"
-			not-null="true" access="field" />
 			
-        <!--  The publication this researcher holds -->
-        <many-to-one name="publication" 
-              class="edu.ur.ir.item.GenericItem" 
-              unique="true" 
-              column="item_id" 
-              cascade="save-update"
-              not-null="true" 
-              access="field"/>
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+		
+		<property name="description" column="description" type="string"
+			not-null="false" access="field" />
+		
+        <property name="url" column="url" type="string"
+			not-null="true" access="field" />
         
         <!--  The researcher folder -->
-        <many-to-one name="parentFolder" class="ResearcherFolder" 
+        <many-to-one name="parentFolder" 
+              class="GroupWorkspaceProjectPageFolder" 
               unique="true" 
-              column="researcher_folder_id" 
+              column="group_workspace_project_page_folder_id" 
               cascade="save-update"
-              access="field"/>
-
-        <!--  The researcher who owns this file -->
-        <many-to-one name="researcher" 
-              class="Researcher" 
+              access="field"/>    
+              
+        <!--  The researcher who owns this link -->
+        <many-to-one name="groupWorkspaceProjectPage" 
+              class="GroupWorkspaceProjectPage" 
               unique="true" 
-              column="researcher_id" 
+              column="group_workspace_project_page_id" 
               not-null="true" 
               access="field"/>
 
         
 	</class>
-
-	  <!-- named query for getting the count of item being used in researcher publication-->
-	<query name="getResearcherPublicationCount">
-		select count(*) 
-		from ResearcherPublication as ResearcherPublication where
-		ResearcherPublication.publication.id = :itemId
-	</query>
 	
     
 </hibernate-mapping>

@@ -1,7 +1,6 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-Public: ${groupWorkspaceProjectPage.pagePublic}
 <h3>Project Page:&nbsp;<a href="${groupWorkspaceUrl}">${groupWorkspaceProjectPage.groupWorkspace.name}</a>
                    <input type="radio" id="group_workspace_project_page_off" name="isPublic" onclick="javascript:YAHOO.ur.edit.group_workspace_project_page.confirmPrivateDialog.showDialog();"
 	               <c:if test="${!groupWorkspaceProjectPage.pagePublic}">

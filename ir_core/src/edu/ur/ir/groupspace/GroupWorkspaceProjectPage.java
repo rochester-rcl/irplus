@@ -24,7 +24,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.item.GenericItem;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.persistent.BasePersistent;
 
@@ -57,6 +60,21 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	
 	// list of members for the project page
 	private Set<GroupWorkspaceProjectPageMember> members = new HashSet<GroupWorkspaceProjectPageMember>();
+	
+	// Root folders of the project page 
+	private Set<GroupWorkspaceProjectPageFolder> rootFolders  = new HashSet<GroupWorkspaceProjectPageFolder>();
+	
+	// Root files of the group workspace 
+	private Set<GroupWorkspaceProjectPageFile> rootFiles = new HashSet<GroupWorkspaceProjectPageFile>(); 
+	
+	// Root publications of the group workspace
+	private Set<GroupWorkspaceProjectPagePublication> rootPublications  = new HashSet<GroupWorkspaceProjectPagePublication>();
+
+	// Root institutional item of the group workspace page
+	private Set<GroupWorkspaceProjectPageInstitutionalItem> rootInstitutionalItems = new HashSet<GroupWorkspaceProjectPageInstitutionalItem>();
+	
+	/** Root links of the researcher */
+	private Set<GroupWorkspaceProjectPageFileSystemLink> rootLinks = new HashSet<GroupWorkspaceProjectPageFileSystemLink>();
 
 	/**
      * Package protected constructor 
@@ -498,5 +516,522 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 		this.members = members;
 	}
 
+	
+	/**
+	 * Adds an existing file to the root of this researcher.
+	 * If the file was a child of an existing folder.  It
+	 * is removed from the old folders file list.
+	 * 
+	 * @param file - to add as a root file
+	 */
+	public void addRootFile(GroupWorkspaceProjectPageFile file) 
+	{
+		// file already part of this 
+		if(!rootFiles.contains(file))
+		{
+		
+		    GroupWorkspaceProjectPageFolder folder = file.getParentFolder();
+		    if( folder != null )
+		    {
+			    folder.removeGroupWorkspaceProjectPageFile(file);
+			    file.setParentFolder(null);
+		    }
+		
+		    rootFiles.add(file);
+		}
+	}
+
+
+	/**
+	 * Adds an existing institutional item to the root of this researcher.
+	 * If the institutional item was a child of an existing folder.  It
+	 * is removed from the old folder list.
+	 * 
+	 * @param institutionalItem - to add as a root institutional item
+	 */
+	public void addRootInstitutionalItem(GroupWorkspaceProjectPageInstitutionalItem institutionalItem) 
+	{
+	
+		GroupWorkspaceProjectPageFolder folder = institutionalItem.getParentFolder();
+		if( folder != null )
+		{
+			folder.removeGroupWorkspaceProjectPageInstitutionalItem(institutionalItem);
+			institutionalItem.setParentFolder(null);
+		}
+		
+		rootInstitutionalItems.add(institutionalItem);
+	}
+	
+	/**
+	 * Adds an existing link to the root of this researcher.
+	 * If the item was a child of an existing folder.  It
+	 * is removed from the old folder list.
+	 * 
+	 * @param link - to add as a root link
+	 */
+	public void addRootLink(GroupWorkspaceProjectPageFileSystemLink link) 
+	{
+	
+		GroupWorkspaceProjectPageFolder folder = link.getParentFolder();
+		if( folder != null )
+		{
+			folder.removeGroupWorkspaceProjectPageFileSystemLink(link);
+			link.setParentFolder(null);
+		}
+		
+		rootLinks.add(link);
+	}
+	
+	/**
+	 * Create a root researcher file for this researcher.  
+	 * 
+	 * @param f the ir file to add to the root.	
+	 * @return the created researcher file
+	 * 
+	 */
+	public GroupWorkspaceProjectPageFile createRootFile(IrFile f, int versionNumber)
+	{
+		GroupWorkspaceProjectPageFile rf = this.getFile(f);
+		if( rf == null )
+		{
+		    rf = new GroupWorkspaceProjectPageFile(this, f);
+		    rf.setVersionNumber(versionNumber);
+		    rootFiles.add(rf);
+		}
+		return rf;
+	}
+	
+
+	
+	/**
+	 * Creates the root folder by name if it does not exist.  The 
+	 * name should not be null or the name of an existing root
+	 * folder for this researcher.
+	 * 
+	 * @param name of root folder to create.
+	 * @return Created Folder if it does not already exist
+	 * @throws DuplicateNameException 
+	 * 
+	 * @throws IllegalArgumentException if the name of the folder 
+	 * already exists or the name is null.
+	 */
+	public GroupWorkspaceProjectPageFolder createRootFolder(String name) throws DuplicateNameException
+	{
+		if( name == null)
+		{
+			throw new IllegalArgumentException("Name cannot be null");
+		}
+		
+		if(getRootFolder(name) != null)
+		{
+			throw new DuplicateNameException("Folder with name " + name +
+			" already exists ", name );
+        }
+		
+		GroupWorkspaceProjectPageFolder f = new GroupWorkspaceProjectPageFolder(this, name);
+		rootFolders.add(f);
+		
+		return f;
+	}
+	
+	/**
+	 * Creates the root publication if it does not exist.  The 
+	 * name should not be null or the name of an existing root
+	 * researcher publication for this researcher.
+	 * 
+	 * @param publication publication to add to this researcher.
+	 * @return Created researcher publication if it does not already exist
+	 */
+	public GroupWorkspaceProjectPagePublication createRootPublication(GenericItem publication, int versionNumber)
+	{ 
+		GroupWorkspaceProjectPagePublication  researcherPublication = this.getPublication(publication);
+		if( researcherPublication == null )
+		{	
+		    researcherPublication = new GroupWorkspaceProjectPagePublication(this, publication, versionNumber);
+	        rootPublications.add(researcherPublication);
+		}
+		return researcherPublication;
+	}
+
+	
+	/**
+	 * Get the researcher file based on the ir file.
+	 * 
+	 * @param f - IR file the researcher file should contain.
+	 * @return - the found researcher file
+	 */
+	public GroupWorkspaceProjectPageFile getFile(IrFile f)
+	{
+		for(GroupWorkspaceProjectPageFile file : rootFiles)
+		{
+			if( file.getIrFile().equals(f ))
+			{
+				return file;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Creates the root link if it does not exist.  The 
+	 * name should not be null or the name of an existing root
+	 * researcher link for this researcher.
+	 * 
+	 * @param url link to add to the researcher.
+	 * @param name Name of the link
+	 * @param description Description for the link
+	 * 
+	 * @return Created researcher link if it does not already exist
+	 * 
+	 */
+	public GroupWorkspaceProjectPageFileSystemLink createRootLink(String url, String name, String description)
+	{  
+		GroupWorkspaceProjectPageFileSystemLink researcherLink = new GroupWorkspaceProjectPageFileSystemLink(this, url);
+		researcherLink.setName(name);
+		researcherLink.setDescription(description);
+	    rootLinks.add(researcherLink);
+		
+		return researcherLink;
+	}
+	
+	/**
+	 * Get a researcher file by name.
+	 * 
+	 * @param nameWithExtension
+	 * @return the found researcher file
+	 */
+	public GroupWorkspaceProjectPageFile getRootFileByNameExtension(String nameWithExtension)
+	{
+		for(GroupWorkspaceProjectPageFile rf: rootFiles )
+		{
+			if( rf.getNameWithExtension().equalsIgnoreCase(nameWithExtension))
+			{
+				return rf;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get a researcher file by name.
+	 * 
+	 * @param nameWithExtension
+	 * @return the found researcher file
+	 */
+	public GroupWorkspaceProjectPageFile getRootFile(String name)
+	{
+		for(GroupWorkspaceProjectPageFile rf: rootFiles )
+		{
+			if( rf.getName().equalsIgnoreCase(name))
+			{
+				return rf;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a researcher publication by name.
+	 * 
+	 * @param name
+	 * @return the found researcher publication 
+	 */
+	public GroupWorkspaceProjectPagePublication getRootPublication(String name)
+	{
+		for(GroupWorkspaceProjectPagePublication rp: rootPublications)
+		{
+			if( rp.getName().equalsIgnoreCase(name))
+			{
+				return rp;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get a researcher publication by name.
+	 * 
+	 * @param name
+	 * @return the found researcher publication 
+	 */
+	public GroupWorkspaceProjectPageInstitutionalItem getRootInstitutionalItem(String name)
+	{
+		for(GroupWorkspaceProjectPageInstitutionalItem rp: rootInstitutionalItems)
+		{
+			if( rp.getName().equalsIgnoreCase(name))
+			{
+				return rp;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a researcher link by name.
+	 * 
+	 * @param name
+	 * @return the found researcher link
+	 */
+	public GroupWorkspaceProjectPageFileSystemLink getRootLink(String name)
+	{
+		for(GroupWorkspaceProjectPageFileSystemLink rl: rootLinks)
+		{
+			if( rl.getName().equalsIgnoreCase(name))
+			{
+				return rl;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a researcher root folder by name.  The comparison
+	 * is case insensitive.
+	 * 
+	 * @param name - name of the folder to return
+	 * @return The folder if found otherwise null.
+	 */
+	public GroupWorkspaceProjectPageFolder getRootFolder(String name)
+	{
+		for(GroupWorkspaceProjectPageFolder f: rootFolders )
+		{
+			if( f.getName().equalsIgnoreCase(name.trim()))
+			{
+				return f;
+			}
+		}
+		return null;
+	}
+	
+
+	
+	/**
+	 * Adds an existing folder to the root of this researcher.
+	 * If the folder was a child of an existing folder.  It
+	 * is removed from its parents list.
+	 * 
+	 * @param folder - to add as a root
+	 * @throws DuplicateNameException 
+	 */
+	public void addRootFolder(GroupWorkspaceProjectPageFolder folder) throws DuplicateNameException
+	{
+		//if this folder already is a root folder do not add it
+		if( !rootFolders.contains(folder) )
+		{
+			if(getRootFolder(folder.getName()) != null)
+			{
+				throw new DuplicateNameException("Folder with name " + folder.getName() +
+				" already exists in this folder", folder.getName() );
+	        }
+			GroupWorkspaceProjectPageFolder parent = folder.getParent();
+			parent.removeChild(folder);
+			rootFolders.add(folder);
+		}
+	}
+
+
+	/**
+	 * Creates the root Institutional Item if it does not exist.  The 
+	 * name should not be null or the name of an existing root
+	 * researcher publication for this researcher.
+	 * 
+	 * @param institutionalItem institutional Item to add to this researcher.
+	 * @return Created researcher institutional Item if it does not already exist
+	 */
+	public GroupWorkspaceProjectPageInstitutionalItem createRootInstitutionalItem(InstitutionalItem institutionalItem)
+	{ 
+		GroupWorkspaceProjectPageInstitutionalItem researcherInstitutionalItem = getInstitutionalItem(institutionalItem);
+		if( researcherInstitutionalItem == null )
+		{
+		    researcherInstitutionalItem = new GroupWorkspaceProjectPageInstitutionalItem(this, institutionalItem);
+	        rootInstitutionalItems.add(researcherInstitutionalItem);
+		}
+		return researcherInstitutionalItem;
+	}
+	
+	/**
+	 * Get the researcher institutional item based on the institutional item
+	 * 
+	 * @param institutionalItem - institutional item to check for
+	 * @return - the researcher institutional item or null if not found
+	 */
+	public GroupWorkspaceProjectPageInstitutionalItem getInstitutionalItem(InstitutionalItem institutionalItem)
+	{
+		for( GroupWorkspaceProjectPageInstitutionalItem item : rootInstitutionalItems)
+		{
+			if(item.getInstitutionalItem().equals(institutionalItem))
+			{
+				return item;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a publication based on the generic item.
+	 * 
+	 * @param publication - publication in the researcher publication
+	 * @return the found researcher publication or null
+	 */
+	public GroupWorkspaceProjectPagePublication getPublication(GenericItem publication)
+	{
+		for(GroupWorkspaceProjectPagePublication pub : rootPublications)
+		{
+			if( pub.getPublication().equals(publication))
+			{
+				return pub;
+			}
+		}
+		return null;
+	}
+	
+
+	/**
+	 * Get the root folders for the researcher.  This is an
+	 * unmodifiable set.
+	 * 
+	 * @return set of root folders.
+	 */
+	public Set<GroupWorkspaceProjectPageFolder> getRootFolders() {
+		return Collections.unmodifiableSet(rootFolders);
+	}
+
+	/**
+	 * Set the root folders for a researcher.
+	 * 
+	 * @param rootFolders
+	 */
+	void setRootFolders(Set<GroupWorkspaceProjectPageFolder> rootFolders) {
+		this.rootFolders = rootFolders;
+	}
+
+	/**
+	 * Get the root files for a researcher.  This is
+	 * an unmodifiable set.
+	 * 
+	 * @return
+	 */
+	public Set<GroupWorkspaceProjectPageFile> getRootFiles() {
+		return Collections.unmodifiableSet(rootFiles);
+	}
+
+	/**
+	 * Se tthe root files.
+	 * 
+	 * @param rootFiles
+	 */
+	void setRootFiles(Set<GroupWorkspaceProjectPageFile> rootFiles) {
+		this.rootFiles = rootFiles;
+	}
+
+	/**
+	 * Return the set of root publications.  This is an unmodifiable set.
+	 * 
+	 * @return unmodifiable set of root publications
+	 */
+	public Set<GroupWorkspaceProjectPagePublication> getRootPublications() {
+		return Collections.unmodifiableSet(rootPublications);
+	}
+
+	/**
+	 * Set the root publications.
+	 * 
+	 * @param rootPublications
+	 */
+	void setRootPublications(Set<GroupWorkspaceProjectPagePublication> rootPublications) {
+		this.rootPublications = rootPublications;
+	}
+
+	/**
+	 * Get the root links for the researcher - this is an unmodifiable set.
+	 * 
+	 * @return set of root links
+	 */
+	public Set<GroupWorkspaceProjectPageFileSystemLink> getRootLinks() {
+		return Collections.unmodifiableSet(rootLinks);
+	}
+
+	/**
+	 * Set the root links for the researcher
+	 * 
+	 * @param rootLinks
+	 */
+	void setRootLinks(Set<GroupWorkspaceProjectPageFileSystemLink> rootLinks) {
+		this.rootLinks = rootLinks;
+	}
+	
+	/**
+	 * Get root publication by id.
+	 * 
+	 * @param id - Id of the researcher root publication to return
+	 * @return The Researcher Publication if found otherwise null.
+	 */
+	public GroupWorkspaceProjectPagePublication getRootPublication(Long id)
+	{
+		for(GroupWorkspaceProjectPagePublication researcherPublication: rootPublications)
+		{
+			if( researcherPublication.getId().equals(id))
+			{
+				return researcherPublication;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get root Institutional item by id.
+	 * 
+	 * @param id - Id of the researcher root Institutional item to return
+	 * @return The Researcher Institutional item if found otherwise null.
+	 */
+	public GroupWorkspaceProjectPageInstitutionalItem getRootInstitutionalItem(Long id)
+	{
+		for(GroupWorkspaceProjectPageInstitutionalItem researcherInstitutionalItem: rootInstitutionalItems)
+		{
+			if( researcherInstitutionalItem.getId().equals(id))
+			{
+				return researcherInstitutionalItem;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get root link by id.
+	 * 
+	 * @param id - Id of the researcher root link to return
+	 * @return The Researcher link if found otherwise null.
+	 */
+	public GroupWorkspaceProjectPageFileSystemLink getRootLink(Long id)
+	{
+		for(GroupWorkspaceProjectPageFileSystemLink researcherLink: rootLinks)
+		{
+			if( researcherLink.getId().equals(id))
+			{
+				return researcherLink;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get the root institutional items for the researcher.  This is 
+	 * an unmodifiable set.
+	 * 
+	 * @return set of root insitutional items.
+	 */
+	public Set<GroupWorkspaceProjectPageInstitutionalItem> getRootInstitutionalItems() {
+		return Collections.unmodifiableSet(rootInstitutionalItems);
+	}
+
+	/**
+	 * Set the root insitutional items 
+	 * @param rootInstitutionalItems
+	 */
+	void setRootInstitutionalItems(
+			Set<GroupWorkspaceProjectPageInstitutionalItem> rootInstitutionalItems) {
+		this.rootInstitutionalItems = rootInstitutionalItems;
+	}
 
 }

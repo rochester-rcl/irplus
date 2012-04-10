@@ -1,20 +1,4 @@
-/**  
-   Copyright 2008 University of Rochester
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/  
-
-package edu.ur.hibernate.ir.researcher.db;
+package edu.ur.hibernate.ir.groupspace.db;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,34 +10,28 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.researcher.ResearcherInstitutionalItem;
-import edu.ur.ir.researcher.ResearcherInstitutionalItemDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageInstitutionalItem;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageInstitutionalItemDAO;
 
-/**
- * Hibernate implementation of researcher institutional Item data access and storage.
- * 
- * @author Sharmila Ranganathan
- *
- */
-public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutionalItemDAO {
+public class HbGroupWorkspaceProjectPageInstitutionalItemDAO implements GroupWorkspaceProjectPageInstitutionalItemDAO{
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = 1439886971641958964L;
-
+	// eclipse generated id
+	private static final long serialVersionUID = -5557160047915579723L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
-	private final HbCrudDAO<ResearcherInstitutionalItem> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspaceProjectPageInstitutionalItem> hbCrudDAO;
 
 	/**  Logger for add files to item action */
-	private static final Logger log = Logger.getLogger(HbResearcherInstitutionalItemDAO.class);
+	private static final Logger log = Logger.getLogger(HbGroupWorkspaceProjectPageInstitutionalItemDAO.class);
 
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbResearcherInstitutionalItemDAO() {
-		hbCrudDAO = new HbCrudDAO<ResearcherInstitutionalItem>(ResearcherInstitutionalItem.class);
+	public HbGroupWorkspaceProjectPageInstitutionalItemDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspaceProjectPageInstitutionalItem>(GroupWorkspaceProjectPageInstitutionalItem.class);
 	}
 	
 	/**
@@ -69,7 +47,7 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	/**
 	 * Return ResearcherInstitutionalItem by id
 	 */
-	public ResearcherInstitutionalItem getById(Long id, boolean lock) {
+	public GroupWorkspaceProjectPageInstitutionalItem getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -77,7 +55,7 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(ResearcherInstitutionalItem entity) {
+	public void makePersistent(GroupWorkspaceProjectPageInstitutionalItem entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -85,7 +63,7 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	 *  
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(ResearcherInstitutionalItem entity) {
+	public void makeTransient(GroupWorkspaceProjectPageInstitutionalItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 	
@@ -95,11 +73,11 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	 * @see edu.ur.ir.researcher.ResearcherInstitutionalItemDAO#getRootResearcherInstitutionalItems(Long)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ResearcherInstitutionalItem> getRootResearcherInstitutionalItems(final Long researcherId)
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getRootItems(final Long projectPageId)
 	{
-		log.debug("getRootResearcherInstitutionalItems::");
+		log.debug("getRootProjectPageInstitutionalItems::");
 		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
-        criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+        criteria.createCriteria("groupWorkspaceProjectPage").add(Restrictions.idEq(projectPageId));
         criteria.add(Restrictions.isNull("parentFolder"));
         return criteria.list();
 	}
@@ -110,11 +88,11 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	 * @see edu.ur.ir.researcher.ResearcherInstitutionalItemDAO#getSubResearcherInstitutionalItems(Long, Long)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ResearcherInstitutionalItem> getSubResearcherInstitutionalItems(final Long researcherId, final Long parentCollectionId)
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(final Long projectPageId, final Long parentCollectionId)
 	{
-		log.debug("getSubResearcherInstitutionalItems::");
+		log.debug("getChildGroupWorkspaceProjectPageInstitutionalItems::");
 		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
-		criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+		criteria.createCriteria("groupWorkspaceProjectPage").add(Restrictions.idEq(projectPageId));
         criteria.createCriteria("parentFolder").add(Restrictions.idEq(parentCollectionId));
         return criteria.list();
 	}
@@ -126,12 +104,12 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	 * @see edu.ur.ir.researcher.ResearcherInstitutionalItemDAO#getResearcherInstitutionalItems(java.lang.Long, java.util.List)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ResearcherInstitutionalItem> getResearcherInstitutionalItems(final Long researcherId, final List<Long> itemIds) {
-		List<ResearcherInstitutionalItem> foundItems = new LinkedList<ResearcherInstitutionalItem>();
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(final Long projectPageId, final List<Long> itemIds) {
+		List<GroupWorkspaceProjectPageInstitutionalItem> foundItems = new LinkedList<GroupWorkspaceProjectPageInstitutionalItem>();
 		if( itemIds.size() > 0 )
 		{
 			Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
-			criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+			criteria.createCriteria("groupWorkspaceProjectPage").add(Restrictions.idEq(projectPageId));
             criteria.add(Restrictions.in("id", itemIds));
             foundItems =  criteria.list();
 		}
@@ -143,21 +121,22 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	 * 
 	 * @see edu.ur.ir.researcher.ResearcherInstitutionalItemDAO#getResearcherInstitutionalItemCount(Long)
 	 */
-	public Long getResearcherInstitutionalItemCount(Long itemId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherInstitutionalItemCount");
+	public Long getCount(Long itemId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceProjectPageInstitutionalItemCount");
 		q.setLong("institutionalItemId", itemId);
 		return (Long)q.uniqueResult();
 	}
+
 	/**
 	 * Get a researcher institutional Items containing this item
 	 * 
 	 * @see edu.ur.ir.researcher.ResearcherInstitutionalItemDAO#getResearcherInstitutionalItem(Long)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ResearcherInstitutionalItem> getResearcherInstitutionalItem(Long itemId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherInstitutionalItem");
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(Long itemId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceProjectPageInstitutionalItem");
 		q.setLong("institutionalItemId", itemId);
-		return (List<ResearcherInstitutionalItem>) q.list();
+		return (List<GroupWorkspaceProjectPageInstitutionalItem>) q.list();
 	}
 
 }

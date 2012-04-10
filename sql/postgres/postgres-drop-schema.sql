@@ -81,6 +81,12 @@ DROP SCHEMA ir_security;
 -- ---------------------------------------------
 -- Drop Group workspaces tables/schema
 -- ---------------------------------------------
+
+DROP TABLE ir_group_workspace.group_workspace_project_page_file_system_link;
+DROP TABLE ir_group_workspace.group_workspace_project_page_institutional_item;
+DROP TABLE ir_group_workspace.group_workspace_project_page_publication;
+DROP TABLE ir_group_workspace.group_workspace_project_page_file;
+DROP TABLE ir_group_workspace.group_workspace_project_page_folder;
 DROP TABLE ir_group_workspace.group_workspace_project_page_image;
 DROP TABLE ir_group_workspace.group_workspace_project_page_member;
 DROP TABLE ir_group_workspace.group_workspace_project_page;
@@ -92,6 +98,11 @@ DROP TABLE ir_group_workspace.group_workspace_folder;
 DROP TABLE ir_group_workspace.group_workspace;
 DROP TABLE ir_group_workspace.group_workspace_file_delete_record;
 
+DROP SEQUENCE ir_group_workspace.group_workspace_project_page_file_system_link_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_project_page_institutional_item_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_project_page_publication_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_project_page_file_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_project_page_folder_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_project_page_image_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_project_page_member_seq;
 DROP SEQUENCE ir_group_workspace.group_workspace_project_page_seq;
