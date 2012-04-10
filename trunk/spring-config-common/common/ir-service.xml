@@ -991,6 +991,7 @@
     <bean id="groupWorkspaceProjectPageService" 
        class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageService">
        <property name="groupWorkspaceProjectPageDAO" ref="groupWorkspaceProjectPageDAO"/>
+       <property name="repositoryService" ref="repositoryService"/>
    </bean>
    
    <!-- ****************************************** --> 

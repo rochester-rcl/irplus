@@ -16,20 +16,15 @@
 
 package edu.ur.hibernate.ir.researcher.db;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.researcher.ResearcherFile;
 import edu.ur.ir.researcher.ResearcherFileDAO;
 
@@ -67,16 +62,6 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
     }
 	
 	/**
-	 * Get a count of the IrFiles
-	 * 
-	 * @see edu.ur.CountableDAO#getCount()
-	 */
-	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileCount");
-		return (Long)q.uniqueResult();
-	}
-
-	/**
 	 * Return ResearcherFile by id
 	 */
 	public ResearcherFile getById(Long id, boolean lock) {
@@ -108,27 +93,12 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 	 * @return the found files
 	 */
 	public ResearcherFile getFileForResearcherWithSpecifiedIrFile(Long researcherId, Long irFileId) {
-		Object[] values = {researcherId, irFileId};
-		return (ResearcherFile)
-		(HbHelper.getUnique(hbCrudDAO.getHibernateTemplate()
-			.findByNamedQuery("getFileWithSpecifiedResearcherIdAndIrFileID", values)));
-		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFileWithSpecifiedResearcherIdAndIrFileID");
+		q.setLong("researcherId", researcherId);
+		q.setLong("fileId", irFileId);
+		return (ResearcherFile) q.uniqueResult();
 	}
 
-	/**
-	 * Get the files with specified ir file id .
-	 * 
-	 * @param irFileId
-	 * 
-	 * @return the found files
-	 */
-	public Long getFileWithSpecifiedIrFile(Long irFileId) {
-		
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate()
-			.findByNamedQuery("getResearcherFilesWithIrFileId", irFileId));
-		
-	}
 	
 	/**
 	 * Get the files for researcher id and folder id .
@@ -140,8 +110,10 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFile> getFilesInAFolderForResearcher(Long researcherId, Long folderId) {
-		Object[] values = {researcherId, folderId};
-		return (List<ResearcherFile>) (hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFilesInAFolderForResearcher", values));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFilesInAFolderForResearcher");
+		q.setLong("researcherId", researcherId);
+		q.setLong("parentId", folderId);
+		return (List<ResearcherFile>) q.list();
 	}
 	
 	/**
@@ -153,10 +125,9 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFile> getRootFiles(Long researcherId) {
-		
-		return (List<ResearcherFile>) (hbCrudDAO.getHibernateTemplate().
-				findByNamedQuery("getRootResearcherFiles", researcherId));
-
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootResearcherFiles");
+		q.setLong("researcherId", researcherId);
+		return  (List<ResearcherFile>) q.list();
 	}
 	
 	/**
@@ -169,16 +140,10 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 		List<ResearcherFile> foundFiles = new LinkedList<ResearcherFile>();
 		if( fileIds.size() > 0 )
 		{
-		   foundFiles = 
-			    (List<ResearcherFile>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-                public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                    Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                    criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
-                    criteria.add(Restrictions.in("id", fileIds));
-                    return criteria.list();
-                }
-            });
+		    Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
+		    criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+            criteria.add(Restrictions.in("id", fileIds));
+            foundFiles = criteria.list();
 		}
 		return foundFiles;
 	}
@@ -189,8 +154,9 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 	 * @see edu.ur.ir.researcher.ResearcherFileDAO#getResearcherFileCount(Long)
 	 */
 	public Long getResearcherFileCount(Long irFileId) {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFileCount", irFileId));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherFileCount");
+		q.setLong("fileId", irFileId);
+		return (Long)q.uniqueResult();
 	}
 
 }

@@ -88,6 +88,73 @@
 			<one-to-many class="GroupWorkspaceProjectPageImage" />
 		</set>
 		
+		 <!--  Root Project Page Folders -->
+		<set name="rootFolders" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all" 
+		     where="group_workspace_project_page_folder_id = root_folder_id"
+		     access="field"
+			 order-by="name" 
+			 lazy="true"
+			 schema="ir_group_workspace"
+			 fetch="subselect">
+			<key column="group_workspace_project_page_id"/>
+			<one-to-many class="GroupWorkspaceProjectPageFolder"/>
+		</set>
+		
+        <!--  Root Researcher Files -->
+		<set name="rootFiles" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     where="group_workspace_project_page_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_group_workspace">
+			<key column="group_workspace_project_page_id"/>
+			<one-to-many class="GroupWorkspaceProjectPageFile"/>
+		</set>
+		
+		<!--  Root Researcher publications -->
+		<set name="rootPublications" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     where="group_workspace_project_page_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_group_workspace">
+			<key column="group_workspace_project_page_id"/>
+			<one-to-many class="GroupWorkspaceProjectPagePublication"/>
+		</set>
+
+		<!--  Root Researcher institutional items -->
+		<set name="rootInstitutionalItems" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     where="group_workspace_project_page_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_group_workspace">
+			<key column="group_workspace_project_page_id"/>
+			<one-to-many class="GroupWorkspaceProjectPageInstitutionalItem"/>
+		</set>
+
+		<!--  Root Researcher Links -->
+		<set name="rootLinks" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     where="group_workspace_project_page_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_group_workspace">
+			<key column="group_workspace_project_page_id"/>
+			<one-to-many class="GroupWorkspaceProjectPageFileSystemLink"/>
+		</set>
+		
 	</class>
 
 </hibernate-mapping>

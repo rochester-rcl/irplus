@@ -194,9 +194,6 @@
 		  <list-index column="order_value"/>
           <one-to-many class="ResearcherPersonalLink"/>
 		</list>
-		
-        
-			
 	</class>
 	
 	<!--  Get a count of researchers in the system -->

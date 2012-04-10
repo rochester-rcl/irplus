@@ -16,16 +16,12 @@
 
 package edu.ur.hibernate.ir.researcher.db;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.researcher.ResearcherLink;
@@ -93,17 +89,11 @@ public class HbResearcherLinkDAO implements ResearcherLinkDAO{
 	@SuppressWarnings("unchecked")
 	public List<ResearcherLink> getRootResearcherLinks( final Long researcherId)
 	{
-		List<ResearcherLink> items = (List<ResearcherLink>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
-                criteria.add(Restrictions.isNull("parentFolder"));
-                return criteria.list();
-            }
-        });
-
-        return items;
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
+		criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+        criteria.add(Restrictions.isNull("parentFolder"));
+        return criteria.list();
+		
 	}
     
 	/**
@@ -114,18 +104,10 @@ public class HbResearcherLinkDAO implements ResearcherLinkDAO{
 	@SuppressWarnings("unchecked")
 	public List<ResearcherLink> getSubResearcherLinks( final Long researcherId, final Long parentCollectionId)
 	{
-		List<ResearcherLink> items = (List<ResearcherLink>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                
-                criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
-                criteria.createCriteria("parentFolder").add(Restrictions.idEq(parentCollectionId));
-                return criteria.list();
-            }
-        });
-
-        return items;
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
+		criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+        criteria.createCriteria("parentFolder").add(Restrictions.idEq(parentCollectionId));
+        return criteria.list();
 	}
 
 	/**
@@ -138,16 +120,10 @@ public class HbResearcherLinkDAO implements ResearcherLinkDAO{
 		List<ResearcherLink> foundItems = new LinkedList<ResearcherLink>();
 		if( itemIds.size() > 0 )
 		{
-		   foundItems = 
-			    (List<ResearcherLink>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-                public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                    Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                    criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
-                    criteria.add(Restrictions.in("id", itemIds));
-                    return criteria.list();
-                }
-            });
+		   Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(hbCrudDAO.getClazz());
+           criteria.createCriteria("researcher").add(Restrictions.idEq(researcherId));
+           criteria.add(Restrictions.in("id", itemIds));
+           foundItems = criteria.list();
 		}
 		return foundItems;
 	}

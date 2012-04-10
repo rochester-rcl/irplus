@@ -2900,6 +2900,126 @@ ALTER TABLE ir_group_workspace.group_workspace_project_page_image OWNER TO ir_pl
 CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_image_seq ;
 ALTER TABLE ir_group_workspace.group_workspace_project_page_image_seq OWNER TO ir_plus;
 
+
+
+-- ---------------------------------------------
+-- Group workspace Project Page  Folder Information
+-- ---------------------------------------------
+
+-- Create a new table to hold group workspace project page folder information in the system
+CREATE TABLE ir_group_workspace.group_workspace_project_page_folder
+(
+  group_workspace_project_page_folder_id BIGINT PRIMARY KEY,
+  root_folder_id BIGINT NOT NULL,
+  parent_id BIGINT,
+  group_workspace_project_page_id BIGINT NOT NULL,
+  left_value BIGINT,
+  right_value BIGINT,
+  name TEXT NOT NULL,
+  path TEXT NOT NULL,
+  description TEXT,
+  version INTEGER,
+  FOREIGN KEY (parent_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
+  FOREIGN KEY (root_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
+  FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+  UNIQUE (parent_id, name),
+  UNIQUE (group_workspace_project_page_id, path, name)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_folder OWNER TO ir_plus;
+
+-- The researcher folder  sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_folder_seq ;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_folder_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace project page file Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_project_page_file
+(
+    group_workspace_project_page_file_id BIGINT PRIMARY KEY,
+    group_workspace_project_page_folder_id BIGINT,
+    group_workspace_project_page_id BIGINT NOT NULL,
+    ir_file_id BIGINT NOT NULL,
+    version_number INTEGER NOT NULL,
+    version INTEGER,
+    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
+    FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id),
+    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+    UNIQUE(group_workspace_project_page_id, group_workspace_project_page_folder_id, ir_file_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_file OWNER TO ir_plus;
+
+-- The researcher file sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_file_seq;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_file_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace project page publication Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_project_page_publication
+(
+    group_workspace_project_page_publication_id BIGINT PRIMARY KEY,
+    group_workspace_project_page_folder_id BIGINT,
+    group_workspace_project_page_id BIGINT NOT NULL,
+    item_id BIGINT NOT NULL,
+    version_number INTEGER NOT NULL,
+    version INTEGER,
+    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
+    FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),
+    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+    UNIQUE(group_workspace_project_page_id, group_workspace_project_page_folder_id, item_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_publication OWNER TO ir_plus;
+
+-- The group workspace project page publication sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_publication_seq;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_publication_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace project page institutional item Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_project_page_institutional_item
+(
+    group_workspace_project_page_institutional_item_id BIGINT PRIMARY KEY,
+    group_workspace_project_page_folder_id BIGINT,
+    group_workspace_project_page_id BIGINT NOT NULL,
+    institutional_item_id BIGINT NOT NULL,
+    description TEXT,
+    version INTEGER,
+    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
+    FOREIGN KEY (institutional_item_id) REFERENCES ir_repository.institutional_item (institutional_item_id),
+    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+    UNIQUE(group_workspace_project_page_id, group_workspace_project_page_folder_id, institutional_item_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_institutional_item OWNER TO ir_plus;
+
+-- The group workspace project page institutional item sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_institutional_item_seq;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_institutional_item_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace project page link Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_project_page_file_system_link
+(
+    group_workspace_project_page_file_system_link_id BIGINT PRIMARY KEY,
+    group_workspace_project_page_folder_id BIGINT,
+    group_workspace_project_page_id BIGINT NOT NULL,
+    url TEXT,
+    name TEXT,
+    description TEXT,
+    version INTEGER,
+    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace. group_workspace_project_page_folder ( group_workspace_project_page_folder_id),
+    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
+    UNIQUE( group_workspace_project_page_id,  group_workspace_project_page_folder_id, name)
+);
+ALTER TABLE ir_group_workspace.group_workspace_project_page_file_system_link OWNER TO ir_plus;
+
+-- The group workspace project page link sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_file_system_link_seq;
+ALTER TABLE ir_group_workspace.group_workspace_project_page_file_system_link_seq OWNER TO ir_plus;
+
+
 -- ----------------------------------------------
 -- **********************************************
        
