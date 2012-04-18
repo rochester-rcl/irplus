@@ -1,3 +1,19 @@
+/**  
+   Copyright 2008 - 2012 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
 package edu.ur.ir.groupspace;
 
 import java.io.Serializable;
@@ -10,415 +26,401 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
 
 
+/**
+ * Service to deal with group workspace project page file system information.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public interface GroupWorkspaceProjectPageFileSystemService extends Serializable{
 	
 	/** indicates that the project page should be used as root */
-	public static final long USE_PROJECT_PAGE_AS_ROOT = 0L;
+	public static final long USE_GROUP_WORKSPACE_PROJECT_PAGE_AS_ROOT = 0L;
 	
 	/**
-	 * Allows a user to create a new folder at root level.
+	 * Save the group workspace project page file system link.
 	 * 
-	 * @param groupWorkspaceProjectPage for creating folder
-	 * @param folderName name of the folder
-	 * 
-	 * @return new folder
-	 * 
-	 * @throws DuplicateNameException 
+	 * @param link
 	 */
-	public GroupWorkspaceProjectPageFolder createNewRootFolder(GroupWorkspaceProjectPage groupWorkspaceProjectPage, String folderName) throws DuplicateNameException ;
+	public void save(GroupWorkspaceProjectPageFileSystemLink link);
 	
 	/**
-	 * Create a group workspace project page folder setting the parent as the parent folder.
+	 * Create the root publication.
 	 * 
-	 * @param parentFolder Parent folder of new folder to be created
-	 * @param folderName Name of folder
+	 * @param projectPage - project page 
+	 * @param item - item to use in the publication
+	 * @param versionNumber - version number of the item 
 	 * 
-	 * @return New folder
+	 * @return the created publication
+	 */
+	public GroupWorkspaceProjectPagePublication createRootPublication(GroupWorkspaceProjectPage projectPage, 
+			GenericItem item, int versionNumber);
+
+	/**
+	 * Create the root publication.
+     *
+	 * @param projectPage - Project page to add the institutional item to
+	 * @param institutionalItem - institutional item
+	 * @return the root group workspace project page institutional item
+	 */
+	public GroupWorkspaceProjectPageInstitutionalItem createRootInstitutionalItem(GroupWorkspaceProjectPage projectPage, 
+			InstitutionalItem institutionalItem);
+	
+	/**
+	 * Add a file to the given folder.
 	 * 
+	 * @param parentFolder - parent folder to add the file to
+	 * @param irFile - the ir file to add
+	 * @param versionNumber - version number
+	 * 
+	 * @return - the created group workspace project page file
+	 */
+	public GroupWorkspaceProjectPageFile addFile(
+			GroupWorkspaceProjectPageFolder parentFolder,
+			IrFile irFile, int versionNumber) ;
+	
+	/**
+	 * Allows a researcher to create a new publication.
+	 * 
+	 * @param parentFolder - parent folder to add the publication to
+	 * @param item - item to add
+	 * @param versionNumber - version number of the item to add
+	 * 
+	 * @return the created publication.
+	 */
+	public GroupWorkspaceProjectPagePublication createPublication(GroupWorkspaceProjectPageFolder parentFolder, 
+			GenericItem item, int versionNumber);
+
+	/**
+	 * Create the institutional item
+	 * 
+	 * @param parentFolder - parent folder to add the item to
+	 * @param item - the institutional item
+	 * 
+	 * @return - the created institutional item
+	 */
+	public GroupWorkspaceProjectPageInstitutionalItem createInstitutionalItem(GroupWorkspaceProjectPageFolder parentFolder, 
+			InstitutionalItem item) ;
+	
+	/**
+	 * Create a new root folder for the project page.
+	 * 
+	 * @param projectPage - project page to create the root folder for
+	 * @param folderName - name for the folder
+	 * @return the created folder
+	 * @throws DuplicateNameException - if the name already exists
+	 */
+	public GroupWorkspaceProjectPageFolder createNewRootFolder(GroupWorkspaceProjectPage projectPage, 
+			String folderName) throws DuplicateNameException;
+
+	/**
+	 * Create a new project page folder in the parent folder.
+	 * 
+	 * @param parentFolder - parent folder to create the project page for
+	 * @param folderName - name to give the folder
+	 * @return created folder
 	 * @throws DuplicateNameException
 	 */
-	public GroupWorkspaceProjectPageFolder createNewFolder(GroupWorkspaceProjectPageFolder parentFolder,
+	public GroupWorkspaceProjectPageFolder createFolder(GroupWorkspaceProjectPageFolder parentFolder,
 			String folderName) throws DuplicateNameException;
+
+	
+
+	/**
+	 * Get all folders for the project page folder.
+	 * 
+	 * @param projectPageId - id of the project page
+	 * @param parentFolderId - id of the parent folder.
+	 * 
+	 * @return - list of group worksapce project page folders
+	 */
+	public List<GroupWorkspaceProjectPageFolder> getFoldersForProjectPage(Long projectPageId, Long parentFolderId);
+
 	
 	/**
-	 * Get sub folders within parent folder for a group workspace project page 
+	 * Get the folders for the given project page.
 	 * 
-	 * @param groupWorkspaceProjectPageId Id of the group workspace project page
-	 * @param parentFolderId Id of the parent folder
+	 * @param projectPageId - id of the project page
+	 * @param folderIds - list of ids for the folder
 	 * 
-	 * @return List of folders within the parent folder
-	 * 
+	 * @return list of folders for the group workspace project page
 	 */
-	public List<GroupWorkspaceProjectPageFolder> getFoldersForProjectPage(Long groupWorkspaceProjectPageId, Long parentFolderId) ;
+	public List<GroupWorkspaceProjectPageFolder> getFolders(Long projectPageId, List<Long> folderIds);
 
-	/**
-	 * Get the specified folders for the group workspace project page.
-	 * 
-	 * @param groupWorkspaceProjectPageId Id of group workspace project page
-	 * @param folderIds List of folder ids
-	 * 
-	 * @return List of folders
-	 */
-	public List<GroupWorkspaceProjectPageFolder> getFolders(Long groupWorkspaceProjectPageId, List<Long> folderIds);
 	
 	/**
-	 * Delete all sub folders, files, publicatons and links from the system for the specified folder id.
-	 * This physically removes the files stored on the file system.
+	 * Delete the group workspace project page file 
 	 * 
-	 * @param Folder to be deleted
+	 * @param projectFile - project page file to delte
 	 */
-	public void deleteFolder(GroupWorkspaceProjectPageFolder groupWorkspaceProjectPageFolder) ;
+	public void delete(GroupWorkspaceProjectPageFile projectFile);
+	
+	/**
+	 * Delete a group workspace project page publication.
+	 * 
+	 * @param publication - delete the publication
+	 */
+	public void delete(GroupWorkspaceProjectPagePublication publication);
 
 	/**
-	 * Get the group workspace project page folder with the specified name and parent id.
+	 * Delete a group workspace project page institutional item.
 	 * 
-	 * @param name Name of folder
-	 * @param parentId Id of the parent folder
+	 * @param item
 	 */
-	public GroupWorkspaceProjectPageFolder getFolder(String name, Long parentId) ;
+	public void delete(GroupWorkspaceProjectPageInstitutionalItem item);
+	
+	/**
+	 * Delete a group workspace project page file system link.
+	 * 
+	 * @param link - link to delete
+	 */
+	public void delete(GroupWorkspaceProjectPageFileSystemLink link);
+
 
 	/**
-	 * Get the group workspace project page folder with the specified id.
+	 * Delete the folder.
 	 * 
-	 * @param id - id of the group workspace project page folder
-     * @param lock - upgrade the lock
+	 * @param folder - deletes the folder and all contents within it
+	 */
+	public void delete(GroupWorkspaceProjectPageFolder folder);
+
+	/**
+	 * Get the group workspace project page folder
+	 * 
+	 * @param name - name of the folder
+	 * @param parentId - id of the parent folder
+	 * 
+	 * @return - the folder if found - otherwise null
+	 */
+	public GroupWorkspaceProjectPageFolder getFolder(String name, Long parentId);
+
+	/**
+	 * Get the folder
+	 * 
+	 * @param id - id of the folder
+	 * @param lock - if true will upgrade the lock mode
+	 * 
+	 * @return the group workspace project page folder if found otherwise null
+	 */
+	public GroupWorkspaceProjectPageFolder getFolder(Long id, boolean lock);
+	
+	/**
+	 * Get the root folder.
+	 * 
+	 * @param name - name of the folder
+	 * @param projectPageId - project page id for the folder
+	 * 
+	 * @return - the root folder if found otherwise null
+	 */
+	public GroupWorkspaceProjectPageFolder getRootFolder(String name, Long projectPageId);
+
+    /**
+     * Get all folders for the project page
      * 
-     * @return the group workspace project page folder if found otherwise null.
+     * @param projectPageId - id of the project page
+     * @return - list of all folders for the project page
      */
-	public GroupWorkspaceProjectPageFolder getFolder(Long id, boolean lock) ;
+    public List<GroupWorkspaceProjectPageFolder> getAllFolders(Long projectPageId);
+
 
 	/**
-	 * Get root group workspace project page folder with the specified name for the specified researcher.
+	 * Save the group workspace project page
 	 * 
-	 * @param  name Name of root folder
-	 * @param researcherId Id of researcher
-	 * 
-	 * @return Folder if found
-	 */
-	public GroupWorkspaceProjectPageFolder getRootFolder(String name, Long researcherId) ;
-
-	/**
-	 * Get all folders for the specified group workspace project apge.
-	 * 
-	 * @param group workspace project page Id Id of researcher to get all folders
-	 * 
-	 * @return List of all folders
-	 */
-	public List<GroupWorkspaceProjectPageFolder> getAllFolders(Long groupWorkspaceProjectPageId) ;
-	
-	/**
-	 * Save the group workspace project page folder.
-	 * 
-	 * @param entity group workspace project page folder to be saved
+	 * @param entity
 	 */
 	public void save(GroupWorkspaceProjectPageFolder entity);
 
 	/**
-	 * Get the group workspace project apge folders within the specified parent folder.
+	 * Save the group workspace project page file.
 	 * 
-	 * @param groupWorkspaceProjectPageId Id of group workspace project page
-	 * @param parentFolderId Id of parent folder
+	 * @param entity
+	 */
+	public void save(GroupWorkspaceProjectPageFile entity);
+	
+	/**
+	 * Get the project page folders within the specified parent folder.
 	 * 
-	 * @return List of folders
+	 * @param projectPageId - project page id
+	 * @param parentFolderId - parent folder id
+	 * 
+	 * @return - list of folders found within the parent folder 
 	 */
 	public List<GroupWorkspaceProjectPageFolder> getFolders( 
-			Long groupWorkspaceProjectPageId, 
+			Long projectPageId, 
 			Long parentFolderId);
-
-	/**
-     * Create a group workspace project page file in the system with the specified ir file for the
-     * given parent folder. This is created at the root level (added to the group workspace project page)
-     * 
-     * @param parentFolder - Folder to add the file to.
-     * @param irFile - file to add
-     * @param versionNumber - IrFile version number
-     * 
-     * @return the created researcher file
-     * @throws DuplicateNameException 
-     */
-	public GroupWorkspaceProjectPageFolder addFile(
-			GroupWorkspaceProjectPageFolder parentFolder,
-			IrFile irFile, int versionNumber) ;
-
-    /**
-	 * Create the root publication.
-	 * 
-	 * @param groupWorkspaceProjectPage group workspace project page creating the publication
-	 * @param item Item to add to the researcher
-	 * @param the version of the publication 
-	 */
-	public GroupWorkspaceProjectPagePublication createRoot(GroupWorkspaceProjectPage groupWorkspaceProjectPage, GenericItem item, int versionNumber);
-
-	/**
-	 * Create the root institutional item
-	 * 
-	 * @param groupWorkspaceProjectPage groupWorkspaceProjectPage for creating the publication
-	 * @param item Institutional Item to add to the researcher
-	 */
-	public GroupWorkspaceProjectPageInstitutionalItem createRoot(GroupWorkspaceProjectPage groupWorkspaceProjectPage, InstitutionalItem item);
-
 	
 	/**
-	 * Delete a group workspace project page file.
+	 * Get the list of folders in path order for the folder with the specified id.
 	 * 
-	 * @param groupWorkspaceProjectPageFile group workspace project page file to delete
+	 * @param projectPageFolderId - id of the group workspace project page folder
+	 * @return - list of folders in path order
 	 */
-	public void deleteFile(GroupWorkspaceProjectPageFile groupWorkspaceProjectPageFile);
-
-	/**
-	 * Delete a group workspace project page publication.
-	 * 
-	 * @param groupWorkspaceProjectPagePublication groupWorkspaceProjectPage to delete
-	 */
-	public void delete(GroupWorkspaceProjectPagePublication groupWorkspaceProjectPagePublication);
+	public List<GroupWorkspaceProjectPageFolder> getFolderPath(Long projectPageFolderId);
 	
-	/**
-	 * Delete a group workspace project page publication.
-	 * 
-	 * @param groupWorkspaceProjectPageInstitutional Item to delete
-	 */
-	public void delete(GroupWorkspaceProjectPageInstitutionalItem groupWorkspaceProjectPageInstitutionalItem);
-	
-	/**
-	 * Delete a group workspace project page link.
-	 * 
-	 * @param groupWorkspaceProjectPageLink
-	 */
-	public void delete(GroupWorkspaceProjectPageFileSystemLink gl);
-
-	/** 
-	 * Get the path to a specified folder with the specified folder id
-	 * 
-	 * @param groupWorkspaceProjectPageFolderId folder id to find the path for
-	 * 
-	 * @return Path of the folder
-	 */
-	public List<GroupWorkspaceProjectPageFolder> getFolderPath(Long groupWorkspaceFolderId);
-
 	/**
 	 * Get group workspace project page files within the specified parent folder
 	 * 
-	 * @param groupWorkspaceProjectPageId Id of groupWorkspaceProjectPageFolder holding the files
-	 * @param parentFolderId Id of parent folder
+	 * @param groupWorkspaceProjectPageId - project page id
+	 * @param parentFolderId - parent folder id
 	 * 
-	 * @return List of files within the folder
+	 * @return - list of group workspace project page files
 	 */
-	public List<GroupWorkspaceProjectPageFile> getFiles(Long groupWorkspaceProjectPageId, Long groupWorkspaceProjectPageFolderId);
-	
+	public List<GroupWorkspaceProjectPageFile> getFiles(Long groupWorkspaceProjectPageId, Long parentFolderId);
+
 	/**
 	 * Get group workspace project page publications within the specified parent folder
 	 * 
-	 * @param groupWorkspaceProjectPageId Id of groupWorkspaceProjectPageFolder holding the files
-	 * @param parentFolderId Id of parent folder
-	 * 
-	 * @return List of publications within the folder
+	 * @param projectPageId - id of the project page 
+	 * @param parentFolderId - parent folder id - if id is 0 then root project page is used
+	 * @return
 	 */
-	public List<GroupWorkspaceProjectPagePublication> getPublications(Long groupWorkspaceProjectPageId, Long parentFolderId);
+	public List<GroupWorkspaceProjectPagePublication> getPublications(Long projectPageId, Long parentFolderId);
 	
 	/**
 	 * Get group workspace project page Institutional Item within the specified parent folder
 	 * 
-	 * @param groupWorkspaceProjectPageId Id of group workspace project page holding the Institutional Items
-	 * @param parentFolderId Id of parent folder
+	 * @param projectPageId - project page id 
+	 * @param parentFolderId - parent folder id - if id is 0 then root project page is used
 	 * 
-	 * @return List of publications within the folder
+	 * @return - the group workspace project page institutional items
 	 */
-	public List<GroupWorkspaceProjectPageInstitutionalItem> getInstitutionalItems(Long groupWorkspaceProjectPageId, Long parentFolderId);
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getInstitutionalItems(Long projectPageId, Long parentFolderId);
 
-
-	/**
-	 * Get the group workspace project page file with the specified id.
-	 * 
-	 * @param id - id of the group workspace project page file
-     * @param lock - upgrade the lock
-     * 
-     * @return the group workspace project page file if found otherwise null.	 
-     */
-	public GroupWorkspaceProjectPageFile getFile(Long id, boolean lock);
-
-	/**
-	 * Allows a group workspace project page to create a new publication.
-	 *
-	 * @param parentFolder Folder to create the publication in
-	 * @param item Item to create publication
-	 * @param versionNumber - version of the personal publication 
-	 *
-	 * @return Newly created publication
-	 */
-	public GroupWorkspaceProjectPagePublication createPublication(GroupWorkspaceProjectPageFolder parentFolder, GenericItem item, int versionNumber);
-
-	/**
-	 * Allows a group workspace project page folder to create a new Institutional Item.
-	 *
-	 * @param parentFolder Folder to create the Institutional Item in
-	 * @param item Item to create Institutional Item
-	 *
-	 * @return Newly created Institutional Item
-	 */
-	public GroupWorkspaceProjectPageInstitutionalItem createInstitutionalItem(GroupWorkspaceProjectPageFolder parentFolder, InstitutionalItem institutionalItem);
-
-	
-	/**
-	 * Get the group workspace project page link with the specified id.
-	 * 
-	 * @param id - id of the group workspace link
-     * @param lock - upgrade the lock
-     * 
-     * @return the researcher link if found otherwise null.	 
-     */
-	public GroupWorkspaceProjectPageFileSystemLink getLink(Long id, boolean lock);
-	
 	/**
 	 * Get links for a group workspace project page in the specified folder
 	 * 
-	 * @param groupWorkspaceProjectPageId Id of group workspace project page id
-	 * @param parentFolderId Id of parent folder
+	 * @param projectPageId - id of the project page
+	 * @param parentFolderId - id of the parent folder - if id is 0 then root project page is used
 	 * 
-	 *  @return List of group workspace project page file system links found
-	 * 
+	 * @return - list of file system links
 	 */
-	public List<GroupWorkspaceProjectPageFileSystemLink> getGroupWorkspacLinks(Long researcherId, Long parentFolderId);
+	public List<GroupWorkspaceProjectPageFileSystemLink> getLinks(Long projectPageId, Long parentFolderId);
+	
+	/**
+	 * Get the project page file.
+	 * 
+	 * @param id - id of the project page file
+	 * @param lock - upgrade the lock mode if true
+	 * 
+	 * @return - the file if found otherwise null
+	 */
+	public GroupWorkspaceProjectPageFile getFile(Long id, boolean lock);
 
+	/**
+	 * Get the group workspace project page file system link with the specified id.
+	 * 
+	 * @param id - id of the link
+	 * @param lock - if true upgrade the lock mode
+	 * 
+	 * @return - the link if found otherwise null
+	 */
+	public GroupWorkspaceProjectPageFileSystemLink getLink(Long id, boolean lock);
+	
 	/**
 	 * Get the group workspace project page publication with the specified id.
 	 * 
-	 * @param id - id of the group workspace project page publication
-     * @param lock - upgrade the lock
-     * 
-     * @return the group workspace project page publication if found otherwise null.	 
-     */
+	 * @param id - id of the publication
+	 * @param lock - if true upgrade the lock mode.
+	 * 
+	 * @return - the publication if found otherwise null
+	 */
 	public GroupWorkspaceProjectPagePublication getPublication(Long id, boolean lock);
 
 	/**
 	 * Get the group workspace project page Institutional Item with the specified id.
 	 * 
-	 * @param id - id of the group workspace project page Institutional Item
-     * @param lock - upgrade the lock
-     * 
-     * @return the group workspace project page Institutional Item if found otherwise null.	 
-     */
-	public GroupWorkspaceProjectPageInstitutionalItem getInstitutionalItem(Long id, boolean lock);
-
-	/**
-	 * Save the group workspace project page link
+	 * @param id - of the group workspace project page institutional item
+	 * @param lock - if true upgrade the lock mode
 	 * 
-	 * @param link Link to be saved
+	 * @return - the institutional item 
 	 */
-	public void saveLink(GroupWorkspaceProjectPageFileSystemLink link);
-
+	public GroupWorkspaceProjectPageInstitutionalItem getInstitutionalItem(Long id, boolean lock);
+	
 	/**
 	 * Get the count of group workspace project page files using this Irfile
 	 * 
-	 * @param irFile irFile used by researcher file
-	 * 
-	 * @return Number of group workspace project page files using this IrFile
+	 * @param irFile - ir file to check to see if the file is used
+	 * @return - the count of project page files with the specified ir file
 	 */
-	public Long getFileCount(IrFile irFile) ;
+	public Long getGroupWorkspaceProjectPageFileCount(IrFile irFile);
 	
 	/**
-	 * Get the count of group workspace project page publications using this generic item
+	 * Get the count of group workspace project page publication using this generic item
 	 * 
-	 * @param item Item to be searched for in the publication
-	 * 
-	 * @return Count of publications using this item in the group workspace project page
-	 * 
+	 * @param item - item to check for
+	 * @return - number found
 	 */
-	public Long getPublicationCount(GenericItem item) ;
-
-	/**
-	 * Get the count of group workspace project page Institutional Item using this generic item
-	 * 
-	 * @param item Item to be searched for in the Institutional Item
-	 * 
-	 * @return Count of Institutional Items using this item
-	 * 
-	 */
-	public Long getGroupWorkspaceProjectPageInstitutionalItemCount(InstitutionalItem item) ;
-	
+	public Long getGroupWorkspaceProjectPagePublicationCount(GenericItem item);
 	
 	/**
-	 * Save the group workspace project page file.
+	 * Get the count of group workspace project page Institutional Item using this institutional item
 	 * 
-	 * @param entity group workspace project page file to be saved
+	 * @param item - institutional item to check for
+	 * @return - count found
 	 */
-	public void save(GroupWorkspaceProjectPageFile entity);
+	public Long getInstitutionalItemCount(InstitutionalItem item);
 	
 	/**
-	 * Save the group workspace project page institutional item
+	 * Get list of group workspace project page institutional item containing this item and delete them
 	 * 
-	 * @param entity item to be saved
-	 */
-	public void save(GroupWorkspaceProjectPageInstitutionalItem entity);
-	
-	/**
-	 * Save the group workspace project page publication
-	 * 
-	 * @param entity researcher file to be saved
-	 */
-	public void save(GroupWorkspaceProjectPagePublication entity);
-
-	/**
-	 * Delete the group workspace project page institutional item with the specified institutional item.
-	 * 
-	 * @param institutionalItem institutional item to be searched for
-	 * 
+	 * @param institutionalItem - institutional item to remove from the group workspace
 	 */
 	public void delete(InstitutionalItem institutionalItem);
-	
-	/**
-	 * Get the files for the group workspace project page id and listed file id's.  If the list of fileIds 
-	 * is null no files are returned.
-	 * 
-	 * @param groupWorkspaceProjectPageId
-	 * @param fileIds
-	 * 
-	 * @return the found files
-	 */
-	public List<GroupWorkspaceProjectPageFile> getFiles(Long groupWorkspaceProjectPageId, List<Long> fileIds);
-	
-    /**
-	 * Find the specified links for the given group workspace project page.
-	 * 
-	 * @param groupWorkspaceProjectPageId Researcher of the link
-	 * @param linkIds Ids of  the link
-	 * 
-	 * @return List of links found
-	 */
-	public List<GroupWorkspaceProjectPageFileSystemLink> getLinks(final Long groupWorkspaceProjectPageId, final List<Long> linkIds);
-	
-	/**
-	 * Get the specified institutional items for the group workspace project page.
-	 * 
-	 * @param groupWorkspaceProjectPageId - id of the group workspace project page ids
-	 * @param institutionalItemIds - list of item ids to retrieve for the researcher
-	 * 
-	 * @return - List of institutional item found.
-	 */
-	public List<GroupWorkspaceProjectPageInstitutionalItem> getInstitutionalItems(final Long groupWorkspaceProjectPageId, final List<Long> institutionalItemIds);
-	
-
-    /**
-	 * Find the specified publications for the given group workspace project page.
-	 * 
-	 * @param groupWorkspaceProjectPageId group workspace project page id of the publication
-	 * @param publicationIds ids of  the publication
-	 * 
-	 * @return List of publications found
-	 */
-	public List<GroupWorkspaceProjectPagePublication> getPublications(final Long groupWorkspaceProjectPageId, final List<Long> groupWorkspaceProjectPageIds);
 
 	/**
-	 * Moves the specified folders, files, links, items and publications into the specified 
-	 * group workspace project page folder destination.
+	 * Get the list of files for the specified group workspace project page.
 	 * 
-	 * @param destination - destination folder to move to
-	 * @param foldersToMove - folders to move
-	 * @param filesToMove - files to move
-	 * @param linksToMove - links to move
-	 * @param itemsToMove - items to move
-	 * @param publicationsToMove publications to move
+	 * @param projectPageId - id of the project page
+	 * @param fileIds - list of files
 	 * 
-	 * @return - the list of file system object that could not be moved.
+	 * @return - list of group workspace project page files
+	 */
+	public List<GroupWorkspaceProjectPageFile> getFiles(Long projectPageId, List<Long> fileIds);
+
+	/**
+	 * Get the list of group workspace project page institutional items.
+	 * 
+	 * @param projectPageId - id of the project page
+	 * @param institutionalItemIds - ids for the institutional items
+	 * @return
+	 */
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getInstitutionalItems(
+			Long projectPageId, List<Long> institutionalItemIds);
+
+	/**
+	 * Get the specified links for the specified group workspace project page.
+	 * 
+	 * @param projectPageId - id of the project page
+	 * @param linkIds - list of ids for the links
+	 * 
+	 * @return - list of links otherwise null
+	 */
+	public List<GroupWorkspaceProjectPageFileSystemLink> getLinks(Long projectPageId,
+			List<Long> linkIds);
+
+	/**
+	 * Get the specified publications for the specified group workspace project page id.
+	 * 
+	 * @param projectPageId - id of the project page
+	 * @param publicationIds - list of publication ids
+	 * 
+	 * @return - list of group workspace project page ids
+	 */
+	public List<GroupWorkspaceProjectPagePublication> getPublications(
+			Long projectPageId, List<Long> publicationIds);
+	
+	/**
+	 * Allow a user to move files and folders into a given folder
+	 * 
+	 *
+	 * @param destination - destination to move the data to
+	 * @param foldersToMove - list of folders to move
+	 * @param filesToMove - list of files to move
+	 * @param linksToMove - list of links to move
+	 * @param itemsToMove - list of items to move
+	 * @param publicationsToMove - list of publications to move
+	 * 
+	 * @return - list of items that could not be moved.
 	 */
 	public List<FileSystem> moveFileSystemInformation(GroupWorkspaceProjectPageFolder destination,
 			List<GroupWorkspaceProjectPageFolder> foldersToMove, 
@@ -428,23 +430,23 @@ public interface GroupWorkspaceProjectPageFileSystemService extends Serializable
 			List<GroupWorkspaceProjectPagePublication> publicationsToMove);
 	
 	/**
-	 * Moves the specified folders, files, links, items and publications into the specified 
-	 * group workspace project page root location.
+	 * Move the folders into the root location of the researcher
 	 * 
-	 * @param destination - destination folder to move to
-	 * @param foldersToMove - folders to move
-	 * @param filesToMove - files to move
-	 * @param linksToMove - links to move
-	 * @param itemsToMove - items to move
-	 * @param publicationsToMove publications to move
+	 * @throws DuplicateNameException 
 	 * 
-	 * @return - the list of file system object that could not be moved.
 	 */
-	public List<FileSystem> moveFileSystemInformation(GroupWorkspaceProjectPage groupWorkspaceProjectPage,
+	public List<FileSystem> moveResearcherFileSystemInformation(GroupWorkspaceProjectPage projectPage,
 			List<GroupWorkspaceProjectPageFolder> foldersToMove, 
 			List<GroupWorkspaceProjectPageFile> filesToMove, 
-			List<GroupWorkspaceProjectPageLink> linksToMove,
+			List<GroupWorkspaceProjectPageFileSystemLink> linksToMove,
 			List<GroupWorkspaceProjectPageInstitutionalItem> itemsToMove,
 			List<GroupWorkspaceProjectPagePublication> publicationsToMove);
 
+    /**
+     * Get the count of files project page files with the specified file
+     * 
+     * @param irFile - ir file to check
+     * @return - count of files
+     */
+    public Long getFileCount(IrFile irFile);
 }

@@ -74,6 +74,6 @@ public interface GroupWorkspaceProjectPageInstitutionalItemDAO  extends CrudDAO<
 	 * 
 	 * @return List of project page Institutional items
 	 */
-	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(Long itemId);
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(Long institutionalItemId);
 
 }

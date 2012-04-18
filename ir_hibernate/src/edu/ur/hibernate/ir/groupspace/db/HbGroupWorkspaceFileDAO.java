@@ -177,5 +177,17 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 		}
 	}
 
+	
+	/**
+	 * Get a count of files with the specified ir file id.
+	 * 
+	 * @see edu.ur.ir.groupspace.GroupWorkspaceFileDAO#getFileCount(java.lang.Long)
+	 */
+	public Long getFileCount(Long irFileId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceFilesWithIrFileId");
+		q.setLong("irFileId", irFileId);
+		return(Long) q.uniqueResult();
+	}
+
 
 }

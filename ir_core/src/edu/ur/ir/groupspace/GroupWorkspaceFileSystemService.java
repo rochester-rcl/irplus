@@ -8,6 +8,7 @@ import java.util.Set;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
@@ -111,6 +112,14 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 * @return all the files within the group workspace
 	 */
 	public List<GroupWorkspaceFile> getAllFiles(Long groupWorkspaceId);
+	
+	/**
+	 * Get a count of the group workspace files with the given ir file.
+	 * 
+	 * @param file - ir file that the group workspace file must contain
+	 * @return - the count
+	 */
+	public Long getGroupWorkspaceFileCount(IrFile file);
 	
 	
 	/**
