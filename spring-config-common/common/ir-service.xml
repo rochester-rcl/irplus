@@ -158,6 +158,8 @@
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="securityService" ref="securityService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
+       <property name="groupWorkspaceProjectPageFileSystemService" ref="groupWorkspaceProjectPageFileSystemService"/>
+       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
    </bean>
    
    <!-- ****************************************** --> 
@@ -192,6 +194,8 @@
        <property name="fileVersionDAO" ref="fileVersionDAO"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="externalAuthenticationEnabled" value="${external.authentication.enabled}"/>
+       <property name="groupWorkspaceProjectPageFileSystemService" ref="groupWorkspaceProjectPageFileSystemService"/>
+       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
    </bean>
  
  
@@ -581,6 +585,9 @@
        <property name="itemService" ref="itemService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="researcherInstitutionalItemDAO" ref="researcherInstitutionalItemDAO"/>
+       <property name="groupWorkspaceProjectPageFileSystemService" ref="groupWorkspaceProjectPageFileSystemService"/>
+       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
+
    </bean>
    
    <!-- ****************************************** --> 
@@ -888,19 +895,6 @@
    </bean>
    
    
-   <!-- ****************************************** --> 
-   <!-- Group workspace file system service                   -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceFileSystemService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemService">
-       <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
-       <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
-       <property name="groupWorkspaceFileDeleteRecordDAO" ref="groupWorkspaceFileDeleteRecordDAO"/>
-       <property name="repositoryService" ref="repositoryService"/>
-       <property name="securityService" ref="securityService"/>
-       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
-   </bean>
-   
      <!-- ****************************************** --> 
    <!-- Service to invite user for personal workspace -->
    <!-- ****************************************** --> 
@@ -1041,5 +1035,37 @@
        <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
        <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Group workspace file system service        -->
+   <!-- ****************************************** --> 
+   <bean id="groupWorkspaceFileSystemService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemService">
+       <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
+       <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
+       <property name="groupWorkspaceFileDeleteRecordDAO" ref="groupWorkspaceFileDeleteRecordDAO"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="securityService" ref="securityService"/>
+       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
+    </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Group workspace project page file system service        -->
+   <!-- ****************************************** --> 
+   <bean id="groupWorkspaceProjectPageFileSystemService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageFileSystemService">
+       <property name="groupWorkspaceProjectPageFolderDAO" ref="groupWorkspaceProjectPageFolderDAO"/>
+       <property name="groupWorkspaceProjectPageFileDAO" ref="groupWorkspaceProjectPageFileDAO"/>
+       <property name="groupWorkspaceProjectPagePublicationDAO" ref="groupWorkspaceProjectPagePublicationDAO"/>
+       <property name="groupWorkspaceProjectPageInstitutionalItemDAO" ref="groupWorkspaceProjectPageInstitutionalItemDAO"/>
+       <property name="groupWorkspaceProjectPageFileSystemLinkDAO" ref="groupWorkspaceProjectPageFileSystemLinkDAO"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="itemService" ref="itemService"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="groupWorkspaceProjectPageDAO" ref="groupWorkspaceProjectPageDAO"/>
+       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+    </bean>
+
 
 </beans>
