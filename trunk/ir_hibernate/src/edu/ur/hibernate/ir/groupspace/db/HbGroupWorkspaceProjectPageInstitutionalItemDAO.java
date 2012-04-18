@@ -133,9 +133,9 @@ public class HbGroupWorkspaceProjectPageInstitutionalItemDAO implements GroupWor
 	 * @see edu.ur.ir.researcher.ResearcherInstitutionalItemDAO#getResearcherInstitutionalItem(Long)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(Long itemId) {
+	public List<GroupWorkspaceProjectPageInstitutionalItem> getItems(Long institutionalItemId) {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceProjectPageInstitutionalItem");
-		q.setLong("institutionalItemId", itemId);
+		q.setLong("institutionalItemId", institutionalItemId);
 		return (List<GroupWorkspaceProjectPageInstitutionalItem>) q.list();
 	}
 

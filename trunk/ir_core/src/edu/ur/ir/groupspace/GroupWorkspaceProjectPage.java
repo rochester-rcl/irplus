@@ -533,7 +533,7 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 		    GroupWorkspaceProjectPageFolder folder = file.getParentFolder();
 		    if( folder != null )
 		    {
-			    folder.removeGroupWorkspaceProjectPageFile(file);
+			    folder.remove(file);
 			    file.setParentFolder(null);
 		    }
 		
@@ -555,7 +555,7 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 		GroupWorkspaceProjectPageFolder folder = institutionalItem.getParentFolder();
 		if( folder != null )
 		{
-			folder.removeGroupWorkspaceProjectPageInstitutionalItem(institutionalItem);
+			folder.remove(institutionalItem);
 			institutionalItem.setParentFolder(null);
 		}
 		
@@ -575,7 +575,7 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 		GroupWorkspaceProjectPageFolder folder = link.getParentFolder();
 		if( folder != null )
 		{
-			folder.removeGroupWorkspaceProjectPageFileSystemLink(link);
+			folder.remove(link);
 			link.setParentFolder(null);
 		}
 		
@@ -599,6 +599,26 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 		    rootFiles.add(rf);
 		}
 		return rf;
+	}
+	
+	/**
+	 * Adds an existing publication to the root of this project page.
+	 * If the publication was a child of an existing folder.  It
+	 * is removed from the old folder list.
+	 * 
+	 * @param publication - to add as a root publication
+	 */
+	public void addRootPublication(GroupWorkspaceProjectPagePublication publication) 
+	{
+	
+		GroupWorkspaceProjectPageFolder folder = publication.getParentFolder();
+		if( folder != null )
+		{
+			folder.remove(publication);
+			publication.setParentFolder(null);
+		}
+		
+		rootPublications.add(publication);
 	}
 	
 
@@ -805,6 +825,70 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	}
 	
 
+	
+	
+	
+	
+	
+	/**
+	 * Remove the root file from this group workspace
+	 * 
+	 * @param file - group workspace project page file
+	 * @return true if the file is removed.
+	 */
+	public boolean remove(GroupWorkspaceProjectPageFile file)
+	{
+		return rootFiles.remove(file);
+	}
+
+	/**
+	 * Remove the root publication from this group workspace project page
+	 * 
+	 * @param publication - group workspace project page publication
+	 * @return true if the publication is removed.
+	 */
+	public boolean remove(GroupWorkspaceProjectPagePublication publication)
+	{
+		return rootPublications.remove(publication);
+	}
+
+	/**
+	 * Remove the root institutional item from this group workspace project page
+	 * 
+	 * @param institutionalItem - group workspace project page institutional tiem
+	 */
+	public boolean remove(GroupWorkspaceProjectPageInstitutionalItem institutionalItem)
+	{
+		return rootInstitutionalItems.remove(institutionalItem);
+	}
+	
+	/**
+	 * Remove the root link from this group workspace project page
+	 * 
+	 * @param link
+	 * @return true if the link is removed.
+	 */
+	public boolean remove(GroupWorkspaceProjectPageFileSystemLink link)
+	{
+		return rootLinks.remove(link);
+	}
+
+	/**
+	 * Remove the root folder from this group workspace project apge folder
+	 * 
+	 * @param folder
+	 * @return true if the folder is removed.
+	 */
+	public boolean remove(GroupWorkspaceProjectPageFolder folder)
+	{
+		return rootFolders.remove(folder);
+	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Adds an existing folder to the root of this researcher.

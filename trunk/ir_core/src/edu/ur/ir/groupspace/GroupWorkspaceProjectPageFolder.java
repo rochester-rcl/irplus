@@ -384,7 +384,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		{
 			if( rf.getParentFolder() != null )
 			{
-				rf.getParentFolder().removeGroupWorkspaceProjectPageFile(rf);
+				rf.getParentFolder().remove(rf);
 			}
 			
 			rf.setParentFolder(this);
@@ -398,7 +398,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 * @param rf - file to be removed
 	 * @return true if the file is removed.
 	 */
-	public boolean removeGroupWorkspaceProjectPageFile(GroupWorkspaceProjectPageFile rf)
+	public boolean remove(GroupWorkspaceProjectPageFile rf)
 	{
 		boolean removed = false;
 		if( files.contains(rf))
@@ -416,7 +416,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 * @param rp
 	 * @return true if the publication is removed.
 	 */
-	public boolean removeGroupWorkspaceProjectPagePublication(GroupWorkspaceProjectPagePublication rp)
+	public boolean remove(GroupWorkspaceProjectPagePublication rp)
 	{
 		boolean removed = false;
 		if( publications.contains(rp))
@@ -433,7 +433,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 * @param rp
 	 * @return true if the institutional Item is removed.
 	 */
-	public boolean removeGroupWorkspaceProjectPageInstitutionalItem(GroupWorkspaceProjectPageInstitutionalItem ri)
+	public boolean remove(GroupWorkspaceProjectPageInstitutionalItem ri)
 	{
 		boolean removed = false;
 		if( institutionalItems.contains(ri))
@@ -450,7 +450,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 * @param rl
 	 * @return true if the link is removed.
 	 */
-	public boolean removeGroupWorkspaceProjectPageFileSystemLink(GroupWorkspaceProjectPageFileSystemLink rl)
+	public boolean remove(GroupWorkspaceProjectPageFileSystemLink rl)
 	{
 		boolean removed = false;
 		if( links.contains(rl))
@@ -997,11 +997,32 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		if (!publications.contains(rp)) {
 			if( rp.getParentFolder() != null )
 			{
-				rp.getParentFolder().removeGroupWorkspaceProjectPagePublication(rp);
+				rp.getParentFolder().remove(rp);
 			}
 			
 			rp.setParentFolder(this);
 			publications.add(rp);
+		}
+	}
+	
+	/**
+	 * Adds an existing researcher file to this folder.  This allows
+	 * a researcher file to be moved from one location to another.
+	 * 
+	 * @param rf - researcher file to add
+	 * @throws DuplicateNameException - if the file already exits
+	 */
+	public void add(GroupWorkspaceProjectPageFile file) 
+	{
+		if(!files.contains(file))
+		{
+			if( file.getParentFolder() != null )
+			{
+				file.getParentFolder().remove(file);
+			}
+			
+			file.setParentFolder(this);
+			files.add(file);
 		}
 	}
 
@@ -1015,7 +1036,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		if (!institutionalItems.contains(ri)) {
 			if( ri.getParentFolder() != null )
 			{
-				ri.getParentFolder().removeGroupWorkspaceProjectPageInstitutionalItem(ri);
+				ri.getParentFolder().remove(ri);
 			}
 			
 			ri.setParentFolder(this);
@@ -1033,7 +1054,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		if (!links.contains(rl)) {
 			if( rl.getParentFolder() != null )
 			{
-				rl.getParentFolder().removeGroupWorkspaceProjectPageFileSystemLink(rl);
+				rl.getParentFolder().remove(rl);
 			}
 			rl.setParentFolder(this);
 			links.add(rl);

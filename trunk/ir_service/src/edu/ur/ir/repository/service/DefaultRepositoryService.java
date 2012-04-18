@@ -43,6 +43,8 @@ import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.TransformedFileTypeDAO;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFileSystemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.LicenseVersion;
@@ -109,7 +111,13 @@ public class DefaultRepositoryService implements RepositoryService {
 	/** determine if the external authentication is enabled */
 	private boolean externalAuthenticationEnabled = false;
 	
-	
+	// group workspace project page file system service
+	private GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService;
+
+
+
+	// group workspace file system service
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 	
 	/**
 	 * Create a versioned file in the repository.
@@ -201,7 +209,10 @@ public class DefaultRepositoryService implements RepositoryService {
 			 
 			//Check if this IrFile is being used by any Item or researcher.
 			//If yes, then do not add the IrFile and FileInfo to the list to be deleted.
-			if ((itemService.getItemFileCount(irFile) == 0) && (researcherFileSystemService.getResearcherFileCount(irFile) == 0)) {
+			if ((itemService.getItemFileCount(irFile) == 0) 
+					&& (researcherFileSystemService.getResearcherFileCount(irFile) == 0)
+					&& (groupWorkspaceFileSystemService.getGroupWorkspaceFileCount(irFile) == 0) 
+					&& (groupWorkspaceProjectPageFileSystemService.getFileCount(irFile) == 0)) {
 				log.debug("Adding Ir file " + irFile);
 				files.add(irFile);
 				fileInfos.add(irFile.getFileInfo());
@@ -946,5 +957,15 @@ public class DefaultRepositoryService implements RepositoryService {
 	public void setExternalAuthenticationEnabled(
 			boolean externalAuthenticationEnabled) {
 		this.externalAuthenticationEnabled = externalAuthenticationEnabled;
+	}
+	
+	public void setGroupWorkspaceProjectPageFileSystemService(
+			GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService) {
+		this.groupWorkspaceProjectPageFileSystemService = groupWorkspaceProjectPageFileSystemService;
+	}
+
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
 	}
 }

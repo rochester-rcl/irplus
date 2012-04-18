@@ -398,7 +398,7 @@ public class GroupWorkspaceProjectPageFolderTest {
 			"Ir file should be found";
 		
 		
-		groupWorkspaceProjectPageFolder1.removeGroupWorkspaceProjectPageFile(rf);
+		groupWorkspaceProjectPageFolder1.remove(rf);
 		
 		assert groupWorkspaceProjectPageFolder1.getGroupWorkspaceProjectPageFile(rf.getName()) == null : 
 			"Should not be able fo find the GroupWorkspaceProjectPage file " + rf;

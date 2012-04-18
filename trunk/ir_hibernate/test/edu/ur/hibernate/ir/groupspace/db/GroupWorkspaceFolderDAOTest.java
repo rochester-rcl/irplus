@@ -535,12 +535,12 @@ public class GroupWorkspaceFolderDAOTest {
 	
 	
 	/**
-	 * Test - get root personal folder 
+	 * Test - get root group workspace folder 
 	 * @throws DuplicateNameException 
 	 * 
 	*/
 	@Test
-	public void baseGetRootPersonalFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void baseGetRootWorkspaceFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
 
         TransactionStatus ts = tm.getTransaction(td);
 

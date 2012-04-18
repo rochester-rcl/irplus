@@ -111,4 +111,14 @@
 		where groupWorkspaceFile.groupWorkspace.id = :groupWorkspaceId
 		and groupWorkspaceFile.id in (:fileIds)
 	</query>
+	
+    <!-- named query for getting files with the given ir file id -->
+	<query name="getGroupWorkspaceFilesWithIrFileId">
+		select count(*)
+		from GroupWorkspaceFile as file 
+		join file.versionedFile versionedFile
+		join versionedFile.versions fileVersion
+		join fileVersion.irFile irFile
+		where irFile.id = :irFileId 
+	</query>
 </hibernate-mapping>

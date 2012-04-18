@@ -52,7 +52,7 @@ public class GroupWorkspaceProjectPageFileSystemLink extends CommonPersistent im
 	 */
 	GroupWorkspaceProjectPageFileSystemLink(GroupWorkspaceProjectPage groupWorkspaceProjectPage, String link)
 	{
-		setResearcher(groupWorkspaceProjectPage);
+		setGroupWorkspaceProjectPage(groupWorkspaceProjectPage);
 		setUrl(link);
 	}
 	
@@ -69,7 +69,7 @@ public class GroupWorkspaceProjectPageFileSystemLink extends CommonPersistent im
 			throw new IllegalStateException("link cannot be null");
 		}
 		
-		setResearcher(groupWorkspaceProjectPage);
+		setGroupWorkspaceProjectPage(groupWorkspaceProjectPage);
 		setUrl(link);
 		setParentFolder(parentFolder);
 	}
@@ -160,8 +160,8 @@ public class GroupWorkspaceProjectPageFileSystemLink extends CommonPersistent im
 		if( (other.getName() != null && !other.getName().equals(getName())) ||
 			(other.getName() == null && getName() != null )	) return false;
 		
-		if( (other.getResearcher() != null && !other.getResearcher().equals(getResearcher())) ||
-				(other.getResearcher() == null && getResearcher() != null )	) return false;
+		if( (other.getGroupWorkspaceProjectPage() != null && !other.getGroupWorkspaceProjectPage().equals(getGroupWorkspaceProjectPage())) ||
+				(other.getGroupWorkspaceProjectPage() == null && getGroupWorkspaceProjectPage() != null )	) return false;
 
 		if( (other.getFullPath() != null && !other.getFullPath().equals(getFullPath())) ||
 				(other.getFullPath() == null && getFullPath() != null )	) return false;
@@ -210,11 +210,11 @@ public class GroupWorkspaceProjectPageFileSystemLink extends CommonPersistent im
 		this.parentFolder = parentFolder;
 	}
 
-	public GroupWorkspaceProjectPage getResearcher() {
+	public GroupWorkspaceProjectPage getGroupWorkspaceProjectPage() {
 		return groupWorkspaceProjectPage;
 	}
 
-	public void setResearcher(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
+	public void setGroupWorkspaceProjectPage(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
 		this.groupWorkspaceProjectPage = groupWorkspaceProjectPage;
 	}
 	

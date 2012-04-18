@@ -27,6 +27,7 @@ import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
@@ -1615,6 +1616,15 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	public List<GroupWorkspaceFolder> getFoldersByIds(Long groupWorkspaceId,
 			List<Long> folderIds) {
 		return groupWorkspaceFolderDAO.getFolders(groupWorkspaceId, folderIds);
+	}
+
+	/**
+	 * Return the count of group workspace files with the specified ir file 
+	 * 
+	 * @see edu.ur.ir.groupspace.GroupWorkspaceFileSystemService#getGroupWorkspaceFileCount(edu.ur.ir.file.IrFile)
+	 */
+	public Long getGroupWorkspaceFileCount(IrFile file) {
+		return groupWorkspaceFileDAO.getFileCount(file.getId());
 	}
 	
 }

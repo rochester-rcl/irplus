@@ -289,11 +289,8 @@ public class ResearcherFileDAOTest {
 		assert researcherFolder.hashCode() == existingFolder.hashCode() : " hash code " + researcherFolder.hashCode() + " should equal " + existingFolder.hashCode();
 		
 		
-		System.out.println("existing hash code = " + existingFolder.hashCode());
 		for(ResearcherFolder folder : researcher.getRootFolders())
 		{
-		    System.out.println("Hash code = " + folder.hashCode());
-		    
 		    assert researcher.getRootFolders().contains(folder);
 		}
 		assert researcher.getRootFolders().contains(existingFolder) : "root folders should contain " + existingFolder;
@@ -397,7 +394,6 @@ public class ResearcherFileDAOTest {
 		
 		assert researcherFileDAO.getRootFiles(researcher.getId()).size() == 1 : "Should be equal to 1";
 		ResearcherFile setFile = researcher.getRootFile(irFile.getName());
-		assert setFile != null : "Should be able to find " + setFile;
 		assert setFile.equals(rfile) : " Set file " + setFile + " Should equal " + rfile;
 		
 		assert researcher.getRootFiles().contains(rfile);

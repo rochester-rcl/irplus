@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -93,8 +92,6 @@ public class ResearcherFolderDAOTest {
     IrFileDAO fileDAO= (IrFileDAO) ctx
 	.getBean("irFileDAO");
 	
-	/** Logger */
-	private static final Logger log = Logger.getLogger(ResearcherFolderDAOTest.class);
 	
 	/**
 	 * Setup for testing

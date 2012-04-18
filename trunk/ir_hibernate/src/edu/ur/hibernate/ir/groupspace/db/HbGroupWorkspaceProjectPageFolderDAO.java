@@ -273,7 +273,7 @@ public class HbGroupWorkspaceProjectPageFolderDAO implements GroupWorkspaceProje
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrFile> getAllIrFiles(GroupWorkspaceProjectPageFolder folder) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllIrFilesForFolder");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllIrFilesForGroupWorkspaceProjectPageFolder");
 		q.setLong("leftValue", folder.getLeftValue());
 		q.setLong("rightValue", folder.getRightValue());
 		q.setLong("rootId", folder.getTreeRoot().getId());
