@@ -21,6 +21,7 @@ package edu.ur.ir.institution.service;
 import java.io.Serializable;
 
 import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemVersion;
 
 /**
  * This class will generate a web url for a versioned institutional item
@@ -58,6 +59,20 @@ public class InstitutionalItemVersionUrlGenerator implements Serializable
 	{
 		String url = baseWebPath;
 		url = baseWebPath + action + "?" + itemIdIdentifier + "=" + institutionalItem.getId() +"&" + versionNumberIdentifier + "=" + version;
+		
+		return url;
+	}
+	
+	/**
+	 * Create the url for the institutional item version.
+	 * 
+	 * @param version
+	 * @return
+	 */
+	public String createUrl(InstitutionalItemVersion version )
+	{
+		String url = baseWebPath;
+		url = baseWebPath + action + "?" + itemIdIdentifier + "=" + version.getVersionedInstitutionalItem().getCurrentVersion().getId() +"&" + versionNumberIdentifier + "=" + version.getVersionNumber();
 		
 		return url;
 	}

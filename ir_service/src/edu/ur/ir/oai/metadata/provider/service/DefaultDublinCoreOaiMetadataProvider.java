@@ -29,6 +29,7 @@ import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
@@ -72,6 +73,9 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
+	
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+
 
 	/**
 	 * Get the xml output for the item
@@ -567,7 +571,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	}
 	
 	/**
-	 * Add handle url.
+	 * Add handle url if it exists otherwise use the url for the site
 	 * 
 	 * @param doc
 	 * @param oaiDc
@@ -580,6 +584,13 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 			HandleInfo handle = item.getHandleInfo();
 		    Element identifier = doc.createElement("dc:identifier");
 		    Text data = doc.createTextNode(handle.getNameAuthority().getAuthorityBaseUrl() + handle.getNameAuthority().getNamingAuthority() + "/" + handle.getLocalName());
+		    identifier.appendChild(data);
+		    oaiDc.appendChild(identifier);
+		}
+		else
+		{
+			Element identifier = doc.createElement("dc:identifier");
+		    Text data = doc.createTextNode(institutionalItemVersionUrlGenerator.createUrl(item));
 		    identifier.appendChild(data);
 		    oaiDc.appendChild(identifier);
 		}
@@ -677,6 +688,11 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		     }
 		 }
 
+	}
+
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemUrlGenerator;
 	}
 
 }
