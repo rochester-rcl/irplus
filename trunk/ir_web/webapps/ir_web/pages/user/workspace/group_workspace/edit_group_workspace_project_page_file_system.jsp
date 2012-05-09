@@ -53,6 +53,8 @@
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	<ur:js src="page-resources/js/util/ur_table.js"/>
  	
+ 	<ur:js src="page-resources/js/user/edit_group_workspace_project_page_file_system.js"/>
+ 	
   </head>
     
    <body class="yui-skin-sam">
@@ -65,24 +67,62 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
-               <c:url value="/user/editGroupWorkspaceProjectPage.action" var="editProjectPageUrl">
+                <c:url value="/user/editGroupWorkspaceProjectPage.action" var="editProjectPageUrl">
 				          <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
 				      </c:url>
-                      <h3> <a href="${editProjectPageUrl}">${groupWorkspaceProjectPage.groupWorkspace.name} </a> &gt; Edit Description </h3>
-               <form method="post" action="<c:url value="/user/saveGroupWorkspaceProjectPageDescription.action"/>">
-                    <input type="hidden" name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
-                    <textarea name="groupWorkspaceProjectPage.description" rows="10" cols="60">${groupWorkspaceProjectPage.description}</textarea>
-                    <input type="submit" value="Submit" />
-
-               </form> 
-                
-   
+                      <h3> <a href="${editProjectPageUrl}">${groupWorkspaceProjectPage.groupWorkspace.name} </a> &gt; Edit File System </h3>
+               
+                <div id="fileSystemTable">
+                    <c:import url="group_workspace_project_page_file_system_table.jsp"/>
+                </div>
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
         
         </div>
         <!-- end doc -->
-        
+        <div id="newFolderDialog" class="hidden">
+            <div class="hd">Folder Information</div>
+            <div class="bd">
+                  <form id="addFolder" name="newFolderForm" 
+                  method="post" >
+              
+                   <input type="hidden" id="newFolderForm_parentFolderId"
+                       name="parentFolderId" value="${parentFolderId}"/>
+                       
+                   <input type="hidden" id="newFolderForm_projectPageId"
+                       name="projectPageId" value="${groupWorkspaceProjectPage.id}"/>                       
+               
+                   <input type="hidden" id="newFolderForm_new"
+                       name="newFolder" value="true"/>
+              
+                   <input type="hidden" id="newfolderForm_folderId"
+                       name="updateFolderId" value=""/>
+                   
+                  <div id="folderNameError" class="errorMessage"></div>
+	              
+	              <table class="formTable">
+	                  <tr>
+	                      <td align="left"  class="label"> Folder Name:*</td>
+	                      <td align="left" class="input"> <input id="folder" type="text" name="folderName" value="" size="45"/></td>
+	                  </tr>
+	                  <tr>
+	                      <td align="left"  class="label"> Folder Description:</td>
+	                      <td align="left" class="input" colspan="2" ><textarea cols="42" rows="4" name="folderDescription"></textarea></td>
+	                  </tr>
+	              </table>
+                 </form>
+           </div>
+           <!-- end dialog body -->
+       </div>
+       
+       <!--  delete folder dialog -->
+       <div id="deleteFileFolderConfirmDialog" class="hidden">
+          <div class="hd">Remove from Group Workspace Page?</div>
+          <div class="bd">
+              <p>Do you want to remove the selected items from your group workspace project page?</p>
+          </div>
+       </div>
+       <!--  end delete folder dialog -->
         
     </body>
 </html>

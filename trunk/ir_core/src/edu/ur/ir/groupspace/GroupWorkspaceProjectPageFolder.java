@@ -74,7 +74,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 	
 	/**  The type of object this represents */
-	private FileSystemType fileSystemType = FileSystemType.RESEARCHER_FOLDER;
+	private FileSystemType fileSystemType = FileSystemType.GROUP_WORKSPACE_PROJECT_PAGE_FOLDER;
 
 	/** Folders of the groupWorkspaceProjectPage */
 	private Set<GroupWorkspaceProjectPageFolder> children = new HashSet<GroupWorkspaceProjectPageFolder>();

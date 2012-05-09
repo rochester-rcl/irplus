@@ -36,40 +36,40 @@ import edu.ur.ir.web.action.UserIdAware;
  */
 public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 	
-	/** Researcher service. */
+	// Researcher service. 
 	private ResearcherService researcherService;
 	
-	/** Service for dealing with researcher file system information */
+	// Service for dealing with researcher file system information */
 	private ResearcherFileSystemService researcherFileSystemService;
 	
-	/** the name of the folder to add */
+	// the name of the folder to add 
 	private String folderName;
 	
-	/** Description of the folder */
+	// Description of the folder 
 	private String folderDescription;
 	
-	/** Current folder the user is looking at  */
+	// Current folder the user is looking at  
 	private Long parentFolderId;
 	
-	/** Id of the folder to update for updating  */
+	// Id of the folder to update for updating  
 	private Long updateFolderId;
 	
-	/**  Eclipse generated id */
+	//  Eclipse generated id 
 	private static final long serialVersionUID = -6343965003122766186L;
 	
-	/**  Logger for add researcher folder action */
+	//  Logger for add researcher folder action 
 	private static final Logger log = Logger.getLogger(AddResearcherFolder.class);
 	
-	/**  Researcher object */
+	//  Researcher object 
 	private Long researcherId;
 
-	/**  Indicates the folder has been added*/
+	//  Indicates the folder has been added 
 	private boolean added = false;
 	
-	/** Message that can be displayed to the user. */
+	// Message that can be displayed to the user.  
 	private String message;
 	
-	/** id of the user making changes */
+	// id of the user making changes  
 	private Long userId;
 	
 	/**
@@ -265,39 +265,63 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 		this.folderDescription = folderDescription;
 	}
 
+	/**
+	 * Get the update folder id.
+	 * 
+	 * @return
+	 */
 	public Long getUpdateFolderId() {
 		return updateFolderId;
 	}
 
+	/**
+	 * Set the update folder id.
+	 * 
+	 * @param updateFolderId
+	 */
 	public void setUpdateFolderId(Long updateFolderId) {
 		this.updateFolderId = updateFolderId;
 	}
 
-
-	public ResearcherService getResearcherService() {
-		return researcherService;
-	}
-
+	/**
+	 * Set the researcher service.
+	 * 
+	 * @param researcherService
+	 */
 	public void setResearcherService(ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
 
+	/**
+	 * Get the researcher id.
+	 * 
+	 * @return
+	 */
 	public Long getResearcherId() {
 		return researcherId;
 	}
 
+	/**
+	 * Set the researcher id.
+	 * 
+	 * @param researcherId
+	 */
 	public void setResearcherId(Long researcherId) {
 		this.researcherId = researcherId;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 */
 	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public ResearcherFileSystemService getResearcherFileSystemService() {
-		return researcherFileSystemService;
-	}
-
+	/**
+	 * Set the researcher file system service.
+	 * 
+	 * @param researcherFileSystemService
+	 */
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
