@@ -163,7 +163,7 @@ public class HbGroupWorkspaceProjectPageFolderDAO implements GroupWorkspaceProje
 	@SuppressWarnings("unchecked")
 	public List<GroupWorkspaceProjectPageFolder> getPath(GroupWorkspaceProjectPageFolder folder)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherFolderPath");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceProjectPageFolderPath");
 		q.setLong("leftValue", folder.getLeftValue());
 		q.setLong("rootId", folder.getTreeRoot().getId());
 		q.setLong("projectPageId", folder.getGroupWorkspaceProjectPage().getId());

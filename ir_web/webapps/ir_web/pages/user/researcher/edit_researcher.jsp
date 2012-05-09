@@ -406,7 +406,7 @@
 	      </div>
   	  </div>
   
-        <div id="newFolderDialog" class="hidden">
+      <div id="newFolderDialog" class="hidden">
             <div class="hd">Folder Information</div>
             <div class="bd">
                   <form id="addFolder" name="newFolderForm" 

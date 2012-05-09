@@ -166,7 +166,11 @@
                     </div>  
                     <div class="contentContainer">
 	                    <div class="contentBoxTitle">
-	                        <p><a href="">Edit Research/Publications</a></p>
+	                    
+	                        <c:url value="/user/editGroupWorkspaceProjectPageFileSystem.action" var="editGroupWorkspaceProjectPageFileSystemUrl">
+						        <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
+						    </c:url>
+	                        <p><a href="${editGroupWorkspaceProjectPageFileSystemUrl}">Edit Research/Publications</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
                             <p>

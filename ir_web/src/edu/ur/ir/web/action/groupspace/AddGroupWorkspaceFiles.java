@@ -28,7 +28,6 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
-import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.groupspace.GroupWorkspace;
@@ -116,9 +115,6 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 
 	/* service to deal with group workspaces */
 	private GroupWorkspaceService groupWorkspaceService;
-	
-	/* service to send emails when an error occurs */
-	private ErrorEmailService errorEmailService;
 	
 	/* service to deal with security information */
 	private SecurityService securityService;
@@ -498,15 +494,7 @@ public class AddGroupWorkspaceFiles extends ActionSupport implements UserIdAware
 		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
 	
-	/**
-	 * Set the error email service.
-	 * 
-	 * @param errorEmailService
-	 */
-	public void setErrorEmailService(ErrorEmailService errorEmailService) {
-		this.errorEmailService = errorEmailService;
-	}
-	
+
 	/**
 	 * Set the group workspace file system service.
 	 * 

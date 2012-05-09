@@ -59,7 +59,7 @@ DescriptionAware, FileSystem{
 	 */
 	public GroupWorkspaceProjectPageInstitutionalItem(GroupWorkspaceProjectPage groupWorkspaceProjectPage, InstitutionalItem institutionalItem)
 	{
-		setResearcher(groupWorkspaceProjectPage);
+		setGroupWorkspaceProjectPage(groupWorkspaceProjectPage);
 		setInstitutionalItem(institutionalItem);
 	}
 	
@@ -77,7 +77,7 @@ DescriptionAware, FileSystem{
 		}
 		
 		
-		setResearcher(groupWorkspaceProjectPage);
+		setGroupWorkspaceProjectPage(groupWorkspaceProjectPage);
 		setInstitutionalItem(institutionalItem);
 		setParentFolder(parentFolder);
 	}
@@ -167,8 +167,8 @@ DescriptionAware, FileSystem{
 
 		final GroupWorkspaceProjectPageInstitutionalItem other = (GroupWorkspaceProjectPageInstitutionalItem) o;
 
-		if( (other.getResearcher() != null && !other.getResearcher().equals(getResearcher())) ||
-			(other.getResearcher() == null && getResearcher() != null )) return false;
+		if( (other.getGroupWorkspaceProjectPage() != null && !other.getGroupWorkspaceProjectPage().equals(getGroupWorkspaceProjectPage())) ||
+			(other.getGroupWorkspaceProjectPage() == null && getGroupWorkspaceProjectPage() != null )) return false;
 
 		
 		if( (other.getInstitutionalItem() != null && !other.getInstitutionalItem().equals(getInstitutionalItem())) ||
@@ -220,11 +220,11 @@ DescriptionAware, FileSystem{
 		this.parentFolder = parentFolder;
 	}
 
-	public GroupWorkspaceProjectPage getResearcher() {
+	public GroupWorkspaceProjectPage getGroupWorkspaceProjectPage() {
 		return groupWorkspaceProjectPage;
 	}
 
-	public void setResearcher(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
+	public void setGroupWorkspaceProjectPage(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
 		this.groupWorkspaceProjectPage = groupWorkspaceProjectPage;
 	}
 	

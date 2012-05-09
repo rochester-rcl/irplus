@@ -150,7 +150,7 @@ YAHOO.ur.edit.group_workspace_project_page =
 		        // occurred
 		        if( !urUtil.checkTimeOut(o.responseText) )
 		        {       		
-		        	var divToUpdate = document.getElementById('group_worksapce_project_page_status');
+		        	var divToUpdate = document.getElementById('group_workspace_project_page_status');
 		            divToUpdate.innerHTML = o.responseText; 
 			    }
 		        YAHOO.ur.edit.group_workspace_project_page.confirmPrivateDialog.hide();
