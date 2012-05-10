@@ -29,6 +29,7 @@ import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
@@ -72,6 +73,10 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
+	
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+
+
 
 	/**
 	 * Get the xml output for the item
@@ -584,6 +589,13 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		    identifier.appendChild(data);
 		    oaiDc.appendChild(identifier);
 		}
+		else
+		{
+			Element identifier = doc.createElement("dc:identifier");
+		    Text data = doc.createTextNode(this.institutionalItemVersionUrlGenerator.createUrl(item.getVersionedInstitutionalItem().getInstitutionalItem(), item.getVersionNumber()));
+		    identifier.appendChild(data);
+		    oaiDc.appendChild(identifier);
+		}
 	}
 	
 	/**
@@ -678,6 +690,16 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		     }
 		 }
 
+	}
+	
+	/**
+	 * Set the url generator.
+	 * 
+	 * @param institutionalItemVersionUrlGenerator
+	 */
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 
 }
