@@ -734,6 +734,7 @@
        <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listSetsService" ref="listSetsService"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
    </bean>
    
     <bean id="qualifiedDublinCoreOaiMetadataProvider" 
