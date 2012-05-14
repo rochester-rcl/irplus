@@ -171,7 +171,7 @@
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td width="125px">
-						                            <c:if test="${researcher.public}">
+						                            <c:if test="${researcher.isPublic}">
 						                                <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
 						                                    <c:url var="url" value="/researcherThumbnailDownloader.action">
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
@@ -180,19 +180,19 @@
                                                            <img class="basic_thumbnail" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
-			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.public}">
+			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.isPublic}">
 	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                                <c:if test="${researcher.public}">
+						                                <c:if test="${researcher.isPublic}">
 						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
 						                        	            <c:param name="researcherId" value="${researcher.id}"/>
 						                        	        </c:url>
 														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
 														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
 														</c:if>
-														<c:if test="${!researcher.public}">
+														<c:if test="${!researcher.isPublic}">
 														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
 													    </c:if>
 						                        </urstb:td>
@@ -332,7 +332,7 @@
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td width="125px">
-						                            <c:if test="${researcher.public}">
+						                            <c:if test="${researcher.isPublic}">
 						                                <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
 						                                    <c:url var="url" value="/researcherThumbnailDownloader.action">
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
@@ -341,19 +341,19 @@
                                                             <img class="basic_thumbnail" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
-			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">
+			                                         <c:if test="${researcher.primaryPicture == null || !researcher.isPublic}">
 	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                                <c:if test="${researcher.public}">
+						                                <c:if test="${researcher.isPublic}">
 						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
 						                        	            <c:param name="researcherId" value="${researcher.id}"/>
 						                        	        </c:url>
 														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
 														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
 														</c:if>
-														<c:if test="${!researcher.public}">
+														<c:if test="${!researcher.isPublic}">
 														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
 													    </c:if>
 						                        </urstb:td>

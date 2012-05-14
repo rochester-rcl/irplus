@@ -25,7 +25,7 @@
 
 <researcher>
     <!--  only show the researcher if the researcher page is public -->
-    <c:if test="${researcher != null && (researcher.public || user.id == researcher.user.id)}">
+    <c:if test="${researcher != null && (researcher.isPublic || user.id == researcher.user.id)}">
     
         <c:if test="${researcher.user.personNameAuthority != null}">
             <c:url var="contributorUrl" value="viewContributorPage.action">

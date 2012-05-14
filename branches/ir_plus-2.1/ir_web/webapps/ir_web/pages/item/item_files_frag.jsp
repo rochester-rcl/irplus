@@ -34,7 +34,7 @@
 		    <!--  the is Preview flag indicates that the file is being previewed by a user this should be passed in
 		          by the importing file -->		
 			<c:if test='${!param.isPreview && !param.isResearcherView}'>    	
-			    <c:if test="${object.public || institutionalItem.owner == user || ir:hasPermission('ITEM_FILE_READ',object) }">
+			    <c:if test="${object.isPublic || institutionalItem.owner == user || ir:hasPermission('ITEM_FILE_READ',object) }">
 			        <c:url var="itemFileDownload" value="/fileDownloadForInstitutionalItem.action">
 				        <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
 					    <c:param value="${object.id}" name="itemFileId"/>
@@ -44,14 +44,14 @@
 		            <br/>
 		            <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 		                Download Status:
-		                <c:if test="${object.public && !object.item.embargoed}"><span class="greenMessage">Publicly Viewable</span></c:if>
-		                <c:if test="${!object.public && !object.item.embargoed}"><span class="errorMessage">Restricted</span></c:if>
-		                <c:if test="${!object.public && object.item.embargoed}"><span class="errorMessage">Embargoed / Restricted After Embargo</span></c:if>
-		                <c:if test="${object.public && object.item.embargoed}"><span class="errorMessage">Embargoed</span> / <span class="greenMessage">Publicly Viewable After Embargo</span></c:if>
+		                <c:if test="${object.isPublic && !object.item.embargoed}"><span class="greenMessage">Publicly Viewable</span></c:if>
+		                <c:if test="${!object.isPublic && !object.item.embargoed}"><span class="errorMessage">Restricted</span></c:if>
+		                <c:if test="${!object.isPublic && object.item.embargoed}"><span class="errorMessage">Embargoed / Restricted After Embargo</span></c:if>
+		                <c:if test="${object.isPublic && object.item.embargoed}"><span class="errorMessage">Embargoed</span> / <span class="greenMessage">Publicly Viewable After Embargo</span></c:if>
 		            </c:if> 
 		       
 		        </c:if>
-		        <c:if test="${!object.public && institutionalItem.owner != user && !ir:hasPermission('ITEM_FILE_READ',object) }">
+		        <c:if test="${!object.isPublic && institutionalItem.owner != user && !ir:hasPermission('ITEM_FILE_READ',object) }">
 		            <c:url var="restrictedAccess" value="/user/institutionalPublicationPublicView.action">
 				        <c:param value="${institutionalItem.id}" name="institutionalItemId"/>
 				        <c:param value="${institutionalItemVersion.versionNumber}" name="versionNumber"/>

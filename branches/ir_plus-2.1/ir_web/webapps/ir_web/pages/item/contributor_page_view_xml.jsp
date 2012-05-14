@@ -32,7 +32,7 @@
     <total_downloads><c:out value="${totalDownloads}"/></total_downloads>
     
     <!--  output the researcher page url if one exists -->
-    <c:if test="${researcher != null && researcher.public}">
+    <c:if test="${researcher != null && researcher.isPublic}">
         <c:url value="viewResearcherPage.action" var="viewResearcherPageUrl">
 	        <c:param name="researcherId" value="${researcher.id}"/>
 	    </c:url>
