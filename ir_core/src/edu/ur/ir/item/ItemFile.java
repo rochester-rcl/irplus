@@ -212,6 +212,16 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 	public boolean isPublic() {
 		return isPublic;
 	}
+	
+	/**
+	 * Determine if the researcher page is public.
+	 * 
+	 * @return
+	 */
+	public boolean getIsPublic()
+	{
+		return isPublic;
+	}
 
 	/**
 	 * Set this item file as public.

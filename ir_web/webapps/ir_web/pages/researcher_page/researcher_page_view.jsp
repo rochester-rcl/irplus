@@ -90,7 +90,7 @@
             <div id="bd">
  				
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
-				  <c:if test="${researcher != null && (!researcher.public)}">
+				  <c:if test="${researcher != null && (!researcher.isPublic)}">
 	                	<h2 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is OFF.</h2>
                   </c:if>
 
@@ -100,7 +100,7 @@
                 	The researcher page is not available.
                 </c:if>
 				 
-				<c:if test="${researcher != null && (researcher.public || user.id == researcher.user.id)}">
+				<c:if test="${researcher != null && (researcher.isPublic || user.id == researcher.user.id)}">
 	            	<table width="100%">
 	            	<tr> <td width="9%">
 		            		<img src="${pageContext.request.contextPath}/page-resources/images/all-images/researcher.jpg" height="50" width="55"/>
