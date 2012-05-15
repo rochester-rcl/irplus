@@ -132,7 +132,7 @@
                      <input type="hidden" id="newLinkForm_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>
                      <input type="hidden" id="newLinkForm_groupWorkspaceProjectPageId" name="groupWorkspaceProjectPageId" 
                          value="${groupWorkspaceProjectPage.id}"/>                       
-                     <div id="researcherLinkFields">
+                     <div id="groupWorkspaceProjectPageLinkFields">
                          <c:import url="group_workspace_project_page_file_system_link_form.jsp"/>
                      </div>
                  </form>

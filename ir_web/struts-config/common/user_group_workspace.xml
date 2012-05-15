@@ -67,7 +67,6 @@
             method ="deleteFileSystemObjects"
             class="edu.ur.ir.web.action.groupspace.ViewGroupWorkspaceFolders">
             <interceptor-ref name="crudStack" />
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_system_table.jsp</result>
         </action>
         
@@ -99,7 +98,6 @@
         <action name="groupWorkspaceFileDownload" 
             class="edu.ur.ir.web.action.groupspace.GroupWorkspaceFileDownload">
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/fileNotFound.jsp</result>
             <result name="success" type="no-op"/>
         </action> 
@@ -110,7 +108,6 @@
             method="inviteUsers" 
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action> 
@@ -136,7 +133,6 @@
         	      <param name="tabName">USERS</param>
         	</result>   
         	<result name="error">/pages/user/workspace/group_workspace/edit_group_workspace_user_permissions.jsp</result>  
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
         </action>
         
@@ -146,7 +142,6 @@
             method="removeUser" 
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action> 
@@ -156,7 +151,6 @@
             method="removeInvite" 
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_not_found.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action> 
@@ -166,7 +160,6 @@
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderProperties">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_folder_properties.jsp</result>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
         </action>
         
@@ -175,7 +168,6 @@
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFolderProperties">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
         </action>
         
@@ -189,7 +181,6 @@
         	      <param name="groupWorkspaceFolderId">${groupWorkspaceFolder.id}</param>
         	</result>   
         	<result name="error">/pages/user/workspace/group_workspace/edit_group_workspace_user_folder_permissions.jsp</result>  
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_folder_not_found.jsp</result>
         </action>
         
@@ -203,7 +194,6 @@
         	      <param name="groupWorkspaceFileId">${groupWorkspaceFile.id}</param>
         	</result> 
         	<result name="error">/pages/user/workspace/group_workspace/edit_group_workspace_user_file_permissions.jsp</result>  
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_file_not_found.jsp</result>
         </action>
         
@@ -212,7 +202,6 @@
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFileProperties">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_properties.jsp</result>
-            <result name="accessDenied">/accessDenied.jsp</result>
         </action>
         
         <!-- Edit the group workspace file permissions  -->
@@ -221,7 +210,6 @@
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceFileProperties">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_user_file_permissions.jsp</result>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_file_not_found.jsp</result>
         </action>
         
@@ -253,21 +241,18 @@
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockGroupWorkspaceVersionedFile" class="edu.ur.ir.web.action.groupspace.LockVersionedFile" >
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/lock_file_response.jsp</result>
         </action>
         
         <!--  un lock a file so that other users can upload changes -->
         <action name="unLockGroupWorkspaceVersionedFile" class="edu.ur.ir.web.action.groupspace.UnLockVersionedFile" >
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/unlock_file_response.jsp</result>
         </action>
     
         <!--  Rename file  -->
         <action name="*GroupWorkspaceFile" class="edu.ur.ir.web.action.groupspace.RenameGroupWorkspaceFile" method="{1}">
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/rename_group_workspace_file_form.jsp</result>
             <result name="get">/pages/user/workspace/group_workspace/rename_group_workspace_file_form.jsp</result>
         </action>   
@@ -408,7 +393,6 @@
             class="edu.ur.ir.web.action.groupspace.UploadGroupWorkspaceProjectPageImage"
             method="addNewPicture">
             <interceptor-ref name="urUploadStack"/>
-             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/upload_group_workspace_project_page_image_frag.jsp</result>
         </action>
         
@@ -436,7 +420,6 @@
         <action name="setGroupWorkspaceProjectPagePermission" class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPage"
         	method="setPagePermission">
         	<interceptor-ref name="crudStack"/>
-        	<result name="accessDenied">/accessDenied.jsp</result>
            <result name="success">/pages/user/workspace/group_workspace/edit_group_workspace_project_page_status.jsp</result>
         </action>
         
@@ -459,7 +442,6 @@
             method="getTable"
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPageFileSystem">
             <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_project_page_file_system_table.jsp</result>
         </action>
         
@@ -468,7 +450,6 @@
             method ="save"
             class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFolder">
             <interceptor-ref name="crudStack" />
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/add_response.jsp</result>
         </action>
         
@@ -476,7 +457,6 @@
             method ="updateFolder"
             class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFolder">
             <interceptor-ref name="crudStack" />
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/add_response.jsp</result>
         </action>
         
@@ -485,9 +465,32 @@
             method ="deleteFileSystemObjects"
             class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPageFileSystem">
             <interceptor-ref name="crudStack" />
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/group_workspace_project_page_file_system_table.jsp</result>
         </action>
         
         
+        <!--  ************************************ -->
+        <!--  Group workspace project page Link Actions            -->
+        <!--  ************************************ -->
         
+        
+        <action name="addGroupWorkspaceProjectPageFileSystemLink"
+            method ="save"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPageFileSystemLink">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/add_response.jsp</result>
+        </action>
+        
+        <action name="getGroupWorkspaceProjectPageFileSystemLink"
+            method ="get"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPageFileSystemLink">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_project_page_file_system_link_form.jsp</result>
+        </action>
+        
+        <action name="updateGroupWorkspaceProjectPageFileSystemLink"
+            method ="updateLink"
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaceProjectPageFileSystemLink">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/researcher/add_response.jsp</result>
+        </action>  
