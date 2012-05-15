@@ -183,6 +183,37 @@ YAHOO.ur.groupworkspace.file_system = {
 	    document.newFolderForm.newFolder.value = "false";
 	    YAHOO.ur.groupworkspace.file_system.newFolderDialog.showDialog();
     },
+    
+    // function to edit link information
+    editLink : function(linkId)
+    {
+	     /*  This call back updates the html when editing the link */
+	      var callback =
+	      {
+	          success: function(o) 
+	          {
+	 		      // check for the timeout - forward user to login page if timeout
+		          // occurred
+		          if( !urUtil.checkTimeOut(o.responseText) )
+		          {       		           
+	                  var divToUpdate = document.getElementById('groupWorkspaceProjectPageLinkFields');
+	                  divToUpdate.innerHTML = o.responseText;
+
+	                  document.getElementById('newLinkForm_new').value="false";
+	                  YAHOO.ur.groupworkspace.file_system.newLinkDialog.showLink();
+	              }
+	        },
+		
+		    failure: function(o) 
+		    {
+		        alert('Edit group workspace project page link Failure ' + o.status + ' status text ' + o.statusText );
+		    }
+	    };
+	        
+	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+	            getLinkAction + '?linkId=' + linkId +  '&bustcache='+new Date().getTime(), 
+	            callback, null);
+    },
 	
 	/**
 	 *  Check all check boxes for files and folders
@@ -404,39 +435,7 @@ YAHOO.ur.groupworkspace.file_system = {
 		YAHOO.ur.groupworkspace.file_system.newLinkDialog.render();
 	 },
 	   
-    // function to edit folder information
-    editLink : function(linkId)
-    {
-	     /*
-	      * This call back updates the html when editing the folder
-	      */
-	      var callback =
-	      {
-	          success: function(o) 
-	          {
-	 		      // check for the timeout - forward user to login page if timout
-		          // occured
-		          if( !urUtil.checkTimeOut(o.responseText) )
-		          {       		           
-		        	  
-	                  var divToUpdate = document.getElementById('researcherLinkFields');
-	                  divToUpdate.innerHTML = o.responseText;
-
-	                  document.getElementById('newLinkForm_new').value="false";
-	          	      YAHOO.ur.groupworkspace.file_system.newLinkDialog.showLink();
-	              }
-	        },
-		
-		    failure: function(o) 
-		    {
-		        alert('Edit researcher link Failure ' + o.status + ' status text ' + o.statusText );
-		    }
-	    };
-	        
-	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-	            getLinkAction + '?linkId=' + linkId +  '&bustcache='+new Date().getTime(), 
-	            callback, null);
-    },
+ 
 	
 	/**
 	 * This creates a hidden field appends it to the form for
