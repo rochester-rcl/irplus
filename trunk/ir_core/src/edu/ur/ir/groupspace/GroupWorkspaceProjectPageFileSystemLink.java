@@ -23,20 +23,20 @@ import edu.ur.persistent.CommonPersistent;
 
 public class GroupWorkspaceProjectPageFileSystemLink extends CommonPersistent implements FileSystem{
 	
-	/** Eclipse generated id */
+	/* Eclipse generated id */
 	private static final long serialVersionUID = 3144484183634385274L;
 
-	/**  Link  */
+	/*  Link  */
 	private String url;
 	
-	/**  groupWorkspaceProjectPage folder the link belongs to. */
+	/*  groupWorkspaceProjectPage folder the link belongs to. */
 	private GroupWorkspaceProjectPageFolder parentFolder;
 	
-	/** GroupWorkspaceProjectPage the link belongs to */
+	/* GroupWorkspaceProjectPage the link belongs to */
 	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 	
-	/** represents the file system type for this groupWorkspaceProjectPage link */
-	private FileSystemType fileSystemType = FileSystemType.GROUP_WORKSPACE_PROJECT_PAGE_LINK;
+	/* represents the file system type for this groupWorkspaceProjectPage link */
+	private FileSystemType fileSystemType = FileSystemType.GROUP_WORKSPACE_PROJECT_PAGE_FILE_SYSTEM_LINK;
 
 	
 	/**

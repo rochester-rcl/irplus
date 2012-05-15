@@ -53,7 +53,7 @@ public class FileSystemType implements Serializable, Orderable{
 	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_FILE = new FileSystemType("groupWorkspaceProjectPageFile", 1);
 	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_FOLDER = new FileSystemType("groupWorkspaceProjectPageFolder", 10);
 	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_PUBLICATION = new FileSystemType("groupWorkspaceProjectPagePublication", 1);
-	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_LINK = new FileSystemType("groupWorkspaceProjectPageLink", 1);
+	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_FILE_SYSTEM_LINK = new FileSystemType("groupWorkspaceProjectPageFileSystemLink", 1);
 	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_INSTITUTIONAL_ITEM = new FileSystemType("groupWorkspaceProjectPageInstitutionalItem", 1);
 
 	

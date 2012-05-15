@@ -108,7 +108,7 @@
             <div id="bd">
  				
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
-				  <c:if test="${researcher != null && (!researcher.public)}">
+				  <c:if test="${researcher != null && (!researcher.isPublic)}">
 	                	<h2 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is OFF.</h2>
                   </c:if>
 
@@ -117,7 +117,7 @@
                 	The researcher page is not available.
                 </c:if>
 				 
-				<c:if test="${researcher != null && (researcher.public || user.id == researcher.user.id)}">
+				<c:if test="${researcher != null && (researcher.isPublic || user.id == researcher.user.id)}">
 				
 	            	<div class="name_div">
 	            	       <c:if test="${user != null && user.id == researcher.user.id}">	

@@ -199,7 +199,7 @@
 			                 	 <ur:a href="javascript:YAHOO.ur.groupworkspace.file_system.editFolder('${fileSystemObject.id}', '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.description)}')"> Edit </ur:a>
 			                 </c:if>
 			                 
-		                	<c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceProjectPageLink'}">
+		                	<c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceProjectPageFileSystemLink'}">
 		                    	<ur:a href="javascript:YAHOO.ur.groupworkspace.file_system.editLink(${fileSystemObject.id})"> Edit </ur:a>
 		                	</c:if>
 		                </urstb:td>	 	                	

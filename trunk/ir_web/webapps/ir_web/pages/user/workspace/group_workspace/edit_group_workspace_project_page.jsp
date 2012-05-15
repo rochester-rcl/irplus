@@ -103,7 +103,7 @@
                                
                                    <tr>
 			                           <td class="baseTableImage"> 
-			                               <c:if test="${!empty(member.groupWorkspaceUser.user.researcher) && member.groupWorkspaceUser.user.researcher.public}">
+			                               <c:if test="${!empty(member.groupWorkspaceUser.user.researcher) && member.groupWorkspaceUser.user.researcher.isPublic}">
 			                                   <c:if test="${ir:hasThumbnail(member.groupWorkspaceUser.user.researcher.primaryPicture)}">
 			                                       <c:url var="url" value="/researcherThumbnailDownloader.action">
                                                        <c:param name="irFileId" value="${member.groupWorkspaceUser.user.researcher.primaryPicture.id}"/>
@@ -128,7 +128,7 @@
 	                                       <p><strong>Description:</strong>${member.description}</p>
 	                                   </c:if>
 	                                   
-	                                   <c:if test="${!empty(member.groupWorkspaceUser.user.researcher)  && member.groupWorkspaceUser.user.researcher.public}">
+	                                   <c:if test="${!empty(member.groupWorkspaceUser.user.researcher)  && member.groupWorkspaceUser.user.researcher.isPublic}">
 	                                       <c:url var="researcherUrl" value="/viewResearcherPage.action">
                                                <c:param name="researcherId" value="${member.groupWorkspaceUser.user.researcher.id}"/>
                                            </c:url>

@@ -70,7 +70,7 @@
             <div id="bd">
 				<table width ="100%">
 					<tr>
-						<c:if test="${researcher != null && researcher.public}">
+						<c:if test="${researcher != null && researcher.isPublic}">
 							<td width="12%">
 								<c:url value="/viewResearcherPage.action" var="viewResearcherPageUrl">
 								    <c:param name="researcherId" value="${researcher.id}"/>
@@ -102,7 +102,7 @@
 						     	
 							 </td>    
 						</c:if>
-						<c:if test="${researcher == null || !researcher.public}">
+						<c:if test="${researcher == null || !researcher.isPublic}">
 							<td width="12%">
 			                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 						     </td>						

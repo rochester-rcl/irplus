@@ -469,7 +469,7 @@
        </div>
        <!--  end private page confirm dialog -->
 
-        <div id="newLinkDialog" class="hidden">
+       <div id="newLinkDialog" class="hidden">
             <div class="hd">Link Information</div>
             <div class="bd">
                   <form id="addLink" name="newLinkForm" 

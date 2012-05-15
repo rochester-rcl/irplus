@@ -179,7 +179,7 @@ public class DefaultGroupWorkspaceProjectPageFileSystemService implements GroupW
 	 */
 	public GroupWorkspaceProjectPageInstitutionalItem createInstitutionalItem(GroupWorkspaceProjectPageFolder parentFolder, InstitutionalItem item) {
 		
-		GroupWorkspaceProjectPageInstitutionalItem institutionalItem = parentFolder.createInstitutionalItem(item);
+		GroupWorkspaceProjectPageInstitutionalItem institutionalItem = parentFolder.create(item);
 		groupWorkspaceProjectPageFolderDAO.makePersistent(parentFolder);
 		return institutionalItem;
 	}
@@ -765,7 +765,7 @@ public class DefaultGroupWorkspaceProjectPageFileSystemService implements GroupW
 		    for( GroupWorkspaceProjectPageFileSystemLink link : linksToMove)
 		    {
 		    	log.debug("Adding link " + link + " to destination " + destination);
-		    	if( destination.getGroupWorkspaceProjectPageFileSystemLink(link.getName()) == null)
+		    	if( destination.getLink(link.getName()) == null)
 		    	{
 			        destination.addLink(link);
 		    	}
