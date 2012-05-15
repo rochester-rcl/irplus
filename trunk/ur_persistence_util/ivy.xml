@@ -43,11 +43,11 @@
         </dependency>
         
          <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-core" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-orm" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-orm" rev="3.1.0.RELEASE" transitive="false">
             <artifact name="spring-orm" type="jar"/>
         </dependency>
             
