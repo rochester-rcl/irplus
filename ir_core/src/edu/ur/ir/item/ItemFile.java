@@ -212,6 +212,10 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 	public boolean isPublic() {
 		return isPublic;
 	}
+	
+	public boolean getIsPublic(){
+		return isPublic;
+	}
 
 	/**
 	 * Set this item file as public.

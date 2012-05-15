@@ -38,12 +38,12 @@
 	<td align="right">
 		Is the file viewable by all users:
 		<input type="radio" name="isPublic_${itemFile.id}" value="true" onClick="javascript:YAHOO.ur.institution.item.permission.updateFilePublicView(${itemFile.id}, ${institutionalItemId}, 'true')"
-		<c:if test="${itemFile.public}">
+		<c:if test="${itemFile.isPublic}">
 			checked
 		</c:if>
 		> Yes  <c:if test="${item.embargoed}"><span class="errorMessage">(After Embargo)&nbsp;</span></c:if>
 		<input type="radio" name="isPublic_${itemFile.id}"  value="false" onClick="javascript:YAHOO.ur.institution.item.permission.updateFilePublicView(${itemFile.id}, ${institutionalItemId}, 'false')"
-		<c:if test="${!itemFile.public}">
+		<c:if test="${!itemFile.isPublic}">
 			checked
 		</c:if>
 		> No  

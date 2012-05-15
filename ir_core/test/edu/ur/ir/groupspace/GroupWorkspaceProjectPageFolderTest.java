@@ -469,7 +469,7 @@ public class GroupWorkspaceProjectPageFolderTest {
 
 		try
 		{
-		    groupWorkspaceProjectPageFolder2.addGroupWorkspaceProjectPageFile(rf);
+		    groupWorkspaceProjectPageFolder2.add(rf);
 		}
 		catch(Exception e)
 		{

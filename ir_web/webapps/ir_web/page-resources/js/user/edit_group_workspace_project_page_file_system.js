@@ -31,9 +31,9 @@ var newFolderAction = basePath + 'user/addGroupWorkspaceProjectPageFolder.action
 var deleteFolderAction = basePath + 'user/deleteGroupWorkspaceProjectPageFileSystemObjects.action';
 
 // actions for adding and removing links
-var updateLinkAction = basePath + 'user/updateResearcherLink.action';
-var newLinkAction = basePath + 'user/addResearcherLink.action';
-var getLinkAction = basePath + 'user/getResearcherLink.action';
+var updateLinkAction = basePath + 'user/updateGroupWorkspaceProjectPageFileSystemLink.action';
+var newLinkAction = basePath + 'user/addGroupWorkspaceProjectPageFileSystemLink.action';
+var getLinkAction = basePath + 'user/getGroupWorkspaceProjectPageFileSystemLink.action';
 
 // object to hold the specified folder data.
 //var myResearcherFolderTable = new YAHOO.ur.table.Table('myFolders', 'newResearcherFolders');
@@ -314,7 +314,7 @@ YAHOO.ur.groupworkspace.file_system = {
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       		 	
-	        	  var response = eval("("+o.responseText+")");
+	        	var response = eval("("+o.responseText+")");
 		        //if the folder was not added then show the user the error message.
 		        // received from the server
 		        if( response.added == "false" )
@@ -329,7 +329,8 @@ YAHOO.ur.groupworkspace.file_system = {
 		            YAHOO.ur.groupworkspace.file_system.newLinkDialog.hide();
 		            YAHOO.ur.groupworkspace.file_system.clearLinkForm();
 		        }
-		        //myResearcherFolderTable.submitForm(myFolderAction);
+		        YAHOO.ur.groupworkspace.file_system.getFolderById(document.getElementById('myFolders_groupWorkspaceProjectPageId').value, 
+		        		document.getElementById('myFolders_parentFolderId').value)
 		    }
 		};
 		
@@ -353,6 +354,9 @@ YAHOO.ur.groupworkspace.file_system = {
 		
 		YAHOO.ur.groupworkspace.file_system.newLinkDialog.showLink = function()
 		{
+			document.getElementById('newLinkForm_parentFolderId').value =
+	    	    document.getElementById('myFolders_parentFolderId').value;
+			
 		    YAHOO.ur.groupworkspace.file_system.newLinkDialog.center();
 		    YAHOO.ur.groupworkspace.file_system.newLinkDialog.show();
 		}
@@ -384,7 +388,7 @@ YAHOO.ur.groupworkspace.file_system = {
 			    alert("A link name must be entered");
 				return false;
 			} 
-			if (urUtil.trim(data.linkUrl) == "" ) {
+			if (urUtil.trim(data.linkUrl) == "" || urUtil.trim(data.linkUrl) == "http://" ) {
 			    alert("A url must be entered");
 				return false;
 			} 

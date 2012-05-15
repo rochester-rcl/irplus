@@ -849,11 +849,21 @@ public class Researcher extends BasePersistent{
 	}
 
 	/**
-	 * Determine if the researche rpage is public.
+	 * Determine if the researcher page is public.
 	 * 
 	 * @return
 	 */
 	public boolean isPublic() {
+		return isPublic;
+	}
+	
+	/**
+	 * Determine if the researcher page is public.
+	 * 
+	 * @return
+	 */
+	public boolean getIsPublic()
+	{
 		return isPublic;
 	}
 

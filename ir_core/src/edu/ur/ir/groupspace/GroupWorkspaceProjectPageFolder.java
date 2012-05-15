@@ -259,7 +259,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		if( rf == null )
 		{
 		    rf = new GroupWorkspaceProjectPageFile(groupWorkspaceProjectPage, irFile, this);
-		    addGroupWorkspaceProjectPageFile(rf);
+		    add(rf);
 		}
 		return rf;
 	}
@@ -286,7 +286,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 * 
 	 * @param institutionalItem
 	 */
-	public GroupWorkspaceProjectPageInstitutionalItem createInstitutionalItem(InstitutionalItem institutionalItem) {
+	public GroupWorkspaceProjectPageInstitutionalItem create(InstitutionalItem institutionalItem) {
 		GroupWorkspaceProjectPageInstitutionalItem ri = getInstitutionalItem(institutionalItem);
 		if( ri == null )
 		{
@@ -371,26 +371,6 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		 return rl;
 	}
 
-	/**
-	 * Adds an existing groupWorkspaceProjectPage file to this folder.  This allows
-	 * a groupWorkspaceProjectPage file to be moved from one location to another.
-	 * 
-	 * @param rf - groupWorkspaceProjectPage file to add
-	 * @throws DuplicateNameException - if the file already exits
-	 */
-	public void addGroupWorkspaceProjectPageFile(GroupWorkspaceProjectPageFile rf) 
-	{
-		if(!files.contains(rf))
-		{
-			if( rf.getParentFolder() != null )
-			{
-				rf.getParentFolder().remove(rf);
-			}
-			
-			rf.setParentFolder(this);
-			files.add(rf);
-		}
-	}
 	
 	/**
 	 * Remove a file from the groupWorkspaceProjectPage folder
@@ -490,7 +470,7 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 * @param name of the file including the extension
 	 * @return the found file
 	 */
-	public GroupWorkspaceProjectPageFileSystemLink getGroupWorkspaceProjectPageFileSystemLink(String name)
+	public GroupWorkspaceProjectPageFileSystemLink getLink(String name)
 	{
 		for(GroupWorkspaceProjectPageFileSystemLink rl : links)
 		{
@@ -517,26 +497,6 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 			if( rf.getIrFile().equals(irFile))
 			{
 				return rf;
-			}
-		}
-		
-		return null;
-	}
-
-	/**
-	 * Find a file based on the irFile.  If
-	 * no file is found a null object is returned.  
-	 * 
-	 * @param irFile - the file
-	 * @return the found file
-	 */
-	public GroupWorkspaceProjectPagePublication getGroupWorkspaceProjectPagePublication(GenericItem item)
-	{
-		for(GroupWorkspaceProjectPagePublication rp : publications)
-		{
-			if( rp.getPublication().equals(item))
-			{
-				return rp;
 			}
 		}
 		
