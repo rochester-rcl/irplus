@@ -1627,4 +1627,17 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		return groupWorkspaceFileDAO.getFileCount(file.getId());
 	}
 	
+	/**
+	 * Get the files for group workspace id and versioned file id .
+	 * 
+	 * @param groupWorkspaceId
+	 * @param versionedFileId
+	 * 
+	 * @return the found file
+	 */
+	public GroupWorkspaceFile getGroupWorkspaceFileWithVersionedFile(Long groupWorkspaceId, Long versionedFileId)
+	{
+		return groupWorkspaceFileDAO.getGroupWorkspaceFileWithVersionedFile(groupWorkspaceId, versionedFileId);
+	}
+	
 }

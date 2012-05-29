@@ -84,4 +84,14 @@ public interface GroupWorkspaceFileDAO extends CrudDAO<GroupWorkspaceFile>
 	 *  @return Count of group workspace files containing this ir file
 	 */
 	public Long getFileCount(Long irFileId) ;
+	
+	/**
+	 * Get the files for group workspace id and versioned file id .
+	 * 
+	 * @param groupWorkspaceId
+	 * @param versionedFileId
+	 * 
+	 * @return the found file
+	 */
+	public GroupWorkspaceFile getGroupWorkspaceFileWithVersionedFile(Long groupWorkspaceId, Long versionedFileId);
 }

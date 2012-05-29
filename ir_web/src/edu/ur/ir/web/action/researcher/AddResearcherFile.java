@@ -159,7 +159,6 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	    }
 	    
 	    return SUCCESS;
-	    
 	}
 	
 	/**
@@ -217,15 +216,10 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		}
 		
 		Collection<ResearcherFolder> myResearcherFolders = researcherFileSystemService.getFoldersForResearcher(researcher.getId(), parentFolderId);
-		
 		Collection<ResearcherFile> myResearcherFiles = researcherFileSystemService.getResearcherFiles(researcher.getId(), parentFolderId);
-		
 		Collection<ResearcherPublication> myResearcherPublications = researcherFileSystemService.getResearcherPublications(researcher.getId(), parentFolderId);
-		
 		Collection<ResearcherLink> myResearcherLinks = researcherFileSystemService.getResearcherLinks(researcher.getId(), parentFolderId);
-		
 		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherFileSystemService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
-		
 		Collection<FileSystem> researcherFileSystem = new LinkedList<FileSystem>();
 
     	researcherFileSystem.addAll(myResearcherFolders);
@@ -239,7 +233,6 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		return SUCCESS;
 	}
 
-	
 	/*
 	 * Retrieves the file version of the IrFile for the display of versions
 	 */
@@ -263,11 +256,8 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 			} else {
 				researcherFileSystemVersion = new ResearcherFileSystemVersion(fileSystem, null);
 			}
-			
-			
 			researcherFileSystemVersions.add(researcherFileSystemVersion);
 		}
-		
 	}
 
 	/**
@@ -313,7 +303,7 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	 * @author Sharmila Ranganathan
 	 *
 	 */
-	public class ResearcherFileSystemVersion
+	public static class ResearcherFileSystemVersion
 	{
 		private FileSystem researcherFileSystem;
 		
@@ -355,8 +345,7 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		}
 		
 		return SUCCESS;
-	}
-	
+	}	
 
 	/**
 	 * Get the parent folder id
@@ -404,15 +393,6 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	}
 
 	/**
-	 * Set the researcher
-	 * 
-	 * @param researcher researcher
-	 */
-	public void setResearcher(Researcher researcher) {
-		this.researcher = researcher;
-	}
-
-	/**
 	 * Get user file system service
 	 * 
 	 * @return
@@ -428,15 +408,6 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
-	}
-
-	/**
-	 * Get researcher service
-	 * 
-	 * @return
-	 */
-	public ResearcherService getResearcherService() {
-		return researcherService;
 	}
 
 	/**
@@ -457,14 +428,6 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		return parentFolderId;
 	}
 	
-	/**
-	 * Service for dealing with user information.
-	 * 
-	 * @return
-	 */
-	public UserService getUserService() {
-		return userService;
-	}
 
 	/**
 	 * Service for dealing with user information.
@@ -484,80 +447,117 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		this.parentFolderId = parentFolderId;
 	}
 
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
 
+	/**
+	 * Get the description
+	 * 
+	 * @return
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Set the description.
+	 * 
+	 * @param description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * Get the researcher folder path.
+	 * 
+	 * @return
+	 */
 	public Collection<ResearcherFolder> getResearcherFolderPath() {
 		return researcherFolderPath;
 	}
 
-	public void setResearcherFolderPath(
-			Collection<ResearcherFolder> researcherFolderPath) {
-		this.researcherFolderPath = researcherFolderPath;
-	}
-
+	/**
+	 * Get the personal folder path.
+	 * 
+	 * @return
+	 */
 	public Collection<PersonalFolder> getPersonalFolderPath() {
 		return personalFolderPath;
 	}
 
-	public void setPersonalFolderPath(Collection<PersonalFolder> personalFolderPath) {
-		this.personalFolderPath = personalFolderPath;
-	}
-
+	/**
+	 * Get the personal file system.
+	 * 
+	 * @return
+	 */
 	public Collection<FileSystem> getPersonalFileSystem() {
 		return personalFileSystem;
 	}
 
-	public void setPersonalFileSystem(Collection<FileSystem> personalFileSystem) {
-		this.personalFileSystem = personalFileSystem;
-	}
-
+	/**
+	 * Get the researcher file system versions.
+	 * 
+	 * @return
+	 */
 	public List<ResearcherFileSystemVersion> getResearcherFileSystemVersions() {
 		return researcherFileSystemVersions;
 	}
 
-	public void setResearcherFileSystemVersions(
-			List<ResearcherFileSystemVersion> researcherFileSystemVersions) {
-		this.researcherFileSystemVersions = researcherFileSystemVersions;
-	}
-
+	/**
+	 * Get the researcher file id.
+	 * 
+	 * @return
+	 */
 	public Long getResearcherFileId() {
 		return researcherFileId;
 	}
 
+	/**
+	 * Set the researcher file id.
+	 * 
+	 * @param researcherFileId
+	 */
 	public void setResearcherFileId(Long researcherFileId) {
 		this.researcherFileId = researcherFileId;
 	}
 
+	/**
+	 * Get the file version id.
+	 * 
+	 * @return
+	 */
 	public Long getFileVersionId() {
 		return fileVersionId;
 	}
 
+	/**
+	 * Set the file version id.
+	 * 
+	 * @param fileVersionId
+	 */
 	public void setFileVersionId(Long fileVersionId) {
 		this.fileVersionId = fileVersionId;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 */
 	public void injectUserId(Long userId) {
 		this.userId = userId;	
 	}
 
-	public ResearcherFileSystemService getResearcherFileSystemService() {
-		return researcherFileSystemService;
-	}
-
+	/**
+	 * Set the researcher file system service.
+	 * 
+	 * @param researcherFileSystemService
+	 */
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;

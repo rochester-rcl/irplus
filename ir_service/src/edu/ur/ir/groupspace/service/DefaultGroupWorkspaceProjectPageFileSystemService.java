@@ -56,43 +56,41 @@ public class DefaultGroupWorkspaceProjectPageFileSystemService implements GroupW
 	// eclipse generated id
 	private static final long serialVersionUID = -6275337346010797410L;
 
-	/** Data access for group workspace project page folder */
+	/* Data access for group workspace project page folder */
 	private GroupWorkspaceProjectPageFolderDAO groupWorkspaceProjectPageFolderDAO;
 
-
-
-	/** Data access for group workspace project page file */
+	/* Data access for group workspace project page file */
 	private GroupWorkspaceProjectPageFileDAO groupWorkspaceProjectPageFileDAO;
 	
-	/** Data access for group workspace project page publication*/
+	/* Data access for group workspace project page publication*/
 	private GroupWorkspaceProjectPagePublicationDAO groupWorkspaceProjectPagePublicationDAO;
 
-	/** Data access for group workspace project page institutional item */
+	/* Data access for group workspace project page institutional item */
 	private GroupWorkspaceProjectPageInstitutionalItemDAO groupWorkspaceProjectPageInstitutionalItemDAO;
 
-	/** Data access for group workspace project page link*/
+	/* Data access for group workspace project page link*/
 	private GroupWorkspaceProjectPageFileSystemLinkDAO groupWorkspaceProjectPageFileSystemLinkDAO;
 	
-	/** Service for dealing with the repository */
+	/* Service for dealing with the repository */
 	private RepositoryService repositoryService;
 	
-	/** Service for dealing with items. */
+	/* Service for dealing with items. */
 	private ItemService itemService;
 	
-	/** service for dealing with user file system */
+	/* service for dealing with user file system */
 	private UserFileSystemService userFileSystemService;
 	
-	/** Service for dealing with group workspace project page information */
+	/* Service for dealing with group workspace project page information */
 	private GroupWorkspaceProjectPageDAO groupWorkspaceProjectPageDAO;
 	
-	/** Service for dealing with group workspace file sytem */
+	/* Service for dealing with group workspace file sytem */
 	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 	
 	
-	/** service for dealing with researcher file system information */
+	/* service for dealing with researcher file system information */
 	private ResearcherFileSystemService researcherFileSystemService;
 	
-	/**  Logger for add files to item action */
+	/*  Logger for add files to item action */
 	private static final Logger log = Logger.getLogger(DefaultGroupWorkspaceProjectPageFileSystemService.class);
 
 	/**

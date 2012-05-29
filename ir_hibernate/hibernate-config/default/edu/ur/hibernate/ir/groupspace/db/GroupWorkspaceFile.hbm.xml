@@ -121,4 +121,12 @@
 		join fileVersion.irFile irFile
 		where irFile.id = :irFileId 
 	</query>
+	
+     <!-- named query for a getting a file in group with versioned file id-->
+	 <query name="getGroupWorkspaceFileWithVersionedFileId">
+		from GroupWorkspaceFile as file 
+		where file.groupWorkspace.id = :groupWorkspaceId 
+		and file.versionedFile.id = :versionedFileId
+	</query>
+	
 </hibernate-mapping>
