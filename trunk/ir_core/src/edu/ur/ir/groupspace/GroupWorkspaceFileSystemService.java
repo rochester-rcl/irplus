@@ -415,4 +415,14 @@ public interface GroupWorkspaceFileSystemService extends Serializable
 	 */
 	public List<GroupWorkspaceFile> getFilesByIds(Long groupWorkspaceId, List<Long> fileIds);
 	
+	/**
+	 * Get the files for group workspace id and versioned file id .
+	 * 
+	 * @param groupWorkspaceId
+	 * @param versionedFileId
+	 * 
+	 * @return the found file
+	 */
+	public GroupWorkspaceFile getGroupWorkspaceFileWithVersionedFile(Long groupWorkspaceId, Long versionedFileId);
+	
 }

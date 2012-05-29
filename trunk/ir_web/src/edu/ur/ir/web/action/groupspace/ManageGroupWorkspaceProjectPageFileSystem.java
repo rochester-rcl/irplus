@@ -26,6 +26,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFile;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFileSystemLink;
@@ -34,6 +35,7 @@ import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageInstitutionalItem;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPagePublication;
 import edu.ur.ir.groupspace.GroupWorkspaceProjectPageService;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.groupspace.GroupWorkspaceUser;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -60,10 +62,18 @@ public class ManageGroupWorkspaceProjectPageFileSystem extends ActionSupport imp
 	/* service to deal with group workspace project page information */
 	private GroupWorkspaceProjectPageService groupWorkspaceProjectPageService;
 	
+	/* group workspace project page file system service information */
 	private GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService;
 	
+	/* group workspace service information */
+	private GroupWorkspaceService groupWorkspaceService;
+	
 
-    /* A collection of folders and files for a user in a given location of */
+
+	/* Id of the group workspace */
+	private Long groupWorkspaceId;
+
+	/* A collection of folders and files for a user in a given location of */
     private List<FileSystem> fileSystem;
 
 	/* user service for dealing with user information */
@@ -129,6 +139,7 @@ public class ManageGroupWorkspaceProjectPageFileSystem extends ActionSupport imp
 				return "accessDenied";
 			}
 		}
+		
 		else
 		{
 			return "notFound";
@@ -281,23 +292,19 @@ public class ManageGroupWorkspaceProjectPageFileSystem extends ActionSupport imp
 		log.debug("Folder Path ::" + folderPath);
 		log.debug("Parent Folder Id ::" + parentFolderId);
 		
-		Collection<GroupWorkspaceProjectPageFolder> myResearcherFolders = groupWorkspaceProjectPageFileSystemService.getFolders(groupWorkspaceProjectPageId, parentFolderId);
+		Collection<GroupWorkspaceProjectPageFolder> folders = groupWorkspaceProjectPageFileSystemService.getFolders(groupWorkspaceProjectPageId, parentFolderId);
+		Collection<GroupWorkspaceProjectPageFile> files = groupWorkspaceProjectPageFileSystemService.getFiles(groupWorkspaceProjectPageId, parentFolderId);
+		Collection<GroupWorkspaceProjectPagePublication> publications = groupWorkspaceProjectPageFileSystemService.getPublications(groupWorkspaceProjectPageId, parentFolderId);
+		Collection<GroupWorkspaceProjectPageFileSystemLink> links = groupWorkspaceProjectPageFileSystemService.getLinks(groupWorkspaceProjectPageId, parentFolderId);
+		Collection<GroupWorkspaceProjectPageInstitutionalItem> institutionalItems = groupWorkspaceProjectPageFileSystemService.getInstitutionalItems(groupWorkspaceProjectPageId, parentFolderId);
 		
-		Collection<GroupWorkspaceProjectPageFile> myResearcherFiles = groupWorkspaceProjectPageFileSystemService.getFiles(groupWorkspaceProjectPageId, parentFolderId);
-		
-		Collection<GroupWorkspaceProjectPagePublication> myResearcherPublications = groupWorkspaceProjectPageFileSystemService.getPublications(groupWorkspaceProjectPageId, parentFolderId);
-
-		Collection<GroupWorkspaceProjectPageFileSystemLink> myResearcherLinks = groupWorkspaceProjectPageFileSystemService.getLinks(groupWorkspaceProjectPageId, parentFolderId);
-
-		Collection<GroupWorkspaceProjectPageInstitutionalItem> myResearcherInstitutionalItems = groupWorkspaceProjectPageFileSystemService.getInstitutionalItems(groupWorkspaceProjectPageId, parentFolderId);
-
 	    fileSystem = new LinkedList<FileSystem>();
 
-	    fileSystem.addAll(myResearcherFiles);
-	    fileSystem.addAll(myResearcherFolders);
-	    fileSystem.addAll(myResearcherPublications);
-	    fileSystem.addAll(myResearcherLinks);
-	    fileSystem.addAll(myResearcherInstitutionalItems);
+	    fileSystem.addAll(files);
+	    fileSystem.addAll(folders);
+	    fileSystem.addAll(publications);
+	    fileSystem.addAll(links);
+	    fileSystem.addAll(institutionalItems);
 
 	    FileSystemSortHelper sortHelper = new FileSystemSortHelper();
 	    if( sortElement.equals("type"))
@@ -347,6 +354,15 @@ public class ManageGroupWorkspaceProjectPageFileSystem extends ActionSupport imp
 		{
 		    groupWorkspaceProjectPage = groupWorkspaceProjectPageService.getById(groupWorkspaceProjectPageId, false);
 		    log.debug("Group workspace project page found value  = " + groupWorkspaceProjectPage);
+		}
+		else if( groupWorkspaceId != null )
+		{
+			GroupWorkspace groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
+			if( groupWorkspace != null )
+			{
+			  groupWorkspaceProjectPage = groupWorkspace.getGroupWorkspaceProjectPage();
+			  groupWorkspaceProjectPageId = groupWorkspaceProjectPage.getId();
+			}
 		}
 	}
 
@@ -568,5 +584,17 @@ public class ManageGroupWorkspaceProjectPageFileSystem extends ActionSupport imp
 
 	public void setItemIds(Long[] itemIds) {
 		this.itemIds = itemIds;
+	}
+	
+    public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
+
+	public void setGroupWorkspaceId(Long groupWorkspaceId) {
+		this.groupWorkspaceId = groupWorkspaceId;
+	}
+	
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
 	}
 }

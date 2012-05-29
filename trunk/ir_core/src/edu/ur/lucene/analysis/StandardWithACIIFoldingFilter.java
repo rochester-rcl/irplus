@@ -17,6 +17,7 @@
 package edu.ur.lucene.analysis;
 
 import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.icu.ICUFoldingFilter;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.util.IOUtils;
@@ -121,7 +122,7 @@ public class StandardWithACIIFoldingFilter extends StopwordAnalyzerBase {
 	    TokenStream tok = new StandardFilter(matchVersion, src);
 	    tok = new LowerCaseFilter(matchVersion, tok);
 	    tok = new StopFilter(matchVersion, tok, stopwords);
-	    tok =  new ASCIIFoldingFilter(tok);
+	    tok = new ICUFoldingFilter(tok);
 	    return new TokenStreamComponents(src, tok) {
 	      @Override
 	      protected boolean reset(final Reader reader) throws IOException {

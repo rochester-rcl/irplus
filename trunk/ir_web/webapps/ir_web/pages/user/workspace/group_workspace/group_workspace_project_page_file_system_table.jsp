@@ -47,7 +47,7 @@
 	    <button class="ur_button" id="showAddFile"
 	            onmouseover="this.className='ur_buttonover';"
  		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.edit.researcher.viewAddFiles();"><span class="pageAddBtnImg">&nbsp;</span>Add file</button>
+ 		        onclick="javascript:YAHOO.ur.groupworkspace.file_system.viewAddFiles();"><span class="pageAddBtnImg">&nbsp;</span>Add file</button>
 	                              
 	    <button class="ur_button" id="showAddPublication"
 	            onmouseover="this.className='ur_buttonover';"

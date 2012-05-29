@@ -516,6 +516,15 @@ YAHOO.ur.groupworkspace.file_system = {
         }
     },
 	
+	/*
+	 *  Allow the user to add files to the group work space project page
+	 */
+	viewAddFiles : function() {
+		
+		document.myFolders.action =  basePath + 'user/viewAddGroupWorkspceProjectPageFiles.action';
+		document.myFolders.submit();
+	},
+    
 	// initialize the page
 	// this is called once the dom has
 	// been created

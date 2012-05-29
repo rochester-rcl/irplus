@@ -188,6 +188,22 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 		q.setLong("irFileId", irFileId);
 		return(Long) q.uniqueResult();
 	}
+	
+	/**
+	 * Get the files for group workspace id and versioned file id .
+	 * 
+	 * @param groupWorkspaceId
+	 * @param versionedFileId
+	 * 
+	 * @return the found file
+	 */
+	public GroupWorkspaceFile getGroupWorkspaceFileWithVersionedFile(Long groupWorkspaceId, Long versionedFileId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceFileWithVersionedFileId");
+		q.setLong("groupWorkspaceId", groupWorkspaceId);
+		q.setLong("versionedFileId", versionedFileId);
+		return(GroupWorkspaceFile) q.uniqueResult();
+		
+	}
 
 
 }
