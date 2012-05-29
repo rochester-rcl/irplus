@@ -120,7 +120,6 @@ span.reportEditBtnImg, span.arrowBtnImg, span.addBtnImg
 	height: 16px;
 	width:16px;
 	align:bottom;
-	font-size: 15px;
 }
 
 span.addBtnImg {background-position: 0 -20px;}
@@ -159,7 +158,6 @@ span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFile
 	height: 16px;
 	width:16px;
 	align:bottom;
-	font-size: 15px;
 }
 
 span.whiteFileImg{background-position: 0 -840px;}
