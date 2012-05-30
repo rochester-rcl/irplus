@@ -498,7 +498,7 @@
         </action>
         
         <!--  ************************************ -->
-        <!--    Group workspace actions         -->
+        <!--    Group workspace project page actions         -->
         <!--  ************************************ -->
         
         <!-- Download group workspace project page image  -->
@@ -516,7 +516,15 @@
             <interceptor-ref name="editStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/group_workspace/next_group_workspace_project_page_picture_frag.jsp</result>
-        </action>  
+        </action> 
+        
+        <action name="groupWorkspaceProjectPageFileDownload" 
+                class="edu.ur.ir.web.action.groupspace.DownloadGroupWorkspaceProjectPageFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+            <result name="notFound">/pages/user/workspace/group_workspace/group_workspace_project_page_file_not_found.jsp</result>
+        </action> 
          
     </package>
          

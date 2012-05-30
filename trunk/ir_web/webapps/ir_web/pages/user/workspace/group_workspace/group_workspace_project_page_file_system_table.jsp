@@ -176,10 +176,10 @@
 			                 </c:if>
 			                 
 			                 <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceProjectPageFile'}">
-			                    <c:url var="researcherFileDownloadUrl" value="/user/researcherFileDownload.action">
-			                            <c:param name="researcherFileId" value="${fileSystemObject.id}"/>
+			                    <c:url var="fileDownloadUrl" value="/user/groupWorkspaceProjectPageFileDownload.action">
+			                            <c:param name="groupWorkspaceProjectPageFileId" value="${fileSystemObject.id}"/>
 			                        </c:url>
-		                        <a href="${researcherFileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a> [v${fileSystemObject.versionNumber}]<c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+		                        <a href="${fileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a> [v${fileSystemObject.versionNumber}]<c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 			                 </c:if>
 	
 							<c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceProjectPagePublication'}">

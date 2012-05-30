@@ -141,20 +141,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.request = request;
 	}
 
-	public WebIoUtils getWebIoUtils() {
-		return webIoUtils;
-	}
-
-
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}
-
-
-	public ResearcherFileSystemService getResearcherFileSystemService() {
-		return researcherFileSystemService;
-	}
-
 
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {

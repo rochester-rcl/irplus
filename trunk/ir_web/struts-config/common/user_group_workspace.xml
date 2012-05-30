@@ -494,3 +494,55 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/researcher/add_response.jsp</result>
         </action>  
+        
+        <!--  ************************************ -->
+        <!--  Group Workspace Project page File Actions  -->
+        <!--  ************************************ -->
+        
+        <!--  Allows to view the page to add, remove files to researcher page -->
+        <action name="viewAddGroupWorkspceProjectPageFiles"
+            class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFile">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/group_workspace/add_files_to_group_workspace_project_page.jsp</result>
+        </action>        
+        
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getGroupWorkspaceProjectPageFilesFolders"
+                method="getGroupWorkspaceFolders"
+                class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFile">
+                <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/add_files_project_page_group_workspace_file_system_table.jsp</result>
+        </action>
+        
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getGroupWorkspaceProjectPageFileSystem"
+                method="getGroupWorkspaceProjectPageFolders"
+                class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFile">
+                <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/add_files_project_page_file_system_table.jsp</result>
+        </action>
+
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="addGroupWorkspaceProjectPageFile"
+                method="addFile"
+                class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFile">
+                <interceptor-ref name="editStack"/>
+                <result name="success" type="no-op"/>
+        </action>        
+        
+        <!--   
+        <action name="groupWorkspaceProjectPageFileDownload" 
+            class="edu.ur.ir.web.action.groupspace.DownloadResearcherFile">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+            <result name="notFound">/pages/user/workspace/group_workspace/researcher_file_not_found.jsp</result>
+        </action> 
+        -->
+        
+        <!--  Change file version -->
+        <action name="changeGroupWorkspaceProjectPageFileVersion"
+                method="changeFileVersion"
+                class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceProjectPageFile">
+                <interceptor-ref name="editStack"/>
+             <result name="success" type="no-op"/>
+        </action>        
