@@ -83,13 +83,22 @@
                 <c:param name="institutionalItemId" value="${institutionalItemId}"/>
                 <c:param name="showItemFileTab" value="true"/> 
             </c:url>
-            <a href="${viewItem}">Done</a>
+            <input type="button" 
+                class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+                onclick="javascript:window.location='${viewItem}'" value="Done">
+           
             <br/>
             <br/>
             <div id="all_user_groups">
                 <c:import url="all_item_file_user_groups_frag.jsp"></c:import>
             </div>
-
+            <input type="button" 
+                class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+                onclick="javascript:window.location='${viewItem}'" value="Done">
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
         
