@@ -394,6 +394,16 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
     public boolean getPagePublic() {
 		return pagePublic;
 	}
+    
+    /**
+     * Determine if this page is public
+     * 
+     * @return
+     */
+    public boolean isPublic()
+    {
+    	return pagePublic;
+    }
 
 	/**
 	 * If Set to true if the page is public.
