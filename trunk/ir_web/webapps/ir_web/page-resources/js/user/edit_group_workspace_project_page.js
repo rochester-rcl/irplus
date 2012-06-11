@@ -198,12 +198,28 @@ YAHOO.ur.edit.group_workspace_project_page =
 		 
 		},
 	    
+		createFolderTree : function() 
+		{
+				//create the TreeView instance:
+				var tree = new YAHOO.widget.TreeView("treeDiv");
+				// this stops the tree from hiding the URL - this is a problem with 
+				// YUI 2.7.X - see http://yuilibrary.com/projects/yui2/ticket/2527720
+				tree.subscribe('clickEvent',function () {return false;});
+				
+				//get a reusable reference to the root node:
+				var root = tree.getRoot();
+				tree.render(); 
+				tree.expandAll();
+		
+		},
+		
 		
 		// initialize the page
 		// this is called once the dom has
 		// been created
 		init : function() 
 		{
+			YAHOO.ur.edit.group_workspace_project_page.createFolderTree();
 	    	YAHOO.ur.edit.group_workspace_project_page.getImage(0, 'INIT');
 	    	YAHOO.ur.edit.group_workspace_project_page.createConfirmPublicDialog();
 		    YAHOO.ur.edit.group_workspace_project_page.createConfirmPrivateDialog();
