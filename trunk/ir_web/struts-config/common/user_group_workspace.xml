@@ -546,3 +546,33 @@
                 <interceptor-ref name="editStack"/>
              <result name="success" type="no-op"/>
         </action>        
+        
+       <!--  ************************************ 			   -->
+       <!--  Group workspace project page move actions        -->
+       <!--  ************************************              -->   
+        <action name="viewMoveGroupWorkspaceProjectPageLocations"
+            class="edu.ur.ir.web.action.groupspace.MoveGroupWorkspaceProjectPageInformation"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/project_page_move.jsp</result>
+        </action>
+        
+         <action name="getMoveGroupWorkspaceProjectPageFolderDestinations"
+            class="edu.ur.ir.web.action.groupspace.MoveGroupWorkspaceProjectPageInformation"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace/project_page_move.jsp</result>
+        </action>
+        
+        <action name="moveGroupWorkspaceProjectPageInformation"
+            class="edu.ur.ir.web.action.groupspace.MoveGroupWorkspaceProjectPageInformation"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result type="redirectAction" name="success">
+        	      <param name="actionName">editGroupWorkspaceProjectPageFileSystem.action</param>
+        	      <param name="namespace">/user</param>
+        	      <param name="groupWorkspaceProjectPageId">${groupWorkspaceProjectPageId}</param>
+        	      <param name="parentFolderId">${destination.id}</param>
+        	</result>
+            <result name="error">/pages/user/workspace/group_workspace/project_page_move.jsp</result>
+        </action>
