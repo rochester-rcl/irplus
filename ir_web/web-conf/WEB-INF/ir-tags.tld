@@ -106,6 +106,17 @@
 	</tag>
 	
 	<tag>
+		<name>drawProjectPageFolderSystem</name>
+		<tag-class>edu.ur.tag.repository.GroupWorkspaceProjectPageFileSystemTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>groupWorkspaceProjectPage</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
+	
+	<tag>
 		<name>drawResearcherXmlFolder</name>
 		<tag-class>edu.ur.tag.repository.ResearcherFolderXmlTag</tag-class>
 		<body-content>scriptless</body-content>

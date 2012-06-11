@@ -1,18 +1,3 @@
-/**  
-   Copyright 2008-2010 University of Rochester
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/  
 package edu.ur.tag.repository;
 
 import java.io.IOException;
@@ -25,30 +10,30 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import edu.ur.ir.researcher.Researcher;
-import edu.ur.ir.researcher.ResearcherFile;
-import edu.ur.ir.researcher.ResearcherFolder;
-import edu.ur.ir.researcher.ResearcherInstitutionalItem;
-import edu.ur.ir.researcher.ResearcherLink;
-import edu.ur.ir.researcher.ResearcherPublication;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPage;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFile;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageInstitutionalItem;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFileSystemLink;
+import edu.ur.ir.groupspace.GroupWorkspaceProjectPagePublication;
 import edu.ur.simple.type.AscendingNameComparator;
 import edu.ur.tag.TagUtil;
 
 /**
- * Tag to output researcher folder information
+ * Tag to output group workspace project page folder information.
  * 
  * @author Nathan Sarr
  *
  */
-public class ResearcherFolderTag extends SimpleTagSupport{
+public class GroupWorkspaceProjectPageFileSystemTag extends SimpleTagSupport{
 	
-	/**  researcher to draw the tree for*/
-	private Researcher researcher;
+	/**  Group workspace project page to draw the tree for*/
+	private GroupWorkspaceProjectPage groupWorkspaceProjectPage;
 	
 	public void doTag() throws JspException
 	{
 		JspWriter out = this.getJspContext().getOut();
-		if( researcher == null)	
+		if( groupWorkspaceProjectPage == null)	
 	    {
 			// do nothing
 	    }
@@ -56,7 +41,7 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 		{
 			try 
 			{
-			    writeResearcherFolderTree(out);
+			    writeFolderTree(out);
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
@@ -64,25 +49,25 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 		}
 	}
 	
-	private void writeResearcherFolderTree(JspWriter out) throws IOException
+	private void writeFolderTree(JspWriter out) throws IOException
 	{
-		List <ResearcherFolder> folders = new LinkedList<ResearcherFolder> (researcher.getRootFolders());
+		List <GroupWorkspaceProjectPageFolder> folders = new LinkedList<GroupWorkspaceProjectPageFolder> (groupWorkspaceProjectPage.getRootFolders());
 		Collections.sort( folders , new AscendingNameComparator());
 		
-		List <ResearcherFile> files = new LinkedList<ResearcherFile> (researcher.getRootFiles());
+		List <GroupWorkspaceProjectPageFile> files = new LinkedList<GroupWorkspaceProjectPageFile> (groupWorkspaceProjectPage.getRootFiles());
 		Collections.sort( files , new AscendingNameComparator());
 		
-		List <ResearcherPublication> publications = new LinkedList<ResearcherPublication> (researcher.getRootPublications());
+		List <GroupWorkspaceProjectPagePublication> publications = new LinkedList<GroupWorkspaceProjectPagePublication> (groupWorkspaceProjectPage.getRootPublications());
 		Collections.sort( publications , new AscendingNameComparator());
 		
-		List <ResearcherInstitutionalItem> items = new LinkedList<ResearcherInstitutionalItem> (researcher.getRootInstitutionalItems());
+		List <GroupWorkspaceProjectPageInstitutionalItem> items = new LinkedList<GroupWorkspaceProjectPageInstitutionalItem> (groupWorkspaceProjectPage.getRootInstitutionalItems());
 		Collections.sort( items , new AscendingNameComparator());
 				
-		List <ResearcherLink> links = new LinkedList<ResearcherLink> (researcher.getRootLinks());
+		List <GroupWorkspaceProjectPageFileSystemLink> links = new LinkedList<GroupWorkspaceProjectPageFileSystemLink> (groupWorkspaceProjectPage.getRootLinks());
 		Collections.sort( links , new AscendingNameComparator());
 				
 		out.write("<ul>");
-		for(ResearcherFolder folder : folders)
+		for(GroupWorkspaceProjectPageFolder folder : folders)
 		{
 		    writeFolder(folder, out);
 		}
@@ -95,22 +80,22 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 		
 	}
 	
-	private void writeFolder(ResearcherFolder parent, JspWriter out) throws IOException
+	private void writeFolder(GroupWorkspaceProjectPageFolder parent, JspWriter out) throws IOException
 	{
-		List <ResearcherFolder> folders = new LinkedList<ResearcherFolder> (parent.getChildren());
+		List <GroupWorkspaceProjectPageFolder> folders = new LinkedList<GroupWorkspaceProjectPageFolder> (parent.getChildren());
 		Collections.sort( folders , new AscendingNameComparator());
 		
-		List <ResearcherFile> files = new LinkedList<ResearcherFile> (parent.getFiles());
+		List <GroupWorkspaceProjectPageFile> files = new LinkedList<GroupWorkspaceProjectPageFile> (parent.getFiles());
 		Collections.sort( files , new AscendingNameComparator());
 		
-		List <ResearcherPublication> publications = new LinkedList<ResearcherPublication> (parent.getPublications());
+		List <GroupWorkspaceProjectPagePublication> publications = new LinkedList<GroupWorkspaceProjectPagePublication> (parent.getPublications());
 		Collections.sort( publications , new AscendingNameComparator());
 		
-		List <ResearcherInstitutionalItem> items = new LinkedList<ResearcherInstitutionalItem> (parent.getInstitutionalItems());
+		List <GroupWorkspaceProjectPageInstitutionalItem> items = new LinkedList<GroupWorkspaceProjectPageInstitutionalItem> (parent.getInstitutionalItems());
 		Collections.sort( items , new AscendingNameComparator());
 		
 		
-		List <ResearcherLink> links = new LinkedList<ResearcherLink> (parent.getLinks());
+		List <GroupWorkspaceProjectPageFileSystemLink> links = new LinkedList<GroupWorkspaceProjectPageFileSystemLink> (parent.getLinks());
 		Collections.sort( links , new AscendingNameComparator());
 		
 		out.write("<li>" + parent.getName());
@@ -119,7 +104,7 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 			out.write(" - " + parent.getDescription());
 		}
 		out.write("<ul>");
-		for( ResearcherFolder folder : folders)
+		for( GroupWorkspaceProjectPageFolder folder : folders)
 		{
 			
 			writeFolder(folder, out);		
@@ -136,11 +121,11 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 			
 	}
 	
-	private void writeFiles(List<ResearcherFile> files, JspWriter out) throws IOException
+	private void writeFiles(List<GroupWorkspaceProjectPageFile> files, JspWriter out) throws IOException
 	{
 		
 		String basePath = TagUtil.getPageContextPath((PageContext)getJspContext()) + "/";
-		for( ResearcherFile f : files)
+		for( GroupWorkspaceProjectPageFile f : files)
 		{
 			
 			out.write("<li><span>");
@@ -188,7 +173,7 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 				}
 			
 			}
-			out.write("<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + f.getId() +"\">");
+			out.write("<a href=\"" + basePath + "groupWorkspaceProjectPageFileDownload.action?groupWorkspaceProjectPageFileId=" + f.getId() +"\">");
 			out.write(f.getNameWithExtension());
 			out.write("</a>");		
 			if( f.getDescription() != null && !f.getDescription().trim().equals(""))
@@ -200,14 +185,14 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 		}
 	}
 	
-	private void writePublications(List<ResearcherPublication> publicaitons, JspWriter out) throws IOException
+	private void writePublications(List<GroupWorkspaceProjectPagePublication> publicaitons, JspWriter out) throws IOException
 	{
 		String basePath = TagUtil.getPageContextPath((PageContext)getJspContext()) + "/";
-		for( ResearcherPublication p : publicaitons)
+		for( GroupWorkspaceProjectPagePublication p : publicaitons)
 		{
 			out.write("<li><span>");
 			out.write("<span class=\"scriptImg\">&nbsp;</span>");
-			out.write("<a href=\"" + basePath + "researcherPublicationView.action?researcherPublicationId=" + p.getId() +"\">");
+			out.write("<a href=\"" + basePath + "groupWorkspaceProjectPagePublicationView.action?groupWorkspaceProjectPagePublicationId=" + p.getId() +"\">");
 			out.write(p.getName());
 			out.write("</a>");		
 			
@@ -219,10 +204,10 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 		}
 	}
 	
-	private void writeItems(List<ResearcherInstitutionalItem> items, JspWriter out) throws IOException
+	private void writeItems(List<GroupWorkspaceProjectPageInstitutionalItem> items, JspWriter out) throws IOException
 	{
 		String basePath = TagUtil.getPageContextPath((PageContext)getJspContext()) + "/";
-		for( ResearcherInstitutionalItem i : items)
+		for( GroupWorkspaceProjectPageInstitutionalItem i : items)
 		{
 			out.write("<li><span>");
 			out.write("<span class=\"packageBtnImg\">&nbsp;</span>");
@@ -237,10 +222,10 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 		}
 	}
 	
-	private void writeLinks(List<ResearcherLink> links, JspWriter out) throws IOException
+	private void writeLinks(List<GroupWorkspaceProjectPageFileSystemLink> links, JspWriter out) throws IOException
 	{
 		String basePath = TagUtil.getPageContextPath((PageContext)getJspContext()) + "/";
-		for( ResearcherLink l : links)
+		for( GroupWorkspaceProjectPageFileSystemLink l : links)
 		{
 			out.write("<li><span>");
 			out.write("<img  alt=\"link\" src=\"" + basePath + "page-resources/images/all-images/link.gif\"/>");
@@ -256,8 +241,9 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 	}
 	
 
-	public void setResearcher(Researcher researcher) {
-		this.researcher = researcher;
+	public void setGroupWorkspaceProjectPage(GroupWorkspaceProjectPage groupWorkspaceProjectPage) {
+		this.groupWorkspaceProjectPage = groupWorkspaceProjectPage;
 	}
+
 
 }

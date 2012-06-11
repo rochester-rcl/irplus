@@ -46,6 +46,7 @@
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
  	<ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
+    <ur:js src="page-resources/yui/treeview/treeview-min.js"/> 
         
  	<ur:js src="page-resources/js/util/base_path.jsp"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
@@ -173,8 +174,7 @@
 	                        <p><a href="${editGroupWorkspaceProjectPageFileSystemUrl}">Edit Research/Publications</a></p>
 	                    </div>
 	                    <div class="contentBoxContent">
-                            <p>
-                            </p>
+                            <div id="treeDiv"><ir:drawProjectPageFolderSystem groupWorkspaceProjectPage="${groupWorkspaceProjectPage}"/></div>
                         </div>
                     </div> 
 	             </div>
