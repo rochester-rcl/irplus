@@ -35,9 +35,6 @@ var updateLinkAction = basePath + 'user/updateGroupWorkspaceProjectPageFileSyste
 var newLinkAction = basePath + 'user/addGroupWorkspaceProjectPageFileSystemLink.action';
 var getLinkAction = basePath + 'user/getGroupWorkspaceProjectPageFileSystemLink.action';
 
-// object to hold the specified folder data.
-//var myResearcherFolderTable = new YAHOO.ur.table.Table('myFolders', 'newResearcherFolders');
-
 
 /**
  * Folder namespace
@@ -497,7 +494,7 @@ YAHOO.ur.groupworkspace.file_system = {
 	/**
      * Allow researcher information to be moved
      */
-    moveResearcherData : function()
+    moveData : function()
     {
         if (!urUtil.checkForNoSelections(document.myFolders.folderIds) &&
 	        !urUtil.checkForNoSelections(document.myFolders.fileIds) &&
@@ -510,7 +507,7 @@ YAHOO.ur.groupworkspace.file_system = {
 	    } 
 	    else
 	    {
-            var viewMoveAction = basePath + 'user/viewMoveResearcherLocations.action';
+            var viewMoveAction = basePath + 'user/viewMoveGroupWorkspaceProjectPageLocations.action';
             document.myFolders.action = viewMoveAction;
             document.myFolders.submit();
         }

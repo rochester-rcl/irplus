@@ -109,8 +109,6 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 	 */
 	private String path;
 	
-
-	
 	/**
 	 * Default Constructor 
 	 */
@@ -343,6 +341,25 @@ DescriptionAware, NameAware, Comparable<GroupWorkspaceProjectPageFolder>, FileSy
 		for(GroupWorkspaceProjectPageFile file : files)
 		{
 			if( file.getIrFile().equals(f ))
+			{
+				return file;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Get the groupWorkspaceProjectPage file based on the ir file.
+	 * 
+	 * @param fileId - id of the ir file.
+	 * @return - the found groupWorkspaceProjectPage file otherwise nul
+	 */
+	public GroupWorkspaceProjectPageFile getFileByIrFileId(Long irFileId)
+	{
+		for(GroupWorkspaceProjectPageFile file : files)
+		{
+			if( file.getIrFile().getId().equals(irFileId))
 			{
 				return file;
 			}

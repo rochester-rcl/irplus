@@ -435,7 +435,7 @@ public interface GroupWorkspaceProjectPageFileSystemService extends Serializable
 	 * @throws DuplicateNameException 
 	 * 
 	 */
-	public List<FileSystem> moveResearcherFileSystemInformation(GroupWorkspaceProjectPage projectPage,
+	public List<FileSystem> moveFileSystemInformation(GroupWorkspaceProjectPage projectPage,
 			List<GroupWorkspaceProjectPageFolder> foldersToMove, 
 			List<GroupWorkspaceProjectPageFile> filesToMove, 
 			List<GroupWorkspaceProjectPageFileSystemLink> linksToMove,

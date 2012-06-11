@@ -68,9 +68,9 @@
             <!--  this is the body of the page -->
             <div id="bd">
                 <c:url value="/user/editGroupWorkspaceProjectPage.action" var="editProjectPageUrl">
-				          <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPage.id}"/>
-				      </c:url>
-                      <h3> <a href="${editProjectPageUrl}">${groupWorkspaceProjectPage.groupWorkspace.name} </a> &gt; Edit File System </h3>
+				     <c:param name="groupWorkspaceProjectPageId" value="${groupWorkspaceProjectPageId}"/>
+				</c:url>
+                <h3> <a href="${editProjectPageUrl}">${groupWorkspaceProjectPage.groupWorkspace.name} </a> &gt; Edit File System </h3>
                
                 <div id="fileSystemTable">
                     <c:import url="group_workspace_project_page_file_system_table.jsp"/>

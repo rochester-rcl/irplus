@@ -762,6 +762,25 @@ public class GroupWorkspaceProjectPage extends BasePersistent {
 	}
 	
 	/**
+	 * Get the groupWorkspaceProjectPage file based on the ir file.
+	 * 
+	 * @param fileId - id of the ir file.
+	 * @return - the found groupWorkspaceProjectPage file otherwise nul
+	 */
+	public GroupWorkspaceProjectPageFile getFileByIrFileId(Long irFileId)
+	{
+		for(GroupWorkspaceProjectPageFile file : rootFiles)
+		{
+			if( file.getIrFile().getId().equals(irFileId))
+			{
+				return file;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Get a researcher publication by name.
 	 * 
 	 * @param name

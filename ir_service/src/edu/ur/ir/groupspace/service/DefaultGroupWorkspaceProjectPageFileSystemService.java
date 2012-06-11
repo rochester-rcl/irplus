@@ -747,7 +747,7 @@ public class DefaultGroupWorkspaceProjectPageFileSystemService implements GroupW
 		    for( GroupWorkspaceProjectPageFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to destination " + destination);
-		    	if( !destination.getFiles().contains(file))
+		    	if( destination.getFileByIrFileId(file.getIrFile().getId()) == null)
 		    	{
 		    		destination.add(file);
 		    	}
@@ -823,7 +823,7 @@ public class DefaultGroupWorkspaceProjectPageFileSystemService implements GroupW
 	 * @throws DuplicateNameException 
 	 * 
 	 */
-	public List<FileSystem> moveResearcherFileSystemInformation(GroupWorkspaceProjectPage projectPage,
+	public List<FileSystem> moveFileSystemInformation(GroupWorkspaceProjectPage projectPage,
 			List<GroupWorkspaceProjectPageFolder> foldersToMove, 
 			List<GroupWorkspaceProjectPageFile> filesToMove, 
 			List<GroupWorkspaceProjectPageFileSystemLink> linksToMove,
@@ -852,7 +852,7 @@ public class DefaultGroupWorkspaceProjectPageFileSystemService implements GroupW
 		    for( GroupWorkspaceProjectPageFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to researcher " + projectPage);
-		    	if( !projectPage.getRootFiles().contains(file))
+		    	if( projectPage.getFileByIrFileId(file.getIrFile().getId()) == null)
 		    	{
 			        projectPage.addRootFile(file);
 		    	}

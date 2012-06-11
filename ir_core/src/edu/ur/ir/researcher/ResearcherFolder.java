@@ -357,6 +357,25 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	}
 	
 	/**
+	 * Get the researcher file by ir file id.
+	 * 
+	 * @param irFileId - id of the ir file
+	 * @return the found researcher file or null 
+	 */
+	public ResearcherFile getByIrFileId(Long irFileId)
+	{
+		for(ResearcherFile file : files)
+		{
+			if( file.getIrFile().getId().equals(irFileId ))
+			{
+				return file;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Add a file to this folder.  this creates a 
 	 * new researcher file record.
 	 * 
