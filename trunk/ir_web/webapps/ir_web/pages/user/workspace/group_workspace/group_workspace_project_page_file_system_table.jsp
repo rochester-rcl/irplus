@@ -41,28 +41,22 @@
  		        onmouseover="this.className='ur_buttonover';"
  		        onmouseout="this.className='ur_button';"
  	 		    onclick="YAHOO.ur.groupworkspace.file_system.newLinkDialog.showLink();"
- 		        id="showLink"><img  alt="" class="buttonImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link_add.gif"/>
- 		       <fmt:message key="new_link"/></button> 
+ 		        id="showLink"><img class="buttonImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link_add.gif"/><fmt:message key="new_link"/></button> 
 	                              
 	    <button class="ur_button" id="showAddFile"
 	            onmouseover="this.className='ur_buttonover';"
  		        onmouseout="this.className='ur_button';"
  		        onclick="javascript:YAHOO.ur.groupworkspace.file_system.viewAddFiles();"><span class="pageAddBtnImg">&nbsp;</span>Add file</button>
 	                              
-	    <button class="ur_button" id="showAddPublication"
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="scriptImg">&nbsp;</span>Add Publication</button>
-	                               
 	   <button class="ur_button"
 	           onmouseover="this.className='ur_buttonover';"
  		       onmouseout="this.className='ur_button';"
- 		       onclick="javascript:YAHOO.ur.groupworkspace.file_system.moveResearcherData()"> <span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
+ 		       onclick="javascript:YAHOO.ur.groupworkspace.file_system.moveData()"> <span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
 	                              
 	    <button class="ur_button" id="showDeleteFolder"
 	            onmouseover="this.className='ur_buttonover';"
  		        onmouseout="this.className='ur_button';"
- 		        onclick="YAHOO.ur.groupworkspace.file_system.deleteFolder.showDialog();"><span class="deleteBtnImg">&nbsp;</span>Remove</button>
+ 		        onclick="javascript:YAHOO.ur.groupworkspace.file_system.deleteFolder.showDialog();"><span class="deleteBtnImg">&nbsp;</span>Remove</button>
    
 	</div>
     <br/>

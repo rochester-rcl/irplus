@@ -657,7 +657,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to destination " + destination);
-		    	if( !destination.getFiles().contains(file))
+		    	if( destination.getByIrFileId(file.getIrFile().getId()) == null)
 		    	{
 		    		destination.addResearcherFile(file);
 		    	}
@@ -762,7 +762,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to researcher " + researcher);
-		    	if( !researcher.getRootFiles().contains(file))
+		    	if( researcher.getByIrFileId(file.getIrFile().getId()) == null)
 		    	{
 			        researcher.addRootFile(file);
 		    	}

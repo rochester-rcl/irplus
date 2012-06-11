@@ -478,6 +478,25 @@ public class Researcher extends BasePersistent{
 	}
 	
 	/**
+	 * Get the researcher file by ir file id.
+	 * 
+	 * @param irFileId - id of the ir file
+	 * @return the found researcher file or null 
+	 */
+	public ResearcherFile getByIrFileId(Long irFileId)
+	{
+		for(ResearcherFile file : rootFiles)
+		{
+			if( file.getIrFile().getId().equals(irFileId ))
+			{
+				return file;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Creates the root link if it does not exist.  The 
 	 * name should not be null or the name of an existing root
 	 * researcher link for this researcher.
