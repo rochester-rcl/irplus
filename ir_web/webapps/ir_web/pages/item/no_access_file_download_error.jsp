@@ -29,6 +29,7 @@
 
 <html>
     <head>
+        <meta name="robots" content="noindex">
         <title>Viewing Institutional Publication: ${institutionalItemVersion.item.name} </title>
         <c:import url="/inc/meta-frag.jsp"/>
                 

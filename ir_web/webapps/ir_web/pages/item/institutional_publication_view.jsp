@@ -29,6 +29,9 @@
 
 <html>
     <head>
+        <c:if test="${!showPublication}">
+            <meta name="robots" content="noindex">
+        </c:if>
         <title>${institutionalItemVersion.item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
