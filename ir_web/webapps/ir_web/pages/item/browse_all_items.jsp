@@ -94,6 +94,9 @@
 
 	            var tab3 = myTabs.getTab(3);
 	            tab3.addListener('click', handleBrowseSponsorsClick);
+
+	            var search = document.getElementById('search');
+	            search.focus();
           }
           
           // initialize the code once the dom is ready
@@ -186,7 +189,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_all_items_pager.jsp"/>
-						
+						 <br/>
 						
 
 
@@ -328,7 +331,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                  <ir:itemTransformUrl itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url" systemCode="PRIMARY_THUMBNAIL" download="true"/>
 						                                  <c:if test="${url != null}">
-						                                       <img class="basic_thumbnail" src="${url}" />
+						                                       <img  src="${url}" />
 						                                  </c:if>
 						                                     
 			                                         </c:if>	
@@ -382,7 +385,7 @@
 	               	    <br/>
 	               	     <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
 						<form method="GET" action="${searchRepositoryItems}">
-						    Search: <input type="text" name="query" size="50"/><br/><br/>
+						    Search: <input type="text" name="query" size="50" id="search" /><br/><br/>
 						    <button type="submit" class="ur_button" 
 		                               onmouseover="this.className='ur_buttonover';"
 	 		                           onmouseout="this.className='ur_button';">Search</button>
@@ -428,7 +431,7 @@
 						                          <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                          <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                      </c:url>
-						                      <a href="${authorFilter}">${author.facetName} (${author.hits}) </a><br/>
+						                      <div class="hanging_indent"><a href="${authorFilter}">${author.facetName} (${author.hits})</a></div>
 						                  </c:if>
 						              </c:forEach>
 						          </ir:facet>
@@ -449,7 +452,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <a href="${collectionFilter}">${collection.facetName} (${collection.hits})</a> <br/>
+						                    <div class="hanging_indent"><a href="${collectionFilter}">${collection.facetName} (${collection.hits})</a></div> 
 						                 </c:if>
 						             </c:forEach>
 						        </ir:facet>
@@ -470,7 +473,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <a href="${formatFilter}"> ${format.facetName} (${format.hits})</a><br/>
+						                    <div class="hanging_indent"><a href="${formatFilter}"> ${format.facetName} (${format.hits})</a></div>
 						                  </c:if>
 						              </c:forEach>
 						          </ir:facet>
@@ -491,7 +494,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <a href="${subjectFilter}">${subject.facetName} (${subject.hits})</a><br/>
+						                     <div class="hanging_indent"><a href="${subjectFilter}">${subject.facetName} (${subject.hits})</a></div>
 						                 </c:if>
 						             </c:forEach>
 						         </ir:facet>
@@ -512,7 +515,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <a href="${languageFilter}">${language.facetName} (${language.hits})</a> <br/>
+						                     <div class="hanging_indent"><a href="${languageFilter}">${language.facetName} (${language.hits})</a></div>
 						                 </c:if>
 						             </c:forEach>
 						        </ir:facet>
@@ -548,7 +551,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                               <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                        <c:if test="${url != null}">
-                                                         <img class="basic_thumbnail" src="${url}"/>
+                                                         <img  src="${url}"/>
                                                        </c:if> 
 			                                         </c:if>	
 						                        </urstb:td>
@@ -604,7 +607,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_all_person_names_pager.jsp"/>
-						
+						<br/>
 						
 						<div class="dataTable">
 							             
@@ -698,7 +701,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_all_sponsor_names_pager.jsp"/>
-						
+						<br/>
 						
 						<div class="dataTable">
 							             
