@@ -89,7 +89,7 @@ a:active
 
 #header_logo
 {
-	width : 50%;
+	width : 70%;
 	align: left;
 	float: left;
 	padding-top: .5em;
@@ -98,7 +98,7 @@ a:active
 
 #header_links
 {
-	width : 50%;
+	width : 30%;
 	align: right;
 	float: right;
 	text-align: right;
@@ -375,6 +375,12 @@ facet and searching
 	float: center;
 	background-color: #D4D4D4;
     text-align: center;
+}
+
+.hanging_indent {
+    text-indent: -25px;
+    padding-left: 25px;
+    padding-bottom: 6px;
 }
 
 

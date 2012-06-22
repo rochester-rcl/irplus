@@ -352,7 +352,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                 <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                          <c:if test="${url != null}">
-                                                             <img class="basic_thumbnail" src="${url}"/>
+                                                             <img src="${url}"/>
                                                          </c:if>
 				                                     </c:if>	
 						                        </urstb:td>
@@ -566,7 +566,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                  <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                           <c:if test="${url != null}">
-                                                             <img class="basic_thumbnail" src="${url}"/></a>
+                                                             <img src="${url}"/>
                                                          </c:if>
 			                                         </c:if>	
 						                        </urstb:td>

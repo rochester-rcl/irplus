@@ -1,3 +1,19 @@
+IR+ 2.1 to 2.1.1
+==========================
+
+- Added no-index meta-tags to help stop google from indexing restricted content
+
+- Fixes for tomcat 7 JSTL tag issues
+
+- back-ported (from 3.0) hanging indent on search for items faceting (browse-items.jsp)
+
+- back-ported (from 3.0) paging fixes tomcat 7.0 for browse-items.jsp
+
+- back-ported image fix on browse-items.jsp - images are no longer streatched to fit the 
+  given area
+  
+- back-ported updated to struts 2.3.4
+
 IR+ 2.0.8 to 2.1
 ==========================
 - Added MARC import/export

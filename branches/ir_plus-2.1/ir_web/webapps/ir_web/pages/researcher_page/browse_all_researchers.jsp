@@ -177,7 +177,7 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                 <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                           <img class="basic_thumbnail" src="${url}"/>
+                                                           <img src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.isPublic}">
@@ -338,7 +338,7 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                  <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                            <img class="basic_thumbnail" src="${url}"/>
+                                                            <img src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${researcher.primaryPicture == null || !researcher.isPublic}">
