@@ -36,7 +36,7 @@
                         <c:param name="newsItemId" value="${newsItem.id}"/>
                         <c:param name="irFileId" value="${newsItem.primaryPicture.id}"/>
                      </c:url>
-                     <img class="basic_thumbnail" src="${url}"/>
+                     <img src="${url}"/>
                  </c:if>
             </td>
             <td>
