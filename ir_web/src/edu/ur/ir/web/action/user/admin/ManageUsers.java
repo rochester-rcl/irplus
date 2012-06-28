@@ -148,7 +148,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	private String emailMessage;
 
 	/** Id of the affiliation selected */
-	private Long affiliationId;
+	private Long affiliationId = -1l;
 	
 	/** Affiliation service class */
 	private AffiliationService affiliationService;
@@ -274,7 +274,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		String firstName = irUser.getFirstName();
 		String lastName = irUser.getLastName();
 					
-		defaultEmail.setVerified(true);
+		defaultEmail.setVerifiedTrue();
 		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), defaultEmail);
 
 		irUser.setAccountExpired(accountExpired);
@@ -485,13 +485,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
  			    deleted = false;
 				log.error("user has published", e);
 			}
- 			
- 			
- 		
-			
-		}
-
-		
+ 		}
 		return "deleted";
 	}
  
@@ -574,14 +568,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return SUCCESS;
 	}
 
-	/**
-	 * Get the user type service.
-	 * 
-	 * @return
-	 */
-	public UserService getUserService() {
-		return userService;
-	}
+
 
 	/**
 	 * Set the user type service.

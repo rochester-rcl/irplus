@@ -73,8 +73,7 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 			UserEmail email = userService.getUserEmailByToken(token);
 			
 			if ((email != null) && (email.getIrUser().equals(user))) {
-				email.setVerified(true);
-				email.setToken(null);
+				email.setVerifiedTrue();
 				userService.makeUserPersistent(user);
 				
 				try {
@@ -106,26 +105,56 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 		return SUCCESS;
 	}
 
+	/**
+	 * Set the token.
+	 * 
+	 * @param token
+	 */
 	public void setToken(String token) {
 		this.token = token;
 	}
 
+	/**
+	 * Inject the user id.
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
+	/**
+	 * Set teh invite suer service.
+	 * 
+	 * @param inviteUserService
+	 */
 	public void setInviteUserService(InviteUserService inviteUserService) {
 		this.inviteUserService = inviteUserService;
 	}
 
+	/**
+	 * Get the repository service.
+	 * 
+	 * @return
+	 */
 	public RepositoryService getRepositoryService() {
 		return repositoryService;
 	}
 
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
@@ -134,6 +163,11 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 		return repository;
 	}
 
+	/**
+	 * Set the repository.
+	 * 
+	 * @param repository
+	 */
 	public void setRepository(Repository repository) {
 		this.repository = repository;
 	}

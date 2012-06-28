@@ -18,6 +18,7 @@
 package edu.ur.ir.user.service;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -73,6 +74,10 @@ public class DefaultInviteUserService implements InviteUserService {
 	/* Mail message for inviting a user who is not in the system*/
 	private SimpleMailMessage userNotExistMailMessage;
 	
+	/* Message to notify users of a new file version */
+	private SimpleMailMessage newFileVersionMailMessage;
+	
+
 	/* Mail message to unshare the document*/
 	private SimpleMailMessage unShareMailMessage;
 
@@ -334,7 +339,7 @@ public class DefaultInviteUserService implements InviteUserService {
 			
 			// Add the email to the invited user
 			UserEmail userEmail = new UserEmail(inviteInfo.getEmail());
-			userEmail.setVerified(true);
+			userEmail.setVerifiedTrue();
 			invitedUser.addUserEmail(userEmail, false);
 			userService.makeUserPersistent(invitedUser);
 			
@@ -418,6 +423,65 @@ public class DefaultInviteUserService implements InviteUserService {
 		}
 		
 		return inboxFiles;
+	}
+	
+	/**
+	 * Notify users that a new version of a file has been added.
+	 * 
+	 * @param personalFile - personal file that has been updated.
+	 * @return - list of collaborators where the email could not be sent
+	 */
+	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds)
+	{
+		List<FileCollaborator> emailsNotSent = new LinkedList<FileCollaborator>();
+		VersionedFile versionedFile = personalFile.getVersionedFile();
+		for(long id : collaboratorIds)
+		{	
+	        FileCollaborator collaborator = versionedFile.getCollaboratorById(id);
+	        if( collaborator != null )
+	        {
+			    try 
+			    {
+				    SimpleMailMessage message = new SimpleMailMessage(newFileVersionMailMessage);
+				    message.setTo(collaborator.getCollaborator().getDefaultEmail().getEmail());
+				
+				    String subject = message.getSubject();
+				    subject = StringUtils.replace(subject, "%FIRST_NAME%", personalFile.getOwner().getFirstName());
+				    subject = StringUtils.replace(subject, "%LAST_NAME%", personalFile.getOwner().getLastName());
+				    subject = StringUtils.replace(subject, "%NAME%", personalFile.getName());
+				    message.setSubject(subject);
+				
+				    String text = message.getText();
+				    String path = personalFile.getName();
+				    
+				    PersonalFile collabPersonalFile = personalFileDAO.getFileForUserWithSpecifiedVersionedFile(collaborator.getCollaborator().getId(), 
+								versionedFile.getId());
+				    
+				    // may be null if user has not yet moved the file into their worksapce
+				    if( collabPersonalFile != null )
+				    {
+				      path = collabPersonalFile.getFullPath();
+				    }
+				    // Get the name of files
+				    text = StringUtils.replace(text, "%NAME%", path);
+				    text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
+				
+				    if( personalFile.getDescription() != null && !personalFile.getDescription().trim().equals(""))
+				    {
+					    text = text + "\n Notes: \n\n" + personalFile.getDescription();
+				    }
+				
+				    message.setText(text);
+				    sendEmail(message);
+			    } 
+			    catch(IllegalStateException e) 
+			    {
+				    emailsNotSent.add(collaborator);
+			    }
+	        }
+	        
+		}
+		return emailsNotSent;
 	}
 	
 	/**
@@ -584,5 +648,13 @@ public class DefaultInviteUserService implements InviteUserService {
 		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
 	}
 
-
+    /**
+	 * Set the new file version mail message.
+	 * 
+	 * @param newFileVersionMailMessage
+	 */
+	public void setNewFileVersionMailMessage(
+			SimpleMailMessage newFileVersionMailMessage) {
+		this.newFileVersionMailMessage = newFileVersionMailMessage;
+	}
 }

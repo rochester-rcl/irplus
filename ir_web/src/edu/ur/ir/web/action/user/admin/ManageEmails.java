@@ -144,8 +144,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 				return "accessDenied";
 			}
 			
-			String emailToken = TokenGenerator.getToken();
-			email.setToken(emailToken);
+			// token is a combination of random number and email
+			String emailToken = TokenGenerator.getToken() + email.getEmail();
+			email.setVerifiedFalse(emailToken);
 			irUser.addUserEmail(email, false);
 			userService.makeUserPersistent(irUser);
 
@@ -198,7 +199,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		}
 
 		UserEmail userEmail = userService.getEmail(emailId, false);
-		userEmail.setVerified(true);
+		userEmail.setVerifiedTrue();
 		userService.makeUserEmailPersistent(userEmail);
 		emails = userEmail.getIrUser().getUserEmails();
 		
@@ -232,8 +233,8 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		}
 
 		UserEmail userEmail = userService.getEmail(emailId, false);
-		userEmail.setVerified(false);
-	    userService.sendAccountVerificationEmailForUser(email.getToken(), email.getEmail(), irUser.getUsername());
+		userEmail.setVerifiedFalse(TokenGenerator.getToken() + userEmail.getEmail());
+	    userService.sendAccountVerificationEmailForUser(userEmail.getToken(), userEmail.getEmail(), irUser.getUsername());
 
 		return "added";
 	}

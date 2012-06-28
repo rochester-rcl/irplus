@@ -2616,15 +2616,14 @@ CREATE TABLE ir_user.personal_file
     version INTEGER,
     FOREIGN KEY (personal_folder_id) REFERENCES ir_user.personal_folder (personal_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    UNIQUE(user_id, personal_folder_id, versioned_file_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id)
 );
 ALTER TABLE ir_user.personal_file OWNER TO ir_plus;
+ALTER TABLE ir_user.personal_file ADD CONSTRAINT personal_file_user_id_versioned_file_id_key UNIQUE (user_id, versioned_file_id);
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.personal_file_seq;
 ALTER TABLE ir_user.personal_file_seq OWNER TO ir_plus;
-
 
 -- ---------------------------------------------
 -- Personal Collection Information
@@ -2691,6 +2690,7 @@ CREATE TABLE ir_user.user_email
   user_id bigint NOT NULL,
   version integer,
   email text,
+  lower_case_email text NOT NULL,
   isVerified boolean NOT NULL,
   token text,
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
@@ -2699,6 +2699,7 @@ CREATE TABLE ir_user.user_email
 ) ; 
 ALTER TABLE ir_user.user_email OWNER TO ir_plus;
 
+ALTER TABLE ir_user.user_email  ADD CONSTRAINT user_email_lower_case_email_key UNIQUE(lower_case_email);
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.user_email_seq;
@@ -2727,9 +2728,9 @@ values (nextval('ir_user.ir_user_seq'),
 
 false, false, false, true, false, date(now()), false);
 
-insert into ir_user.user_email(user_email_id, version, email, user_id, isVerified) values 
+insert into ir_user.user_email(user_email_id, version, email, lower_case_email, user_id, isVerified) values 
 
-(nextval('ir_user.user_email_seq'), 1, 'test@abc.com', 
+(nextval('ir_user.user_email_seq'), 1, 'test@abc.com', 'test@abc.com',
 
 currval('ir_user.ir_user_seq'), true);
 

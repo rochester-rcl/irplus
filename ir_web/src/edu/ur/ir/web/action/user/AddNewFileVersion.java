@@ -18,6 +18,9 @@
 package edu.ur.ir.web.action.user;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -30,6 +33,7 @@ import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
@@ -93,7 +97,16 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	/** Keep the file locked  even after the new version has been uploaded*/
 	private boolean keepLocked = false;
 	
-	/** service to create thumbnails  */
+	/* notify collaborators */
+	private Long[] collaboratorIds;
+	
+
+
+
+	/* service to deal with inviting users */
+	private InviteUserService inviteUserService;
+
+	/* service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
 
 	/**
@@ -130,6 +143,8 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 		{
 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 					false);
+			
+			// lock the file for the user to make change
 			if(versionedFile.getLockedBy() == null)
 			{
 				repositoryService.lockVersionedFile(versionedFile, user);
@@ -145,6 +160,18 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 			    thumbnailTransformerService.transformFile(repository, irFile);			    
 			    userWorkspaceIndexProcessingRecordService.saveAll(personalFile, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+			    
+			    // unlock the file if the user did not select keep locked
+				if( !keepLocked)
+				{
+					repositoryService.unlockVersionedFile(versionedFile, user);
+				}
+				
+				if( collaboratorIds.length > 0 )
+				{
+					List<Long> collaborators = Arrays.asList(collaboratorIds);
+				    inviteUserService.notifyCollaboratorsOfNewVersion(personalFile, collaborators);
+				}
 			}
 			else
 			{
@@ -152,11 +179,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 				"The file is currently locked by user: " + versionedFile.getLockedBy().getUsername());
 		        returnStatus = INPUT;
 			}
-			// unlock the file if the user did not select keep locked
-			if( !keepLocked)
-			{
-				repositoryService.unlockVersionedFile(versionedFile, user);
-			}
+			
 			
 		}
 		else
@@ -289,6 +312,22 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
+	
 
+	/**
+	 * Invite user service.
+	 * 
+	 * @param inviteUserService
+	 */
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
+	}
 
+	public Long[] getCollaboratorIds() {
+		return collaboratorIds;
+	}
+
+	public void setCollaboratorIds(Long[] collaboratorIds) {
+		this.collaboratorIds = collaboratorIds;
+	}
 }

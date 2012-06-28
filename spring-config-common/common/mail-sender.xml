@@ -299,5 +299,22 @@
     			]]>
     		</value>
     	</property>
-    </bean>     
+    </bean>    
+    
+    <bean id = "newFileVersionMailMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
+    	<property name="subject"> <value>  <![CDATA[ From %FIRST_NAME% %LAST_NAME% - New Version of %NAME% Added ]]> </value> </property>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			**DO NOT REPLY TO THIS MESSAGE**
+    			
+    			You can login into the system using the link below:
+    			%BASE_WEB_APP_PATH%home.action
+    			
+    			A new version of '%NAME%' has been updated in your workspace. ]]>
+    		</value>
+    	</property>
+    </bean> 
 </beans>
