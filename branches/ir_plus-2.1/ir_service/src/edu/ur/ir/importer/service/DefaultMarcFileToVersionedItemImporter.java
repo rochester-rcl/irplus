@@ -571,6 +571,43 @@ public class DefaultMarcFileToVersionedItemImporter
 	}
 	
 	/**
+	 * Get all the data for the marc field except
+	 * 'e', '4', '0', '2', '3', '6', '8'
+	 * 
+	 * @param field - field to get data from
+	 * @param item - to add data to
+	 * 
+	 * @return the found keyword or null not found
+	 */
+	@SuppressWarnings("unchecked")
+	private String handleAllData(DataField field)
+	{
+		String data = "";
+		
+		List<Subfield> fields = field.getSubfields();
+		Collections.sort(fields, this);
+	
+		for(Subfield f : fields)
+		{
+			if( f.getCode() != 'e' &&
+				f.getCode() != '4' &&
+				f.getCode() != '0' &&
+				f.getCode() != '2' &&
+				f.getCode() != '3' &&
+				f.getCode() != '6' &&
+				f.getCode() != '8')
+			{
+			    if( f.getData() != null && !f.getData().trim().equals(""))
+			    {
+			 	    data += f.getData() + " ";
+				
+			    }
+		    }
+		}
+		return data;
+	}
+	
+	/**
 	 * Deal with tags set up by the user - mapped to identifiers and extents.
 	 * 
 	 * @param field - field to get data from
@@ -653,12 +690,17 @@ public class DefaultMarcFileToVersionedItemImporter
 		        }
 		        
 		        // if 650 a is mapped get all data and append.
-		        if (tag.matches("650") )
+		        if (tag.matches("650"))
 		        {
 		        	if ( code == 'a' )
 		        	{
 		        	    data = handleSubjects(field);
 		        	}
+		        }
+		        
+		        if( tag.matches("600") )
+		        {
+		        	data = handleAllData(field);
 		        }
 		        
 	        	//handle identifier type mappings

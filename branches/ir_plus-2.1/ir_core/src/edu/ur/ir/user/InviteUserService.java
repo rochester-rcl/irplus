@@ -159,4 +159,14 @@ public interface InviteUserService extends Serializable{
 	 * @param inboxFile
 	 */
 	public void deleteSharedInboxFile(SharedInboxFile inboxFile) ;
+	
+	/**
+	 * Notify users that a new version of a file has been added.
+	 * 
+	 * @param personalFile - personal file that has been updated.
+	 * @param collaboratorIds - list of collaborators to notify
+	 * @return - list of collaborators where the email could not be sent
+	 */
+	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds);
+
 }

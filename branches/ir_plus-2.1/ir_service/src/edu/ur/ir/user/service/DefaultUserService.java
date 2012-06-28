@@ -167,7 +167,7 @@ public class DefaultUserService implements UserService {
 	public IrUser getUserByEmail(String email) {
 		IrUser user = null;
 		
-		UserEmail userEmail = userEmailDAO.getUserByEmail(email);
+		UserEmail userEmail = userEmailDAO.getUserByLowerCaseEmail(email);
 		
 		if (userEmail != null) {
 			user = userEmail.getIrUser();
@@ -183,7 +183,7 @@ public class DefaultUserService implements UserService {
 	public IrUser getUserForVerifiedEmail(String email) {
 		IrUser user = null;
 		
-		UserEmail userEmail = userEmailDAO.getUserByEmail(email);
+		UserEmail userEmail = userEmailDAO.getUserByLowerCaseEmail(email);
 		
 		if ((userEmail != null) &&(userEmail.isVerified())) {
 			user = userEmail.getIrUser();
@@ -191,18 +191,6 @@ public class DefaultUserService implements UserService {
 		return user; 
 	}
 	
-	/**
-	 * Get the User email if email  exists in the system.
-	 * 
-	 * @see edu.ur.ir.user.InviteUserService#getUserByEmail(String email)
-	 */
-	public UserEmail getUserEmailByEmail(String email) {
-		
-		UserEmail userEmail = userEmailDAO.getUserByEmail(email);
-		
-		return userEmail; 
-	}
-
 	/**
 	 * Encode the specified password.
 	 * 
@@ -492,6 +480,7 @@ public class DefaultUserService implements UserService {
 		log.debug("DONE deleting root files");
 	}
 	
+	// delete the users root folders
 	private void deleteRootFolders(IrUser user, IrUser deletingUser)
 	{
 		log.debug("delete Root folders");
@@ -504,6 +493,7 @@ public class DefaultUserService implements UserService {
 		}
 		log.debug("done deleting root folders");
 	}
+	
 
 	/**
 	 * Get the password encoder.

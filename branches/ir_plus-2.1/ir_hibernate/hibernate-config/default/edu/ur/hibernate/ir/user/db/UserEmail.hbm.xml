@@ -42,6 +42,9 @@
 
 		<property name="email" column="email" type="string"
 			not-null="true" access="field" />
+			
+		<property name="lowerCaseEmail" column="lower_case_email" type="string"
+			not-null="true" access="field" />
 
 		<property name="isVerified" column="isVerified" type="boolean"
 			not-null="true" access="field" />
@@ -65,6 +68,12 @@
 	<query name="getUserByEmail">
 		from UserEmail as UserEmail where
 		UserEmail.email = ?
+	</query>
+	
+	<!-- named query for getting a user by lower case email  -->
+	<query name="getUserByLowerCaseEmail">
+		from UserEmail as UserEmail where
+		UserEmail.lowerCaseEmail = :email
 	</query>
 	
 	<!-- named query for getting a user by email  -->

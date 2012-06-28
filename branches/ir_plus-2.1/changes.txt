@@ -14,6 +14,11 @@ IR+ 2.1 to 2.1.1
   
 - back-ported updated to struts 2.3.4
 
+- back ported fix for constraint on ir_user.personal_file to make sure the same file cannot
+be added to more than one location in the file system
+
+- back ported( from 3.0) ability to send collaborators emails of new file version added
+
 IR+ 2.0.8 to 2.1
 ==========================
 - Added MARC import/export

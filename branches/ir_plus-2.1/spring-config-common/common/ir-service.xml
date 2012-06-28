@@ -338,6 +338,7 @@
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="roleService" ref="roleService"/>
        <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
+       <property name="newFileVersionMailMessage" ref="newFileVersionMailMessage"/>
    </bean>
      
    <!-- ****************************************** --> 

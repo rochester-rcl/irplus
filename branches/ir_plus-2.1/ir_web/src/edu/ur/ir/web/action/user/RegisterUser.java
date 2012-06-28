@@ -584,9 +584,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		String lastName = irUser.getLastName().trim();
 		String phoneNumber = irUser.getPhoneNumber().trim();
 		ExternalUserAccount externalAccount = irUser.getExternalAccount();
-				
-		defaultEmail.setVerified(false);
-		defaultEmail.setToken(TokenGenerator.getToken());
+	
+		defaultEmail.setVerifiedFalse(TokenGenerator.getToken() + defaultEmail.getEmail());
 				
 		irUser = userService.createUser(irUser.getPassword().trim(), irUser.getUsername().trim(), 
 			    		defaultEmail);
@@ -653,16 +652,16 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 				String emailToken = TokenGenerator.getToken();
 
 				UserEmail anotherEmail = new UserEmail(inviteInfo.getEmail());
-				anotherEmail.setVerified(true);
+				anotherEmail.setVerifiedTrue();
 				irUser.addUserEmail(anotherEmail, true);
 
-				irUser.getUserEmail(defaultEmail.getEmail()).setToken(emailToken);
+				irUser.getUserEmail(defaultEmail.getEmail()).setVerifiedFalse(TokenGenerator.getToken() + defaultEmail.getEmail());
 				
 				// send email With URL to verify email
 				userService.sendEmailForEmailVerification(emailToken, defaultEmail.getEmail(), irUser.getUsername());
 			} else {
 				log.debug("setting default email verified ");
-				irUser.getDefaultEmail().setVerified(true);
+				irUser.getDefaultEmail().setVerifiedTrue();
 				userService.makeUserPersistent(irUser);
 			}
 			

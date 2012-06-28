@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import edu.ur.ir.file.FileCollaborator;
 import edu.ur.order.OrderType;
 
 /**
@@ -315,13 +316,6 @@ public interface UserService extends UserDetailsService, Serializable {
 	 */
 	public void sendPendingAffiliationEmailForUser(IrUser user);
 
-	/**
-	 * Get the User email if email  exists in the system.
-	 * 
-	 * @param email Email to verify
-	 * @return Email if email exists in the system else return null
-	 */
-	public UserEmail getUserEmailByEmail(String email) ;
 
 	/**
 	 * Get user having the specified person name authority
@@ -395,6 +389,7 @@ public interface UserService extends UserDetailsService, Serializable {
 	 * @return - the found external user account or null if the external user account is not found.
 	 */
 	public ExternalUserAccount getByExternalUserNameAccountType(String externalUserName, ExternalAccountType externalAccountType);
+
 }
 
 

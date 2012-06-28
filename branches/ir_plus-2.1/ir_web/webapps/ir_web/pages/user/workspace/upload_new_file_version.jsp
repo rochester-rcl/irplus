@@ -50,4 +50,16 @@
          <td class="label">Keep Locked</td>
          <td align="left" class="input"><input type="checkbox" name="keepLocked" value="true"/></td>
     </tr>
+    <c:if test="${!empty personalFile.versionedFile.collaborators}">
+    <tr>
+        <td colspan="2">Select collaborators to notify of update by Email</td>
+    </tr>
+    <c:forEach items="${personalFile.versionedFile.collaborators}" var="collaborator">
+    <tr>
+         <td class="label">${collaborator.collaborator.firstName}&nbsp;${collaborator.collaborator.lastName} </td>
+         <td align="left" class="input"><input type="checkbox"  name="collaboratorIds" value="${collaborator.id}"/></td>
+    </tr>
+    </c:forEach>
+    
+    </c:if>
 </table>
