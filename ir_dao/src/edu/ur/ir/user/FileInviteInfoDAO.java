@@ -18,7 +18,9 @@ package edu.ur.ir.user;
 
 import java.util.List;
 
+import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -27,7 +29,7 @@ import edu.ur.dao.CrudDAO;
  * @author Sharmila Ranganathan
  *
  */
-public interface InviteInfoDAO extends CrudDAO<InviteInfo> {
+public interface FileInviteInfoDAO extends CrudDAO<FileInviteInfo>, CountableDAO {
 	
 	/**
 	 * Find the Invite information for a specified token
@@ -35,7 +37,7 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo> {
 	 * @param token user token
 	 * @return User token information
 	 */
-	public InviteInfo findInviteInfoForToken(String token);
+	public FileInviteInfo findInviteInfoForToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email
@@ -43,6 +45,25 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo> {
 	 * @param email email address shared with
 	 * @return List of invite information
 	 */
-	public List<InviteInfo> getInviteInfoByEmail(String email);
+	public List<FileInviteInfo> getInviteInfoByEmail(String email);
+		
+	/**
+	 * Get the list of invite infos ordered by inviteor
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results to retrieve
+	 * @param orderType - ascending/descending order
+	 * 
+	 * @return list of invite infos found
+	 */
+	public List<FileInviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+			int maxResults, OrderType orderType);
 	
+	/**
+	 * Get the invites made by a particular user.
+	 * 
+	 * @param user - invites made by a given user
+	 * @return - all invites made by the user or an empty list if no invites found
+	 */
+	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user);
 }

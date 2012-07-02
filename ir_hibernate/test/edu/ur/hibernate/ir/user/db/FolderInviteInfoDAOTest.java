@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2010 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package edu.ur.hibernate.ir.user.db;
 
-import java.io.File;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,35 +28,30 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.file.db.FileInfo;
-import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
-import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.file.IrFileDAO;
-import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.security.IrClassTypeDAO;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.IrClassTypePermissionDAO;
-import edu.ur.ir.user.InviteInfo;
-import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.FolderInviteInfo;
+import edu.ur.ir.user.FolderInviteInfoDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
+import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserManager;
-import edu.ur.util.FileUtil;
 
 /**
- * Test class for persistent methods of InviteInfo
+ * Allows for basic folder invite info data access to be
+ * tested.
  * 
- * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-
 @Test(groups = { "baseTests" }, enabled = true)
-public class InviteInfoDAOTest {
+public class FolderInviteInfoDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -69,8 +66,8 @@ public class InviteInfoDAOTest {
      IrUserDAO userDAO= (IrUserDAO) ctx
      	.getBean("irUserDAO");
 
-     InviteInfoDAO inviteInfoDAO= (InviteInfoDAO) ctx
- 		.getBean("inviteInfoDAO");
+     FolderInviteInfoDAO folderInviteInfoDAO= (FolderInviteInfoDAO) ctx
+ 		.getBean("folderInviteInfoDAO");
      
      VersionedFileDAO versionedFileDAO= (VersionedFileDAO) ctx
 		.getBean("versionedFileDAO");
@@ -103,93 +100,62 @@ public class InviteInfoDAOTest {
 	public void baseInviteUserTokenDAOTest()throws Exception{
 
 		TransactionStatus ts = tm.getTransaction(td);
-
-		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
-		Repository repo = repoHelper.createRepository("localFileServer",
-				"displayName",
-				"file_database", 
-				"my_repository", 
-				properties.getProperty("a_repo_path"),
-				"default_folder");
-		tm.commit(ts);
-
-        // Start a transaction 
-		ts = tm.getTransaction(td);
-		
   		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("passowrd", "userName");
 		user.setAccountExpired(true);
 		user.setAccountLocked(true);
 		user.setCredentialsExpired(true);
+		
+		PersonalFolder folder = user.createRootFolder("my folder");
 		userDAO.makePersistent(user);
 		
 		tm.commit(ts);
 		
         // Start a transaction 
 		ts = tm.getTransaction(td);
-
-		// create the first file to store in the temporary folder
-		String tempDirectory = properties.getProperty("ir_hibernate_temp_directory");
-		File directory = new File(tempDirectory);
-		
-        // helper to create the file
-		FileUtil testUtil = new FileUtil();
-		testUtil.createDirectory(directory);
-
-		File f = testUtil.creatFile(directory, "testFile", 
-		"Hello  - irFile This is text in a file - VersionedFileDAO test");
-		
-		FileServerService fileServerService = repoHelper.getFileServerService();
-		FileInfo fileInfo = fileServerService.addFile(repo.getFileDatabase(), f,
-				uniqueNameGenerator.getNextName(), "txt");
-		fileInfo.setDisplayName("name");
-		VersionedFile vf = new VersionedFile(user, fileInfo, "name");
-		versionedFileDAO.makePersistent(vf);
-		Long irFileId = vf.getCurrentVersion().getIrFile().getId(); 
-
+		user = userDAO.getById(user.getId(), false);
 		IrClassTypePermission permission 
 			= irClassTypePermissionDAO.getClassTypePermissionByNameAndClassType("edu.ur.ir.file.VersionedFile", "VIEW");
 
-		InviteInfo inviteInfo = new InviteInfo(user, vf);
-		inviteInfo.setEmail("test@mail.com");
-		inviteInfo.setToken("123");
-		inviteInfo.addPermission(permission);
-		inviteInfo.setInviteMessage("invite message");
+		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.add(permission);
+		FolderInviteInfo folderInviteInfo = new FolderInviteInfo(user.getRootFolder("my folder"), "test@mail.com", permissions);
+		
 
-		inviteInfoDAO.makePersistent(inviteInfo);
+		folderInviteInfoDAO.makePersistent(folderInviteInfo);
 		
 		//complete the transaction
 		tm.commit(ts);
         
 		ts = tm.getTransaction(td);
-		InviteInfo other = inviteInfoDAO.getById(inviteInfo.getId(), false);
-		assert other.equals(inviteInfo) : "The user inviteInfo information should be equal";
-		assert inviteInfo.getEmail() == "test@mail.com" : "Email should be equal";
-		assert inviteInfo.getInviteMessage() == "invite message" : "Message should be equal";
-		assert inviteInfo.getToken() == "123" : "inviteInfo should be equal";
-		assert inviteInfo.getPermissions().contains(permission) : "Permissions should exit";
-		assert inviteInfo.getUser().equals(user) : "User should be equal";
-		assert inviteInfo.getFiles().contains(vf) : "VersionedFile should be equal";
-		assert (inviteInfoDAO.findInviteInfoForToken("123")).equals(inviteInfo) : "The user inviteInfo should be equal";
+		FolderInviteInfo other = folderInviteInfoDAO.getById(folderInviteInfo.getId(), false);
+		assert other.equals(folderInviteInfo) : "The user inviteInfo information should be equal";
+		assert folderInviteInfo.getEmail() == "test@mail.com" : "Email should be equal";
+		assert folderInviteInfo.getPermissions().contains(permission) : "Permissions should exit";
+		assert folderInviteInfo.getPersonalFolder().equals(folder) : "Folders should be equal";
+		List<FolderInviteInfo> invites = folderInviteInfoDAO.getInviteInfoByEmail("TeSt@Mail.com");
+		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
+		assert invites.get(0).equals(folderInviteInfo) : "invite " + invites.get(0) + " should equal " + folderInviteInfo;
+		
+		
+		invites = folderInviteInfoDAO.getInviteInfoByEmail("test@mail.com");
+		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
+		assert invites.get(0).equals(folderInviteInfo) : "invite " + invites.get(0) + " should equal " + folderInviteInfo;
 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
-		inviteInfoDAO.makeTransient(inviteInfoDAO.getById(other.getId(), false));
+		folderInviteInfoDAO.makeTransient(folderInviteInfoDAO.getById(other.getId(), false));
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		assert inviteInfoDAO.getById(other.getId(), false) == null : "Should not be able to find other";
-		versionedFileDAO.makeTransient(versionedFileDAO.getById(vf.getId(), false));
-		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
+		assert folderInviteInfoDAO.getById(other.getId(), false) == null : "Should not be able to find other";
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
 		
-		ts = tm.getTransaction(td);
-		repoHelper.cleanUpRepository();
-		tm.commit(ts);
+		
 		
 	}
 	
-	
+
 }

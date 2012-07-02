@@ -69,40 +69,43 @@
               column="user_id" 
               not-null="true" 
               access="field"/>
-
-        
 	</class>
 	
 	    <!-- named query for a getting a file  -->
 	<query name="getFileWithSpecifiedUserIdAndVerionFileID">
-		from PersonalFile as PersonalFile where
-		PersonalFile.owner.id = ? and PersonalFile.versionedFile.id = ?
+		from PersonalFile as PersonalFile 
+		where PersonalFile.owner.id = ? 
+		and PersonalFile.versionedFile.id = ?
 	</query>
 	
 	 <!-- named query for a getting a file  -->
 	 <query name="getFileWithSpecifiedUserIdAndIrFileID">
 		select PersonalFile 
 		from PersonalFile as PersonalFile 
-		join PersonalFile.versionedFile.currentVersion as FileVersion where FileVersion.versionedFile.id = PersonalFile.versionedFile.id and
-		   PersonalFile.owner.id = ?  and FileVersion.irFile.id = ?
+		join PersonalFile.versionedFile.currentVersion as FileVersion 
+		where FileVersion.versionedFile.id = PersonalFile.versionedFile.id 
+		and PersonalFile.owner.id = ?  
+		and FileVersion.irFile.id = ?
 	</query>
 	
 	<!-- named query for getting files in a folder -->
 	<query name="getFilesInAFolderForUser">
-		from PersonalFile as PersonalFile where
-		PersonalFile.owner.id = ? and PersonalFile.personalFolder.id = ?
+		from PersonalFile as personalFile where
+		personalFile.owner.id = :userId 
+		and personalFile.personalFolder.id = :folderId
 	</query>
 	
-	<!-- named query for getting files in a folder -->
+	<!-- named query for getting files for root level - the user -->
 	<query name="getRootFiles">
-		from PersonalFile as PersonalFile where
-		PersonalFile.owner.id = ? and PersonalFile.personalFolder.id is NULL
+		from PersonalFile as personalFile 
+		where personalFile.owner.id = :userId 
+		and personalFile.personalFolder.id is NULL
 	</query>
 	
-   <!-- named query for getting files  -->
+    <!-- named query for getting files  -->
 	<query name="getFiles">
-		from PersonalFile as PersonalFile where
-		PersonalFile.owner.id = :userId
+		from PersonalFile as PersonalFile 
+		where PersonalFile.owner.id = :userId
 		and PersonalFile.id in (:fileIds)
 	</query>
 	
@@ -113,9 +116,29 @@
 		join personalFile.versionedFile versionedFile
 		join versionedFile.versions fileVersion
 		join fileVersion.irFile irFile
-		where
-		irFile.id = ? 
+		where irFile.id = ? 
 	</query>
 	
-    
+	<!-- named query for a getting files shared with a given user  -->
+	 <query name="getPersonalFilesSharedWithUser">
+		select personalFile 
+		from PersonalFile as personalFile 
+		join personalFile.versionedFile versionedFile
+		join versionedFile.collaborators fileCollaborator
+		where personalFile.owner.id = :ownerId 
+		and fileCollaborator.collaborator.id = :collaboratorId
+		order by versionedFile.name asc, versionedFile.extension asc
+	</query>
+	
+	
+	 <!-- named query for a getting a count of files shared with a user   -->
+	 <query name="getPersonalFilesSharedWithUserCount">
+		select count(*)
+		from PersonalFile as personalFile 
+		join personalFile.versionedFile versionedFile
+		join versionedFile.collaborators fileCollaborator
+		where personalFile.owner.id = :ownerId 
+		and fileCollaborator.collaborator.id = :collaboratorId
+	</query>
+   
 </hibernate-mapping>
