@@ -19,6 +19,10 @@ be added to more than one location in the file system
 
 - back ported( from 3.0) ability to send collaborators emails of new file version added
 
+- back ported - removed fedora tables from sql script
+
+- back ported (3.0) - added invite schema
+
 IR+ 2.0.8 to 2.1
 ==========================
 - Added MARC import/export

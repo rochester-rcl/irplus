@@ -199,15 +199,15 @@
    <!-- Invite Info								   -->
    <!-- ****************************************** --> 
 
-   <bean id="inviteInfoDAOTarget" 
-       class="edu.ur.hibernate.ir.user.db.HbInviteInfoDAO">
+   <bean id="fileInviteInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.user.db.HbFileInviteInfoDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
    
-   <bean id="inviteInfoDAO" 
+   <bean id="fileInviteInfoDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="inviteInfoDAOTarget"/>
+       <property name="target" ref="fileInviteInfoDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
@@ -215,7 +215,29 @@
                <prop key="make*">PROPAGATION_REQUIRED</prop>
            </props>
        </property>
-   </bean>      
+   </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Folder Invite Info						   -->
+   <!-- ****************************************** --> 
+
+   <bean id="folderInviteInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.user.db.HbFolderInviteInfoDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="folderInviteInfoDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="folderInviteInfoDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>           
  
    <!-- ****************************************** --> 
    <!-- Affiliation									-->
@@ -413,5 +435,27 @@
            </props>
        </property>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Folder Auto Share Info						   -->
+   <!-- ****************************************** --> 
+
+   <bean id="folderAutoShareInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.user.db.HbFolderAutoShareInfoDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="folderAutoShareInfoDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="folderAutoShareInfoDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>           
       
 </beans>

@@ -263,8 +263,8 @@ ALTER TABLE handle.handle_info OWNER TO ir_plus;
 CREATE SEQUENCE handle.handle_info_seq;
 ALTER TABLE handle.handle_info_seq OWNER TO ir_plus;
 
-
-
+-- create an index on the handle info local name
+CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
 
 
 -- ----------------------------------------------
@@ -2383,177 +2383,39 @@ ALTER TABLE ir_repository.reviewable_item_seq OWNER TO ir_plus;
 
 
 
-
 -- ----------------------------------------------
 -- **********************************************
        
--- FEDORA SCHEMA     
+-- Invite SCHEMA     
 
 -- **********************************************
 -- ----------------------------------------------
 
-
-
-
-
-
 -- ---------------------------------------------
--- Create a schema to hold all fedora file system
+-- Create a schema to hold all file system
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA fedora_file_system AUTHORIZATION ir_plus;
+CREATE SCHEMA ir_invite AUTHORIZATION ir_plus;
 
--- ---------------------------------------------
--- Sequence for naming files and folders on the file
--- system
--- ---------------------------------------------
-
-CREATE SEQUENCE fedora_file_system.file_system_name_seq; 
-ALTER TABLE fedora_file_system.file_system_name_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- File Server information
--- ---------------------------------------------
-
--- Create a new table to hold folder information in the system
-CREATE TABLE fedora_file_system.file_server
+CREATE TABLE ir_invite.invite_token
 (
-  file_server_id BIGINT PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
-  description TEXT,
-  version INTEGER
-);
-ALTER TABLE fedora_file_system.file_server OWNER TO ir_plus;
-
--- The folder name sequence
-CREATE SEQUENCE fedora_file_system.file_server_seq;
-ALTER TABLE fedora_file_system.file_server_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Fedora File Database Information
--- ---------------------------------------------
-
--- Create a new table to hold database information in the system
-CREATE TABLE fedora_file_system.file_database
-(
-  file_database_id BIGINT PRIMARY KEY,
-  file_server_id BIGINT NOT NULL,
-  name TEXT NOT NULL,
-  display_name TEXT,
-  description TEXT,
-  base_url TEXT,
-  upload_url TEXT, 		
-  admin_user_name TEXT,			
-  admin_password TEXT,
-  uri_prefix TEXT,
-  default_log_message TEXT,
+  invite_token_id BIGINT PRIMARY KEY,
   version INTEGER,
-  FOREIGN KEY(file_server_id) REFERENCES fedora_file_system.file_server 
-
-(file_server_id),
-  UNIQUE (name, file_server_id)
+  token TEXT NOT NULL,
+  email TEXT NOT NULL,
+  invite_message TEXT,
+  inviting_user_id BIGINT NOT NULL,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  expiration_date TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id), 
+  UNIQUE(token)
 );
-ALTER TABLE fedora_file_system.file_database OWNER TO ir_plus;
+ALTER TABLE ir_invite.invite_token OWNER TO ir_plus;
 
--- The folder name sequence
-CREATE SEQUENCE fedora_file_system.file_database_seq;
-ALTER TABLE fedora_file_system.file_database_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Datastream Information
--- ---------------------------------------------
-
--- Create a new table to hold datastream information in the system
-CREATE TABLE fedora_file_system.datastream_info
-(
-  datastream_info_id BIGINT NOT NULL PRIMARY KEY,
-  fedora_state TEXT,
-  pid TEXT NOT NULL,
-  external_datastream_id TEXT,
-  datastream_label TEXT,
-  upload_url TEXT,
-  versionable BOOLEAN,
-  mime_type TEXT,
-  format_uri TEXT,
-  datastream_location TEXT,
-  fedora_control_group TEXT,
-  checksum_type TEXT,
-  checksum TEXT,
-  log_message TEXT,
-  version INTEGER,
-  UNIQUE (pid)
-);
-ALTER TABLE fedora_file_system.datastream_info OWNER TO ir_plus;
-
--- The file sequence
-CREATE SEQUENCE fedora_file_system.datastream_info_seq;
-ALTER TABLE fedora_file_system.datastream_info_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Alternate Id 
--- ---------------------------------------------
-
--- Create a new table to hold alternate ids for fedora datastreams
-CREATE TABLE fedora_file_system.alternate_id
-(
-  alternate_id BIGINT NOT NULL PRIMARY KEY,
-  datastream_info_id BIGINT NOT NULL,
-  id_value TEXT NOT NULL,
-  version INTEGER,
-  FOREIGN KEY (datastream_info_id) REFERENCES fedora_file_system.datastream_info 
-
-(datastream_info_id)
-);
-ALTER TABLE fedora_file_system.alternate_id OWNER TO ir_plus;
-
--- The file sequence
-CREATE SEQUENCE fedora_file_system.alternate_id_seq;
-ALTER TABLE fedora_file_system.alternate_id_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- File Information
--- ---------------------------------------------
-
--- Create a new table to hold file information in the system
-CREATE TABLE fedora_file_system.file
-(
-  file_id BIGINT NOT NULL PRIMARY KEY,
-  datastream_info_id BIGINT,
-  file_database_id BIGINT NOT NULL,
-  file_name TEXT NOT NULL,
-  path TEXT not NULL,
-  size BIGINT,
-  created_date TIMESTAMP WITH TIME ZONE,
-  extension VARCHAR(10),
-  modified_date TIMESTAMP WITH TIME ZONE,
-  display_name TEXT,
-  description TEXT,
-  version INTEGER,
-  FOREIGN KEY (file_database_id) REFERENCES fedora_file_system.file_database 
-
-(file_database_id),
-  FOREIGN KEY (datastream_info_id) REFERENCES fedora_file_system.datastream_info 
-
-(datastream_info_id),
-  UNIQUE (file_name)
-);
-ALTER TABLE fedora_file_system.file OWNER TO ir_plus;
-
--- Index on the file Name
-CREATE INDEX fedora_file_display_name_idx ON fedora_file_system.file USING btree 
-
-(display_name);
-
--- The file sequence
-CREATE SEQUENCE fedora_file_system.file_seq;
-ALTER TABLE fedora_file_system.file_seq OWNER TO ir_plus;
-
-
-
-
-
-
+-- The  invite token sequence
+CREATE SEQUENCE ir_invite.invite_token_seq;
+ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
 
 
 
@@ -2616,10 +2478,10 @@ CREATE TABLE ir_user.personal_file
     version INTEGER,
     FOREIGN KEY (personal_folder_id) REFERENCES ir_user.personal_folder (personal_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
+    UNIQUE(user_id, versioned_file_id)
 );
 ALTER TABLE ir_user.personal_file OWNER TO ir_plus;
-ALTER TABLE ir_user.personal_file ADD CONSTRAINT personal_file_user_id_versioned_file_id_key UNIQUE (user_id, versioned_file_id);
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.personal_file_seq;
@@ -2686,20 +2548,20 @@ ALTER TABLE ir_user.personal_item_seq OWNER TO ir_plus;
 
 CREATE TABLE ir_user.user_email
 (
-  user_email_id bigint PRIMARY KEY,
-  user_id bigint NOT NULL,
-  version integer,
-  email text,
-  lower_case_email text NOT NULL,
-  isVerified boolean NOT NULL,
-  token text,
+  user_email_id BIGINT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  version INTEGER,
+  email TEXT NOT NULL,
+  lower_case_email TEXT NOT NULL,
+  isVerified BOOLEAN NOT NULL,
+  token TEXT,
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (user_id, user_email_id),
-  UNIQUE (email)
+  UNIQUE (email),
+  UNIQUE (lower_case_email)
 ) ; 
 ALTER TABLE ir_user.user_email OWNER TO ir_plus;
 
-ALTER TABLE ir_user.user_email  ADD CONSTRAINT user_email_lower_case_email_key UNIQUE(lower_case_email);
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.user_email_seq;
@@ -2739,21 +2601,18 @@ update ir_user.ir_user set default_email_id = currval('ir_user.user_email_seq') 
 user_id = currval('ir_user.ir_user_seq');
 
 
-
 -- ---------------------------------------------
 -- Invite Information
 -- ---------------------------------------------
 
 
-
 CREATE TABLE ir_user.invite_info
 (
   invite_info_id BIGINT PRIMARY KEY,
+  invite_token_id BIGINT NOT NULL,
   version INTEGER,
-  token TEXT NOT NULL,
-  email TEXT NOT NULL,
-  user_id BIGINT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id) 
+  FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token(invite_token_id),
+  UNIQUE(invite_token_id)
 );
 ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
 
@@ -2798,13 +2657,24 @@ CREATE SEQUENCE ir_user.shared_inbox_file_seq ;
 ALTER TABLE ir_user.shared_inbox_file_seq OWNER TO ir_plus;
 
 
+-- ---------------------------------------------
+-- Invite info for folder data
+-- ---------------------------------------------
 
+CREATE TABLE ir_user.folder_invite_info
+(
+  folder_invite_info_id BIGINT PRIMARY KEY,
+  version INTEGER,
+  email TEXT NOT NULL,
+  personal_folder_id BIGINT NOT NULL,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  FOREIGN KEY (personal_folder_id) REFERENCES ir_user.personal_folder (personal_folder_id) 
+);
+ALTER TABLE ir_user.folder_invite_info OWNER TO ir_plus;
 
-
-
-
-
-
+-- The folder invite info sequence
+CREATE SEQUENCE ir_user.folder_invite_info_seq;
+ALTER TABLE ir_user.folder_invite_info_seq OWNER TO ir_plus;
 
 
 
@@ -2897,6 +2767,52 @@ CREATE TABLE ir_user.invite_permissions
     FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
 ALTER TABLE ir_user.invite_permissions OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Folder invite permission
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.folder_invite_permissions
+(
+    folder_invite_info_id BIGINT NOT NULL, 
+    class_type_permission_id BIGINT NOT NULL,
+    PRIMARY KEY (folder_invite_info_id, class_type_permission_id),
+    FOREIGN KEY (folder_invite_info_id) REFERENCES ir_user.folder_invite_info(folder_invite_info_id),
+    FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
+);
+ALTER TABLE ir_user.folder_invite_permissions OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Auto share information
+-- ---------------------------------------------
+CREATE TABLE ir_user.folder_auto_share_info
+(
+    folder_auto_share_info_id BIGINT PRIMARY KEY,
+    personal_folder_id BIGINT NOT NULL REFERENCES ir_user.personal_folder(personal_folder_id),
+    user_id BIGINT NOT NULL REFERENCES ir_user.ir_user(user_id),
+    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    version INTEGER,
+    UNIQUE(personal_folder_id, user_id)
+);
+ALTER TABLE ir_user.folder_auto_share_info OWNER TO ir_plus;
+
+-- The auto share sequence
+CREATE SEQUENCE ir_user.folder_auto_share_info_seq ;
+ALTER TABLE ir_user.folder_auto_share_info_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Auto share folder permissions 
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.folder_auto_share_permissions
+(
+    folder_auto_share_info_id BIGINT NOT NULL REFERENCES ir_user.folder_auto_share_info(folder_auto_share_info_id), 
+    class_type_permission_id BIGINT NOT NULL REFERENCES ir_security.class_type_permission(class_type_permission_id),
+    PRIMARY KEY (folder_auto_share_info_id, class_type_permission_id)
+);
+ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
+
 
 -- ---------------------------------------------
 -- Insert values for Class type permission
@@ -3138,7 +3054,6 @@ CREATE TABLE ir_security.user_group_control_entry_permission
         REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
 ALTER TABLE ir_security.user_group_control_entry_permission OWNER TO ir_plus;
-
 
 
 
@@ -3586,6 +3501,10 @@ CREATE INDEX ip_ignore_ip_address_idx
 
 CREATE SCHEMA ir_metadata_dublin_core AUTHORIZATION ir_plus;
 
+-- ---------------------------------------------
+-- contributor type dublin core mapping
+-- ---------------------------------------------
+
 CREATE TABLE ir_metadata_dublin_core.contributor_type_dc_mapping
 (
     contributor_type_dc_mapping_id BIGINT PRIMARY KEY,
@@ -3603,7 +3522,9 @@ ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus
 CREATE SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping_seq OWNER TO ir_plus;
 
-
+-- ---------------------------------------------
+-- metadata identifier type dublin core mapping
+-- ---------------------------------------------
 CREATE TABLE ir_metadata_dublin_core.identifier_type_dc_mapping
 (
     identifier_type_dc_mapping_id BIGINT PRIMARY KEY,

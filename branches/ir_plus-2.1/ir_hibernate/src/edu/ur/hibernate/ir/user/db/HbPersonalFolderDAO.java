@@ -19,7 +19,7 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -40,9 +40,7 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	/** eclipse generated id */
 	private static final long serialVersionUID = 1529661878676331576L;
 
-	/** Logger */
-	private static final Logger log = Logger.getLogger(HbPersonalFolderDAO.class);
-	
+
 	/** helper for dealing with database */
 	private final HbCrudDAO<PersonalFolder> hbCrudDAO;
 	
@@ -69,8 +67,8 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personalFolderCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personalFolderCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**
@@ -146,14 +144,12 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	 * @see edu.ur.ir.user.PersonalFolderDAO#getSubFoldersForFolder(java.lang.Long, java.lang.Long)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersonalFolder> getSubFoldersForFolder(Long userId, Long parentFolderId) {
-		
-		Long[] values = new Long[] {userId, parentFolderId};
-		
-		List<PersonalFolder> folders =  
-			(List<PersonalFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalSubFoldersForFolder", 
-					values);
-		return folders;
+	public List<PersonalFolder> getSubFoldersForFolder(Long userId, Long parentFolderId) 
+	{		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPersonalFoldersForFolder");
+		q.setParameter("userId", userId);
+		q.setParameter("parentId", parentFolderId);
+		return q.list();
 	}
 	
 	/**
@@ -163,11 +159,9 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PersonalFolder> getRootFolders(Long userId) {
-		
-		List<PersonalFolder> folders =  
-			(List<PersonalFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalRootFolders", 
-					userId);
-		return folders;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPersonalRootFolders");
+		q.setParameter("userId", userId);
+		return q.list();
 	}
 
 	/**
@@ -187,7 +181,7 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	/**
 	 * Gets the path to the collection starting from the top parent all the way
 	 * down to the specified child.  Only includes parents of the specified 
-	 * collection.  The list is ordered highest level parent to last child.  This
+	 * folder.  The list is ordered highest level parent to last child.  This
 	 * is useful for displaying the path to a given collection.
 	 * 
 	 * @param collection 
@@ -198,24 +192,13 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	@SuppressWarnings("unchecked")
 	public List<PersonalFolder> getPath(PersonalFolder personalFolder)
 	{
-		Long[] values = new Long[] {personalFolder.getLeftValue(),
-				personalFolder.getTreeRoot().getId(), 
-				personalFolder.getOwner().getId()};
-		return (List<PersonalFolder>) 
-		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalFolderPath", values);
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPersonalFolderPath");
+		q.setParameter("leftValue", personalFolder.getLeftValue());
+		q.setParameter("rootId",personalFolder.getTreeRoot().getId());
+		q.setParameter("userId", personalFolder.getOwner().getId());
+		return q.list();
 	}
 	
-
-	/**
-	 * Get all personal folders in the system.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	/**
 	 * Get all personal folders by id.
 	 * 
@@ -241,49 +224,7 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	 */
 	public void makeTransient(PersonalFolder entity) {
 		
-		log.debug("deleting folder " + entity);
 		hbCrudDAO.makeTransient(entity);
-		/**
-		
-		Long[] values = new Long[]{entity.getTreeRoot().getId(), entity.getLeftValue(), entity.getRightValue()};
-		
-		String deleteFiles = "DELETE PersonalFile AS file " +
-		"WHERE file.id IN " +
-		"( " +
-		"  SELECT aFile.id " +
-		"  FROM PersonalFile aFile " +
-		"  WHERE aFile.personalFolder.treeRoot.id = ? " +
-		"  and aFile.personalFolder.leftValue between ? and ? " +
-		")";
-
-		
-		int numDeleted = hbCrudDAO.getHibernateTemplate().bulkUpdate(deleteFiles, values);
-		
-		if(log.isDebugEnabled())
-		{
-		    log.debug("deleted " + numDeleted + 
-		    		" files from root folder id = " 
-		    		+ entity.getTreeRoot().getId() + 
-		    		" where left value between " + entity.getLeftValue() + 
-		    		" and " + entity.getRightValue());
-		}
-	    
-		
-		String deleteFolders = "delete PersonalFolder pf where pf.treeRoot.id = ? and " +
-		"pf.leftValue between ? and ?";
-		
-		numDeleted = hbCrudDAO.getHibernateTemplate().bulkUpdate(deleteFolders, values);
-		
-		if(log.isDebugEnabled())
-		{
-		    log.debug("deleted " + numDeleted + 
-		    		" folders from root folder id = " 
-		    		+ entity.getTreeRoot().getId() + 
-		    		" where left value between " + entity.getLeftValue() + 
-		    		" and " + entity.getRightValue());
-		}
-		*/
-		
 	}
 
 	/**
@@ -295,13 +236,29 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder) {
-		Long[] ids = new Long[] {personalFolder.getLeftValue(),
-				personalFolder.getRightValue(), 
-				personalFolder.getTreeRoot().getId()};
-		List<PersonalFile> files =  
-			(List<PersonalFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllPersonalFilesForFolder", 
-					ids);
-		return files;
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllPersonalFilesForFolder");
+		q.setParameter("leftValue", personalFolder.getLeftValue());
+		q.setParameter("rightValue", personalFolder.getRightValue());
+		q.setParameter("rootId", personalFolder.getTreeRoot().getId());
+		return (List<PersonalFile>) q.list();
+	}
+	
+	/**
+	 * This returns all folders for the specified parent folder.  This
+	 * includes all children including those within sub folders.
+	 * 
+	 * @param personalFolder - to get all children folders from
+	 * @return list of all children folders
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonalFolder> getAllChildrenForFolder(PersonalFolder personalFolder)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllChildrenFoldersForFolder");
+		q.setParameter("leftValue", personalFolder.getLeftValue());
+		q.setParameter("rightValue", personalFolder.getRightValue());
+		q.setParameter("rootId", personalFolder.getTreeRoot().getId());
+		return (List<PersonalFolder>) q.list();
 	}
 	
 	/**
@@ -383,6 +340,16 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 			return foundFolders;
         }
 		return foundFolders;
+	}
+	
+	/**
+	 * Get all personal collections in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 	
 }
