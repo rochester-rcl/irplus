@@ -47,6 +47,7 @@ import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.RoleService;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
@@ -311,8 +312,15 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		try {
 		    // Share files -  If there are any invitations sent to this email address 
 			inviteUserService.sharePendingFilesForEmail(irUser.getId(), defaultEmail.getEmail());
-		} catch (FileSharingException e) {
+		
+		} 
+		catch (FileSharingException e) 
+		{
 		    log.error("File cannot be shared with themselves" + e.getMessage());
+		}
+		catch(UnVerifiedEmailException uvef)
+		{
+			log.error("email not verified " + defaultEmail.getEmail() + " " + uvef.getMessage());
 		}
 					
 		added = true;
@@ -495,6 +503,13 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String changePassword() {
 		
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
+		
 		irUser = userService.getUser(id, false);
 		
 		userService.updatePassword(password, irUser);
@@ -516,6 +531,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String loginAsUser() 
 	{
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
 		log.debug("user id = " + id);
 		irUser = userService.getUser(id, false);
 		log.debug("User = " + irUser);
@@ -559,6 +580,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String reIndexUserWorkspace() throws IOException
 	{
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
 		log.debug("user id = " + id);
 		viewEditUser();
 		irUser.setReBuildUserWorkspaceIndex(true);
@@ -605,10 +632,20 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.added = added;
 	}
 
+	/**
+	 * Id of the user.
+	 * 
+	 * @return id of the user
+	 */
 	public Long getId() {
 		return id;
 	}
 
+	/**
+	 * Set the id of the user.
+	 * 
+	 * @param id
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -631,66 +668,129 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		
 	}
 
+	/**
+	 * Get the user being updated.
+	 * 
+	 * @return
+	 */
 	public IrUser getIrUser() {
 		return irUser;
 	}
 
-	public void setIrUser(IrUser irUser) {
-		this.irUser = irUser;
-	}
-
+	/**
+	 * Set to true if the account is locked.
+	 * 
+	 * @return
+	 */
 	public boolean isAccountLocked() {
 		return accountLocked;
 	}
 
+	/**
+	 * Setting to true indicates the account is locked.
+	 * 
+	 * @param accountLocked
+	 */
 	public void setAccountLocked(boolean accountLocked) {
 		this.accountLocked = accountLocked;
 	}
 
+	/**
+	 * Get the default email.
+	 * 
+	 * @return
+	 */
 	public UserEmail getDefaultEmail() {
 		return defaultEmail;
 	}
 
-	public void setDefaultEmail(UserEmail defaultEmail) {
-		this.defaultEmail = defaultEmail;
-	}
-
+	
+	/**
+	 * Returns true if the account is expired.
+	 * 
+	 * @return
+	 */
 	public boolean isAccountExpired() {
 		return accountExpired;
 	}
 
+	/**
+	 * Set to true if the account is expired.
+	 * 
+	 * @param accountExpired
+	 */
 	public void setAccountExpired(boolean accountExpired) {
 		this.accountExpired = accountExpired;
 	}
 
+	/**
+	 * Set to true if the credentials are expired.
+	 * 
+	 * @return
+	 */
 	public boolean isCredentialsExpired() {
 		return credentialsExpired;
 	}
 
+	/**
+	 * Set to true if the credentials are expired.
+	 * 
+	 * @param credentialsExpired
+	 */
 	public void setCredentialsExpired(boolean credentialsExpired) {
 		this.credentialsExpired = credentialsExpired;
 	}
 
+	/**
+	 * Get the phone number.
+	 * 
+	 * @return
+	 */
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
+	/**
+	 * Set the phone number.
+	 * 
+	 * @param phoneNumber
+	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
+	/**
+	 * Get the password.
+	 * 
+	 * @return
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * Set the password.
+	 * 
+	 * @param password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * Set to true if the user should be emailed their password.
+	 * 
+	 * @return
+	 */
 	public boolean isEmailPassword() {
 		return emailPassword;
 	}
 
+	/**
+	 * Set the email password.
+	 * 
+	 * @param emailPassword
+	 */
 	public void setEmailPassword(boolean emailPassword) {
 		this.emailPassword = emailPassword;
 	}
@@ -751,22 +851,38 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.affiliationId = affiliationId;
 	}
 
+	/**
+	 * Get the email message.
+	 * 
+	 * @return
+	 */
 	public String getEmailMessage() {
 		return emailMessage;
 	}
 
+	/**
+	 * Set the email message.
+	 * 
+	 * @param emailMessage
+	 */
 	public void setEmailMessage(String emailMessage) {
 		this.emailMessage = emailMessage;
 	}
 
-	public DepartmentService getDepartmentService() {
-		return departmentService;
-	}
-
+	/**
+	 * Set the department servic.e
+	 * 
+	 * @param departmentService
+	 */
 	public void setDepartmentService(DepartmentService departmentService) {
 		this.departmentService = departmentService;
 	}
 
+	/**
+	 * Get the departments.
+	 * 
+	 * @return
+	 */
 	public List<Department> getDepartments() {
 		List<Department> departments;
 		departments = departmentService.getAllDepartments();
@@ -774,6 +890,11 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return departments ;
 	}
 	
+	/**
+	 * Get the list of external account types.
+	 * 
+	 * @return
+	 */
 	public List<ExternalAccountType> getExternalAccountTypes() {
 		List<ExternalAccountType> externalAccountTypes;
 		externalAccountTypes = externalAccountTypeService.getAll();
@@ -781,66 +902,128 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return  externalAccountTypes;
 	}
 
+	/**
+	 * Get the array of department ids.
+	 * 
+	 * @return
+	 */
 	public Long[] getDepartmentId() {
 		return departmentIds;
 	}
 
+	/**
+	 * Set the list of department ids.
+	 * 
+	 * @param departmentIds
+	 */
 	public void setDepartmentIds(Long[] departmentIds) {
 		this.departmentIds = departmentIds;
 	}
 
+	/**
+	 * If true the user is an admin.
+	 * 
+	 * @return
+	 */
 	public boolean isAdminRole() {
 		return adminRole;
 	}
 
+	/**
+	 * If true the user is an admin.
+	 * 
+	 * @param adminRole
+	 */
 	public void setAdminRole(boolean adminRole) {
 		this.adminRole = adminRole;
 	}
 
+	/**
+	 * If set to true the user has basic user role.
+	 * 
+	 * @return
+	 */
 	public boolean isUserRole() {
 		return userRole;
 	}
 
+	/**
+	 * If set to true user has basic user role.
+	 * 
+	 * @param userRole
+	 */
 	public void setUserRole(boolean userRole) {
 		this.userRole = userRole;
 	}
 
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
 
-	public UserIndexService getUserIndexService() {
-		return userIndexService;
-	}
-
+	/**
+	 * Set the user index service.
+	 * 
+	 * @param userIndexService
+	 */
 	public void setUserIndexService(UserIndexService userIndexService) {
 		this.userIndexService = userIndexService;
 	}
 
+	/**
+	 * If true the user is a researcher.
+	 * 
+	 * @return
+	 */
 	public boolean isResearcherRole() {
 		return researcherRole;
 	}
 
+	/**
+	 * Set the researcher role.
+	 * 
+	 * @param researcherRole
+	 */
 	public void setResearcherRole(boolean researcherRole) {
 		this.researcherRole = researcherRole;
 	}
 	
+	/**
+	 * Set the collaborator role.
+	 * 
+	 * @param collaboratorRole
+	 */
 	public void setCollaboratorRole(boolean collaboratorRole) {
 		this.collaboratorRole = collaboratorRole;
 	}
 	
+	/**
+	 * Set the importer role.
+	 * 
+	 * @param importerRole
+	 */
 	public void setImporterRole(boolean importerRole) {
 		this.importerRole = importerRole;
 	}
 
+	/**
+	 * Is author role.
+	 * 
+	 * @return
+	 */
 	public boolean isAuthorRole() {
 		return authorRole;
 	}
 
+	/**
+	 * Set the author role.
+	 * 
+	 * @param authorRole
+	 */
 	public void setAuthorRole(boolean authorRole) {
 		this.authorRole = authorRole;
 	}
@@ -989,18 +1172,38 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		}
 	}
 
+	/**
+	 * If set to true the user has collection administrator role.
+	 * 
+	 * @return
+	 */
 	public boolean isCollectionAdminRole() {
 		return collectionAdminRole;
 	}
 
+	/**
+	 * If set to true the user has collection administration role.
+	 * 
+	 * @param collectionAdminRole
+	 */
 	public void setCollectionAdminRole(boolean collectionAdminRole) {
 		this.collectionAdminRole = collectionAdminRole;
 	}
 
+	/**
+	 * Set the invite user service.
+	 * 
+	 * @param inviteUserService
+	 */
 	public void setInviteUserService(InviteUserService inviteUserService) {
 		this.inviteUserService = inviteUserService;
 	}
 
+	/**
+	 * Get the file system size for the user.
+	 * 
+	 * @return
+	 */
 	public Long getFileSystemSize() {
 		return fileSystemSize;
 	}
@@ -1038,10 +1241,20 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return SUCCESS;
 	}
 
+	/**
+	 * Set the person service.
+	 * 
+	 * @param personService
+	 */
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
 
+	/**
+	 * Set the athority id.
+	 * 
+	 * @param authorityId
+	 */
 	public void setAuthorityId(Long authorityId) {
 		this.authorityId = authorityId;
 	}
@@ -1056,70 +1269,118 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	}
 
 
+	/**
+	 * Get the row end.
+	 * 
+	 * @return
+	 */
 	public int getRowEnd() {
 		return rowEnd;
 	}
 
 
+	/**
+	 * Set the row end.
+	 * 
+	 * @param rowEnd
+	 */
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
 	}
 
 
+	/**
+	 * Get the sort type.
+	 * 
+	 * @return
+	 */
 	public String getSortType() {
 		return sortType;
 	}
 
 
+	/**
+	 * Set the sort type.
+	 * 
+	 * @param sortType
+	 */
 	public void setSortType(String sortType) {
 		this.sortType = sortType;
 	}
 
 
+	/**
+	 * Get the sort element.
+	 * 
+	 * @return
+	 */
 	public String getSortElement() {
 		return sortElement;
 	}
 
 
+	/**
+	 * Set the sort element.
+	 * 
+	 * @param sortElement
+	 */
 	public void setSortElement(String sortElement) {
 		this.sortElement = sortElement;
 	}
 
+	/**
+	 * Set the researcher index.
+	 * 
+	 * @param researcherIndexService
+	 */
 	public void setResearcherIndexService(
 			ResearcherIndexService researcherIndexService) {
 		this.researcherIndexService = researcherIndexService;
 	}
 	
+	/**
+	 * Get the error message.
+	 * 
+	 * @return
+	 */
 	public String getMessage() {
 		return message;
 	}
 
+	/**
+	 * Set the error message.
+	 * 
+	 * @param message
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
-	public AuthenticateUserOverrideService getAuthenticateUserOverrideService() {
-		return authenticateUserOverrideService;
-	}
-
+	/**
+	 * Set the authentication user override service.
+	 * 
+	 * @param authenticateUserOverrideService
+	 */
 	public void setAuthenticateUserOverrideService(
 			AuthenticateUserOverrideService authenticateUserOverrideService) {
 		this.authenticateUserOverrideService = authenticateUserOverrideService;
 	}
 
-	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
-		return userWorkspaceIndexProcessingRecordService;
-	}
-
+	/**
+	 * Set the user workspace index processing record service.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
-	public IndexProcessingTypeService getIndexProcessingTypeService() {
-		return indexProcessingTypeService;
-	}
-
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
@@ -1130,27 +1391,48 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		adminUserId = userId;
 	}
 
-	public ExternalAccountTypeService getExternalAccountTypeService() {
-		return externalAccountTypeService;
-	}
-
+	/**
+	 * Set the external account type service.
+	 * 
+	 * @param externalAccountTypeService
+	 */
 	public void setExternalAccountTypeService(
 			ExternalAccountTypeService externalAccountTypeService) {
 		this.externalAccountTypeService = externalAccountTypeService;
 	}
 
+	/**
+	 * Get the external account type id.
+	 * 
+	 * @return
+	 */
 	public long getExternalAccountTypeId() {
 		return externalAccountTypeId;
 	}
 
+	/**
+	 * Set the external account type id.
+	 * 
+	 * @param externalAccountTypeId
+	 */
 	public void setExternalAccountTypeId(long externalAccountTypeId) {
 		this.externalAccountTypeId = externalAccountTypeId;
 	}
 
+	/**
+	 * Get the external account user name.
+	 * 
+	 * @return
+	 */
 	public String getExternalAccountUserName() {
 		return externalAccountUserName;
 	}
 
+	/**
+	 * Set the external account user name.
+	 * 
+	 * @param externalAccountUserName
+	 */
 	public void setExternalAccountUserName(String externalAccountUserName) {
 		this.externalAccountUserName = externalAccountUserName;
 	}

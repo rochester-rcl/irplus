@@ -32,6 +32,7 @@ import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
@@ -100,6 +101,8 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	
 
 
+
+
 	/**
 	 * Prepares for the action
 	 * 
@@ -145,7 +148,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 			}
 			
 			// token is a combination of random number and email
-			String emailToken = TokenGenerator.getToken() + email.getEmail();
+			String emailToken = TokenGenerator.getToken();
 			email.setVerifiedFalse(emailToken);
 			irUser.addUserEmail(email, false);
 			userService.makeUserPersistent(irUser);
@@ -184,7 +187,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	 * @return
 	 * @throws FileSharingException 
 	 */
-	public String setVerified() throws FileSharingException
+	public String setVerified() throws FileSharingException, UnVerifiedEmailException
 	{
 		log.debug("verifing email with id = " + emailId);
 
@@ -233,7 +236,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		}
 
 		UserEmail userEmail = userService.getEmail(emailId, false);
-		userEmail.setVerifiedFalse(TokenGenerator.getToken() + userEmail.getEmail());
+		userEmail.setVerifiedFalse(TokenGenerator.getToken() );
 	    userService.sendAccountVerificationEmailForUser(userEmail.getToken(), userEmail.getEmail(), irUser.getUsername());
 
 		return "added";
