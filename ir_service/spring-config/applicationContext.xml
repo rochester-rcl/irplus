@@ -16,13 +16,10 @@
    limitations under the License.
 -->   
 
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
-    "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-<!-- ****************************************** --> 
-<!-- Application context file for ir_hibernate -->
-<!-- ****************************************** -->    
-<beans>
 
     <!-- ****************************************** --> 
     <!-- Property configuration -->
@@ -86,7 +83,7 @@
     <import resource="ir-news-hibernate.xml"/>
     <import resource="ir-researcher-hibernate.xml"/>
     <import resource="ir-statistics-hibernate.xml"/>
-    
+    <import resource="ir-invite-hibernate.xml"/>
     
    <!-- ****************************************** --> 
    <!-- Institutional Repository services  -->

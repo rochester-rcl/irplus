@@ -21,7 +21,7 @@ import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
 import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
-import edu.ur.ir.user.InviteInfo;
+import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.UserEmail;
@@ -78,7 +78,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	private RoleService roleService;
 
 	/** Invite information */
-	private InviteInfo inviteInfo;
+	private FileInviteInfo inviteInfo;
 	
 	/** Message that can be displayed to the user. */
 	private String message;
@@ -290,7 +290,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	 * 
 	 * @return
 	 */
-	public InviteInfo getInviteInfo() {
+	public FileInviteInfo getInviteInfo() {
 		return inviteInfo;
 	}
 

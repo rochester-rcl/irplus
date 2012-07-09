@@ -26,6 +26,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -79,8 +80,12 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 				try {
 					// Share files -  If there are any invitations sent to this email address 
 					inviteUserService.sharePendingFilesForEmail(userId, email.getEmail());
-				} catch (FileSharingException e) {
-					log.error("File cannot be shared with themselves" + e.getMessage());
+					
+				} catch (UnVerifiedEmailException e) {
+					log.error("Email has not yet ben verified " + e.getMessage());
+				}
+				catch(FileSharingException fse){
+					log.error("User sharing with themselves " + fse.getMessage());
 				}
 				
 				addFieldError("emailVerified", 
@@ -159,6 +164,11 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 		this.repositoryService = repositoryService;
 	}
 
+	/**
+	 * Get the repository.
+	 * 
+	 * @return
+	 */
 	public Repository getRepository() {
 		return repository;
 	}

@@ -319,12 +319,11 @@
     </bean>
     
    <!-- ****************************************** --> 
-   <!-- Service to invite user					   -->
+   <!-- Service to invite user for personal workspace -->
    <!-- ****************************************** --> 
    <bean id="inviteUserService" 
        class="edu.ur.ir.user.service.DefaultInviteUserService">
-	   <property name="inviteInfoDAO" ref="inviteInfoDAO"/>
-       <property name="irUserDAO" ref="irUserDAO"/>
+	   <property name="fileInviteInfoDAO" ref="fileInviteInfoDAO"/>
        <property name="personalFileDAO" ref="personalFileDAO"/>
        <property name="userService" ref="userService"/>
        <property name="fileCollaboratorDAO" ref="fileCollaboratorDAO"/>
@@ -333,12 +332,17 @@
        <property name="userExistMailMessage" ref="userExistMailMessage"/>
        <property name="userNotExistMailMessage" ref="userNotExistMailMessage"/>
        <property name="unShareMailMessage" ref="unShareMailMessage"/>
+        <property name="newFileVersionMailMessage" ref="newFileVersionMailMessage"/>
        <property name="securityService" ref="securityService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="roleService" ref="roleService"/>
        <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
-       <property name="newFileVersionMailMessage" ref="newFileVersionMailMessage"/>
+       <property name="folderInviteInfoDAO" ref="folderInviteInfoDAO"/>
+       <property name="folderAutoShareInfoDAO" ref="folderAutoShareInfoDAO"/>
+       <property name="userWorkspaceIndexProcessingRecordService" ref="userWorkspaceIndexProcessingRecordService"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
      
    <!-- ****************************************** --> 
@@ -873,6 +877,14 @@
    <bean id="extentTypeSubFieldMapperService" 
        class="edu.ur.ir.item.metadata.marc.service.DefaultExtentTypeSubFieldMapperService">
        <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Invite token service  -->
+   <!-- ****************************************** --> 
+    <bean id="inviteTokenService" 
+       class="edu.ur.ir.invite.service.DefaultInviteTokenService">
+       <property name="inviteTokenDAO" ref="inviteTokenDAO"/>
    </bean>
    
    <!-- ****************************************** --> 
