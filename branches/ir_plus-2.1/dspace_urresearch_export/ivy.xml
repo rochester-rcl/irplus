@@ -30,7 +30,7 @@
     <dependencies>
 
         <dependency org="dspace_urresearch_import_export" 
-            name="dspace_urresearch_import_export" changing="true" rev="2.1" />
+            name="dspace_urresearch_import_export" changing="true" rev="2.1.1" />
   
         <!-- commons io files -->
         <dependency org="commons-io" name="commons-io" rev="1.4">

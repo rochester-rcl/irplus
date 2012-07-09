@@ -28,10 +28,10 @@
     
        
         <!--  file database dependency -->
-        <dependency org="file_db" name="file_db" rev="2.1" changing="true"/>
+        <dependency org="file_db" name="file_db" rev="2.1.1" changing="true"/>
       
         <!--  file database dependency -->
-        <dependency org="metadata" name="metadata" rev="2.1" changing="true"/>
+        <dependency org="metadata" name="metadata" rev="2.1.1" changing="true"/>
 
 
         <!-- javax mail libaries -->
@@ -69,16 +69,16 @@
         </dependency>
         
         <!-- pdf box jars  -->     
-         <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.2.1" transitive="false">
+         <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.7.0" transitive="false">
 	        <artifact name="pdfbox" type="jar"/> 
         </dependency>
         
-         <dependency org="org.apache.pdfbox" name="fontbox" rev="1.2.1" transitive="false">
+         <dependency org="org.apache.pdfbox" name="fontbox" rev="1.7.0" transitive="false">
 	        <artifact name="fontbox" type="jar"/> 
         </dependency>
         
-        <dependency org="org.apache.pdfbox" name="jempbox" rev="1.2.1" transitive="false">
-	        <artifact name="jempbox" type="jar" url="http://repo1.maven.org/maven2/org/apache/pdfbox/jempbox/1.2.1/jempbox-1.2.1.jar"/> 
+        <dependency org="org.apache.pdfbox" name="jempbox" rev="1.7.0" transitive="false">
+	        <artifact name="jempbox" type="jar" /> 
         </dependency>
         
           
