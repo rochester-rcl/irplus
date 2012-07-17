@@ -44,7 +44,6 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
-import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
@@ -382,33 +381,6 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
 		{
 		    return("accessDenied");
-		}
-		
-		IrUser user = fileCollaborator.getCollaborator();
-
-		// If user is unsharing themselves, then unshare the user and load the parent folder
-		if (userId.equals(user.getId())) {
-			returnResult =  "workspace";
-		} 
-
-		// un-index the file
-		PersonalFile pf = userFileSystemService.getPersonalFile(user, fileCollaborator.getVersionedFile());
-
-		// Check if personal file exist. Sometimes the file may be still in Shared file inbox.
-		// In that case, there is no need to delete from index
-		if (pf != null) {
-			
-			userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
-	    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-		}
-		else
-		{
-			SharedInboxFile sif = user.getSharedInboxFile(fileCollaborator.getVersionedFile());
-			if( sif != null )
-			{
-				userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
-		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-			}
 		}
 		
 		inviteUserService.unshareFile(fileCollaborator, unInvitingUser);

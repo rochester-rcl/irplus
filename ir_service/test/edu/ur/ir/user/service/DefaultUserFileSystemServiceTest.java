@@ -37,6 +37,8 @@ import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
@@ -53,6 +55,8 @@ import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecord;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.util.FileUtil;
 
 
@@ -101,7 +105,13 @@ public class DefaultUserFileSystemServiceTest {
 		/** unique name generator */
 		UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) ctx.getBean("uniqueNameGenerator");
 		
+		   /** index processing type record service  */
+		IndexProcessingTypeService indexProcessingTypeService = 
+	    	(IndexProcessingTypeService) ctx.getBean("indexProcessingTypeService");
 		
+	    /** User index processing record service  */
+		UserWorkspaceIndexProcessingRecordService recordProcessingService = 
+	    	(UserWorkspaceIndexProcessingRecordService) ctx.getBean("userWorkspaceIndexProcessingRecordService");
 		/**
 		 * Test creating a file
 		 * 
@@ -496,7 +506,15 @@ public class DefaultUserFileSystemServiceTest {
 
 			RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
 			Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
-			// save the repository
+			
+			IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+			indexProcessingTypeService.save(updateProcessingType);
+			
+			IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+			indexProcessingTypeService.save(deleteProcessingType);
+			
+			IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+			indexProcessingTypeService.save(insertProcessingType);
 			tm.commit(ts);
 			
 	        // Start the transaction 
@@ -568,6 +586,7 @@ public class DefaultUserFileSystemServiceTest {
 			assert u1Other.getRootFiles().contains(sharedInboxPersonalFile) : 
 				"Root files should contain the specified sharedInboxPersonalFile";
 			
+			
 			tm.commit(ts);
 
 			// Start a transaction 
@@ -581,6 +600,14 @@ public class DefaultUserFileSystemServiceTest {
 			
 		    // Start new transaction
 			ts = tm.getTransaction(td);
+			List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+			for( UserWorkspaceIndexProcessingRecord record : records )
+			{
+				recordProcessingService.delete(record);
+			}
+			indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+			indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+			indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			assert userService.getUser(user1.getId(), false) == null : "User should be null"; 
 			assert userService.getUser(user.getId(), false) == null : "User should be null";
 			helper.cleanUpRepository();

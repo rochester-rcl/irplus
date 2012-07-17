@@ -90,6 +90,7 @@ YAHOO.ur.folder =
 	    document.newFolderForm.folderDescription.value = "";
 	    document.newFolderForm.newFolder.value = "true";
 	    document.newFolderForm.updateFolderId.value = "";
+	   
     
     },
     
@@ -363,7 +364,44 @@ YAHOO.ur.folder =
         };
         
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getFolderAction + '?updateFolderId=' + id +  '&bustcache='+new Date().getTime(), 
+            getFolderAction + '?updateFolderId=' + id  + '&bustcache='+new Date().getTime(), 
+            callback, null);
+                	
+	},
+	
+	/**
+     * Function to create a new folder
+     */
+    newFolder : function(parentId)
+    {
+	    /*
+         * This call back updates the html when editing the folder
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+ 			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		             
+                    var divToUpdate = document.getElementById('newFolderDialogFields');
+                    divToUpdate.innerHTML = o.responseText;
+
+                    document.newFolderForm.newFolder.value = "true";
+                    YAHOO.ur.folder.newFolderDialog.showFolder();
+                }
+                
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Edit Folder Failure ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getFolderAction + '?parentFolderId=' + parentId  + '&bustcache='+new Date().getTime(), 
             callback, null);
                 	
 	},

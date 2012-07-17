@@ -61,7 +61,7 @@
 	           <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
- 		                   onClick="YAHOO.ur.folder.newFolderDialog.showFolder();"
+ 		                   onClick="YAHOO.ur.folder.newFolder(${parentFolderId});"
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
 	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
@@ -118,8 +118,7 @@
 	       <!-- End - To create new Publication -->
 	       
            <input type="hidden" id="myFolders_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>
-           <input type="hidden" id="page_type" 
-	                  name="pageType"  value="folder_page"/>
+           <input type="hidden" id="page_type" name="pageType"  value="folder_page"/>
 	       <input type="hidden" id="folder_sort_type" name="sortType" value="${sortType}"/>
 	       <input type="hidden" id="folder_sort_element" name="sortElement" value="${sortElement}"/>
        
@@ -217,7 +216,8 @@
 	                                 ${ir:canBreakLock(user,fileSystemObject.versionedFile)},
 	                                 ${ir:canShareFile(user,fileSystemObject.versionedFile)}, 
 	                                 ${ir:canEditFile(user,fileSystemObject.versionedFile)},
-	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
+	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', 
+	                                 '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
 	                             </div>
 	                         </c:if>
                         </urstb:td>
@@ -251,13 +251,13 @@
                                 <c:url var="fileProperties" value="/user/viewPersonalFile.action">
                                     <c:param name="personalFileId" value="${fileSystemObject.id}"/>
                                 </c:url>
-	                            <a href="${fileProperties}">properties</a>
+	                            <a href="${fileProperties}">Properties</a>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
                                 <c:url var="folderProperties" value="/user/viewFolderProperties.action">
                                     <c:param name="personalFolderId" value="${fileSystemObject.id}"/>
                                 </c:url>	                        
-	                           <a href="${folderProperties}">properties</a>
+	                           <a href="${folderProperties}">Properties</a>
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>
@@ -266,19 +266,19 @@
                	                <!--  owners always have invite permissions -->
                	                <c:if test="${ir:isOwner(user, fileSystemObject.versionedFile)}">
                	                    <c:if test="${empty fileSystemObject.versionedFile.collaborators}">
-	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shareable </a>
+	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
 	                      		    </c:if>
 	                      		    <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shared </a>
+	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shared </a>
 	                      		    </c:if>
                	                </c:if>
                	                <c:if test="${!ir:isOwner(user, fileSystemObject.versionedFile)}">
                	                    <ir:acl domainObject="${fileSystemObject.versionedFile}" hasPermission="SHARE">
 	                      		        <c:if test="${empty fileSystemObject.versionedFile.collaborators}">
-	                      		             <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shareable </a>
+	                      		             <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
 	                      		        </c:if>
 	                      		        <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		            <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shared </a>
+	                      		            <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shared </a>
 	                      		        </c:if>
 	                                </ir:acl>
 	                               
@@ -286,7 +286,12 @@
 	                                    Not Shareable
 	                                </c:if>
                	                </c:if>
-               	            
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
+	                             <c:url var="autoShareUrl" value="/user/autoShareFolder.action">
+                                    <c:param name="personalFolderId" value="${fileSystemObject.id}"/>
+                                </c:url>
+                                <span class="groupAddBtnImg">&nbsp;</span><a href="${autoShareUrl}">Auto Share</a>	 
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>

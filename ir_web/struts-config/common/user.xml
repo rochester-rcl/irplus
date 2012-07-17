@@ -24,7 +24,7 @@
 <struts>
     
     <include file="struts-default.xml"/>
-
+    
     <package name="user" namespace="/user" extends="struts-default">
            <result-types>
                <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
@@ -44,7 +44,9 @@
                  <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
-                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="params">
+ 	                 <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+             	 </interceptor-ref>
                  <interceptor-ref name="prepare"/>
                  <interceptor-ref name="modelDriven"/>
                  <interceptor-ref name="conversionError"/>
@@ -65,10 +67,14 @@
                  <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
-                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="params">
+ 	                 <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+             	 </interceptor-ref>
                  <interceptor-ref name="prepare"/>
                  <interceptor-ref name="modelDriven"/>
-                 <interceptor-ref name="params"/>
+                  <interceptor-ref name="params">
+ 	                 <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+             	 </interceptor-ref>
                  <interceptor-ref name="conversionError"/>
                  <interceptor-ref name="validation"/>
                  <interceptor-ref name="workflow"/>
@@ -76,9 +82,11 @@
              </interceptor-stack>
              
         </interceptors>
-        
         <!--  set the default stack for this package -->
         <default-interceptor-ref name="default"/>
+        
+        <default-action-ref name="unknownAction" />
+        
  
   		<global-results>
         	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
@@ -219,6 +227,12 @@
             <result name="success" type="no-op"/>
         </action> 
         
+        <action name="viewFilesSharedWithUser"
+            class="edu.ur.ir.web.action.user.ViewAllFilesSharedWithUser">
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/workspace/view_all_files_shared_with_user.jsp</result>
+        </action>
+        
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
             <interceptor-ref name="editStack"/>
@@ -247,6 +261,10 @@
             <result name="accessDenied">/access_denied_js.jsp</result>
             <result name="success" type="no-op"/>
         </action>  
+        
+        <!--  ************************************ -->
+        <!--  Move files/folders actions     -->
+        <!--  ************************************ -->
         
         <action name="viewMovePersonalFolderLocations"
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
@@ -1005,7 +1023,7 @@
         </action>
         
         <!--  ************************************ -->
-        <!--  Invite User actions			       -->
+        <!--  Invite User actions (File)          -->
         <!--  ************************************ -->
 
 		<action name="checkSharePermission" class="edu.ur.ir.web.action.user.InviteUser"
@@ -1069,6 +1087,50 @@
         </action> 
 
  
+        <!--  ************************************ -->
+        <!--  Auto share folder actions (Folder)   -->
+        <!--  ************************************ -->
+        <action name="autoShareFolder" 
+            class="edu.ur.ir.web.action.user.AutoShareFolder">
+            <interceptor-ref name="editStack"/>           
+            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
+        </action>
+        
+        <action name="autoShareFolderWithUsers" 
+            method="autoShareFolder"
+            class="edu.ur.ir.web.action.user.AutoShareFolder">
+            <interceptor-ref name="editStack"/>           
+            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
+        </action>
+        
+        <action name="removeAutoShareFolder" 
+            method="deleteAutoShare"
+            class="edu.ur.ir.web.action.user.AutoShareFolder">
+            <interceptor-ref name="editStack"/>           
+            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
+        </action>
+        
+        <action name="removeAutoShareFolderInvite" 
+            method="deleteFolderInvite"
+            class="edu.ur.ir.web.action.user.AutoShareFolder">
+            <interceptor-ref name="editStack"/>           
+            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
+        </action>
+        
+        <action name="getFolderAutoSharePermissions" method="getPermissions"  
+        		class="edu.ur.ir.web.action.user.AutoShareFolder">
+        	<interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/edit_folder_auto_share_permissions_form.jsp</result>
+        </action>
+        
+        <action name="updateFolderAutoSharePermissions" method="updatePermissions"  
+        		class="edu.ur.ir.web.action.user.AutoShareFolder">
+        	<interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/edit_folder_auto_share_permissions_form.jsp</result>
+        </action>
+        
         <!--  ************************************ -->
         <!--  Change Password  actions			       -->
         <!--  ************************************ -->

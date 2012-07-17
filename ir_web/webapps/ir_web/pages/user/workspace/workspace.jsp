@@ -222,9 +222,6 @@
 		    <form id="addFolder" name="newFolderForm" 
 		        method="post" action="user/addPersonalFolder.action">
 		              
-		        <input type="hidden" id="newFolderForm_parentFolderId"
-		               name="parentFolderId" value="${parentFolderId}"/>
-
               	<div id="newFolderDialogFields">
               	    <c:import url="personal_folder_form.jsp"/>
               	</div>

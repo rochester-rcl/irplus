@@ -66,4 +66,15 @@ public interface FileInviteInfoDAO extends CrudDAO<FileInviteInfo>, CountableDAO
 	 * @return - all invites made by the user or an empty list if no invites found
 	 */
 	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user);
+	
+	/**
+	 * Find the Invite information for all invites that contain the specified versioned file ids and the 
+	 * given emails.
+	 * 
+	 * @param versionedFileIds - list of versioned file ids the invite should have
+	 * @param email - email the invite should have
+	 * @return list of invite infos found
+	 */
+	public List<FileInviteInfo> getInviteInfosWithVersionedFilesAndEmail(List<Long> versionedFileIds, 
+			String email);
 }
