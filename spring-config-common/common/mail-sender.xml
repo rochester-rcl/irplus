@@ -38,6 +38,7 @@
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
 	   <property name="host" value="${mail.sender.host}" /> 
 	   <property name="port" value="${mail.sender.port}"/>
+	   <property name="defaultEncoding" value="UTF-8"/>
 	   <!--  uncomment for ssl
 	       <property name="session" ref="mailSession" /> 
 	    -->
