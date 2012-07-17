@@ -31,7 +31,7 @@
 <html>
 
 <head>
-    <title>Invite user</title>
+    <title>Auto Share Folder(s) With User</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -50,20 +50,15 @@
     <ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
- 	<ur:js src="page-resources/yui/tabview/tabview-min.js"/>
+ 	
 
- 	<ur:js src="pages/js/base_path.js"/>
+ 	<ur:js src="pages/js/base_path.js" />
  	<ur:js src="page-resources/js/util/ur_util.js"/>
+ 	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-    <ur:js src="page-resources/js/user/invite_user.js"/>
-    
- 	<script type="text/javascript">
-       	var myTabs = new YAHOO.widget.TabView("invite-user-tabs");
-    </script>    
+ 	<ur:js src="page-resources/js/user/auto_share_folder.js"/>
     
 </head>
-
-
 
 <body  class="yui-skin-sam">
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
@@ -74,23 +69,19 @@
       
         <div id="bd">
 			
-			<h3> Invite user </h3>
-	        
-	        <!--  set up tabs for editing news -->
-	        <div id="invite-user-tabs" class="yui-navset">
-	            <ul class="yui-nav">
-	                <li class="selected"><a href="#tab1"><em>Invite User</em></a></li>
-	            </ul>
+			<h3>Auto Share Folder: ${personalFolder.name}</h3>
+			<p>Will automatically share files added to the folder and files currently existing in the folder</p>
 	
-	            <div class="yui-content">
-	                <!--  first tab -->
-	                <div id="tab1">  
-			        <!--  create the first column -->
-			        <div class="yui-g">
+	        <div class="yui-content">
+	            <div class="yui-g">
 		                <br/>
 						<ur:basicForm id="showWorkspace" name="backToWorkspace" method="POST" action="user/workspace.action">
-							<input type="hidden" name="parentFolderId" value="${parentFolderId}">
-						
+						    <c:if test="${personalFolder.parent != null }">
+							    <input type="hidden" name="parentFolderId" value="${personalFolder.parent.id}">
+						    </c:if>
+						    <c:if test="${personalFolder.parent == null }">
+							    <input type="hidden" name="parentFolderId" value="0">
+						    </c:if>
 							
 							<button class="ur_button" type="submit"
 				                   onmouseover="this.className='ur_buttonover';"
@@ -103,20 +94,27 @@
 				            
 				           <div class="contentContainer">
 				               <div class="contentBoxTitle">
-				                   <p>User to share the file with</p>
+				                   <p>User(s) to auto-share folder with</p>
 				               </div>
 				           
 				               <div class="contentBoxContent">
 				               		<p>
-								          <form id="addInvite" name="newInviteForm" method="POST" action="<c:url value="/user/addInviteUser.action"/>">
+								          <form id="addInvite" name="newInviteForm" 
+								          onsubmit="javascript: return YAHOO.ur.auto_share.validateAutoShareForm();"
+								          method="post" 
+								          action="<c:url value="/user/autoShareFolderWithUsers.action"/>">
 								              <table class="formTable">
 		
 											  <input type="hidden" id="share_file_ids"
 								               		name="shareFileIds" value="${shareFileIds}"/>
-											  <input type="hidden" name="parentFolderId" value="${parentFolderId}"/>						               		
+											  <input type="hidden" name="personalFolderId" value="${personalFolder.id}"/>						               		
 								               		
 								              <tr>
 								              <td colspan="2">  <div id="inviteUserError" class="errorMessage"></div> </td>
+									          </tr>
+									          <tr>
+									              <td><input type="checkbox" name="includeSubFolders" value="true"/> </td>
+									              <td>Apply permissions to existing sub folders and files</td>
 									          </tr>
 									          <tr> 
 									              <td></td>
@@ -124,8 +122,8 @@
 									             
 									          </tr>
 									          <tr> 
-									          <td> <label class="label" for="newUserForm_middle_name">Email(s) </label>  </td>
-									          <td> <textarea name="email" id="newInviteForm_inviteEmail" cols="52" rows="5"></textarea></td>
+									          <td>Email(s)</td>
+									          <td> <textarea name="emails" id="newInviteForm_inviteEmail" cols="52" rows="5"></textarea></td>
 									          </tr>
 		
 											  <tr>
@@ -138,17 +136,18 @@
 									          <c:forEach var="classTypePermission" items="${classTypePermissions}">
 												  <tr>
 												  <td>  <input type="checkbox" name="selectedPermissions" id="${classTypePermission.name}" value="${classTypePermission.id}" 
-												      onclick="YAHOO.ur.invite.autoCheckPermission(this, selectedPermissions);"/> </td>
+												      onclick="YAHOO.ur.auto_share.autoCheckPermission(this, selectedPermissions);"/> </td>
 										          <td> ${classTypePermission.description}</td>
 												  </tr>
 			           						  </c:forEach>
 											  
 											  <tr>
 											  <td colspan="2" align="center"> 
-												  <button class="ur_button" id="inviteUser" type="button"
+												  <button class="ur_button" id="inviteUser" type="submit"
+												           
 							                               onmouseover="this.className='ur_buttonover';"
 							                               onmouseout="this.className='ur_button';"
-							                               >Invite User</button>
+							                               >Auto Share</button>
                               				  </td>
 											  </tr>
 											  </table>
@@ -164,11 +163,24 @@
 		                    
 		                    <div class="contentContainer">
 		                        <div class="contentBoxTitle">
-		                            <p>File(s) selected to share</p>
+		                            <p>Auto sharing with</p>
 		                        </div>
 		                   
 		                        <div class="contentBoxContent">
-						     		<div id="newCollaborators"></div>
+		                        <p>
+		                            <c:if test="${empty personalFolder.autoShareInfos && empty personalFolder.folderInviteInfos}">
+						     		Not auto-sharing with anyone
+						     		</c:if>
+						     		<c:if test="${!empty personalFolder.autoShareInfos || !empty personalFolder.folderInviteInfos}">
+						     		    <c:forEach var="autoShareInfo" items="${personalFolder.autoShareInfos}">
+						     		        ${autoShareInfo.collaborator.firstName}&nbsp;${autoShareInfo.collaborator.lastName}
+						     		        &nbsp;<a href="javascript:YAHOO.ur.auto_share.editPermissions(${autoShareInfo.id})">Edit</a>&nbsp;<a href="javascript:YAHOO.ur.auto_share.unshareFolder(${autoShareInfo.id}, '<c:url value="/user/removeAutoShareFolder.action"/>');">Remove Auto Share</a><br/>
+						     		    </c:forEach>
+						     		    <c:forEach var="invite" items="${ personalFolder.folderInviteInfos}">
+						     		        ${invite.email}&nbsp; [to be shared]&nbsp; <a href="javascript:YAHOO.ur.auto_share.unshareFolder(${invite.id}, '<c:url value="/user/removeAutoShareFolderInvite.action"/>');">Remove Auto Share</a><br/>
+						     		    </c:forEach>
+						     		</c:if> 
+						     	</p>
 		                        </div>
 		                    </div>
 		                </div>
@@ -176,15 +188,8 @@
 	                
 	                </div>
 	                <!--  end the grid -->
-
-		        </div>
-	            <!--  end first tab -->
-
-	       </div>
-	       <!--  end content -->
-	   
-	   </div>
-	   <!-- end tabs -->
+	        </div>
+	        <!-- end content div -->
 	   
 	  </div>
       <!--  end body div -->
@@ -194,75 +199,62 @@
   
   </div>
   <!--  End doc div-->
-
-	        <div id="editPermissionsDialog" class="hidden">
-                <div class="hd">Edit Permissions</div>
-                <div class="bd">
-                    <form id="editPermissions" name="editPermissionsForm" 
-		                    method="post" action="<c:url value="/user/editPermissions.action"/>">
-		            	<div id="editPermissionsDialogFields">
-		            	    <c:import url="edit_permissions_form.jsp"/>
-	                  	</div>
-	                </form>
-                </div>
-            </div>
-
-			<!--  start unshare dialog -->
-			<div id="unshareFileConfirmDialog" class="hidden">
-			     <div class="hd">Delete?</div>
-			     <div class="bd">
-			        <form id="unshareConfirmationForm" name="unshareForm" 
-		                    method="post" action="<c:url value="/user/deleteCollaborator.action"/>">
-		            	<input type="hidden" id="unshareForm_fileCollaboratorId" name="fileCollaboratorId">
-		            	<input type="hidden" id="unshareForm_personalFileId" name="personalFileId">
-		            	<input type="hidden" id="unshareForm_parentFolderId" name="parentFolderId" value="${parentFolderId}" >
-                        <input type="hidden" id="unshareForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
-		            	
-			         <p>Do you want to unshare the file for the selected user?</p>
-			         </form>
-			     </div>
-			</div>
-			<!--  end unshare dialog -->
-
-
-			<!--  start unshare pending invitee dialog -->
-			<div id="unsharePendingInviteeConfirmDialog" class="hidden" >
-			     <div class="hd">Delete?</div>
-			     <div class="bd">
-			        <form id="unsharePendingInviteeConfirmationForm" name="unsharePendingInviteeForm" 
-		                    method="post" action="<c:url value="/user/deletePendingInvitee.action"/>">
-		            	<input type="hidden" id="unsharePendingInviteeForm_inviteInfoId" name="inviteInfoId">
-		            	<input type="hidden" id="unsharePendingInviteeForm_personalFileId" name="personalFileId">
-		            	<input type="hidden" id="unsharePendingInviteeForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
-			         <p>Do you want to unshare the file?</p>
-			         </form>
-			     </div>
-			</div>
-			<!--  end unshare pending invitee dialog -->
-
-		   <!--  start remove file dialog -->
-			<div id="removeFileConfirmDialog" class="hidden" >
-			     <div class="hd">Remove?</div>
-			     <div class="bd">
-			        <form id="remove_file_form" name="removeFileForm" 
-		                    method="post" action="<c:url value="/user/removeFile.action"/>">
-		            	<input type="hidden" id="remove_file_form_personal_file_id" name="personalFileId">
-		            	<input type="hidden" id="removeFileForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
-			         <p>Do you want to remove the file?</p>
-			         </form>
-			     </div>
-			</div>
-			<!--  end remove file  dialog -->			
-						      
-
   
-   <!--  wait div -->
-   <div id="wait_dialog_box" class="hidden">
-	    <div class="hd">Processing...</div>
-		<div class="bd">
-		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
-		    <p><img src="${wait}"></img></p>
+  <!--  start unshare dialog [ this will handle both unsharing an existing user and a user yet to register ]-->
+  <div id="unshareFolderConfirmDialog" class="hidden">
+      <div class="hd">Delete?</div>
+	  <div class="bd">
+	      <form id="unshareConfirmationForm" 
+	            name="unshareForm" 
+		        method="post" action="">
+		       <input type="hidden" id="unshareFormAutoShareInfoId" name="folderAutoShareInfoId">
+		       <input type="hidden" id="unshareFormParentFolderId" name="personalFolderId" value="${personalFolderId}" >
+		            	
+			   <p>Do you you want to stop auto sharing with selected user?</p>
+			   
+			   <table class="formTable">
+			       <tr>
+			           <td>
+			               Include sub folders:
+			           </td>
+			           <td>
+			               <input type="checkbox" name="includeSubFolders" value="true"/>
+			           </td>
+			       </tr>
+			       <tr>
+			           <td>
+			               Remove Permissions on Files:
+			           </td>
+			           <td>
+			               <input type="checkbox" name="includeSubFiles" checked="checked" value="true"/> 
+			           </td>
+			       </tr>
+			   </table>
+			</form>
 		</div>
-	</div>       
+	</div>
+	<!--  end unshare dialog -->
+	
+	<div id="editFolderPermissionsDialog" class="hidden">
+        <div class="hd">Edit Permissions</div>
+        <div class="bd">
+            <form id="editPermissions" name="editPermissionsForm" 
+		                    method="post" action="<c:url value="/user/editPermissions.action"/>">
+		       <div id="editPermissionsDialogFields">
+		           <c:import url="edit_folder_auto_share_permissions_form.jsp"/>
+	           </div>
+	       </form>
+        </div>
+    </div>
+	
+	
+	<!--  wait div -->
+ 	<div id="wait_dialog_box" class="hidden">
+ 	    <div class="hd">Processing...</div>
+ 		<div class="bd">
+ 		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+ 		    <p><img src="${wait}"></img></p>
+ 		</div>
+ 	</div>       
 </body>
 </html>

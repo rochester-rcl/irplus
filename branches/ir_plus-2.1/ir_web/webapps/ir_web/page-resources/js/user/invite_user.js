@@ -150,8 +150,8 @@ YAHOO.ur.invite =
 	    var handleSuccess = function(o) 
 	    {
 	    	 YAHOO.ur.invite.waitDialog.hide();
-			// check for the timeout - forward user to login page if timout
-	        // occured
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       	    
 	            //get the response from adding a contributor type
@@ -577,7 +577,7 @@ YAHOO.ur.invite =
 	    YAHOO.ur.invite.createUnshareFileConfirmDialog();
 	    YAHOO.ur.invite.createUnsharePendingInviteeConfirmDialog();
 	    YAHOO.ur.invite.createRemoveFileConfirmDialog();
-	    YAHOO.ur.invite. createWaitDialog();
+	    YAHOO.ur.invite.createWaitDialog();
     }
     
 };

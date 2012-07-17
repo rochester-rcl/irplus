@@ -383,6 +383,9 @@ facet and searching
     padding-bottom: 6px;
 }
 
+.p_indent {
+	 padding: 5px;
+}
 
 /******************************
 override yui css files

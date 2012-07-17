@@ -130,6 +130,11 @@
     
 	               <!-- set to indicate a success full move -->
 	               <input type="hidden" id="action_success" value="${actionSuccess}" name="actionSuccess"/>
+	               <c:if test="${destinationId > 0}">
+	                   <c:if test="${destination.hasAutoSharing}">
+	                   Apply Auto Share Permissions to Moved Files and Folders<input type="checkbox" checked="checked" value="true" name="applyAutoShare"/>
+                       </c:if>
+                   </c:if>
                </form>
                <div class="dataTable">
               <urstb:table width="100%">

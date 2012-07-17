@@ -160,7 +160,16 @@ public class DefaultInviteUserServiceTest {
 
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
 		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
-		// save the repository
+		
+		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
 		tm.commit(ts);
 		
         // Start the transaction 
@@ -295,6 +304,15 @@ public class DefaultInviteUserServiceTest {
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 		inviteInfoDAO.makeTransient(inviteInfoDAO.getById(otherInfo.getId(), false));
+		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 
 		tm.commit(ts);
 
@@ -355,7 +373,14 @@ public class DefaultInviteUserServiceTest {
 		PersonalFile pf = userFileSystemService.addFileToUser(repo, f, user, 
 				    "test file", "description");
 		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
 		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
         tm.commit(ts);
 
         
@@ -414,7 +439,7 @@ public class DefaultInviteUserServiceTest {
 		VersionedFile otherVf = versionedFileDAO.getById(vf.getId(), false);
 		IrUser u = userService.getUser(user1.getUsername());
 		assert u.getSharedInboxFile(otherVf) != null : "Versioned file should exist in shared inbox";
-		
+				
 		tm.commit(ts);
 
 		// Start a transaction 
@@ -429,6 +454,16 @@ public class DefaultInviteUserServiceTest {
 		
 	    // Start new transaction
 		ts = tm.getTransaction(td);
+		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		
 		assert userService.getUser(user1.getId(), false) == null : "User1 should be null"; 
 		assert userService.getUser(user.getId(), false) == null : "User should be null";
 		assert roleService.getRole(role.getId(), false) == null : "Role should be null";

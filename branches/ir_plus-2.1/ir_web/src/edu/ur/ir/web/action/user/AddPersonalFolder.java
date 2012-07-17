@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -18,20 +18,25 @@
 package edu.ur.ir.web.action.user;
 
 
+import java.util.LinkedList;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.FolderAutoShareInfo;
+import edu.ur.ir.user.FolderInviteInfo;
+import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
-import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -76,11 +81,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	/** Message that can be displayed to the user. */
 	private String folderMessage;
 	
-	/** User index service for indexing files */
-	private UserWorkspaceIndexService userWorkspaceIndexService;
-	
-	/** Repository service for placing information in the repository */
-	private RepositoryService repositoryService;
+	private boolean useParentAutoShareProperties = false;
 	
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
@@ -88,7 +89,13 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	/** service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 
+	/* invite user service. */
+	private InviteUserService inviteUserService;
 	
+    private PersonalFolder parentFolder;
+
+
+
 	/**
 	 * Create the new folder
 	 */
@@ -133,19 +140,38 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		else
 		{
 		    // add sub folder	
-			PersonalFolder folder = userFileSystemService.getPersonalFolder(parentFolderId, true);
+			parentFolder = userFileSystemService.getPersonalFolder(parentFolderId, true);
 			
 			// user must be owner of folder
-			if( !folder.getOwner().getId().equals(thisUser.getId()))
+			if( !parentFolder.getOwner().getId().equals(thisUser.getId()))
 			{
 				return "accessDenied";
 			}
 			
 			try
 			{
-			    PersonalFolder personalFolder = folder.createChild(folderName);
+			    PersonalFolder personalFolder = parentFolder.createChild(folderName);
 			    personalFolder.setDescription(folderDescription);
-			    userFileSystemService.makePersonalFolderPersistent(folder);
+			    userFileSystemService.makePersonalFolderPersistent(parentFolder);
+			    
+			    if(useParentAutoShareProperties)
+			    {
+			    	Set<FolderAutoShareInfo> shareInfos = parentFolder.getAutoShareInfos();
+			    	for(FolderAutoShareInfo info : shareInfos)
+			    	{
+			    		LinkedList<String> emails = new LinkedList<String>();
+			    		emails.add(info.getCollaborator().getDefaultEmail().getEmail());
+			    	    inviteUserService.autoShareFolder(emails, personalFolder, info.getPermissions(),  false);
+			    	}
+			    	
+			    	Set<FolderInviteInfo> inviteInfos = parentFolder.getFolderInviteInfos();
+			    	for(FolderInviteInfo inviteInfo : inviteInfos)
+			    	{
+			    		LinkedList<String> emails = new LinkedList<String>();
+			    		emails.add(inviteInfo.getEmail());
+			    	    inviteUserService.autoShareFolder(emails, personalFolder, inviteInfo.getPermissions(),  false);
+			    	}
+			    }
 			    
 			    userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
@@ -252,28 +278,31 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	{
 		log.debug("get called");
 		
-		PersonalFolder folder = userFileSystemService.getPersonalFolder(updateFolderId, true);
-		
-		if( !folder.getOwner().getId().equals(userId))
+		if( parentFolderId != null && parentFolderId > 0)
 		{
-			return "accessDenied";
+			 parentFolder = userFileSystemService.getPersonalFolder(parentFolderId, true);
+			 if( ! parentFolder.getOwner().getId().equals(userId))
+			 {
+			     return "accessDenied";
+			 }
 		}
 		
-		
-		folderName = folder.getName();
-		folderDescription = folder.getDescription();
+		if( updateFolderId != null )
+		{
+		    PersonalFolder folder = userFileSystemService.getPersonalFolder(updateFolderId, true);
+		    
+		    if( !folder.getOwner().getId().equals(userId))
+		    {
+			    return "accessDenied";
+		    }
+		    folderName = folder.getName();
+		    folderDescription = folder.getDescription();
+		   
+		}
 		
 	    return "get";
 	}
 	
-	/**
-	 * The user service for dealing with actions.
-	 * 
-	 * @return
-	 */
-	public UserService getUserService() {
-		return userService;
-	}
 
 	/**
 	 * The user service for dealing with actions.
@@ -382,32 +411,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		this.updateFolderId = updateFolderId;
 	}
 
-	public UserFileSystemService getUserFileSystemService() {
-		return userFileSystemService;
-	}
-
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
-	}
-
-	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
-		return userWorkspaceIndexService;
-	}
-
-	public void setUserWorkspaceIndexService(UserWorkspaceIndexService userIndexService) {
-		this.userWorkspaceIndexService = userIndexService;
-	}
-
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
-	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
-		return userWorkspaceIndexProcessingRecordService;
 	}
 
 	public void setUserWorkspaceIndexProcessingRecordService(
@@ -415,12 +420,17 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
-	public IndexProcessingTypeService getIndexProcessingTypeService() {
-		return indexProcessingTypeService;
-	}
-
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
+	
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
+	}
+
+	public PersonalFolder getParentFolder() {
+		return parentFolder;
+	}
+
 }
