@@ -130,6 +130,5 @@
     <!-- ****************************************** -->
     <import resource="metadata-hibernate.xml"/> 
     <import resource="metadata-service.xml"/>
-    
    
 </beans>
