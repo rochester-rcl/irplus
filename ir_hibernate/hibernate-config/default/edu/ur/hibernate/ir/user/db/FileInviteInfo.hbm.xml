@@ -81,7 +81,7 @@
         where inviteInfo.inviteToken.invitingUser.id = :userId </query> 
     
     <!-- named query for getting all invites with a particular versioned file id -->
-    <query name="getInviteInfosWithVersionedFilesAndEmail">select inviteInfo from FileInviteInfo as inviteInfo
+    <query name="getInviteInfosWithVersionedFilesAndEmail">select distinct(inviteInfo) from FileInviteInfo as inviteInfo
         join inviteInfo.files as versionedFile
         where versionedFile.id in (:versionedFileIds)
         and lower(inviteInfo.inviteToken.email) = :email </query> 
