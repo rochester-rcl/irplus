@@ -14,6 +14,82 @@ ALTER TABLE ir_user.user_email ALTER COLUMN lower_case_email SET NOT NULL;
 
 ALTER TABLE ir_user.user_email  ADD CONSTRAINT user_email_lower_case_email_key UNIQUE(lower_case_email);
 
+
+-- ---------------------------------------------
+-- Add a constraint on the invite info table
+-- ---------------------------------------------
+ ALTER TABLE ir_user.invite_info
+  ADD CONSTRAINT invite_info_token_key UNIQUE (token);
+  
+ 
+-- ---------------------------------------------
+-- Create a schema to hold all system
+-- invite information.
+-- ---------------------------------------------
+
+CREATE SCHEMA ir_invite AUTHORIZATION ir_plus;
+
+CREATE TABLE ir_invite.invite_token
+(
+  invite_token_id BIGINT PRIMARY KEY,
+  version INTEGER,
+  token TEXT NOT NULL,
+  email TEXT NOT NULL,
+  invite_message TEXT,
+  inviting_user_id BIGINT NOT NULL,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  expiration_date TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id), 
+  UNIQUE(token)
+);
+ALTER TABLE ir_invite.invite_token OWNER TO ir_plus;
+
+-- The  invite token sequence
+CREATE SEQUENCE ir_invite.invite_token_seq;
+ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Move invite info over
+-- ---------------------------------------------
+
+INSERT INTO ir_invite.invite_token(invite_token_id, version, token, email, inviting_user_id, created_date,expiration_date)  SELECT
+nextval('ir_invite.invite_token_seq'),0, token, email, user_id, now(), null
+FROM ir_user.invite_info;
+
+-- Add new column
+ALTER TABLE ir_user.invite_info ADD COLUMN invite_token_id BIGINT;
+
+-- create reference
+UPDATE ir_user.invite_info SET invite_token_id = (SELECT invite_token_id
+FROM ir_invite.invite_token WHERE invite_info.token = invite_token.token);
+
+-- set not null
+ALTER TABLE ir_user.invite_info ALTER COLUMN invite_token_id SET NOT NULL;
+
+-- create foreign key link
+ALTER TABLE ir_user.invite_info
+  ADD CONSTRAINT invite_info_invite_token_id_fkey FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token (invite_token_id);
+
+-- drop moved columns
+ALTER TABLE ir_user.invite_info DROP COLUMN token;
+ALTER TABLE ir_user.invite_info DROP COLUMN email;
+ALTER TABLE ir_user.invite_info DROP COLUMN user_id;
+-- ---------------------------------------------
+-- Update all users who have a verified email
+-- where the token is not null
+-- ---------------------------------------------
+UPDATE ir_user.user_email set token = null
+where ir_user.user_email.isverified = true
+and token is not null;
+
+ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
+
+-- -------------------------------------------------------
+-- create an index on the handle info local name
+-- -------------------------------------------------------
+
+CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
+
 -- ---------------------------------------------
 -- Invite info for folder data
 -- ---------------------------------------------
@@ -32,16 +108,6 @@ ALTER TABLE ir_user.folder_invite_info OWNER TO ir_plus;
 -- The folder invite info sequence
 CREATE SEQUENCE ir_user.folder_invite_info_seq;
 ALTER TABLE ir_user.folder_invite_info_seq OWNER TO ir_plus;
-
-
--- add invite info created date
-ALTER TABLE ir_user.invite_info ADD COLUMN created_date TIMESTAMP WITH TIME ZONE;
-UPDATE  ir_user.invite_info set created_date = date(now());
-
-ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
-
--- add message column
-ALTER TABLE ir_invite.invite_token ADD COLUMN invite_message TEXT;
 
 
 -- ---------------------------------------------
@@ -88,76 +154,4 @@ CREATE TABLE ir_user.folder_auto_share_permissions
 );
 ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Add a constraint on the invite info table
--- ---------------------------------------------
- ALTER TABLE ir_user.invite_info
-  ADD CONSTRAINT invite_info_token_key UNIQUE (token);
-    
--- ---------------------------------------------
--- Create a schema to hold all file system
--- information.
--- ---------------------------------------------
 
-CREATE SCHEMA ir_invite AUTHORIZATION ir_plus;
-
-CREATE TABLE ir_invite.invite_token
-(
-  invite_token_id BIGINT PRIMARY KEY,
-  version INTEGER,
-  token TEXT NOT NULL,
-  email TEXT NOT NULL,
-  invite_message TEXT,
-  inviting_user_id BIGINT NOT NULL,
-  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
-  expiration_date TIMESTAMP WITH TIME ZONE,
-  FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id), 
-  UNIQUE(token)
-);
-ALTER TABLE ir_invite.invite_token OWNER TO ir_plus;
-
--- The  invite token sequence
-CREATE SEQUENCE ir_invite.invite_token_seq;
-ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- Move invite info over
--- ---------------------------------------------
-
-
-
-INSERT INTO ir_invite.invite_token(invite_token_id, version, token, email, inviting_user_id, created_date,expiration_date)  SELECT
-nextval('ir_invite.invite_token_seq'),0, token, email, user_id, created_date, null
-FROM ir_user.invite_info;
-
--- Add new column
-ALTER TABLE ir_user.invite_info ADD COLUMN invite_token_id BIGINT;
-
--- create reference
-UPDATE ir_user.invite_info SET invite_token_id = (SELECT invite_token_id
-FROM ir_invite.invite_token WHERE invite_info.token = invite_token.token);
-
--- set not null
-ALTER TABLE ir_user.invite_info ALTER COLUMN invite_token_id SET NOT NULL;
-
--- create foreign key link
-ALTER TABLE ir_user.invite_info
-  ADD CONSTRAINT invite_info_invite_token_id_fkey FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token (invite_token_id);
-
--- drop moved columns
-ALTER TABLE ir_user.invite_info DROP COLUMN token;
-ALTER TABLE ir_user.invite_info DROP COLUMN email;
-ALTER TABLE ir_user.invite_info DROP COLUMN user_id;
-ALTER TABLE ir_user.invite_info DROP COLUMN created_date;
--- ---------------------------------------------
--- Update all users who have a verified email
--- where the token is not null
--- ---------------------------------------------
-UPDATE ir_user.user_email set token = null
-where ir_user.user_email.isverified = true
-and token is not null;
-
-
--- create an index on the handle info local name
-CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
