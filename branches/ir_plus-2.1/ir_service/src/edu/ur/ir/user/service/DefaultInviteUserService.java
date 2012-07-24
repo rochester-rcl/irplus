@@ -242,7 +242,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		for( PersonalFile pf : personalFilesToShare)
 		{
 			IrAcl acl = securityService.getAcl(pf.getVersionedFile(), invitingUser);
-			if( acl != null && acl.isGranted(InviteUserService.SHARE_PERMISSION, invitingUser, false))
+			if( acl != null && acl.isGranted(VersionedFile.SHARE_PERMISSION, invitingUser, false))
 			{
 				actualFilesToShare.add(pf);
 			}
@@ -287,7 +287,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		for( PersonalFile pf : personalFilesToShare)
 		{
 			IrAcl acl = securityService.getAcl(pf.getVersionedFile(), invitingUser);
-			if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, invitingUser, false))
+			if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, invitingUser, false))
 			{
 				throw new PermissionNotGrantedException("User " + invitingUser + "does not have permissions to share file " + pf.getVersionedFile());
 			}
@@ -1044,11 +1044,11 @@ public class DefaultInviteUserService implements InviteUserService {
 	
 	/**
 	 * Adds permissions to files and folders added to an existing folder.  This uses the parent 
-	 * folders invite info and folder information to determine the permissions for the newley added
+	 * folders invite info and folder information to determine the permissions for the newly added
 	 * file and folders
 	 * 
 	 * @param parentFolder - parent folder the files and folders were added to
-	 * @param folders - list of top level folders being added - no childen of these folders should be in the list
+	 * @param folders - list of top level folders being added - no children of these folders should be in the list
 	 * @param files - list of top level file being added.
 	 * 
 	 * @throws FileSharingException
@@ -1070,7 +1070,7 @@ public class DefaultInviteUserService implements InviteUserService {
     		IrAcl acl = securityService.getAcl(pf.getVersionedFile(), parentFolder.getOwner());
 			
 			// Check if the user has SHARE permission for the file
-			if (acl.isGranted(InviteUserService.SHARE_PERMISSION, parentFolder.getOwner(), false)) {
+			if (acl.isGranted(VersionedFile.SHARE_PERMISSION, parentFolder.getOwner(), false)) {
 				allFilesToGivePermissions.add(pf);
 			}
     	}

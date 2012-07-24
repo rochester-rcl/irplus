@@ -399,7 +399,7 @@ public class DefaultInviteUserServiceTest {
 		
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		permissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION));
+		permissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION));
 		
 		
 		String userEmail3 = properties.getProperty("user_3_email");
@@ -548,7 +548,7 @@ public class DefaultInviteUserServiceTest {
 		// create permissions to give user
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION);
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
 		permissions.add(view);
 
 		// create the role
@@ -700,7 +700,7 @@ public class DefaultInviteUserServiceTest {
 		// create permissions to give user
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION);
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
 		permissions.add(view);
 
 		// create the role
@@ -741,6 +741,7 @@ public class DefaultInviteUserServiceTest {
 		user3 = userService.getUser(user3.getId(), false);
 		assert user3.getSharedInboxFile(vf) != null : "User should have shared inbox file";
 		assert user3.getRole(IrRole.COLLABORATOR_ROLE) != null : "User should have collaborator role";
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
 		
 		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
 		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
@@ -758,9 +759,70 @@ public class DefaultInviteUserServiceTest {
 		Set<FolderInviteInfo> subInvites = subFolder.getFolderInviteInfos();
 		assert subInvites.size() == 1 : "Should have one invite but has " + subInvites.size();
 		assert subFolder.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert pf.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should no longer contain user2's email";
+
 		tm.commit(ts);
 		
 
+		// update the auto share permissions give user 3 edit permissions
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		IrClassTypePermission edit = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.EDIT_PERMISSION);
+		permissions.add(edit);
+		FolderAutoShareInfo folderAutoShareInfo = rootFolder.getAutoShareInfo(user3);
+		inviteUserService.updateAutoSharePermissions(folderAutoShareInfo, permissions, true, true);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		assert securityService.hasPermission(vf, user3, VersionedFile.EDIT_PERMISSION) > 0 : "User should have edit permission";
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		FolderAutoShareInfo subFolderAutoShare = subFolder.getAutoShareInfo(user3);
+		assert subFolderAutoShare.getPermissions().contains(edit) : "Sub forlder should contain the edit permission but doesn't";
+		tm.commit(ts);
+		
+		// update the auto share permissions give user 3 edit permissions
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		assert permissions.remove(edit) : "Should be able to remove edit" ;
+		folderAutoShareInfo = rootFolder.getAutoShareInfo(user3);
+		inviteUserService.updateAutoSharePermissions(folderAutoShareInfo, permissions, true, true);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		assert securityService.hasPermission(vf, user3, VersionedFile.EDIT_PERMISSION) == 0 : "User should NOT have edit permission";
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		subFolderAutoShare = subFolder.getAutoShareInfo(user3);
+		assert !subFolderAutoShare.getPermissions().contains(edit) : "Sub forlder should NOT contain the edit permission but doesn't";
+		tm.commit(ts);
+		
+		// delete the auto share on the root folder with cascade
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		folderAutoShareInfo = rootFolder.getAutoShareInfo(user3);
+		IrUser owner = userService.getUser(user.getId(), false);
+		inviteUserService.delete(owner, folderAutoShareInfo, true, true);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) == 0 : "User should NOT have view permission";
+		assert securityService.hasPermission(vf, user3, VersionedFile.EDIT_PERMISSION) == 0 : "User should NOT have edit permission";
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		subFolderAutoShare = subFolder.getAutoShareInfo(user3);
+        assert subFolderAutoShare == null : "Sub folder auto share should be deleted";
+		tm.commit(ts);
+		
+		
+		// delete the auto share invite on the root folder with cascade
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		FolderInviteInfo folderInviteInfo = rootFolder.getFolderInviteInfo(userEmail2);
+		inviteUserService.delete( folderInviteInfo, true, true);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert !pf.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should no longer contain user2's email";
+
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		FolderInviteInfo subFolderInviteInfo = subFolder.getFolderInviteInfo(userEmail2);
+        assert subFolderInviteInfo == null : "Sub folder invite info should be deleted";
+		tm.commit(ts);
+
+		
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 		IrUser deleteUser = userService.getUser(user.getId(), false); 
@@ -780,6 +842,8 @@ public class DefaultInviteUserServiceTest {
 		assert roleService.getRole(role.getId(), false) == null : "Role should be null";
 		helper.cleanUpRepository();
 		tm.commit(ts);
+		
+		
 	}
 
 }

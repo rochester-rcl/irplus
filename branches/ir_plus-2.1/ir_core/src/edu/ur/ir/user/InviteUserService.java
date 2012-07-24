@@ -34,11 +34,6 @@ import edu.ur.order.OrderType;
  */
 public interface InviteUserService extends Serializable{
 
-	/** permissions that can be granted on versioned files */
-	public static final String VIEW_PERMISSION = "VIEW";
-	public static final String EDIT_PERMISSION = "EDIT";
-	public static final String SHARE_PERMISSION = "SHARE";
-
 	/**
 	 * Persistent method for invite info
 	 * 
