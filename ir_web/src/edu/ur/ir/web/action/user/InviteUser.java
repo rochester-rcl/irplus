@@ -196,7 +196,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 				IrAcl acl = securityService.getAcl(personalFile.getVersionedFile(), user);
 				
 				// Check if the user has SHARE permission for the file
-				if (acl.isGranted(InviteUserService.SHARE_PERMISSION, user, false)) {
+				if (acl.isGranted(VersionedFile.SHARE_PERMISSION, user, false)) {
 					buffer.append(fileId);
 					buffer.append(",");
 				} else {
@@ -222,7 +222,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			{
 				IrAcl acl = securityService.getAcl(file.getVersionedFile(), user);
 				
-				if (acl.isGranted(InviteUserService.SHARE_PERMISSION, user, false)) {
+				if (acl.isGranted(VersionedFile.SHARE_PERMISSION, user, false)) {
 					buffer.append(file.getId());
 					buffer.append(",");
 				} else {
@@ -378,7 +378,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		IrUser unInvitingUser = userService.getUser(userId, true);
 		
 		IrAcl acl = securityService.getAcl(fileCollaborator.getVersionedFile(), unInvitingUser);
-		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
+		if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, unInvitingUser, false))
 		{
 		    return("accessDenied");
 		}
@@ -403,7 +403,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		    IrUser unInvitingUser = userService.getUser(userId, true);
 		
 		    IrAcl acl = securityService.getAcl(unsharingUserPersonalFile.getVersionedFile(), unInvitingUser);
-		    if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
+		    if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, unInvitingUser, false))
 		    {
 			    return("accessDenied");
 		    }
@@ -477,7 +477,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		IrUser changingPermissionsUser = userService.getUser(userId, true);
 		
 		IrAcl acl = securityService.getAcl(versionedFile, changingPermissionsUser);
-		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, changingPermissionsUser, false))
+		if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, changingPermissionsUser, false))
 		{
 		    return("accessDenied");
 		}
