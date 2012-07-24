@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -126,6 +127,16 @@ public interface InviteUserService extends Serializable{
 	 * @return File collaborator 
 	 */
 	public FileCollaborator findFileCollaborator(Long fileCollaboratorId, boolean lock);
+	
+	/**
+	 * Based on the inviting user returns only the files that can be shared.
+	 * 
+	 * @param invitingUser - user doing the sharing
+	 * @param personalFilesToShare - list of files user is trying to share
+	 * 
+	 * @return - list of files that can be shared for the given user.
+	 */
+	public List<PersonalFile> getOnlyShareableFiles(IrUser invitingUser, Collection<PersonalFile> personalFilesToShare);
 	
 	/**
 	 * Find inviting User information by token

@@ -19,6 +19,7 @@ package edu.ur.ir.security.service;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -156,6 +157,42 @@ public class DefaultSecurityService implements SecurityService {
 			irAcl.createUserAccessControlEntry(user);
 		
 		for (IrClassTypePermission classTypePermission: permissions) {
+			// add permission
+			userAccessControlEntry.addPermission(classTypePermission);
+		}
+		irAclDAO.makePersistent(irAcl);
+	}
+	
+	/**
+	 * Update the permissions for the user - first removes all old permissions
+	 * then updates with the new permissions.
+	 * 
+	 * @param domainInstance - domain instance to update the permissions for
+	 * @param user - user to update the permissions for
+	 * @param newPermissions - new permissions to give to the user
+	 */
+	public void updatePermissions(Object domainInstance, IrUser user, 
+			Collection<IrClassTypePermission> newPermissions)
+	{
+		log.debug("Update Permission for " + user.getUsername() 
+				+ ". Permissions = " + newPermissions);
+		IrAcl irAcl = getAcl(domainInstance);
+		
+		if (irAcl == null) {
+			irAcl = new IrAcl(domainInstance, getClassType(domainInstance));
+		}
+		
+		IrUserAccessControlEntry userAccessControlEntry = 
+			irAcl.createUserAccessControlEntry(user);
+		
+		LinkedList<IrClassTypePermission> oldPermissions = new LinkedList<IrClassTypePermission>();
+		oldPermissions.addAll(userAccessControlEntry.getIrClassTypePermissions());
+		for(IrClassTypePermission permission : oldPermissions)
+		{
+			userAccessControlEntry.removePermission(permission);
+		}
+		
+		for (IrClassTypePermission classTypePermission: newPermissions) {
 			// add permission
 			userAccessControlEntry.addPermission(classTypePermission);
 		}
