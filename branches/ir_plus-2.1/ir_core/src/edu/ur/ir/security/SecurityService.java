@@ -229,5 +229,16 @@ public interface SecurityService extends Serializable{
 	 * @return all sids who meet the specified criteria
 	 */
 	public Set<Sid> getSidsWithPermissionForObject(Object domainInstance, String permission, List<Sid> specificSids);
+	
+	/**
+	 * Update the permissions for the user - first removes all old permissions
+	 * then updates with the new permissions.
+	 * 
+	 * @param domainInstance - domain instance to update the permissions for
+	 * @param user - user to update the permissions for
+	 * @param newPermissions - new permissions to give to the user
+	 */
+	public void updatePermissions(Object domainInstance, IrUser user, 
+			Collection<IrClassTypePermission> newPermissions);
 }
 

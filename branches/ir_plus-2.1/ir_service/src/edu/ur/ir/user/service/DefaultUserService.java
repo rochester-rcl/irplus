@@ -43,6 +43,7 @@ import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.ExternalAccountType;
 import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.ExternalUserAccountDAO;
+import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -321,7 +322,7 @@ public class DefaultUserService implements UserService {
         this.deletePersonalCollections(user, deletingUser);
 		this.deleteRootFiles(user, deletingUser);
 		this.deleteRootFolders(user, deletingUser);
-		
+		this. deleteUserInvites(user);
 
 		
 		try {
@@ -348,6 +349,19 @@ public class DefaultUserService implements UserService {
 		}
 		log.debug("done deleting subscriptions");
 		
+	}
+	
+	/**
+	 * Delete all invites made by the user
+	 * @param user
+	 */
+	private void deleteUserInvites(IrUser user)
+	{
+		List<FileInviteInfo> invites = inviteUserService.getInvitesMadeByUser(user);
+		for(FileInviteInfo invite : invites)
+		{
+			inviteUserService.delete(invite);
+		}
 	}
 	
 	/**

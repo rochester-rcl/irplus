@@ -1034,8 +1034,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	    	     List<FileCollaborator> collaboratorRecords = getCollaborations(folderAutoShareInfo.getCollaborator().getId(), versionedFileIds);
 	    	     for(FileCollaborator collab : collaboratorRecords)
 	    	     {
-	    	    	// Create permissions for the file that is being shared
-	    	 		securityService.createPermissions(collab.getVersionedFile(), 
+	    	    	 securityService.updatePermissions(collab.getVersionedFile(), 
 	    	 				collab.getCollaborator(), permissions);
 	    	     }
 	         }
@@ -1138,6 +1137,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	public void delete(FolderInviteInfo inviteInfo, boolean cascadeToSubFolders, boolean cascadeToFiles) {
 		
 		PersonalFolder personalFolder = inviteInfo.getPersonalFolder();
+		personalFolder.removeFolderInviteInfo(inviteInfo);
 		folderInviteInfoDAO.makeTransient(inviteInfo);
 		if( cascadeToSubFolders )
 		{
@@ -1147,8 +1147,8 @@ public class DefaultInviteUserService implements InviteUserService {
 			    FolderInviteInfo info = aFolder.getFolderInviteInfo(inviteInfo.getEmail());
 				if( info != null )
 				{
+					aFolder.removeFolderInviteInfo(info);
 				    folderInviteInfoDAO.makeTransient(info);
-				    aFolder.removeFolderInviteInfo(info);
 				}
 			}
 		}
@@ -1158,26 +1158,31 @@ public class DefaultInviteUserService implements InviteUserService {
 			// take care of files in all folders and sub folders
 	        List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), 
 	        		 userFileSystemService.getAllFilesForFolder(personalFolder));
+	        log.debug("cascade to file, files size = " + files.size());
 	        if( files.size() > 0 )
 	        {
 	        	 LinkedList<Long> versionedFileIds = new LinkedList<Long>();
 	    	     for(PersonalFile f : files )
 	    	     {
+	    	    	 log.debug("adding versioned file id " + f.getVersionedFile().getId());
 	    	    	 versionedFileIds.add(f.getVersionedFile().getId());
 	    	     }
 	    	     List<FileInviteInfo> infos = fileInviteInfoDAO.getInviteInfosWithVersionedFilesAndEmail(versionedFileIds, inviteInfo.getEmail());
 	    	     
+	    	     log.debug( " found invite infos with size " + infos.size());
 	    	     for(FileInviteInfo fileInvite : infos)
 	    	     {
 	    	    	 List<VersionedFile> inviteFiles = new LinkedList<VersionedFile>();
 	    	    	 inviteFiles.addAll(fileInvite.getFiles());
 	    	    	 
+	    	    	 log.debug(" added invite files " + inviteFiles.size());
 	    	    	 // check each file if it is in the list of files
 	    	    	 // to be unshared remove it
 	    	    	 for(VersionedFile f : inviteFiles)
 	    	    	 {
 	    	    		 if( versionedFileIds.contains(f.getId()))
 	    	    		 {
+	    	    			 log.debug(" removing file  " + f);
 	    	    			 fileInvite.removeFile(f);
 	    	    		 }
 	    	    	 }
@@ -1196,7 +1201,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	    	     
 	         }
 		}
-		personalFolder.removeFolderInviteInfo(inviteInfo);
+		
 	}
 
 	/**
