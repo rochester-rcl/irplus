@@ -1084,34 +1084,42 @@ public class DefaultInviteUserService implements InviteUserService {
     	}
     	
     	// assign auto share information to folders
-    	for(PersonalFolder f : folders)
+    	for(PersonalFolder f : allFoldersToGivePermissions)
         {
     		for(FolderAutoShareInfo shareInfo : shareInfos)
     		{
-    			FolderAutoShareInfo newShareInfo  = f.createAutoShareInfo(shareInfo.getPermissions(), shareInfo.getCollaborator());
+    			Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+        		permissions.addAll(shareInfo.getPermissions());
+    			FolderAutoShareInfo newShareInfo  = f.createAutoShareInfo(permissions, shareInfo.getCollaborator());
 			    save(newShareInfo);
     		}
     		
     		for(FolderInviteInfo inviteInfo : inviteInfos)
     		{
-    			FolderInviteInfo newInviteInfo  = f.createInviteInfo(inviteInfo.getPermissions(), inviteInfo.getEmail());
+    			Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+        		permissions.addAll(inviteInfo.getPermissions());
+    			FolderInviteInfo newInviteInfo  = f.createInviteInfo(permissions, inviteInfo.getEmail());
 			    save(newInviteInfo);
     		}
         }
     	
-    	// apply sharing for files and folders
+    	// send out emails for new files and invites for newly added files
     	for(FolderAutoShareInfo shareInfo : shareInfos)
 		{
     		 LinkedList<String> emails = new LinkedList<String>();
     		 emails.add(shareInfo.getCollaborator().getDefaultEmail().getEmail());
-    		 inviteUsers(parentFolder.getOwner(), emails, shareInfo.getPermissions(),allFilesToGivePermissions , null);
+    		 Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+    		 permissions.addAll(shareInfo.getPermissions());
+    		 inviteUsers(parentFolder.getOwner(), emails, permissions, allFilesToGivePermissions , null);
 		}
     	
     	for(FolderInviteInfo inviteInfo : inviteInfos)
 		{
     		LinkedList<String> emails = new LinkedList<String>();
    		    emails.add(inviteInfo.getEmail());
-   		    inviteUsers(parentFolder.getOwner(), emails, inviteInfo.getPermissions(),allFilesToGivePermissions , null);
+   		    Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+   		    permissions.addAll(inviteInfo.getPermissions());
+   		    inviteUsers(parentFolder.getOwner(), emails, permissions,allFilesToGivePermissions , null);
 		}
     	
 	}
