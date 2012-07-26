@@ -123,13 +123,13 @@
 									          </tr>
 									          <tr> 
 									          <td>Email(s)</td>
-									          <td> <textarea name="emails" id="newInviteForm_inviteEmail" cols="52" rows="5"></textarea></td>
+									          <td> <textarea name="emails" id="newInviteForm_inviteEmail" cols="48" rows="5"></textarea></td>
 									          </tr>
 		
 											  <tr>
 											  <td>Message</td>
 											  <td>
-								              <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="52" rows="8"></textarea>
+								              <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="48" rows="8"></textarea>
 								              </td>
 											  </tr>
 											  
