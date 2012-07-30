@@ -27,18 +27,22 @@
    <img class="repository_image picture_module_size" src="${pictureUrl}"/>
    
    <c:if test="${numRepositoryPictures > 1}"> 
-       <div class="button_next_left">
+   <table class="buttonTable">
+        <tr>
+            <td class="leftButton">
                 <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
  		            onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentRepositoryPictureLocation}, 'PREV');">&lt; Previous</button>
-       </div>
-       <div class="button_next_right">
+ 		    </td>
+ 		    <td class="rightButton">
  		        <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
  		            onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentRepositoryPictureLocation}, 'NEXT');">Next &gt;</button>
-       </div>
+            </td>
+        </tr>
+    </table>
     </c:if>
 </c:if>
 <c:if test="${repositoryImageFile == null }">

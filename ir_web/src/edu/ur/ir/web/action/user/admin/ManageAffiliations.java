@@ -32,7 +32,6 @@ import edu.ur.ir.web.table.Pager;
  * Action to deal with affiliations.
  * 
  * @author Sharmila Ranganathan
- * @author Nathan Sarr
  *
  */
 public class ManageAffiliations extends Pager implements Preparable, UserIdAware{
@@ -72,9 +71,6 @@ public class ManageAffiliations extends Pager implements Preparable, UserIdAware
 
 	/**  Indicates whether the affiliation has a researcher permissions */
 	private boolean researcher = false;
-	
-	/**  Indicates whether the affiliation has a create group workspace permissions */
-	private boolean workspaceCreator = false;
 
 	/**  Indicates whether the affiliation needs to be approved by admin */
 	private boolean needsApproval = false;
@@ -91,6 +87,8 @@ public class ManageAffiliations extends Pager implements Preparable, UserIdAware
 	
 	/** user making the changes */
 	private Long userId;
+	
+
 
 	/** Default constructor */
 	public  ManageAffiliations()
@@ -113,7 +111,6 @@ public class ManageAffiliations extends Pager implements Preparable, UserIdAware
 		{
 			affiliation.setAuthor(author);
 			affiliation.setResearcher(researcher);
-			affiliation.setWorkspaceCreator(workspaceCreator);
 			affiliation.setNeedsApproval(needsApproval);
 		    affiliationService.makeAffiliationPersistent(affiliation);
 		    added = true;
@@ -143,7 +140,6 @@ public class ManageAffiliations extends Pager implements Preparable, UserIdAware
 		{
 			affiliation.setAuthor(author);
 			affiliation.setResearcher(researcher);
-			affiliation.setWorkspaceCreator(workspaceCreator);
 			affiliation.setNeedsApproval(needsApproval);
 			affiliationService.makeAffiliationPersistent(affiliation);
 			added = true;
@@ -346,31 +342,13 @@ public class ManageAffiliations extends Pager implements Preparable, UserIdAware
 	/**
 	 * User editing the data.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
 	public Long getUserId() {
 		return userId;
-	}
-	
-	/**
-	 * Returns true if the affiliation can create group workspaces.
-	 * 
-	 * @return
-	 */
-	public boolean getWorkspaceCreator() {
-		return workspaceCreator;
-	}
-
-	/**
-	 * Set to true if the affiliation can create group workspaces
-	 * 
-	 * @param workspaceCreator
-	 */
-	public void setWorkspaceCreator(boolean workspaceCreator) {
-		this.workspaceCreator = workspaceCreator;
 	}
 }

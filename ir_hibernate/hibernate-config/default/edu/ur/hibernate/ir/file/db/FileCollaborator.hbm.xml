@@ -70,5 +70,18 @@
     <!-- named query for getting all person name titles for person name like the specified person name id -->
     <query name="findCollaboratorsForVersionedFileId">from FileCollaborator as FileCollaborator where FileCollaborator.versionedFile.id = ? </query>
 
+    <!-- named query for getting all person name titles for person name like the specified person name id -->
+    <query name="findCollaboratorForUserVersionedFileId">from FileCollaborator as fileCollaborator 
+      where  fileCollaborator.versionedFile.id = :versionedFileId
+      and fileCollaborator.collaborator.id = :userId
+    </query>
+    
+    <!-- named query for getting all person name titles for person name like the specified person name id -->
+    <query name="findCollaboratorForUserVersionedFileIdList">from FileCollaborator as fileCollaborator 
+      where  fileCollaborator.versionedFile.id in (:versionedFileIds)
+      and fileCollaborator.collaborator.id = :userId
+    </query>
+    
+    
 	
 </hibernate-mapping>

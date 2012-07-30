@@ -73,8 +73,7 @@ public class HbSponsorDAO implements SponsorDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("sponsorCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sponsorCount"));
 	}
 
 	/**

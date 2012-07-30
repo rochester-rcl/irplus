@@ -20,7 +20,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.order.OrderType;
 
@@ -31,7 +30,7 @@ import edu.ur.order.OrderType;
  *
  */
 public interface PlaceOfPublicationDAO extends CountableDAO, 
-CrudDAO<PlaceOfPublication>, UniqueNameDAO<PlaceOfPublication>, ListAllDAO
+CrudDAO<PlaceOfPublication>, UniqueNameDAO<PlaceOfPublication>
 {
 	/**
 	 * Get the list of language types order by name

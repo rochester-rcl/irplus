@@ -108,5 +108,14 @@ public class HbInviteTokenDAO implements InviteTokenDAO{
 		q.setParameter("email", email.trim().toLowerCase());
 		return q.list();
 	}
+	
+	/**
+	 * Get all content types.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<InviteToken> getAll() {
+		return hbCrudDAO.getAll();
+	}
 
 }

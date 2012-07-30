@@ -243,7 +243,7 @@ CREATE TABLE handle.handle_info
     handle_id BIGINT NOT NULL PRIMARY KEY,
     handle_name_authority_id BIGINT NOT NULL,
     handle_idx BIGINT NOT NULL,
-    local_name TEXT NOT NULL, 
+    local_name text NOT NULL, 
     data_type TEXT,
     data TEXT,
     time_to_live_type INT,
@@ -833,7 +833,6 @@ CREATE TABLE ir_user.affiliation
   description text,
   is_author BOOLEAN NOT NULL,
   is_researcher BOOLEAN NOT NULL,
-  is_workspace_creator BOOLEAN NOT NULL,
   needs_approval BOOLEAN NOT NULL,
   CONSTRAINT affiliation_pkey PRIMARY KEY (affiliation_id),
   CONSTRAINT affiliation_name_key UNIQUE (name)
@@ -883,10 +882,8 @@ CREATE TABLE ir_user.ir_user
   lower_case_middle_name TEXT,
   created_date TIMESTAMP WITH TIME ZONE,
   last_login_date TIMESTAMP WITH TIME ZONE,
-  most_recent_login_date TIMESTAMP WITH TIME ZONE,
   self_registered BOOLEAN,
   phone_number TEXT,
-  show_only_my_group_workspaces BOOLEAN NOT NULL,
   account_expired BOOLEAN NOT NULL,
   account_locked BOOLEAN NOT NULL,
   credentials_expired BOOLEAN NOT NULL,
@@ -1980,9 +1977,6 @@ CREATE TABLE ir_repository.repository
   institutional_item_index_folder TEXT,
   researcher_index_folder TEXT,
   user_workspace_index_folder TEXT,
-  institutional_collection_index_folder TEXT,
-  group_workspace_index_folder TEXT,
-  user_group_index_folder TEXT,
   default_handle_authority_id BIGINT,
   last_email_subscriber_process_sent_date TIMESTAMP WITH TIME ZONE,
   UNIQUE (name),
@@ -2217,8 +2211,7 @@ CREATE TABLE ir_repository.deleted_institutional_item
     user_id BIGINT NOT NULL,
     deleted_date TIMESTAMP WITH TIME ZONE NOT NULL ,
     version INTEGER,
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
-    UNIQUE(institutional_item_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_repository.deleted_institutional_item OWNER TO ir_plus;
 
@@ -2243,9 +2236,8 @@ CREATE TABLE ir_repository.deleted_institutional_item_version
     handle_info_id BIGINT,
     version_number INTEGER NOT NULL,
     version INTEGER,
-    FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id),
-    UNIQUE(institutional_item_version_id)
- );
+    FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id)
+);
 ALTER TABLE ir_repository.deleted_institutional_item_version OWNER TO ir_plus;
 
 -- The deleted institutional item seq
@@ -2391,7 +2383,6 @@ ALTER TABLE ir_repository.reviewable_item_seq OWNER TO ir_plus;
 
 
 
-
 -- ----------------------------------------------
 -- **********************************************
        
@@ -2496,7 +2487,6 @@ ALTER TABLE ir_user.personal_file OWNER TO ir_plus;
 CREATE SEQUENCE ir_user.personal_file_seq;
 ALTER TABLE ir_user.personal_file_seq OWNER TO ir_plus;
 
-
 -- ---------------------------------------------
 -- Personal Collection Information
 -- ---------------------------------------------
@@ -2593,12 +2583,12 @@ insert into
 ir_user.ir_user ( user_id, user_password, password_encoding, default_email_id, username, 
 first_name, lower_case_first_name, last_name, lower_case_last_name, 
 version, account_expired, account_locked, credentials_expired, 
-force_change_password, affiliation_approved, self_registered, created_date, re_build_user_workspace_index, show_only_my_group_workspaces)  
+force_change_password, affiliation_approved, self_registered, created_date, re_build_user_workspace_index)  
 values (nextval('ir_user.ir_user_seq'), 
       'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'System', 
       'system', 'Admin', 'admin', 0, false, 
 
-false, false, false, true, false, date(now()), false, true);
+false, false, false, true, false, date(now()), false);
 
 insert into ir_user.user_email(user_email_id, version, email, lower_case_email, user_id, isVerified) values 
 
@@ -2691,338 +2681,6 @@ ALTER TABLE ir_user.folder_invite_info_seq OWNER TO ir_plus;
 -- ----------------------------------------------
 -- **********************************************
        
--- Group space schema  
-
--- **********************************************
--- ----------------------------------------------
-
-
-
-CREATE SCHEMA ir_group_workspace AUTHORIZATION ir_plus;
-
-
--- ---------------------------------------------
--- group space information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace
-(
-  group_workspace_id BIGINT PRIMARY KEY,
-  name TEXT NOT NULL,
-  lower_case_name TEXT NOT NULL,
-  description TEXT,
-  date_created DATE,
-  version INTEGER,
-  UNIQUE (lower_case_name)
-);
-ALTER TABLE ir_group_workspace.group_workspace OWNER TO ir_plus;
-
--- The group space sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_seq ;
-ALTER TABLE ir_group_workspace.group_workspace_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- group space folder information
--- ---------------------------------------------
-
-CREATE TABLE ir_group_workspace.group_workspace_folder
-(
-  group_workspace_folder_id BIGINT PRIMARY KEY,
-  root_group_workspace_folder_id BIGINT NOT NULL,
-  parent_id BIGINT,
-  group_workspace_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  left_value BIGINT NOT NULL,
-  right_value BIGINT NOT NULL,
-  name TEXT NOT NULL,
-  path TEXT NOT NULL,
-  description TEXT,
-  version INTEGER,
-  FOREIGN KEY (parent_id) REFERENCES ir_group_workspace.group_workspace_folder (group_workspace_folder_id),
-  FOREIGN KEY (root_group_workspace_folder_id) REFERENCES ir_group_workspace.group_workspace_folder (group_workspace_folder_id),
-  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-  UNIQUE (parent_id, name),
-  UNIQUE (group_workspace_id, path, name)
-);
-ALTER TABLE ir_group_workspace.group_workspace_folder OWNER TO ir_plus;
-
--- The group folder sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_folder_seq ;
-ALTER TABLE ir_group_workspace.group_workspace_folder_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- Group file Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_file
-(
-    group_workspace_file_id BIGINT PRIMARY KEY,
-    group_workspace_folder_id BIGINT,
-    group_workspace_id BIGINT NOT NULL,
-    versioned_file_id BIGINT NOT NULL,
-    version INTEGER,
-    FOREIGN KEY (group_workspace_folder_id) REFERENCES ir_group_workspace.group_workspace_folder (group_workspace_folder_id),
-    FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
-    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
-    UNIQUE(group_workspace_id, group_workspace_folder_id, versioned_file_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_file OWNER TO ir_plus;
-
--- The group file sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_file_seq;
-ALTER TABLE ir_group_workspace.group_workspace_file_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- Group workspace user Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_user
-(
-    group_workspace_user_id BIGINT PRIMARY KEY,
-    group_workspace_id BIGINT NOT NULL,
-    is_owner boolean NOT NULL,
-    user_id BIGINT NOT NULL,
-    version INTEGER,
-    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_user OWNER TO ir_plus;
-
--- The group file sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_user_seq;
-ALTER TABLE ir_group_workspace.group_workspace_user_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- Group workspace email invite Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_email_invite
-(
-    group_workspace_email_invite_id BIGINT PRIMARY KEY,
-    version INTEGER,
-    invite_token_id BIGINT NOT NULL,
-    set_as_owner BOOLEAN NOT NULL,
-    group_workspace_id BIGINT NOT NULL,
-    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
-    FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token(invite_token_id),
-    UNIQUE(invite_token_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_email_invite OWNER TO ir_plus;
-
--- The group workspace group sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_email_invite_seq;
-ALTER TABLE ir_group_workspace.group_workspace_email_invite_seq OWNER TO ir_plus;
-
-
-
--- ---------------------------------------------
--- group workspace file delete record
--- ---------------------------------------------
-
-CREATE TABLE ir_group_workspace.group_workspace_file_delete_record
-(
-  group_workspace_file_delete_record_id BIGINT PRIMARY KEY,
-  group_workspace_file_id BIGINT NOT NULL,
-  group_workspace_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  date_deleted TIMESTAMP WITH TIME ZONE NOT NULL,
-  full_path TEXT NOT NULL,
-  group_workspace_name TEXT NOT NULL,
-  description TEXT,
-  delete_reason TEXT,
-  UNIQUE(group_workspace_file_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_file_delete_record OWNER TO ir_plus;
-
--- The group workspace file delete record sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
-ALTER TABLE ir_group_workspace.group_workspace_file_delete_record_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- group workspace project page information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_project_page
-(
-  group_workspace_project_page_id BIGINT PRIMARY KEY,
-  group_workspace_id BIGINT NOT NULL,
-  is_public BOOLEAN NOT NULL,
-  description TEXT,
-  date_created DATE,
-  version INTEGER,
-  FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page OWNER TO ir_plus;
-
--- The group space sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_seq ;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- group workspace project page information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_project_page_member
-(
-  group_workspace_project_page_member_id BIGINT PRIMARY KEY,
-  group_workspace_project_page_id BIGINT NOT NULL,
-  group_workspace_user_id BIGINT NOT NULL,
-  member_order INT NOT NULL,
-  title TEXT,
-  description TEXT,
-  version INTEGER,
-  FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-  FOREIGN KEY (group_workspace_user_id) REFERENCES ir_group_workspace.group_workspace_user (group_workspace_user_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_member OWNER TO ir_plus;
-
--- The group space sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_member_seq ;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_member_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Group workspace project page image Information
--- ---------------------------------------------
--- Create a new table to hold group workspace project page 
--- pictures in the system
-CREATE TABLE ir_group_workspace.group_workspace_project_page_image
-(
-  group_workspace_project_page_image_id BIGINT PRIMARY KEY,
-  group_workspace_project_page_id BIGINT NOT NULL,
-  ir_file_id BIGINT NOT NULL,
-  image_order BIGINT NOT NULL,
-  version INTEGER,
-  FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-  FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_image OWNER TO ir_plus;
-
--- The group space sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_image_seq ;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_image_seq OWNER TO ir_plus;
-
-
-
--- ---------------------------------------------
--- Group workspace Project Page  Folder Information
--- ---------------------------------------------
-
--- Create a new table to hold group workspace project page folder information in the system
-CREATE TABLE ir_group_workspace.group_workspace_project_page_folder
-(
-  group_workspace_project_page_folder_id BIGINT PRIMARY KEY,
-  root_folder_id BIGINT NOT NULL,
-  parent_id BIGINT,
-  group_workspace_project_page_id BIGINT NOT NULL,
-  left_value BIGINT,
-  right_value BIGINT,
-  name TEXT NOT NULL,
-  path TEXT NOT NULL,
-  description TEXT,
-  version INTEGER,
-  FOREIGN KEY (parent_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
-  FOREIGN KEY (root_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
-  FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-  UNIQUE (parent_id, name),
-  UNIQUE (group_workspace_project_page_id, path, name)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_folder OWNER TO ir_plus;
-
--- The researcher folder  sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_folder_seq ;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_folder_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Group workspace project page file Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_project_page_file
-(
-    group_workspace_project_page_file_id BIGINT PRIMARY KEY,
-    group_workspace_project_page_folder_id BIGINT,
-    group_workspace_project_page_id BIGINT NOT NULL,
-    ir_file_id BIGINT NOT NULL,
-    version_number INTEGER NOT NULL,
-    version INTEGER,
-    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
-    FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id),
-    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-    UNIQUE(group_workspace_project_page_id, group_workspace_project_page_folder_id, ir_file_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_file OWNER TO ir_plus;
-
--- The researcher file sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_file_seq;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_file_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Group workspace project page publication Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_project_page_publication
-(
-    group_workspace_project_page_publication_id BIGINT PRIMARY KEY,
-    group_workspace_project_page_folder_id BIGINT,
-    group_workspace_project_page_id BIGINT NOT NULL,
-    item_id BIGINT NOT NULL,
-    version_number INTEGER NOT NULL,
-    version INTEGER,
-    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
-    FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),
-    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-    UNIQUE(group_workspace_project_page_id, group_workspace_project_page_folder_id, item_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_publication OWNER TO ir_plus;
-
--- The group workspace project page publication sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_publication_seq;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_publication_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Group workspace project page institutional item Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_project_page_institutional_item
-(
-    group_workspace_project_page_institutional_item_id BIGINT PRIMARY KEY,
-    group_workspace_project_page_folder_id BIGINT,
-    group_workspace_project_page_id BIGINT NOT NULL,
-    institutional_item_id BIGINT NOT NULL,
-    description TEXT,
-    version INTEGER,
-    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace.group_workspace_project_page_folder (group_workspace_project_page_folder_id),
-    FOREIGN KEY (institutional_item_id) REFERENCES ir_repository.institutional_item (institutional_item_id),
-    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-    UNIQUE(group_workspace_project_page_id, group_workspace_project_page_folder_id, institutional_item_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_institutional_item OWNER TO ir_plus;
-
--- The group workspace project page institutional item sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_institutional_item_seq;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_institutional_item_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Group workspace project page link Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_project_page_file_system_link
-(
-    group_workspace_project_page_file_system_link_id BIGINT PRIMARY KEY,
-    group_workspace_project_page_folder_id BIGINT,
-    group_workspace_project_page_id BIGINT NOT NULL,
-    url TEXT,
-    name TEXT,
-    description TEXT,
-    version INTEGER,
-    FOREIGN KEY (group_workspace_project_page_folder_id) REFERENCES ir_group_workspace. group_workspace_project_page_folder ( group_workspace_project_page_folder_id),
-    FOREIGN KEY (group_workspace_project_page_id) REFERENCES ir_group_workspace.group_workspace_project_page (group_workspace_project_page_id),
-    UNIQUE( group_workspace_project_page_id,  group_workspace_project_page_folder_id, name)
-);
-ALTER TABLE ir_group_workspace.group_workspace_project_page_file_system_link OWNER TO ir_plus;
-
--- The group workspace project page link sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_project_page_file_system_link_seq;
-ALTER TABLE ir_group_workspace.group_workspace_project_page_file_system_link_seq OWNER TO ir_plus;
-
-
--- ----------------------------------------------
--- **********************************************
-       
 -- SECURITY SCHEMA     
 
 -- **********************************************
@@ -3075,16 +2733,6 @@ values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.item.GenericItem',
 insert into ir_security.class_type(class_type_id, name , description , version) 
 values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.item.ItemFile', 
 'Item File',1);
-
-insert into ir_security.class_type(class_type_id, name , description , version) 
-values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspaceFolder', 
-'Group Workspace Folder',1);
-
-insert into ir_security.class_type(class_type_id, name , description , version) 
-values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspace', 
-'Group Workspace',1);
-
-
 
 -- ---------------------------------------------
 -- Class type permission
@@ -3167,20 +2815,6 @@ ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
--- Email Invite permission
--- ---------------------------------------------
-
-CREATE TABLE  ir_group_workspace.group_workspace_email_invite_permissions
-(
-    group_workspace_email_invite_id BIGINT NOT NULL, 
-    class_type_permission_id BIGINT NOT NULL,
-    PRIMARY KEY (group_workspace_email_invite_id, class_type_permission_id),
-    FOREIGN KEY (group_workspace_email_invite_id) REFERENCES ir_group_workspace.group_workspace_email_invite(group_workspace_email_invite_id),
-    FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
-);
-ALTER TABLE ir_group_workspace.group_workspace_email_invite_permissions OWNER TO ir_plus;
-
--- ---------------------------------------------
 -- Insert values for Class type permission
 -- ---------------------------------------------
 
@@ -3204,55 +2838,6 @@ nextval('ir_security.class_type_permission_seq'),
 versions as well as share/unshare the file with other users and give those users permissions',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.file.VersionedFile';
-
-  
-
-
- 
--- ---------------------------------------------
--- New permission types for workspace folders
--- ---------------------------------------------
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_EDIT','The user can add and delete any files and folders from the specified folder including child files and folders',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFolder';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_ADD_FILE','The user can add files to the specified folder and only delete files they own',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFolder';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_FOLDER_READ','The user can view the folder and read all of the files and folders within the folder',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspaceFolder';
-
--- ---------------------------------------------
--- New permission types for workspace
--- ---------------------------------------------
-
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_EDIT','The user(s) can read, add and delete any files and folders from the specified group',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspace';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_ADD_FILE','The user(s) can read all files in the group, add files to the group and only delete files they own',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspace';
-
-insert into ir_security.class_type_permission select 
-nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'GROUP_WORKSPACE_READ','The user(s) can read and open all files and folders within the group',0
-  from ir_security.class_type where ir_security.class_type.name = 
-'edu.ur.ir.groupspace.GroupWorkspace';
 
 -- ------------------------------------
 -- institutional colleciton permissions
@@ -3969,7 +3554,6 @@ ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping_seq OWNER TO ir_p
 CREATE SCHEMA ir_metadata_marc AUTHORIZATION ir_plus;
 
 
-
 -- ---------------------------------------------
 -- mapping between content types and fields
 -- ---------------------------------------------
@@ -4083,6 +3667,3 @@ ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper OWNER TO ir_plus;
 CREATE SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
 ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper_seq OWNER TO ir_plus;
 
-
--- create an index on the personal folder personal folder id
-CREATE INDEX personal_file_user_id_personal_folder_id_idx ON ir_user.personal_file(user_id, personal_folder_id);

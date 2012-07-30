@@ -50,7 +50,7 @@
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
  	
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="page-resources/js/admin/edit_user_group.js"/>
@@ -124,57 +124,67 @@
 	                 
 	                 <!--  Start second tab -->
                      <div id="tab2">
-                        
-						     <c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
-	                            <form method="GET" id="user_search_form" name="userSearchForm" 
+                         <table width="100%">
+							<c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
+	                             <tr>
+	                                 <td></td>
+	                                 <td>
+	                                     <form method="GET" id="user_search_form" name="userSearchForm" 
 	                                         action="javascript:YAHOO.ur.usergroup.edit.userSearch(0, 1, 1);">
 	                                         Search: <input type="text" size="50" id="user_query" name="query" value=""/>
 	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
 	                                         <input type="submit" value="search"/>
-	                           </form>
-	                           <br/>
-	                           <br/>
-	                               <table>
-	                                   <tr>
-	                                       <td valign="top">
-	                                            <div id="group_members_div">
-                                                    <c:import url="user_group_users_frag.jsp"/>
-                                                </div>
-                                           </td>
-                                           <td valign="top">
-                                               <div id="users_search_results_div" ></div>
-                                           </td>
-                                        </tr>
-                                  </table>
+	                                     </form>
+	                                 </td>
+	                             </tr>
+	                        
+                             <tr>
+                                 <td><br/><br/></td>
+                             </tr>
+                             <tr>
+                                 <td valign="top">
+                                    <div id="group_members_div">
+                                        <c:import url="user_group_users_frag.jsp"></c:import>
+                                    </div>
+                                 </td>
+                                 <td valign="top">
+                                     <div id="users_search_results_div"></div>
+                                 </td>
+                             </tr>
                              </c:if>
+                         </table>
 	                 </div>
 	                 <!--  End second tab -->
 	                 
 	                 <!--  Start third tab -->
                      <div id="tab3">
+                         <table width="100%">
                          	<c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
-	                            <form method="GET" id="admin_search_form" name="adminSearchForm" 
+	                             <tr>
+	                                 <td></td>
+	                                 <td>
+	                                     <form method="GET" id="admin_search_form" name="adminSearchForm" 
 	                                         action="javascript:YAHOO.ur.usergroup.edit.adminSearch(0, 1, 1);">
 	                                         Search: <input type="text" size="50" id="admin_query" name="query" value=""/>
 	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
 	                                     </form>
-                             
-                             <br/>
-                             <br/>
-                                 <table>
-                                     <tr>
-                                        <td valign="top">
-                                            <div id="group_admins_div">
-                                                <c:import url="user_group_admins_frag.jsp"/>
-                                            </div>
-                                        </td>
-                                        <td valign="top">
-                                            <div id="admin_search_results_div"></div>
-                                        </td>
-                                
-                                   </tr>
-                                </table>
-                           </c:if>
+	                                 </td>
+	                             </tr>
+                             </c:if>
+                             <tr>
+                                 <td><br/><br/></td>
+                             </tr>
+                             <tr>
+                                 <td valign="top">
+                                    <div id="group_admins_div">
+                                        <c:import url="user_group_admins_frag.jsp"></c:import>
+                                    </div>
+                                 </td>
+                                 <td valign="top">
+                                     <div id="admin_search_results_div"></div>
+                                 </td>
+                             </tr>
+                         </table>
 	                 </div>
 	                 <!--  End third tab -->
 	                 

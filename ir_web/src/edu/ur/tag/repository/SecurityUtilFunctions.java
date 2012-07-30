@@ -49,11 +49,6 @@ public class SecurityUtilFunctions {
 	 */
 	public static boolean entryHasPermission(AccessControlEntry accessControlEntry, String permission)
 	{
-		// a null access control entry cannot have any permissions
-		if( accessControlEntry == null )
-		{
-			return false;
-		}
 	
 		return accessControlEntry.getPermissionNames().contains(permission);
 	}
@@ -267,7 +262,8 @@ public class SecurityUtilFunctions {
             	 }
             	 else
             	 {
-                     if( securityService.hasPermission(domainObject, user, permissions))
+            	     Long count = securityService.hasPermission(domainObject, user, permissions);
+                     if( count > 0)
                      {
                 	     granted = true;
                      }
@@ -279,7 +275,7 @@ public class SecurityUtilFunctions {
         
 	}
 
-	public void setSecurityService(SecurityService securityService) {
+	public  void setSecurityService(SecurityService securityService) {
 		SecurityUtilFunctions.securityService = securityService;
 	}
 

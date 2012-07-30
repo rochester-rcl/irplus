@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -33,11 +34,6 @@ import edu.ur.order.OrderType;
  *
  */
 public interface InviteUserService extends Serializable{
-
-	/** permissions that can be granted on versioned files */
-	public static final String VIEW_PERMISSION = "VIEW";
-	public static final String EDIT_PERMISSION = "EDIT";
-	public static final String SHARE_PERMISSION = "SHARE";
 
 	/**
 	 * Persistent method for invite info
@@ -58,7 +54,7 @@ public interface InviteUserService extends Serializable{
 	 * 
 	 * @param inviteInfo - folder invite information
 	 */
-	public void delete(FolderInviteInfo inviteInfo);
+	public void delete(FolderInviteInfo inviteInfo,  boolean cascadeToSubFolders, boolean cascadeToFiles);
 	
 	/**
 	 * Save the folder auto share info.
@@ -70,9 +66,15 @@ public interface InviteUserService extends Serializable{
 	/**
 	 * Delete the folder auto share information.
 	 * 
-	 * @param autoShareInfo - folder auto share information
+	 * @param unAutoShareUser - user performing the removal of the auto share
+	 * @param folderAutoShareInfo - folder auto-share info to delete
+	 * @param cascadeToSubFolders - set to true if auto-sharing should be removed from sub folders
+	 * @param cascadeToFiles - set to true if sharing should be removed from files.
 	 */
-	public void delete(FolderAutoShareInfo autoShareInfo);
+	public void delete(IrUser unAutoShareUser, FolderAutoShareInfo folderAutoShareInfo, 
+			boolean cascadeToSubFolders, 
+			boolean cascadeToFiles);
+
 
 	/**
 	 * Sends email to user existing in the system for collaborating on a document/file
@@ -125,6 +127,16 @@ public interface InviteUserService extends Serializable{
 	 * @return File collaborator 
 	 */
 	public FileCollaborator findFileCollaborator(Long fileCollaboratorId, boolean lock);
+	
+	/**
+	 * Based on the inviting user returns only the files that can be shared.
+	 * 
+	 * @param invitingUser - user doing the sharing
+	 * @param personalFilesToShare - list of files user is trying to share
+	 * 
+	 * @return - list of files that can be shared for the given user.
+	 */
+	public List<PersonalFile> getOnlyShareableFiles(IrUser invitingUser, Collection<PersonalFile> personalFilesToShare);
 	
 	/**
 	 * Find inviting User information by token
@@ -294,8 +306,39 @@ public interface InviteUserService extends Serializable{
 	 * Notify users that a new version of a file has been added.
 	 * 
 	 * @param personalFile - personal file that has been updated.
+	 * @param collaboratorIds - list of collaborators to notify
 	 * @return - list of collaborators where the email could not be sent
 	 */
-	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile);
+	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds);
 	
+	/**
+	 * Will set the personal folder to auto share with the given email.  This
+	 * will first check to see if the user already exists in the system.
+	 * 
+	 * @param email - to share with.
+	 * @param personalFolder - personal folder to auto share files when added to.
+	 * @param cascade - cascade down to sub folders
+	 * @throws FileSharingException - if the user tries sharing with themselves
+	 * 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void updateAutoSharePermissions(FolderAutoShareInfo folderAutoShareInfo, Set<IrClassTypePermission> permissions, 
+			boolean cascadeFolders, boolean cascadeFiles);
+	
+	/**
+	 * Adds permissions to files and folders added to an existing folder.  This uses the parent 
+	 * folders invite info and folder information to determine the permissions for the newly added
+	 * file and folders.  This can be used for when files and folders have been moved into an existing
+	 * folder set for auto sharing.
+	 * 
+	 * @param parentFolder - parent folder the files and folders were added to
+	 * @param folders - list of top level folders being added - no childen of these folders should be in the list
+	 * @param files - list of top level file being added.
+	 * 
+	 * @throws FileSharingException
+	 * @throws PermissionNotGrantedException
+	 */
+	public void addNewFilesFoldersToFolderWithAutoShare(PersonalFolder parentFolder, 
+			List<PersonalFolder> folders, List<PersonalFile> files) throws FileSharingException, 
+			PermissionNotGrantedException;
 }

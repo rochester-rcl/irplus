@@ -275,7 +275,7 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		log.debug("getting shared inbox files");
 		sharedInboxFiles = user.getSharedInboxFiles();
 		log.debug("found " + sharedInboxFiles.size() + " inbox files");
-		sharedInboxFilesCount = Long.valueOf(user.getSharedInboxFiles().size());
+		sharedInboxFilesCount = new Long(user.getSharedInboxFiles().size());
 		return SUCCESS;
 
 	}
@@ -288,7 +288,7 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	public String getNumberOfSharedInboxFiles()
 	{
 		IrUser user = userService.getUser(userId, false);
-		sharedInboxFilesCount = Long.valueOf(user.getSharedInboxFiles().size());
+		sharedInboxFilesCount = new Long(user.getSharedInboxFiles().size());
 		return SUCCESS;
 	}
 	
@@ -318,9 +318,9 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	

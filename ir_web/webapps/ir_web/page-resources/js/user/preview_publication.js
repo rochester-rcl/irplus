@@ -20,7 +20,7 @@
 YAHOO.namespace("ur.item.preview");
 
 var viewAddItemToCollectionsAction = basePath + 'user/viewAddItemToCollections.action';
-var publicationWorkspaceAction = basePath + 'user/workspace.action?tabName=COLLECTION';
+var publicationWorkspaceAction = basePath + 'user/workspace.action?showCollectionTab=true';
 var viewInstitutionalItemAction = basePath + 'institutionalPublicationPublicView.action';
 var viewContributorsAction = basePath + 'user/viewItemContributor.action';
 var viewAddFilesAction = basePath + 'user/viewEditItem.action';

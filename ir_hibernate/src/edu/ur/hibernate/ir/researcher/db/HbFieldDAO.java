@@ -16,14 +16,19 @@
 
 package edu.ur.hibernate.ir.researcher.db;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.researcher.Field;
 import edu.ur.ir.researcher.FieldDAO;
 
@@ -63,8 +68,7 @@ public class HbFieldDAO implements FieldDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("fieldCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fieldCount"));
 	}
 
 	/**
@@ -76,8 +80,8 @@ public class HbFieldDAO implements FieldDAO {
 	public List<Field> getAllNameOrder() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Field.class);
     	dc.addOrder(Order.asc("name"));
-    	return (List<Field>) dc.getExecutableCriteria(hbCrudDAO.getSessionFactory().getCurrentSession()).list();
- 	}
+    	return (List<Field>) hbCrudDAO.getHibernateTemplate().findByCriteria(dc);
+	}
 
 	/**
 	 * Get all fields in name order.
@@ -94,9 +98,13 @@ public class HbFieldDAO implements FieldDAO {
 	 * @see edu.ur.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
 	public Field findByUniqueName(String name) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFieldByName");
-		q.setString("name", name);
-		return (Field)  q.uniqueResult();
+		return (Field) 
+	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFieldByName", name));
+	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public Field getById(Long id, boolean lock) {
@@ -115,18 +123,25 @@ public class HbFieldDAO implements FieldDAO {
 	@SuppressWarnings("unchecked")
 	public List<Field> getFields(final int rowStart, 
     		final int numberOfResultsToShow, final String sortType) {
-	
-        Query q = null;
-		if (sortType.equalsIgnoreCase("asc")) {
-		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFieldsOrderByNameAsc");
-		} else {
-		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFieldsOrderByNameDesc");
-		}
+		List<Field> fields = 
+			(List<Field>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		        Query q = null;
+		        if (sortType.equalsIgnoreCase("asc")) {
+		        	q = session.getNamedQuery("getFieldsOrderByNameAsc");
+		        } else {
+		        	q = session.getNamedQuery("getFieldsOrderByNameDesc");
+		        }
 			    
-		q.setFirstResult(rowStart);
-		q.setMaxResults(numberOfResultsToShow);
-		q.setReadOnly(true);
-		q.setFetchSize(numberOfResultsToShow);
-	    return q.list();
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(numberOfResultsToShow);
+			    q.setReadOnly(true);
+			    q.setFetchSize(numberOfResultsToShow);
+	            return q.list();
+            }
+        });
+
+        return fields;
 	}
 }

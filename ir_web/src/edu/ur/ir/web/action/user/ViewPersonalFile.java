@@ -118,7 +118,7 @@ public class ViewPersonalFile extends ActionSupport implements Preparable, UserI
 		this.userFileSystemService = userFileSystemService;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 }

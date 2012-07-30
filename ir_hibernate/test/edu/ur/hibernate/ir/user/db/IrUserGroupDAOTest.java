@@ -103,7 +103,7 @@ public class IrUserGroupDAOTest {
  		//start a new transaction
  		ts = tm.getTransaction(td);
  		user = userDAO.getById(user.getId(), false);
- 		assert user != null : "Should be able to find user ";
+ 		assert user != null : "Should be able to find user " + user;
  		
  		IrUserGroup group = new IrUserGroup("groupName");
  		group.setDescription("groupDescription");

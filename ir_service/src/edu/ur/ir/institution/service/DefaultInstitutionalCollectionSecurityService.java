@@ -328,11 +328,10 @@ public class DefaultInstitutionalCollectionSecurityService implements Institutio
 
 	
 	/**
-	 * Return the true if the user has the specified permission
-	 * 
+	 * Return the count of the number of times the user has the collection permission.
 	 * @see edu.ur.ir.institution.InstitutionalCollectionSecurityService#hasPermission(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUser, edu.ur.ir.institution.InstitutionalCollectionPermission)
 	 */
-	public boolean hasPermission(InstitutionalCollection collection, IrUser user,
+	public long hasPermission(InstitutionalCollection collection, IrUser user,
 			InstitutionalCollectionPermission collectionPermission) {
 		 return securityService.hasPermission( collection,
 					user, collectionPermission.getPermission());

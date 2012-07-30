@@ -29,7 +29,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.invite.InviteTokenService;
 import edu.ur.ir.repository.LicenseVersion;
@@ -95,9 +94,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	/* Invite user service class */
 	private InviteUserService inviteUserService;
 	
-	/* service to deal with invitations to a group workspace */
-	private GroupWorkspaceInviteService groupWorkspaceInviteService;
-
 	/* Service for indexing users */
 	private UserIndexService userIndexService;
 	
@@ -528,10 +524,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		return userId;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
-	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -640,8 +633,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		String lastName = irUser.getLastName().trim();
 		String phoneNumber = irUser.getPhoneNumber().trim();
 		ExternalUserAccount externalAccount = irUser.getExternalAccount();
-				
-		defaultEmail.setVerifiedFalse(TokenGenerator.getToken() + defaultEmail.getEmail());
+	
+		defaultEmail.setVerifiedFalse(TokenGenerator.getToken());
 				
 		irUser = userService.createUser(irUser.getPassword().trim(), irUser.getUsername().trim(), 
 			    		defaultEmail);
@@ -723,9 +716,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
             
             
         	inviteUserService.sharePendingFilesForEmail(irUser.getId(),inviteToken.getEmail());
-        	groupWorkspaceInviteService.addUserToGroupsForEmail(inviteToken.getEmail());
-            
-			
 			returnVal = "successInvite";
 		} 
 		else
@@ -885,26 +875,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 */
 	public boolean getExternalAccountAlreadyExists() {
 		return externalAccountAlreadyExists;
-	}
-	
-	/**
-	 * Set the invite token service.
-	 * 
-	 * @param inviteTokenService
-	 */
-	public void setInviteTokenService(InviteTokenService inviteTokenService) {
-		this.inviteTokenService = inviteTokenService;
-	}
-
-	
-	/**
-	 * Service to deal with group workspace invitations.
-	 * 
-	 * @param groupWorkspaceInviteService
-	 */
-	public void setGroupWorkspaceInviteService(
-			GroupWorkspaceInviteService groupWorkspaceInviteService) {
-		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
 	}
 
 }

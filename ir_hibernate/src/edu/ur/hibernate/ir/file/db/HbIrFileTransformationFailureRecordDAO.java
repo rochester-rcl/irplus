@@ -16,11 +16,12 @@
 
 package edu.ur.hibernate.ir.file.db;
 
+import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.file.IrFileTransformationFailureRecord;
 import edu.ur.ir.file.IrFileTransformationFailureRecordDAO;
 
@@ -56,8 +57,12 @@ public class HbIrFileTransformationFailureRecordDAO implements IrFileTransformat
     }
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileTransformationFailureRecordCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileTransformationFailureRecordCount"));
+	}
+
+	public List<IrFileTransformationFailureRecord> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public IrFileTransformationFailureRecord getById(Long id, boolean lock) {

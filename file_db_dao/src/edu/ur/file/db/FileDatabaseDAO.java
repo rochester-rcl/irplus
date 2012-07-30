@@ -18,7 +18,6 @@ package edu.ur.file.db;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 
 /**
@@ -28,7 +27,7 @@ import edu.ur.dao.NameListDAO;
  *
  */
 public interface FileDatabaseDAO extends CountableDAO, 
-CrudDAO<FileDatabase>, NameListDAO, ListAllDAO
+CrudDAO<FileDatabase>, NameListDAO
 {
 	/**
 	 * Find a file database by it's file system name for the 

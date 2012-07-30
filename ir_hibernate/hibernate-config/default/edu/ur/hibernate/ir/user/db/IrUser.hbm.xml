@@ -68,10 +68,7 @@
 		          not-null="true"/>				          
 
 	    <property name="lastLoginDate" column="last_login_date" type="timestamp" 
-		          access="field" />	
-		          
-		<property name="mostRecentLoginDate" column="most_recent_login_date" type="timestamp" 
-		          access="field" />			
+		          access="field" />		
 		
 		<property name="selfRegistered" column="self_registered" 
 		     type="boolean" not-null="true"
@@ -83,12 +80,9 @@
 		<property name="passwordEncoding" column="password_encoding" type="string"
 			not-null="true" access="field" />
 
-		<property name="showOnlyMyGroupWorkspaces" column="show_only_my_group_workspaces" 
-		     type="boolean" access="field" />
-	
-	    <property name="accountExpired" column="account_expired" 
+		<property name="accountExpired" column="account_expired" 
 		     type="boolean" not-null="true"
-			 access="field" /> 
+			 access="field" />
 	
 	    <property name="accountLocked" column="account_locked" 
 		     type="boolean" not-null="true"
@@ -203,6 +197,7 @@
 		     cascade="all" 
 		     where="personal_folder_id = root_personal_folder_id"
 		     access="field"
+			 order-by="name" 
 			 lazy="true"
 			 schema="ir_user"
 			 fetch="subselect">
@@ -275,12 +270,6 @@
 	<query name="getUserByName">
 		from IrUser as IrUser where
 		IrUser.username = ?
-	</query>
-	
-	 <!-- named query for getting users where the personal index is not null -->
-	<query name="getUsersWithPersonalIndexFolder">
-		from IrUser as irUser where
-		irUser.personalIndexFolder is not null
 	</query>
 	
     <!-- named query for getting a user -->
@@ -369,183 +358,4 @@
 		where isAffiliationApproved = false 
 		and affiliation.needsApproval = true
 	</query>	
-	
-	<!-- ********* ROLE ONLY ********** -->
-	
-	<!-- named query for getting count of users by role ordered by  name -->
-	<query name="getUserByRoleCount">
-		select count(*) from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by  name -->
-	<query name="getUserByRoleOrderByNameAsc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		order by irUser.lowerCaseLastName asc, irUser.lowerCaseFirstName asc, irUser.lowerCaseMiddleName asc
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by  name -->
-	<query name="getUserByRoleOrderByNameDesc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		order by irUser.lowerCaseLastName desc, irUser.lowerCaseFirstName desc, irUser.lowerCaseMiddleName desc
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by username -->
-	<query name="getUserByRoleOrderByUsernameAsc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		order by irUser.username asc
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by username -->
-	<query name="getUserByRoleOrderByUsernameDesc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		order by irUser.username desc
-	</query>	
-	
-	
-	<!-- named query for getting a user by role ordered by default email asc -->
-	<query name="getUsersByRoleOrderByEmailAsc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		order by irUser.defaultEmail.email asc
-	</query>	
-	
-	<!-- named query for getting a user by role order by email desc -->
-	<query name="getUsersByRoleOrderByEmailDesc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		order by irUser.defaultEmail.email desc
-	</query>	
-	
-	
-	
-	
-	
-	<!-- ********* Affiliation ONLY ********** -->
-	
-	<!-- named query for getting a user by affiliation count -->
-	<query name="getUserByAffiliationCount">
-		select count(*) from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-	</query>	
-
-
-	<!-- named query for getting a user by affiliation ordered by  name -->
-	<query name="getUserByAffiliationOrderByNameAsc">
-		select irUser from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-		order by irUser.lowerCaseLastName asc, irUser.lowerCaseFirstName asc, irUser.lowerCaseMiddleName asc
-	</query>	
-	
-	<!-- named query for getting a user by affiliation ordered by  name -->
-	<query name="getUserByAffiliationOrderByNameDesc">
-		select irUser from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-		order by irUser.lowerCaseLastName desc, irUser.lowerCaseFirstName desc, irUser.lowerCaseMiddleName desc
-	</query>	
-	
-	<!-- named query for getting a user by affiliation ordered by username -->
-	<query name="getUserByAffiliationOrderByUsernameAsc">
-		select irUser from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-		order by irUser.username asc
-	</query>	
-	
-	<!-- named query for getting a user by affiliation ordered by username -->
-	<query name="getUserByAffiliationOrderByUsernameDesc">
-		select irUser from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-		order by irUser.username desc
-	</query>	
-		
-	<!-- named query for getting a user by affiliation ordered by default email asc -->
-	<query name="getUsersByAffiliationOrderByEmailAsc">
-		select irUser from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-		order by irUser.defaultEmail.email asc
-	</query>	
-	
-	<!-- named query for getting a user by affiliation order by email desc -->
-	<query name="getUsersByAffiliationOrderByEmailDesc">
-		select irUser from IrUser as irUser 
-		where irUser.affiliation.id = :affiliationId
-		order by irUser.defaultEmail.email desc
-	</query>	
-	
-	
-	<!-- ********* Affiliation AND Role ********** -->
-
-	<!-- named query for getting a user by role count -->
-	<query name="getUserByAffiliationRoleCount">
-		select count(*) from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by  name -->
-	<query name="getUserByAffiliationRoleOrderByNameAsc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-		order by irUser.lowerCaseLastName asc, irUser.lowerCaseFirstName asc, irUser.lowerCaseMiddleName asc
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by  name -->
-	<query name="getUserByAffiliationRoleOrderByNameDesc">
-		select irUser from IrUser as irUser
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-		order by irUser.lowerCaseLastName desc, irUser.lowerCaseFirstName desc, irUser.lowerCaseMiddleName desc
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by username -->
-	<query name="getUserByAffiliationRoleOrderByUsernameAsc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-		order by irUser.username asc
-	</query>	
-	
-	<!-- named query for getting a user by role ordered by username -->
-	<query name="getUserByAffiliationRoleOrderByUsernameDesc">
-		select irUser from IrUser as irUser
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-		order by irUser.username desc
-	</query>	
-		
-	<!-- named query for getting a user by role ordered by default email asc -->
-	<query name="getUsersByAffiliationRoleOrderByEmailAsc">
-		select irUser from IrUser as irUser
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-		order by irUser.defaultEmail.email asc
-	</query>	
-	
-	<!-- named query for getting a user by role order by email desc -->
-	<query name="getUsersByAffiliationRoleOrderByEmailDesc">
-		select irUser from IrUser as irUser 
-		join irUser.roles as role
-		where role.id = :roleId
-		and irUser.affiliation.id = :affiliationId
-		order by irUser.defaultEmail.email desc
-	</query>	
-	
 </hibernate-mapping>

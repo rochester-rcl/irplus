@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.FileSystem;
-import edu.ur.ir.groupspace.GroupWorkspaceFile;
-import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.index.IndexProcessingType;
 
 
@@ -57,6 +55,13 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
     public void save(UserWorkspaceIndexProcessingRecord userWorkspaceIndexProcessingRecord);
  
 	/**
+	 * Get all workspace index processing records 
+	 * 
+	 * @return List of all index processing types
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> getAll();
+	
+	/**
 	 * Get the processing record by the workspace item id, user id and file system type.
 	 * 
 	 * @param userId - id of the user who owns the item
@@ -95,33 +100,8 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
 	 */
 	public List<UserWorkspaceIndexProcessingRecord> saveAll(PersonalFile personalFile, 
 			IndexProcessingType processingType);
-	
-	/**
-	 * Update all indexes for a group workspace file - since a workspace file can be shared across multiple users, we may
-	 * want to update all users.  This method provides this option.
-	 * 
-	 * @param workspaceFile - workspace file to update
-	 * @param processingType - type of processing
-	 * 
-	 * @return list of records updated.
-	 */
-	public List<UserWorkspaceIndexProcessingRecord> saveAll(GroupWorkspaceFile File, 
-			IndexProcessingType processingType);
-	
-	/**
-	 * Update all indexes for a group workspace folder - since a workspace folder can be shared across multiple users, we may
-	 * want to update all users.  This method provides this option.
-	 * 
-	 * @param workspaceFolder - workspace folder to update
-	 * @param processingType - type of processing
-	 * 
-	 * @return list of records updated.
-	 */
-	public List<UserWorkspaceIndexProcessingRecord> saveAll(
-			GroupWorkspaceFolder workspaceFolder, IndexProcessingType processingType);
-	
     /**
-     * Add all file system objects available to the given user to be processed
+     * Add all items within the given user to be processed
      * 
      * @param user - user with all items to be processed
      * @param processing type - type of processing to be performed.
@@ -130,12 +110,6 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
     public void reIndexAllUserItems( IrUser user,
 			IndexProcessingType processingType) throws IOException;
     
-    /**
-     * Will delete and set all user workspaces to be re-indexed
-     * 
-     * @param processing type - type of processing to be performed.
-     * @throws IOException 
-     */
-    public void reIndexAllWorkspaceUsers(IndexProcessingType processingType) throws IOException;
+  
 
 }

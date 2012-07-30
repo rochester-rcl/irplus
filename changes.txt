@@ -1,68 +1,31 @@
-IR+ changes 2.1 to 3.0
-==============================
-- Updated rename file - now re-indexes after name change
-- Simplified move personal collections and items (should also help with performance)
-- Simplified move personal folder and files code (should also help with performance)
-- Simplified move researcher folder and files code (should also help with performance)
-- Updated Approve affiliations - removed unneeded variables and imports
-- added last login date to user search results table 
-- updated to allow filtering by role and affiliation in user administration
-- Updated to allow administrators to view invite table
-   - allows administrators to delete an invite
-   - allows administrators to see list of named files shared
-- Updated to Lucene version 3.6
-- Updated to Struts 2.3.4
-- Updated to load user id when going to approve user affiliations - fixes menu bar
-- Updated to YUI 2.9.0 
-- Updated to PDF box 1.6.0
-- Updated to POI 3.8
-- Updated to ivy 2.2.0
-- Updated to hibernate 3.6.0 Final
-- Added updated date to invite info
-- Added indexing capabilities for collections
-- Added indexing capabilities for user groups
-- Changed upload files to return access denied rather than files not uploaded for non-authoring users.
-- Updated to Spring 3.1.0
-- Updated to re-index all items within a collection tree if a new collection is added
-- Updated email to have a new column - lower case email to allow comparison by the lower case email
-  address
-- Updated file properties page to show emails that are shared with but users have not yet created an account
-- fixed to make back button work in personal files/folders workspace
-- Updated home page to set focus on search box
-- Updated Search / Browse page to set focus on search box
-- Added search interface to institutional collection admin section
-- Added job to allow administrators option to re-index all institutional collections
-- Updated collection page to show description of sub collections
-- Updated collections indexing to occur on new collection creation or updating of collection
-- Added Group workspaces admin option in administration drop down
-- Added setting to make system property headless = true for graphics processing
-- Added ability to have images open in browser based on setting
-- Added ability to see all files being shared with a given user
-- Added ability to see last login date 
-- Now removes the invite token if the user removes all files associated with invite
-- Updated to now properly use the default interceptor stack
-- Updated to correctly forward to action not found if user tries to enter an action that does not exist
-- Updated user admin to view all groups a user belongs to
-- Fixed issue related to deleting a file in shared file in-box
-- Updated to only use one ivysettings.xml file
-- Added ability to re-index all users with a workspace in administration section
-- Added ability to send email notifications to collaborators when a new version of a file is added in
-  personal workspace.
-- Added processing window when opening folder
-- Updates to no longer distort researcher images on home page, contributor page or browse researcher page
-- Fixed administration issue when navigating to view publication then selecting move user would not be able
-  to see publication on left hand side - now it is shown and can be moved.
-  
-after  5/8/2012
-- Dublin core data now shows site url to item if Handle system is not used.
-- Updated to new ICUFoldingFilter for better search results with text that
-  has diacritic information
-  
-[ur_persistence_util]
-=============================
-- Removed getAll from HbCrudDAO and moved it into its own interface.  Removed method from all
-DAO classes that did not have a client using the method.
+IR+ 2.1 to 2.1.1
+==========================
 
+- Added no-index meta-tags to help stop google from indexing restricted content
+
+- Fixes for tomcat 7 JSTL tag issues
+
+- back-ported (from 3.0) hanging indent on search for items faceting (browse-items.jsp)
+
+- back-ported (from 3.0) paging fixes tomcat 7.0 for browse-items.jsp
+
+- back-ported image fix on browse-items.jsp - images are no longer streatched to fit the 
+  given area
+  
+- back-ported updated to struts 2.3.4
+
+- back ported fix for constraint on ir_user.personal_file to make sure the same file cannot
+be added to more than one location in the file system
+
+- back ported (from 3.0) ability to send collaborators emails of new file version added
+
+- back ported (from 3.0) ability to auto share folders and sub-folders
+
+- back ported (from 3.0) ability to see all files you are sharing with a particular user
+
+- back ported - removed fedora tables from sql script
+
+- back ported (3.0) - added invite schema
 
 IR+ 2.0.8 to 2.1
 ==========================
@@ -125,8 +88,31 @@ their workspace
 
 - Fixed issues with IE and FF related to add/remove of other title.
 
+- Set license to be read only so it can be scrolled in IE 
 
+- Fixed null pointer issue in collection searching when collection no longer exists
 
+- Updated link to YUI library
+
+- Moved tag library tld file to WEB-INF to fix issue with Tomcat 7
+
+IR+ 2.0.7 to 2.0.8
+==========================
+- Updated almost all images to use css rather than hard coded sizes
+- Fixed error where if only one image in repository image is not displayed image
+now shows up correctly.
+
+IR+ 2.0.6 to 2.0.7
+===========================
+- Updated to allow for sorting by published date and first created date in collection
+and repository browse.
+
+- Fixed group user remove.  Removed user doing the removing rather than the
+user performing the remove.
+
+IR+ 2.0.5 to 2.06.
+============================
+Fixed security vulnerabilities
 
 IR+ 2.0.4 to 2.0.5
 ============================
@@ -134,8 +120,8 @@ IR+ 2.0.4 to 2.0.5
 [Thanks to Paul Hoffman and Fenway Libraries Online] 
 
 IR+ 2.0.3 to 2.0.4
-===========================
-Updated to Struts 2.2.1 for security issue
+=============================
+- Updated to deal with Struts 2 security issue
 
 IR+ 2.0.2 to 2.0.3
 =============================
@@ -145,14 +131,8 @@ IR+ 2.0.1 to 2.0.2
 =============================
 - Fixed security issue for YUI library
 
+irplus changes 1.0 to 2.0
 
-IR+ Changes 2.0 to 2.0.1
-==============================
-Fixed issue with incorrect indexing of institutional items on submission
-
-
-IR+ changes 1.0 to 2.0
-===============================
 
 [Global]
 =============================

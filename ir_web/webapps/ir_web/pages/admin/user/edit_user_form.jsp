@@ -171,19 +171,9 @@
  		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_ADMIN", "")}'> 
                  checked="true" 
              </c:if>
-             id="editUserForm_isAdmin" name="adminRole" value="true"/>  Administrator
+             id="editUserForm_isAdmin" name="adminRole" value="true"/>  Admin
 		</td>
 	</tr>
-	 <tr>
-		<td class="label" colspan="2"> 
-		 <input type="checkbox"	
-		     onclick="YAHOO.ur.email.autoCheckRoles(this);"
-		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_AFFLIATION_APPROVER", "")}'> 
-                checked="true" 
-             </c:if>
-              name="affiliationApproverRole" value="true" id="editUserForm_isAffilationApprover"/> User Affiliation Approver
- 		</td>
-	</tr> 
    <tr>
 		<td class="label" colspan="2"> 
 		 <input type="checkbox"	
@@ -214,17 +204,7 @@
              </c:if>
               name="importerRole" value="true" id="editUserForm_isImporter"/> Importer
  		</td>
-	</tr> 
-	<tr>
-		<td class="label" colspan="2"> 	
-            <input type="checkbox"
-                onclick="YAHOO.ur.email.autoCheckRoles(this);"
-            <c:if test='${ir:checkUserHasRole(irUser, "ROLE_GROUP_WORKSPACE_CREATOR", "")}'> 
-                checked="true" 
-            </c:if>  
-            name="groupWorkspaceCreatorRole" value="true" id="editUserForm_isGroupWorkspaceCreator"/> Group Workspace Creator
-		</td>
-	</tr>     
+	</tr>      
 	<tr>
 		<td class="label" colspan="2"> 	
             <input type="checkbox"
@@ -235,7 +215,7 @@
             name="authorRole" value="true" id="editUserForm_isAuthor"/> Author
 		</td>
 	</tr>        
-    
+
 	<tr>
 		 <td class="label" colspan="2"> 	
              <input type="checkbox"

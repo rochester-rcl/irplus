@@ -200,7 +200,7 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 		return collectionId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -48,7 +48,7 @@
     <ur:js src="page-resources/yui/menu/menu-min.js"/>
     
  	<!--  base path information -->
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
 
@@ -64,7 +64,7 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<p>Sorry, the file could not be found if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> </p> 
+				<h3> <div class="errorMessage"> File does not exist for download! </div> </h3> 
 		    </div>
 		    <!--  end the body tag --> 
 		

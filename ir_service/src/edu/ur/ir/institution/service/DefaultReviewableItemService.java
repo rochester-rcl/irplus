@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 	private InstitutionalCollectionSecurityService institutionalCollectionSecurityService;
 	
 	/** Mail sender */
-	private transient MailSender mailSender;
+	private MailSender mailSender;
 	
 	/** Mail message for admin to verify the user affiliation */
 	private SimpleMailMessage itemRejectedMessage;
@@ -90,8 +90,10 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 		
 		log.debug("Checking reviewer permissions for " + pendingItems.size() );
 		for(ReviewableItem item: pendingItems) {
-			if (institutionalCollectionSecurityService.hasPermission(item.getInstitutionalCollection(),
-					user, InstitutionalCollectionSecurityService.REVIEWER_PERMISSION)) {
+			long permission = institutionalCollectionSecurityService.hasPermission(item.getInstitutionalCollection(),
+					user, InstitutionalCollectionSecurityService.REVIEWER_PERMISSION);
+			
+			if (permission > 0) {
 				itemsForReview.add(item);
 			}
 		}

@@ -28,7 +28,7 @@ var addCollectionAction =  basePath + 'user/addInstitutionalCollection.action';
 
 // Action to goto other screens
 var submitPublicationAction = basePath + 'user/submitPublicationAndFinishLater.action';
-var publicationWorkspaceAction = basePath + 'user/workspace.action?tabName=COLLECTION';
+var publicationWorkspaceAction = basePath + 'user/workspace.action?showCollectionTab=true';
 
 YAHOO.ur.item.collection = {
 

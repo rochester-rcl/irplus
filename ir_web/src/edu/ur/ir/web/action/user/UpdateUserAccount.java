@@ -120,7 +120,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	private Long licenseId;
 	
 	/** Authenticator for ldap username/password */
-	private transient LdapAuthenticator authenticator;
+	private LdapAuthenticator authenticator;
 	
 	/** Authentication provider for ldap */
 	private UrLdapAuthenticationProvider ldapAuthProvider;
@@ -376,7 +376,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

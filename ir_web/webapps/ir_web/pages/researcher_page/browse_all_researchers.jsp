@@ -47,10 +47,10 @@
  	    <ur:js src="page-resources/yui/menu/menu-min.js"/>
         <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
-	    <ur:js src="page-resources/js/util/base_path.jsp"/>
+	    <ur:js src="pages/js/base_path.js"/>
 	    <ur:js src="page-resources/js/util/ur_util.js"/>
 	    <ur:js src="page-resources/js/menu/main_menu.js"/>
-		<ur:js src="page-resources/js/util/ur_table.js"/>
+		<ur:js src="pages/js/ur_table.js"/>
 
          <c:url var="browseResearchers" value="/viewResearcherBrowse.action"/>
          <c:url var="searchAllResearchers" value="/startSearchResearchers.action"/>
@@ -119,7 +119,7 @@
 		                  <div class="clear">&nbsp;</div>
 
                           <c:import url="browse_researcher_pager.jsp"></c:import>
-						  <br/>
+						
 						<div class="dataTable">
 							                 
 					        <urstb:table width="100%">
@@ -177,19 +177,24 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                 <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                           <img  src="${url}"/>
+                                                           <img src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.isPublic}">
-	                                                      <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
+	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                            <c:url value="viewResearcherPage.action" var="viewResearcherPage">
-						                        	    <c:param name="researcherId" value="${researcher.id}"/>
-						                        	 </c:url>
-													<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
-													<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+						                                <c:if test="${researcher.isPublic}">
+						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	            <c:param name="researcherId" value="${researcher.id}"/>
+						                        	        </c:url>
+														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														</c:if>
+														<c:if test="${!researcher.isPublic}">
+														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
+													    </c:if>
 						                        </urstb:td>
 						                    </urstb:tr>
 						            </urstb:tbody>
@@ -251,7 +256,7 @@
 							                          <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                          <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                      </c:url>
-							                      <div class="hanging_indent"><a href="${departmentFilter}">${department.facetName}&nbsp;(${department.hits})</a></div>
+							                      <a href="${departmentFilter}">${department.facetName} (${department.hits}) </a><br/>
 							                   </c:if>
 							              </c:forEach>
 							          </ir:facet>
@@ -272,7 +277,7 @@
 							                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                     </c:url>
-							                    <div class="hanging_indent"><a href="${fieldFilter}">${field.facetName} (${field.hits})</a></div>
+							                     <a href="${fieldFilter}">${field.facetName} (${field.hits})</a> <br/>
 							               	 </c:if>
 							             </c:forEach>
 							        </ir:facet>	
@@ -293,7 +298,7 @@
 							                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                     </c:url>
-							                     <div class="hanging_indent"><a href="${keywordFilter}">${keyword.facetName} (${keyword.hits})</a></div>
+							                     <a href="${keywordFilter}">${keyword.facetName} (${keyword.hits})</a> <br/>
 							               	 </c:if>
 							             </c:forEach>
 							        </ir:facet>								        						          
@@ -337,7 +342,7 @@
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${researcher.primaryPicture == null || !researcher.isPublic}">
-	                                                      <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
+	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>

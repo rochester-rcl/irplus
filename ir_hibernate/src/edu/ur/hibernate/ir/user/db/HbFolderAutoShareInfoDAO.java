@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.user.db;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -78,6 +80,15 @@ public class HbFolderAutoShareInfoDAO implements FolderAutoShareInfoDAO{
 	 */
 	public void makeTransient(FolderAutoShareInfo entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+	
+	/**
+	 * Get all user external accounts.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<FolderAutoShareInfo> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 }

@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.person.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -36,8 +35,6 @@ import edu.ur.ir.person.ContributorDAO;
  */
 public class HbContributorDAO implements ContributorDAO{
 	
-	/** eclipse generated id. */
-	private static final long serialVersionUID = 1475362787137379446L;
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
@@ -66,8 +63,7 @@ public class HbContributorDAO implements ContributorDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("contributorCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("contributorCount"));
 	}
 	
 	/**
@@ -90,6 +86,12 @@ public class HbContributorDAO implements ContributorDAO{
 	public List<Contributor> getAllForName(Long personNameId)
 	{
 		return (List<Contributor>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllContributorForName", personNameId);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public Contributor getById(Long id, boolean lock) {

@@ -30,7 +30,6 @@
 			<class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionServiceTest"/>
 		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSecurityServiceTest"/>
 		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexProcessingRecordServiceTest"/>
-		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionIndexServiceTest"/>
 		    
 		    <class name="edu.ur.ir.user.service.DefaultInviteUserServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultUserFileSystemServiceTest"/>
@@ -41,7 +40,6 @@
 		    <class name="edu.ur.ir.user.service.DefaultUserWorkspaceIndexServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultUserWorkspaceSearchServiceTest"/>
 		    <class name="edu.ur.ir.user.service.UserWorkspaceIndexProcessingRecordServiceTest"/>
-		    <class name="edu.ur.ir.user.service.UserGroupIndexServiceTest"/>
 		    
 		    <class name="edu.ur.ir.person.service.DefaultPersonServiceTest"/>
 		    <class name="edu.ur.ir.person.service.DefaultNameAuthorityIndexServiceTest"/>
@@ -62,11 +60,6 @@
 		    <class name="edu.ur.ir.handle.service.HandleServiceTest"/>
 		    
 		    <class name="edu.ur.ir.oai.metadata.provider.service.DefaultResumptionTokenTest"/>
-		    
-		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemServiceTest"/>
-		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceInviteServiceTest"/>
-		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceSearchServiceTest"/>
-		    <class name="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageFileSystemServiceTest"/>
 
 		</classes>
 	</test>

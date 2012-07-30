@@ -18,7 +18,6 @@ package edu.ur.ir.importer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
@@ -31,7 +30,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface MarcFileToVersionedItemImporter extends Serializable{
+public interface MarcFileToVersionedItemImporter {
 	
 	
 	/**

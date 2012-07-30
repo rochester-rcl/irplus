@@ -95,17 +95,10 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(VersionedFile.class);
 	
-	/* allows a user to view/read the file */
-	public static String VIEW_PERMISSION = "VIEW";
-	
-	/* allows user to edit the file versions and delete */
-	public static String EDIT_PERMISSION = "EDIT";
-	
-	/* allows user to edit the file versions and share with others */
-	public static String SHARE_PERMISSION = "SHARE";
-	
-	/* allows user to edit the file versions and share with others */
-	public static String MANAGE_PERMISSION = "MANAGE";
+	/** permissions that can be granted on versioned files */
+	public static final String VIEW_PERMISSION = "VIEW";
+	public static final String EDIT_PERMISSION = "EDIT";
+	public static final String SHARE_PERMISSION = "SHARE";
 	
 	/**
 	 * Package protected versioned file constructor.

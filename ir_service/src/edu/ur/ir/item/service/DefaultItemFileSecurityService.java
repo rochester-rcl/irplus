@@ -104,7 +104,7 @@ public class DefaultItemFileSecurityService implements ItemFileSecurityService {
 	 * 
 	 * @see edu.ur.ir.item.ItemFileSecurityService#hasPermission(ItemFile, IrUser, edu.ur.ir.item.ItemFilePermission)
 	 */
-	public boolean hasPermission(ItemFile itemFile, IrUser user, ItemFilePermission permission) {
+	public long hasPermission(ItemFile itemFile, IrUser user, ItemFilePermission permission) {
 		return securityService.hasPermission(itemFile, user, permission.getPermission());
 	}
 	

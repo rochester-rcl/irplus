@@ -1,5 +1,5 @@
 /**
- * This allows a wait dialog to be created.  The HTML file
+ * This allows a wait dialog to be greated.  The html file
  * must contain a wait_dialog_box  like the following:
  * 
  *  <!--  wait div -->

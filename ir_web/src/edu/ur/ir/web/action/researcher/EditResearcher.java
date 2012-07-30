@@ -110,9 +110,9 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -172,6 +172,8 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 				    new File(repository.getResearcherIndexFolder()) );
 		}
 		    	
+		researcherIndexService.optimize(new File(repository.getResearcherIndexFolder()));
+
         return SUCCESS;
 	}
 
@@ -269,11 +271,13 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		{
 		    researcherIndexService.updateIndex(researcher, 
 				        new File(repository.getResearcherIndexFolder()) );
+		    researcherIndexService.optimize( new File(repository.getResearcherIndexFolder()));
 		}
 	  	else
 		{
 			researcherIndexService.deleteFromIndex(researcher.getId(), 
 				    new File(repository.getResearcherIndexFolder()) );
+			researcherIndexService.optimize( new File(repository.getResearcherIndexFolder()));
 		}
 		return SUCCESS;
 		

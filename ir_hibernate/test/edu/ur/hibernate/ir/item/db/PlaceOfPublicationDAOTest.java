@@ -16,6 +16,7 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -52,6 +53,7 @@ public class PlaceOfPublicationDAOTest {
 	/**
 	 * Test place of publication persistance
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void basePlaceOfPublicationDAOTest() throws Exception{
  		PlaceOfPublication placeOfPublication = new PlaceOfPublication();
@@ -65,6 +67,9 @@ public class PlaceOfPublicationDAOTest {
         ts = tm.getTransaction(td);
          PlaceOfPublication other = placeOfPublicationDAO.getById(placeOfPublication.getId(), false);
          assert other.equals(placeOfPublication) : "Language types should be equal";
+         
+         List<PlaceOfPublication> placeOfPublications = placeOfPublicationDAO.getAll();
+         assert placeOfPublications.size() == 1 : "One place of publication should be found";
          
          PlaceOfPublication placeOfPublicationByName = placeOfPublicationDAO.findByUniqueName(placeOfPublication.getName());
          assert placeOfPublicationByName.equals(placeOfPublication) : "Language should be found";

@@ -31,7 +31,7 @@ public class FileSystemType implements Serializable, Orderable{
 	/** eclipse genreated id */
 	private static final long serialVersionUID = -7485498621126903978L;
 
-	/** Represents a file and folder types */
+	/** Represents a file type */
 	public static final FileSystemType FILE = new FileSystemType("file", 1);
 	public static final FileSystemType FOLDER = new FileSystemType("folder", 10);
 	public static final FileSystemType PERSONAL_FILE = new FileSystemType("personalFile", 1);
@@ -48,13 +48,6 @@ public class FileSystemType implements Serializable, Orderable{
 	public static final FileSystemType RESEARCHER_PUBLICATION = new FileSystemType("researcherPublication", 1);
 	public static final FileSystemType RESEARCHER_LINK = new FileSystemType("researcherLink", 1);
 	public static final FileSystemType RESEARCHER_INSTITUTIONAL_ITEM = new FileSystemType("researcherInstitutionalItem", 1);
-	public static final FileSystemType GROUP_WORKSPACE_FILE = new FileSystemType("groupWorkspaceFile", 1);
-	public static final FileSystemType GROUP_WORKSPACE_FOLDER = new FileSystemType("groupWorkspaceFolder", 10);
-	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_FILE = new FileSystemType("groupWorkspaceProjectPageFile", 1);
-	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_FOLDER = new FileSystemType("groupWorkspaceProjectPageFolder", 10);
-	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_PUBLICATION = new FileSystemType("groupWorkspaceProjectPagePublication", 1);
-	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_FILE_SYSTEM_LINK = new FileSystemType("groupWorkspaceProjectPageFileSystemLink", 1);
-	public static final FileSystemType GROUP_WORKSPACE_PROJECT_PAGE_INSTITUTIONAL_ITEM = new FileSystemType("groupWorkspaceProjectPageInstitutionalItem", 1);
 
 	
 	/**
@@ -124,14 +117,6 @@ public class FileSystemType implements Serializable, Orderable{
 		else if(systemType.equalsIgnoreCase(RESEARCHER_INSTITUTIONAL_ITEM.getType()))
 		{
 			return RESEARCHER_INSTITUTIONAL_ITEM;
-		}
-		else if(systemType.equalsIgnoreCase(GROUP_WORKSPACE_FOLDER.getType()))
-		{
-			return GROUP_WORKSPACE_FOLDER;
-		}
-		else if(systemType.equalsIgnoreCase(GROUP_WORKSPACE_FILE.getType()))
-		{
-			return GROUP_WORKSPACE_FILE;
 		}
 		
 		return null;

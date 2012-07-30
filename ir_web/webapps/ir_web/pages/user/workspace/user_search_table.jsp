@@ -74,30 +74,14 @@
                             </c:if>	
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
                                 <span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">${fileSystemObject.name}</a>
-                            </c:if>   
-                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
-                                <c:url var="groupWorkspaceFileDownloadUrl" value="/user/groupWorkspaceFileDownload.action">
-		                                <c:param name="groupWorkspaceFileId" value="${fileSystemObject.id}"/>
-		                        </c:url>
-		                        <ir:fileTypeImg cssClass="tableImg" 
-                                     versionedFile="${fileSystemObject.versionedFile}"/><a href="${groupWorkspaceFileDownloadUrl}">${fileSystemObject.versionedFile.nameWithExtension}</a>
-                               
-                            </c:if>   
-                            <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
-                                <c:url var="folderUrl" value="/user/workspace.action">
-                                   <c:param name="tabName" value="GROUP_WORKSPACE"/>
-                                   <c:param name="groupWorkspaceId" value="${fileSystemObject.groupWorkspace.id}"/>
-                                   <c:param name="groupWorkspaceFolderId" value="${fileSystemObject.id}"/>
-                                </c:url>
-                                <span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id},${fileSystemObject.groupWorkspace.id},-1);YAHOO.ur.user.workspace.setActiveIndex('GROUP_WORKSPACE')">${fileSystemObject.name}</a>
-                            </c:if>                     
+                            </c:if>                        
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-                               /My Files${fileSystemObject.path}
+                               /${user.username}${fileSystemObject.path}
                             </c:if>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                           /My Files${fileSystemObject.path}
+	                           /${user.username}${fileSystemObject.path}
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'sharedInboxFile'}">
 	                            /Shared File Inbox${fileSystemObject.path}
@@ -107,12 +91,6 @@
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            /My Publications${fileSystemObject.path}
-	                        </c:if>
-	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
-	                            /Group Workspaces${fileSystemObject.path}
-	                        </c:if>
-	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
-	                            /Group Workspaces${fileSystemObject.path}
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>${fileSystemObject.description}</urstb:td>
@@ -131,17 +109,6 @@
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">Open Folder</a>
-	                        </c:if>
-	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFolder'}">
-	                            <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.id},${fileSystemObject.groupWorkspace.id},-1);YAHOO.ur.user.workspace.setActiveIndex('GROUP_WORKSPACE')">Open Folder</a>	       
-	                        </c:if>
-	                        <c:if test="${fileSystemObject.fileSystemType.type == 'groupWorkspaceFile'}">
-	                            <c:if test="${ ! empty fileSystemObject.groupWorkspaceFolder}"> 
-	                                <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(${fileSystemObject.groupWorkspaceFolder.id},${fileSystemObject.groupWorkspace.id},-1);YAHOO.ur.user.workspace.setActiveIndex('GROUP_WORKSPACE')">Open Folder</a>
-	                            </c:if>
-	                            <c:if test="${ empty fileSystemObject.groupWorkspaceFolder}"> 
-	                                <a href="javascript:YAHOO.ur.user.group_workspace.getFolderById(0,${fileSystemObject.groupWorkspace.id},-1);YAHOO.ur.user.workspace.setActiveIndex('GROUP_WORKSPACE')">Open Folder</a>
-	                            </c:if>
 	                        </c:if>
                         </urstb:td>
                     </urstb:tr>

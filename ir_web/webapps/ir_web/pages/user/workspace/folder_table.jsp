@@ -61,7 +61,7 @@
 	           <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
- 		                   onClick="YAHOO.ur.folder.newFolderDialog.showFolder();"
+ 		                   onClick="YAHOO.ur.folder.newFolder(${parentFolderId});"
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
 	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
@@ -209,6 +209,7 @@
 	                                 onclick="javascript:YAHOO.ur.folder.buildFileMenu(this, 'file_'+ ${fileSystemObject.id}, 
 	                                 'file_menu_' + ${fileSystemObject.id}, 
 	                                 ${fileSystemObject.id}, 
+	                                 ${user.id}, 
 	                                 ${fileSystemObject.versionedFile.locked}, 
 	                                 ${ir:isLocker(user,fileSystemObject.versionedFile)}, 
 	                                 ${ir:canLockFile(user,fileSystemObject.versionedFile)},

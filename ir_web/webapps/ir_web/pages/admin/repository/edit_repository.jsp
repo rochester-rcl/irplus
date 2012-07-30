@@ -57,7 +57,7 @@
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
  	<ur:js src="page-resources/yui/tabview/tabview-min.js"/>
  	
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="page-resources/js/admin/repository.js"/>
@@ -220,18 +220,6 @@
                                      </td>
                                  </tr>
                                  <tr>
-                                     <td class="label"> Institutional Collection Index Folder Location: </td>
-                                     <td class="input" colspan="2">
-                                         <input size="80" name="institutionalCollectionIndexFolder" value="${repository.institutionalCollectionIndexFolder}"/>
-                                     </td>
-                                 </tr>
-                                 <tr>
-                                     <td class="label"> User Group Index Folder Location: </td>
-                                     <td class="input" colspan="2">
-                                         <input size="80" name="userGroupIndexFolder" value="${repository.userGroupIndexFolder}"/>
-                                     </td>
-                                 </tr>
-                                 <tr>
                                      <td class="buttons" colspan="3" >
                              
                                          <c:if test="${repository == null}">
@@ -249,8 +237,6 @@
    
                        <c:if test="${repository != null}">
                            Last subscription process email date: ${repository.lastSubscriptionProcessEmailDate}
-                           
-                           
                            <br/>
                            <br/>
                            
@@ -259,19 +245,8 @@
                            
                            <br/>
                            <br/>
-
-                           <c:url var="reIndexItemsUrl" value="/admin/reIndexInstitutionalCollections.action"/>
-                           <a href="${reIndexItemsUrl}">Re-Index Institutional Collections</a>
-                           
-                           <br/>
-                           <br/>
                            
                            <a href="<c:url value="/admin/reIndexUsers.action"/>">Re-Index Users</a>
-                           
-                           <br/>
-                           <br/>
-                           
-                            <a href="<c:url value="/admin/reIndexUserGroups.action"/>">Re-Index User Groups</a>
                            
                            <br/>
                            <br/>
@@ -286,7 +261,9 @@
                            <br/>
                            <br/>
                            
-                           <a href="<c:url value="/admin/reIndexAllUserWorkspaces.action"/>">Re-Index All User Workspaces</a>
+                           <c:url var="resetAllHandles" value="/admin/resetAllHandles.action"/>
+                           
+                           <a href="${resetAllHandles}">Reset all handles</a>
                            <br/>
                            <br/>
                        </c:if>

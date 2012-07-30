@@ -60,8 +60,7 @@ public class HbIdentifierTypeDAO implements IdentifierTypeDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("identifierTypeCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("identifierTypeCount"));
 	}
 	
 	/**

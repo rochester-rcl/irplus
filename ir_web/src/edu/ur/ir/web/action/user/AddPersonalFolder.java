@@ -18,14 +18,21 @@
 package edu.ur.ir.web.action.user;
 
 
+import java.util.LinkedList;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.user.FolderAutoShareInfo;
+import edu.ur.ir.user.FolderInviteInfo;
+import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
@@ -74,13 +81,21 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	/** Message that can be displayed to the user. */
 	private String folderMessage;
 	
+	private boolean useParentAutoShareProperties = false;
+	
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
 	/** service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 
+	/* invite user service. */
+	private InviteUserService inviteUserService;
 	
+    private PersonalFolder parentFolder;
+
+
+
 	/**
 	 * Create the new folder
 	 */
@@ -125,19 +140,38 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		else
 		{
 		    // add sub folder	
-			PersonalFolder folder = userFileSystemService.getPersonalFolder(parentFolderId, true);
+			parentFolder = userFileSystemService.getPersonalFolder(parentFolderId, true);
 			
 			// user must be owner of folder
-			if( !folder.getOwner().getId().equals(thisUser.getId()))
+			if( !parentFolder.getOwner().getId().equals(thisUser.getId()))
 			{
 				return "accessDenied";
 			}
 			
 			try
 			{
-			    PersonalFolder personalFolder = folder.createChild(folderName);
+			    PersonalFolder personalFolder = parentFolder.createChild(folderName);
 			    personalFolder.setDescription(folderDescription);
-			    userFileSystemService.makePersonalFolderPersistent(folder);
+			    userFileSystemService.makePersonalFolderPersistent(parentFolder);
+			    
+			    if(useParentAutoShareProperties)
+			    {
+			    	Set<FolderAutoShareInfo> shareInfos = parentFolder.getAutoShareInfos();
+			    	for(FolderAutoShareInfo info : shareInfos)
+			    	{
+			    		LinkedList<String> emails = new LinkedList<String>();
+			    		emails.add(info.getCollaborator().getDefaultEmail().getEmail());
+			    	    inviteUserService.autoShareFolder(emails, personalFolder, info.getPermissions(),  false);
+			    	}
+			    	
+			    	Set<FolderInviteInfo> inviteInfos = parentFolder.getFolderInviteInfos();
+			    	for(FolderInviteInfo inviteInfo : inviteInfos)
+			    	{
+			    		LinkedList<String> emails = new LinkedList<String>();
+			    		emails.add(inviteInfo.getEmail());
+			    	    inviteUserService.autoShareFolder(emails, personalFolder, inviteInfo.getPermissions(),  false);
+			    	}
+			    }
 			    
 			    userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
@@ -244,16 +278,27 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	{
 		log.debug("get called");
 		
-		PersonalFolder folder = userFileSystemService.getPersonalFolder(updateFolderId, true);
-		
-		if( !folder.getOwner().getId().equals(userId))
+		if( parentFolderId != null && parentFolderId > 0)
 		{
-			return "accessDenied";
+			 parentFolder = userFileSystemService.getPersonalFolder(parentFolderId, true);
+			 if( ! parentFolder.getOwner().getId().equals(userId))
+			 {
+			     return "accessDenied";
+			 }
 		}
 		
-		
-		folderName = folder.getName();
-		folderDescription = folder.getDescription();
+		if( updateFolderId != null )
+		{
+		    PersonalFolder folder = userFileSystemService.getPersonalFolder(updateFolderId, true);
+		    
+		    if( !folder.getOwner().getId().equals(userId))
+		    {
+			    return "accessDenied";
+		    }
+		    folderName = folder.getName();
+		    folderDescription = folder.getDescription();
+		   
+		}
 		
 	    return "get";
 	}
@@ -282,7 +327,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -379,4 +424,13 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
+	
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
+	}
+
+	public PersonalFolder getParentFolder() {
+		return parentFolder;
+	}
+
 }

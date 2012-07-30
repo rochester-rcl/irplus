@@ -49,10 +49,10 @@
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
  	
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-    <ur:js src="page-resources/js/util/ur_table.js"/>
+    <ur:js src="pages/js/ur_table.js"/>
     <ur:js src="page-resources/js/admin/marc_identifier_type_mapping.js"/>
     <ur:js src="page-resources/js/admin/marc_extent_type_mapping.js"/>
     

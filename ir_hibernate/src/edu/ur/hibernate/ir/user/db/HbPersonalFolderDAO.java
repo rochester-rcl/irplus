@@ -342,4 +342,14 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 		return foundFolders;
 	}
 	
+	/**
+	 * Get all personal collections in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+	
 }

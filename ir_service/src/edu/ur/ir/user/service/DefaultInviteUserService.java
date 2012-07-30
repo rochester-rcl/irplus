@@ -242,7 +242,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		for( PersonalFile pf : personalFilesToShare)
 		{
 			IrAcl acl = securityService.getAcl(pf.getVersionedFile(), invitingUser);
-			if( acl != null && acl.isGranted(InviteUserService.SHARE_PERMISSION, invitingUser, false))
+			if( acl != null && acl.isGranted(VersionedFile.SHARE_PERMISSION, invitingUser, false))
 			{
 				actualFilesToShare.add(pf);
 			}
@@ -287,7 +287,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		for( PersonalFile pf : personalFilesToShare)
 		{
 			IrAcl acl = securityService.getAcl(pf.getVersionedFile(), invitingUser);
-			if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, invitingUser, false))
+			if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, invitingUser, false))
 			{
 				throw new PermissionNotGrantedException("User " + invitingUser + "does not have permissions to share file " + pf.getVersionedFile());
 			}
@@ -314,7 +314,7 @@ public class DefaultInviteUserService implements InviteUserService {
 			
 			log.debug("invitied user = " + invitedUser);
 			/* If user exist in the system then share the file and send email*/
-			if (invitedUser != null) 
+			if (invitedUser != null && versionedFiles.size() > 0) 
 			{
 				InviteToken inviteToken = new InviteToken(email, null, invitingUser);
 				inviteToken.setInviteMessage(inviteMessage);
@@ -355,7 +355,7 @@ public class DefaultInviteUserService implements InviteUserService {
 					emailsNotSent.add(email);
 				}
 			} 
-			else 
+			else if( versionedFiles.size() > 0 )
 			{
 				/* If user does not exist in the system then get a token and send email with the token */
 				InviteToken inviteToken = new InviteToken(email, TokenGenerator.getToken() + email, invitingUser);
@@ -424,9 +424,30 @@ public class DefaultInviteUserService implements InviteUserService {
 	 */
 	public void unshareFile(FileCollaborator fileCollaborator, IrUser unsharingUser)
 	{
+		
 		IrUser collaborator = fileCollaborator.getCollaborator();
 		VersionedFile file = fileCollaborator.getVersionedFile();
 		log.debug("UnShare file " + file.toString() + " with user " + collaborator);
+		
+		// un-index the file
+		PersonalFile pf = userFileSystemService.getPersonalFile(collaborator, fileCollaborator.getVersionedFile());
+
+		// Check if personal file exist. Sometimes the file may be still in Shared file inbox.
+		// In that case, there is no need to delete from index
+		if (pf != null) {
+			
+			userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		}
+		else
+		{
+			SharedInboxFile sif = collaborator.getSharedInboxFile(fileCollaborator.getVersionedFile());
+			if( sif != null )
+			{
+				userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+			}
+		}
 		
 		// Remove Personal file from user if it is in the users files
 		PersonalFile personalFile 
@@ -531,7 +552,6 @@ public class DefaultInviteUserService implements InviteUserService {
 			// Add the email to the invited user
 			UserEmail userEmail = new UserEmail(inviteInfo.getInviteToken().getEmail());
 			userEmail.setVerifiedTrue();
-			
 			invitedUser.addUserEmail(userEmail, false);
 			userService.makeUserPersistent(invitedUser);
 			
@@ -627,43 +647,58 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * Notify users that a new version of a file has been added.
 	 * 
 	 * @param personalFile - personal file that has been updated.
+	 * @param collaboratorIds - list of collaborators to notify
 	 * @return - list of collaborators where the email could not be sent
 	 */
-	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile)
+	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds)
 	{
 		List<FileCollaborator> emailsNotSent = new LinkedList<FileCollaborator>();
-		Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
-		for( FileCollaborator collaborator : collaborators )
-		{
-			try 
-			{
-				SimpleMailMessage message = new SimpleMailMessage(newFileVersionMailMessage);
-				message.setTo(collaborator.getCollaborator().getDefaultEmail().getEmail());
+		VersionedFile versionedFile = personalFile.getVersionedFile();
+		for(long id : collaboratorIds)
+		{	
+	        FileCollaborator collaborator = versionedFile.getCollaboratorById(id);
+	        if( collaborator != null )
+	        {
+			    try 
+			    {
+				    SimpleMailMessage message = new SimpleMailMessage(newFileVersionMailMessage);
+				    message.setTo(collaborator.getCollaborator().getDefaultEmail().getEmail());
 				
-				String subject = message.getSubject();
-				subject = StringUtils.replace(subject, "%FIRST_NAME%", personalFile.getOwner().getFirstName());
-				subject = StringUtils.replace(subject, "%LAST_NAME%", personalFile.getOwner().getLastName());
-				subject = StringUtils.replace(subject, "%NAME%", personalFile.getName());
-				message.setSubject(subject);
+				    String subject = message.getSubject();
+				    subject = StringUtils.replace(subject, "%FIRST_NAME%", personalFile.getOwner().getFirstName());
+				    subject = StringUtils.replace(subject, "%LAST_NAME%", personalFile.getOwner().getLastName());
+				    subject = StringUtils.replace(subject, "%NAME%", personalFile.getName());
+				    message.setSubject(subject);
 				
-				String text = message.getText();
+				    String text = message.getText();
+				    String path = personalFile.getName();
+				    
+				    PersonalFile collabPersonalFile = personalFileDAO.getFileForUserWithSpecifiedVersionedFile(collaborator.getCollaborator().getId(), 
+								versionedFile.getId());
+				    
+				    // may be null if user has not yet moved the file into their worksapce
+				    if( collabPersonalFile != null )
+				    {
+				      path = collabPersonalFile.getFullPath();
+				    }
+				    // Get the name of files
+				    text = StringUtils.replace(text, "%NAME%", path);
+				    text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
 				
-				// Get the name of files
-				text = StringUtils.replace(text, "%NAME%", personalFile.getName());
-				text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
+				    if( personalFile.getDescription() != null && !personalFile.getDescription().trim().equals(""))
+				    {
+					    text = text + "\n Notes: \n\n" + personalFile.getDescription();
+				    }
 				
-				if( personalFile.getDescription() != null && !personalFile.getDescription().trim().equals(""))
-				{
-					text = text + "\n Notes: \n\n" + personalFile.getDescription();
-				}
-				
-				message.setText(text);
-				sendEmail(message);
-			} 
-			catch(IllegalStateException e) 
-			{
-				emailsNotSent.add(collaborator);
-			}
+				    message.setText(text);
+				    sendEmail(message);
+			    } 
+			    catch(IllegalStateException e) 
+			    {
+				    emailsNotSent.add(collaborator);
+			    }
+	        }
+	        
 		}
 		return emailsNotSent;
 	}
@@ -715,6 +750,19 @@ public class DefaultInviteUserService implements InviteUserService {
 	
 	public FileCollaborator findFileCollaborator(Long fileCollaboratorId, boolean lock) {
 		return fileCollaboratorDAO.getById(fileCollaboratorId, lock);
+	}
+	
+	/**
+	 * Get the list for file collaborator objects for the user id and versioned file ids.
+	 * 
+	 * @param userId - id of the user who is a collaborator
+	 * @param versionedFileIds - List of versioned files to check for
+	 * 
+	 * @return the file collaborator.
+	 */
+	public List<FileCollaborator> getCollaborations(Long userId, List<Long> versionedFileIds)
+	{
+		return fileCollaboratorDAO.findByUserIdVersionedFileId(userId, versionedFileIds);
 	}
 
 	public void setUserExistMailMessage(SimpleMailMessage userExistMailMessage) {
@@ -905,26 +953,23 @@ public class DefaultInviteUserService implements InviteUserService {
 		}
 		if( cascade )
 		{
-			// take care of files in all folders and sub folders
+			 // take care of files in all folders and sub folders
 	         List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), userFileSystemService.getAllFilesForFolder(personalFolder));
-	         if( files.size() > 0 )
-	         {
+	         try 
+	    	 {
+			     inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
+			 } 
+	    	 catch (PermissionNotGrantedException e)
+	    	 {
+				log.error(e);
+				errorEmailService.sendError(e);
+			 }
 	        
-	    	     try 
-	    	     {
-				     inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
-			     } 
-	    	     catch (PermissionNotGrantedException e)
-	    	     {
-				    log.error(e);
-				    errorEmailService.sendError(e);
-			     }
-	         }
 		}
 		else
 		{
-			// only share files in the given folder
-			List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), personalFolder.getFiles());
+			 // only share files in the given folder
+			 List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), personalFolder.getFiles());
 	         try 
 	         {
 			     inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
@@ -936,6 +981,150 @@ public class DefaultInviteUserService implements InviteUserService {
 		     }
 		}
 	}
+	
+	/**
+	 * Will set the personal folder to auto share with the given email.  This
+	 * will first check to see if the user already exists in the system.
+	 * 
+	 * @param email - to share with.
+	 * @param personalFolder - personal folder to auto share files when added to.
+	 * @param cascade - cascade down to sub folders
+	 * @throws FileSharingException - if the user tries sharing with themselves
+	 * 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void updateAutoSharePermissions(FolderAutoShareInfo folderAutoShareInfo, Set<IrClassTypePermission> permissions, 
+			boolean cascadeFolders, boolean cascadeFiles)
+	{
+	    folderAutoShareInfo.changePermissions(permissions);
+	    save(folderAutoShareInfo);
+		
+	    // cascade share permissions to all sub folders 
+		if( cascadeFolders )
+		{
+		    // take care of folders
+		    List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(folderAutoShareInfo.getPersonalFolder());
+		    if( log.isDebugEnabled())
+		    {
+		        log.debug("Number of folders to be processed = " + folders.size());
+		        log.debug(" user = " + folderAutoShareInfo.getCollaborator());
+		    }
+		    for(PersonalFolder f : folders)
+		    {
+		        FolderAutoShareInfo subFolderShare = f.getAutoShareInfo(folderAutoShareInfo.getCollaborator());
+		        if(subFolderShare != null )
+		        {
+		        	subFolderShare.changePermissions(permissions);
+		        	save(folderAutoShareInfo);
+		        }
+		    }
+		}
+		if( cascadeFiles )
+		{
+			 // take care of files in all folders and sub folders
+	         List<PersonalFile> files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(), 
+	        		 userFileSystemService.getAllFilesForFolder(folderAutoShareInfo.getPersonalFolder()));
+	         if( files.size() > 0 )
+	         {
+	        	 LinkedList<Long> versionedFileIds = new LinkedList<Long>();
+	    	     for(PersonalFile f : files )
+	    	     {
+	    	    	 versionedFileIds.add(f.getVersionedFile().getId());
+	    	     }
+	    	     List<FileCollaborator> collaboratorRecords = getCollaborations(folderAutoShareInfo.getCollaborator().getId(), versionedFileIds);
+	    	     for(FileCollaborator collab : collaboratorRecords)
+	    	     {
+	    	    	 securityService.updatePermissions(collab.getVersionedFile(), 
+	    	 				collab.getCollaborator(), permissions);
+	    	     }
+	         }
+		}
+	}
+	
+	/**
+	 * Adds permissions to files and folders added to an existing folder.  This uses the parent 
+	 * folders invite info and folder information to determine the permissions for the newly added
+	 * file and folders
+	 * 
+	 * @param parentFolder - parent folder the files and folders were added to
+	 * @param folders - list of top level folders being added - no children of these folders should be in the list
+	 * @param files - list of top level file being added.
+	 * 
+	 * @throws FileSharingException
+	 * @throws PermissionNotGrantedException
+	 */
+	public void addNewFilesFoldersToFolderWithAutoShare(PersonalFolder parentFolder, 
+			List<PersonalFolder> folders, List<PersonalFile> files) throws FileSharingException, 
+			PermissionNotGrantedException
+	{
+		// permissions to share to the files and folders
+		Set<FolderAutoShareInfo> shareInfos = parentFolder.getAutoShareInfos();
+    	Set<FolderInviteInfo> inviteInfos = parentFolder.getFolderInviteInfos();
+    	
+    	Set<PersonalFolder> allFoldersToGivePermissions = new HashSet<PersonalFolder>();
+    	List<PersonalFile> allFilesToGivePermissions = new LinkedList<PersonalFile>();
+    	
+    	for(PersonalFile pf : files )
+    	{
+    		IrAcl acl = securityService.getAcl(pf.getVersionedFile(), parentFolder.getOwner());
+			
+			// Check if the user has SHARE permission for the file
+			if (acl.isGranted(VersionedFile.SHARE_PERMISSION, parentFolder.getOwner(), false)) {
+				allFilesToGivePermissions.add(pf);
+			}
+    	}
+    	
+    	// flatten out the list for folders, sub-folders and files
+    	for( PersonalFolder pf : folders )
+    	{
+    		allFoldersToGivePermissions.add(pf);
+    		allFoldersToGivePermissions.addAll(userFileSystemService.getAllChildrenForFolder(pf));
+    		allFilesToGivePermissions.addAll(getOnlyShareableFiles(parentFolder.getOwner(), 
+	        		 userFileSystemService.getAllFilesForFolder(pf)));
+    	}
+    	
+    	// assign auto share information to folders
+    	for(PersonalFolder f : allFoldersToGivePermissions)
+        {
+    		for(FolderAutoShareInfo shareInfo : shareInfos)
+    		{
+    			Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+        		permissions.addAll(shareInfo.getPermissions());
+    			FolderAutoShareInfo newShareInfo  = f.createAutoShareInfo(permissions, shareInfo.getCollaborator());
+			    save(newShareInfo);
+    		}
+    		
+    		for(FolderInviteInfo inviteInfo : inviteInfos)
+    		{
+    			Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+        		permissions.addAll(inviteInfo.getPermissions());
+    			FolderInviteInfo newInviteInfo  = f.createInviteInfo(permissions, inviteInfo.getEmail());
+			    save(newInviteInfo);
+    		}
+        }
+    	
+    	// send out emails for new files and invites for newly added files
+    	for(FolderAutoShareInfo shareInfo : shareInfos)
+		{
+    		 LinkedList<String> emails = new LinkedList<String>();
+    		 emails.add(shareInfo.getCollaborator().getDefaultEmail().getEmail());
+    		 Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+    		 permissions.addAll(shareInfo.getPermissions());
+    		 inviteUsers(parentFolder.getOwner(), emails, permissions, allFilesToGivePermissions , null);
+		}
+    	
+    	for(FolderInviteInfo inviteInfo : inviteInfos)
+		{
+    		LinkedList<String> emails = new LinkedList<String>();
+   		    emails.add(inviteInfo.getEmail());
+   		    Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+   		    permissions.addAll(inviteInfo.getPermissions());
+   		    inviteUsers(parentFolder.getOwner(), emails, permissions,allFilesToGivePermissions , null);
+		}
+    	
+	}
+	
+
 	
 	/**
 	 * Get the invites made by a particular user.
@@ -953,8 +1142,74 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 * @see edu.ur.ir.user.InviteUserService#delete(edu.ur.ir.user.FolderInviteInfo)
 	 */
-	public void delete(FolderInviteInfo inviteInfo) {
-		folderInviteInfoDAO.makePersistent(inviteInfo);
+	public void delete(FolderInviteInfo inviteInfo, boolean cascadeToSubFolders, boolean cascadeToFiles) {
+		
+		PersonalFolder personalFolder = inviteInfo.getPersonalFolder();
+		personalFolder.removeFolderInviteInfo(inviteInfo);
+		folderInviteInfoDAO.makeTransient(inviteInfo);
+		if( cascadeToSubFolders )
+		{
+		    List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
+			for( PersonalFolder aFolder : folders)
+			{
+			    FolderInviteInfo info = aFolder.getFolderInviteInfo(inviteInfo.getEmail());
+				if( info != null )
+				{
+					aFolder.removeFolderInviteInfo(info);
+				    folderInviteInfoDAO.makeTransient(info);
+				}
+			}
+		}
+		
+		if( cascadeToFiles )
+		{
+			// take care of files in all folders and sub folders
+	        List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), 
+	        		 userFileSystemService.getAllFilesForFolder(personalFolder));
+	        log.debug("cascade to file, files size = " + files.size());
+	        if( files.size() > 0 )
+	        {
+	        	 LinkedList<Long> versionedFileIds = new LinkedList<Long>();
+	    	     for(PersonalFile f : files )
+	    	     {
+	    	    	 log.debug("adding versioned file id " + f.getVersionedFile().getId());
+	    	    	 versionedFileIds.add(f.getVersionedFile().getId());
+	    	     }
+	    	     List<FileInviteInfo> infos = fileInviteInfoDAO.getInviteInfosWithVersionedFilesAndEmail(versionedFileIds, inviteInfo.getEmail());
+	    	     
+	    	     log.debug( " found invite infos with size " + infos.size());
+	    	     for(FileInviteInfo fileInvite : infos)
+	    	     {
+	    	    	 List<VersionedFile> inviteFiles = new LinkedList<VersionedFile>();
+	    	    	 inviteFiles.addAll(fileInvite.getFiles());
+	    	    	 
+	    	    	 log.debug(" added invite files " + inviteFiles.size());
+	    	    	 // check each file if it is in the list of files
+	    	    	 // to be unshared remove it
+	    	    	 for(VersionedFile f : inviteFiles)
+	    	    	 {
+	    	    		 if( versionedFileIds.contains(f.getId()))
+	    	    		 {
+	    	    			 log.debug(" removing file  " + f);
+	    	    			 fileInvite.removeFile(f);
+	    	    		 }
+	    	    	 }
+	    	    	 
+	    	    	 // delete the invite if it doesn't have any files
+	    	    	 if(fileInvite.getFiles().size() <= 0 )
+	    	    	 {
+	    	    		 fileInviteInfoDAO.makeTransient(fileInvite);
+	    	    	 }
+	    	    	 else
+	    	    	 {
+	    	    		 fileInviteInfoDAO.makePersistent(fileInvite);
+	    	    	 }
+	    	    	 
+	    	     }
+	    	     
+	         }
+		}
+		
 	}
 
 	/**
@@ -1000,9 +1255,46 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 * @param autoShareInfo - folder auto share information
 	 */
-	public void delete(FolderAutoShareInfo autoShareInfo)
+	public void delete(IrUser unAutoShareUser, FolderAutoShareInfo folderAutoShareInfo, boolean cascadeToSubFolders, boolean cascadeToFiles)
 	{
-		folderAutoShareInfoDAO.makeTransient(autoShareInfo);
+		
+		PersonalFolder personalFolder = folderAutoShareInfo.getPersonalFolder();
+		personalFolder.removeAutoShareInfo(folderAutoShareInfo);
+		folderAutoShareInfoDAO.makeTransient(folderAutoShareInfo);
+		if( cascadeToSubFolders )
+		{
+		    List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
+			for( PersonalFolder aFolder : folders)
+			{
+			    FolderAutoShareInfo info = aFolder.getAutoShareInfo(folderAutoShareInfo.getCollaborator());
+				if( info != null )
+				{
+					aFolder.removeAutoShareInfo(info);
+				    folderAutoShareInfoDAO.makeTransient(info);
+				}
+			}
+		}
+		
+		if( cascadeToFiles )
+		{
+			// take care of files in all folders and sub folders
+	        List<PersonalFile> files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(), 
+	        		 userFileSystemService.getAllFilesForFolder(folderAutoShareInfo.getPersonalFolder()));
+	        if( files.size() > 0 )
+	        {
+	        	 LinkedList<Long> versionedFileIds = new LinkedList<Long>();
+	    	     for(PersonalFile f : files )
+	    	     {
+	    	    	 versionedFileIds.add(f.getVersionedFile().getId());
+	    	     }
+	    	     List<FileCollaborator> collaboratorRecords = getCollaborations(folderAutoShareInfo.getCollaborator().getId(), versionedFileIds);
+	    	     for(FileCollaborator collab : collaboratorRecords)
+	    	     {
+	    	    	 unshareFile(collab, unAutoShareUser);
+	    	     }
+	         }
+		}
+		
 	}
 	
 	/**

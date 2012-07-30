@@ -106,17 +106,6 @@
 	</tag>
 	
 	<tag>
-		<name>drawProjectPageFolderSystem</name>
-		<tag-class>edu.ur.tag.repository.GroupWorkspaceProjectPageFileSystemTag</tag-class>
-		<body-content>scriptless</body-content>
-		<attribute>
-			<name>groupWorkspaceProjectPage</name>
-			<rtexprvalue>true</rtexprvalue>
-			<required>true</required>
-		</attribute>
-	</tag>
-	
-	<tag>
 		<name>drawResearcherXmlFolder</name>
 		<tag-class>edu.ur.tag.repository.ResearcherFolderXmlTag</tag-class>
 		<body-content>scriptless</body-content>
@@ -524,6 +513,45 @@
 		</function-signature>
 	</function>
 	
+	<function>
+		<name>canMoveToResearcherFolder</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canMoveToResearcherFolder(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isResearcherObjectToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isResearcherObjectToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canMoveToPersonalCollection</name>
+		<function-class>
+			edu.ur.tag.repository.CollectionWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canMoveToPersonalCollection(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isPublicationToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.CollectionWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isPublicationToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
 
 	<function>
 		<name>canLockFile</name>
@@ -552,16 +580,6 @@
 		</function-class>
 		<function-signature>
 			boolean canEditFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
-		</function-signature>
-	</function>
-	
-	<function>
-		<name>canReadFile</name>
-		<function-class>
-			edu.ur.tag.repository.FileWebUtilFunctions
-		</function-class>
-		<function-signature>
-			boolean canReadFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -704,7 +722,6 @@
 			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
 		</function-signature>
 	</function>
-	
 	<function>
 		<name>getItemDescription</name>
 		<function-class>
@@ -715,37 +732,6 @@
 		</function-signature>
 	</function>
 	
-	
-	<function>
-		<name>isGroupWorkspaceMember</name>
-		<function-class>
-			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
-		</function-class>
-		<function-signature>
-			boolean isGroupWorkspaceMember(edu.ur.ir.groupspace.GroupWorkspace)
-		</function-signature>
-   </function>
-   
-   <function>
-		<name>isCurrentUserGroupWorkspaceOwner</name>
-		<function-class>
-			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
-		</function-class>
-		<function-signature>
-			boolean isCurrentUserGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace)
-		</function-signature>
-	</function>
-	
-    <function>
-		<name>isUserGroupWorkspaceOwner</name>
-		<function-class>
-			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
-		</function-class>
-		<function-signature>
-			boolean isUserGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace, edu.ur.ir.user.IrUser)
-		</function-signature>
-	</function>
-
    <function>
 		<name>getSlashedDate</name>
 		<function-class>

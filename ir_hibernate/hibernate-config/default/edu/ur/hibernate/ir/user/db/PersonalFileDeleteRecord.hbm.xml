@@ -60,10 +60,5 @@
 	    select count(*) from PersonalFileDeleteRecord
 	</query>
 	
-		<!--  delete all fo the group workspace file delete information -->
-	<query name="personalFileDeleteRecordDeleteAll">
-	    delete from PersonalFileDeleteRecord
-	</query>
-	
 
 </hibernate-mapping>

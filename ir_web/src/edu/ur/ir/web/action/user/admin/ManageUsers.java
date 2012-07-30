@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonService;
@@ -47,12 +46,10 @@ import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.UnVerifiedEmailException;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
-import edu.ur.ir.user.UserGroupService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
@@ -138,14 +135,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** Indicates if the user can import data */
 	private boolean importerRole = false;
-	
-	/** Indicates if the user can approve affiliations */
-	private boolean affiliationApproverRole = false;
-	
-
-
-	/** Indicates if the user can create group workspaces */
-	private boolean groupWorkspaceCreatorRole = false;
 
     /** Phone number of the user */
 	private String phoneNumber;
@@ -223,29 +212,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** the external account user name */
 	private String externalAccountUserName;
-	
-	private Long roleId = -1l;
-	
-	/** service to view user group information */
-	private UserGroupService userGroupService;
-	
-	/** list of groups the user belongs to */
-	private List<IrUserGroup> userGroups;
-	
-	/* service to deal with inviting users to group workspaces */
-	private GroupWorkspaceInviteService groupWorkspaceInviteService;
-	
 
-
-
-	/**
-	 * Set the user group service.
-	 * 
-	 * @param userGroupService
-	 */
-	public void setUserGroupService(UserGroupService userGroupService) {
-		this.userGroupService = userGroupService;
-	}
 
 	/** Default constructor */
 	public  ManageUsers() 
@@ -344,7 +311,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 		try {
 		    // Share files -  If there are any invitations sent to this email address 
-			groupWorkspaceInviteService.addUserToGroupsForEmail(defaultEmail.getEmail());
 			inviteUserService.sharePendingFilesForEmail(irUser.getId(), defaultEmail.getEmail());
 		
 		} 
@@ -475,7 +441,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			irUser = userService.getUser(id, false);
 			defaultEmail = irUser.getDefaultEmail();
 			fileSystemSize = repositoryService.getFileSystemSizeForUser(irUser);
-			userGroups = userGroupService.getUserGroupsForUser(id);
 		}
 		
 		return SUCCESS;
@@ -589,98 +554,14 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String viewUsers()
 	{
-		if(log.isDebugEnabled())
-		{
-		    log.debug("RowStart = " + rowStart
-	    		+ " numberOfResultsToShow=" + numberOfResultsToShow
-	    		+ " sortElement="  + sortElement + "   orderType =" + sortType
-	    		+ " affilationId = " + affiliationId
-	    		+ " roleId = " + roleId);
-		   
-		    log.debug("admin user id = " + adminUserId);
-		}
-		
-		IrUser admin = userService.getUser(adminUserId, false);
-        
-        if( !admin.hasRole(IrRole.ADMIN_ROLE))
-        {
-        	return "accessDenied";
-        }
+		log.debug("RowStart = " + rowStart
+	    		+ "   numberOfResultsToShow=" + numberOfResultsToShow + "   sortElement="  + sortElement + "   orderType =" + sortType);
 		rowEnd = rowStart + numberOfResultsToShow;
 	    
 		OrderType orderType = OrderType.getOrderType(sortType);
-		
-		
-	    if( sortElement.equalsIgnoreCase("lastName"))
-	    {
-	    	if(affiliationId == -1l && roleId == -1l  )
-	    	{
-	            users = userService.getUsersByLastNameOrder(rowStart, numberOfResultsToShow, orderType);
-	            totalHits = userService.getUserCount().intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId == -1)
-	    	{
-	    		users = userService.getUsersByAffiliationFullNameOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
-	    	}
-	    	else if(affiliationId == -1 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleFullNameOrder(roleId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByRoleCount(roleId).intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleAffiliationFullNameOrder(roleId, affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
-	    	}
-	    
-	    } 
-	    else if ( sortElement.equalsIgnoreCase("username") )
-	    {
-	    	if(affiliationId == -1l && roleId == -1l  )
-	    	{
-	    		users = userService.getUsersByUsernameOrder(rowStart, numberOfResultsToShow, orderType);
-		        totalHits = userService.getUserCount().intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId == -1)
-	    	{
-	    		users = userService.getUsersByAffiliationUsernameOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
-	    	}
-	    	else if(affiliationId == -1 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleUsernameOrder(roleId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByRoleCount(roleId).intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleAffiliationUsernameOrder(roleId, affiliationId, totalHits, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
-	    	}
-	    } 
-	    else if ( sortElement.equalsIgnoreCase("email") )
-	    {
-	    	if(affiliationId == -1l && roleId == -1l  )
-	    	{
-	    		users = userService.getUsersByEmailOrder(rowStart, numberOfResultsToShow, orderType);
-	            totalHits = userService.getUserCount().intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId == -1)
-	    	{
-	    		users = userService.getUsersByAffiliationEmailOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
-	    	}
-	    	else if(affiliationId == -1 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleEmailOrder(roleId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByRoleCount(roleId).intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId > 0)
-	    	{
-	    		users = userService.getUsersByRoleAffiliationEmailOrder(roleId, affiliationId, rowStart, numberOfResultsToShow, orderType);	    		
-	    		totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
-	    	}
-	    }		
+	    users = userService.getUsers(rowStart, 
+	    		numberOfResultsToShow, sortElement, orderType);
+	    totalHits = userService.getUserCount().intValue();
 		
 		if(rowEnd > totalHits)
 		{
@@ -914,6 +795,14 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.emailPassword = emailPassword;
 	}
 
+	public RoleService getRoleService() {
+		return roleService;
+	}
+
+	public void setRoleService(RoleService roleService) {
+		this.roleService = roleService;
+	}
+
 	/**
 	 * Get all affiliations
 	 * 
@@ -924,19 +813,16 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		Collections.sort(affiliations, nameComparator);
 		return affiliations ;
 	}
-	
+
+
 	/**
-	 * Get all roles
+	 * Get service class for affiliation
 	 * 
 	 * @return
 	 */
-	public List<IrRole> getRoles() {
-		List<IrRole> roles = roleService.getAllRoles();
-		log.debug(" rolses size = " + roles.size());
-		Collections.sort(roles, nameComparator);
-		return roles ;
+	public AffiliationService getAffiliationService() {
+		return affiliationService;
 	}
-
 
 	/**
 	 * Set service class for affiliation
@@ -1143,42 +1029,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	}
 	
 	/**
-	 * Determine if the user can approve user affiliations
-	 * 
-	 * @return true if the user can approve user affiliations
-	 */
-	public boolean isAffiliationApproverRole() {
-		return affiliationApproverRole;
-	}
-
-	/**
-	 * Set to true if the user can approve user affiliations.
-	 * 
-	 * @param affiliationApproverRole
-	 */
-	public void setAffiliationApproverRole(boolean affiliationApproverRole) {
-		this.affiliationApproverRole = affiliationApproverRole;
-	}
-
-	/**
-	 * Determine if the user can create group workspaces.
-	 * 
-	 * @return true  if the user can create group workspaces
-	 */
-	public boolean isGroupWorkspaceCreatorRole() {
-		return groupWorkspaceCreatorRole;
-	}
-
-	/**
-	 * Set to true if the user can create group workspaces.
-	 * 
-	 * @param groupWorkspaceCreatorRole
-	 */
-	public void setGroupWorkspaceCreatorRole(boolean groupWorkspaceCreatorRole) {
-		this.groupWorkspaceCreatorRole = groupWorkspaceCreatorRole;
-	}
-	
-	/**
 	 * Make sure the external account is set up correctly
 	 * @return
 	 */
@@ -1301,24 +1151,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		else
 		{
 			irUser.removeRole(roleService.getRole(IrRole.IMPORTER_ROLE));
-		}
-		
-		if( groupWorkspaceCreatorRole )
-		{
-			irUser.addRole(roleService.getRole(IrRole.GROUP_WORKSPACE_CREATOR_ROLE));
-		}
-		else
-		{
-			irUser.removeRole(roleService.getRole(IrRole.GROUP_WORKSPACE_CREATOR_ROLE));
-		}
-		
-		if( affiliationApproverRole )
-		{
-			irUser.addRole(roleService.getRole(IrRole.APPROVE_USER_AFFILIATION_ROLE));
-		}
-		else
-		{
-			irUser.removeRole(roleService.getRole(IrRole.APPROVE_USER_AFFILIATION_ROLE));
 		}
 
 	}
@@ -1554,10 +1386,8 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
-	 */
-	public void injectUserId(Long userId) {
+	
+	public void setUserId(Long userId) {
 		adminUserId = userId;
 	}
 
@@ -1606,51 +1436,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	public void setExternalAccountUserName(String externalAccountUserName) {
 		this.externalAccountUserName = externalAccountUserName;
 	}
-	
-	/**
-	 * Get the role id.
-	 * 
-	 * @return
-	 */
-	public Long getRoleId() {
-		return roleId;
-	}
 
-	/**
-	 * Set the role id
-	 * 
-	 * @param roleId
-	 */
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
-	
-	/**
-	 * Get the list of user groups the user belongs to.
-	 * 
-	 * @return
-	 */
-	public List<IrUserGroup> getUserGroups() {
-		return userGroups;
-	}
 
-	/**
-	 * Set the role service.
-	 * 
-	 * @param roleService
-	 */
-	public void setRoleService(RoleService roleService) {
-		this.roleService = roleService;
-	}
-	
-	/**
-	 * Set the group workspace invite service.
-	 * 
-	 * @param groupWorkspaceInviteService
-	 */
-	public void setGroupWorkspaceInviteService(
-			GroupWorkspaceInviteService groupWorkspaceInviteService) {
-		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
-	}
 
 }
