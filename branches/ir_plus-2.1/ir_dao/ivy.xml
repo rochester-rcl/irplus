@@ -28,6 +28,6 @@
 <ivy-module version="2.0">
     <info organisation="ir_dao" module="ir_dao"/>
     <dependencies>
-        <dependency org="ir_core" name="ir_core" rev="2.1.1" changing="true"/>
+        <dependency org="ir_core" name="ir_core" rev="2.2" changing="true"/>
     </dependencies>
 </ivy-module>
