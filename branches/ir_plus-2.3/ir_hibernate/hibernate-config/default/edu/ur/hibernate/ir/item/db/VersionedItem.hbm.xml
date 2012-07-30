@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a versioned item.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.item">
+	<class name="VersionedItem" schema="ir_item" table="versioned_item"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="versioned_item_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_item.versioned_item_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<property name="maxAllowedVersions" column="max_allowed_versions" type="int"
+			not-null="true" access="field"/>
+
+		<property name="maxVersion" column="largest_item_version_id" type="int"
+			not-null="true" access="field"/>
+
+		<!--  The user who owns this file -->
+        <many-to-one name="owner" class="edu.ur.ir.user.IrUser"  
+              unique="true" column="user_id" access="field"/>
+        
+        <!--  current version of the file -->
+        <many-to-one name="currentVersion" 
+              class="edu.ur.ir.item.ItemVersion" 
+              fetch="join"
+              lazy="false"
+              unique="true" 
+              column="current_item_version_id" 
+              access="field"/>
+                 
+       	<!--  Items maintained by this versioned item -->
+	 	<set name="versions" cascade="all, delete-orphan" 
+	 	     order-by="version_number" 
+	 	     inverse="true" 
+	 	     access="field" 
+	 	     fetch="subselect"
+	 	     lazy="true" >
+			<key column="versioned_item_id" not-null="true"/>
+			<one-to-many class="edu.ur.ir.item.ItemVersion" />
+		</set>
+	</class>
+		
+	<!--  Get a count of versioned items in the system -->
+	<query name="versionedItemCount">
+	    select count(*) from VersionedItem
+	</query>
+	
+	<!-- named query for getting all the item belonging to an user -->
+	<query name="getAllVersionedItemsForUser">
+        from VersionedItem versionedItem
+        where versionedItem.owner.id = ?
+	</query>
+	
+
+</hibernate-mapping>
