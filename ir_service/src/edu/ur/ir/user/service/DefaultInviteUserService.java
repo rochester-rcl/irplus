@@ -173,7 +173,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		StringBuffer names = new StringBuffer();
 		VersionedFile[] files = inviteInfo.getFiles().toArray(new VersionedFile[0]);
 		for(int i = 0; i<files.length; i++) {
-			names.append(files[i].getName());
+			names.append(files[i].getNameWithExtension());
 			if ( i != (files.length-1) ) {
 				names.append(", ");
 			}
@@ -209,7 +209,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		StringBuffer names = new StringBuffer();
 		VersionedFile[] files = inviteInfo.getFiles().toArray(new VersionedFile[0]);
 		for(int i = 0; i<files.length; i++) {
-			names.append(files[i].getName());
+			names.append(files[i].getNameWithExtension());
 			if ( i != (files.length-1) ) {
 				names.append(", ");
 			}
