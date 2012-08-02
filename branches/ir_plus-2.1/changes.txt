@@ -1,4 +1,4 @@
-IR+ 2.1 to 2.1.1
+IR+ 2.1 to 2.2
 ==========================
 
 - Added no-index meta-tags to help stop google from indexing restricted content
@@ -26,6 +26,8 @@ be added to more than one location in the file system
 - back ported - removed fedora tables from sql script
 
 - back ported (3.0) - added invite schema
+
+- added set focus when creating new personal folder
 
 IR+ 2.0.8 to 2.1
 ==========================

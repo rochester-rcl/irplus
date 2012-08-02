@@ -801,6 +801,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 		{
 		    inviteInfo = new FolderInviteInfo(this, email, permissions);
 		}
+		folderInviteInfos.add(inviteInfo);
 		return inviteInfo;
 	}
 	

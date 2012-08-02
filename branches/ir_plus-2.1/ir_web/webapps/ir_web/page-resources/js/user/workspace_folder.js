@@ -308,6 +308,7 @@ YAHOO.ur.folder =
 	    {
 	        YAHOO.ur.folder.newFolderDialog.center();
 	        YAHOO.ur.folder.newFolderDialog.show();
+	        document.getElementById("folder").focus();
 	        YAHOO.ur.shared.file.inbox.getSharedFilesCount();
 	    };
    
