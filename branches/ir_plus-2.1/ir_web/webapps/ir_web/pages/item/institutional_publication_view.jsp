@@ -32,6 +32,15 @@
         <c:if test="${!showPublication}">
             <meta name="robots" content="noindex">
         </c:if>
+         <c:if test="${showPublication}">
+            <meta name="citation_title" content="${institutionalItemVersion.item.fullName}"/>
+            <c:forEach items="${institutionalItemVersion.item.contributors}" var="itemContributor">
+                <c:if test="${itemContributor.contributor.contributorType.uniqueSystemCode == 'AUTHOR'}">
+                    <meta name="citation_author" content="${itemContributor.contributor.personName.surname}, ${itemContributor.contributor.personName.forename}"/>
+                </c:if>
+            </c:forEach>
+            <meta name="citation_publication_date" content="${ir:getGoogleScholarDate(institutionalItemVersion)}">
+        </c:if>
         <title>${institutionalItemVersion.item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
