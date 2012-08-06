@@ -35,7 +35,9 @@
          <c:if test="${showPublication}">
             <meta name="citation_title" content="${institutionalItemVersion.item.fullName}"/>
             <c:forEach items="${institutionalItemVersion.item.contributors}" var="itemContributor">
-                <c:if test="${itemContributor.contributor.contributorType.uniqueSystemCode == 'AUTHOR'}">
+                <c:if test="${itemContributor.contributor.contributorType.uniqueSystemCode == 'AUTHOR' 
+                || itemContributor.contributor.contributorType.uniqueSystemCode == 'COMPOSER' 
+                || itemContributor.contributor.contributorType.uniqueSystemCode == 'PHOTOGRAPHER'}">
                     <meta name="citation_author" content="${itemContributor.contributor.personName.surname}, ${itemContributor.contributor.personName.forename}"/>
                 </c:if>
             </c:forEach>
