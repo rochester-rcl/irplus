@@ -29,6 +29,8 @@ be added to more than one location in the file system
 
 - added set focus when creating new personal folder
 
+- Updates for google scholar indexing
+
 IR+ 2.0.8 to 2.1
 ==========================
 - Added MARC import/export
