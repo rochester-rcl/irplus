@@ -266,11 +266,11 @@
                	                <!--  users with only invite share permissions can share files -->
                	                <!--  owners always have invite permissions -->
                	                <c:if test="${ir:isOwner(user, fileSystemObject.versionedFile)}">
-               	                    <c:if test="${empty fileSystemObject.versionedFile.collaborators}">
+               	                    <c:if test="${empty fileSystemObject.versionedFile.collaborators && empty fileSystemObject.versionedFile.invitees}">
 	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
 	                      		    </c:if>
-	                      		    <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Sharing (${fn:length(fileSystemObject.versionedFile.collaborators)}) </a>
+	                      		    <c:if test="${!empty fileSystemObject.versionedFile.collaborators || !empty fileSystemObject.versionedFile.invitees}">
+	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Sharing (${fn:length(fileSystemObject.versionedFile.collaborators) + fn:length(fileSystemObject.versionedFile.invitees)}) </a>
 	                      		    </c:if>
                	                </c:if>
                	                <c:if test="${!ir:isOwner(user, fileSystemObject.versionedFile)}">
