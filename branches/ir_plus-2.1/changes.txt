@@ -31,6 +31,8 @@ be added to more than one location in the file system
 
 - Updates for google scholar indexing
 
+- Made invite url more secure
+
 IR+ 2.0.8 to 2.1
 ==========================
 - Added MARC import/export
