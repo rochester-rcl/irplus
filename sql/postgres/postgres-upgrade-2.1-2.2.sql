@@ -53,7 +53,7 @@ ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 
 INSERT INTO ir_invite.invite_token(invite_token_id, version, token, email, inviting_user_id, created_date,expiration_date)  SELECT
-nextval('ir_invite.invite_token_seq'),0, token, email, user_id, now(), null
+nextval('ir_invite.invite_token_seq'),0, token, lower(email), user_id, now(), null
 FROM ir_user.invite_info;
 
 -- Add new column

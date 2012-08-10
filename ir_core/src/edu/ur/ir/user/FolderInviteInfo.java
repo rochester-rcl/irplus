@@ -66,7 +66,7 @@ public class FolderInviteInfo extends BasePersistent
 			throw new FileSharingException("Cannot share a folder with yourself");
 		}
 		this.personalFolder = personalFolder;
-		this.email = email.trim();
+		this.email = email.trim().toLowerCase();
 		this.createdDate = new Timestamp(new Date().getTime());
 		this.permissions = permissions;
 	}

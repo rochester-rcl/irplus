@@ -306,9 +306,17 @@ public class DefaultInviteUserService implements InviteUserService {
 				//check if the file is already shared with this user 
 				//AND 
 				//check if email is already sent to this Id for sharing and the user has not created the account yet
-				if ((versionedFile.getCollaborator(invitedUser) == null) && (!versionedFile.getInviteeEmails().contains(email))) 
+			    FileCollaborator collaborator = versionedFile.getCollaborator(invitedUser);
+			    FileInviteInfo inviteInfo = versionedFile.getInvitee(email);
+				if ((collaborator == null) && (inviteInfo == null)) 
 				{
 					versionedFiles.add(versionedFile);
+				}
+				// collaborator exists or invite exists - update permissions
+				else if( collaborator != null )
+				{
+			         securityService.updatePermissions(versionedFile, 
+	    	 				collaborator.getCollaborator(), permissions);
 				}
 			}
 			
@@ -1037,6 +1045,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	    	    	 securityService.updatePermissions(collab.getVersionedFile(), 
 	    	 				collab.getCollaborator(), permissions);
 	    	     }
+	    	     
 	         }
 		}
 	}

@@ -854,7 +854,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	{
 		for(FolderInviteInfo inviteInfo : folderInviteInfos)
 		{
-			if( inviteInfo.getEmail().equalsIgnoreCase(email))
+			if( inviteInfo.getEmail().equalsIgnoreCase(email.trim()))
 			{
 				return inviteInfo;
 			}

@@ -218,7 +218,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 		UserEmail myEmail = null;
 		for( UserEmail userEmail : emails)
 		{
-			if( userEmail.getEmail().equals(email))
+			if( userEmail.getEmail().equalsIgnoreCase(email.trim()))
 			{
 				myEmail = userEmail;
 				break;
