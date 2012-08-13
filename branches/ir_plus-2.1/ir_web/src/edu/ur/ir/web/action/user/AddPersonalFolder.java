@@ -27,7 +27,6 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.FolderAutoShareInfo;

@@ -18,11 +18,14 @@ package edu.ur.hibernate.ir.user.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.user.FolderAutoShareInfo;
 import edu.ur.ir.user.FolderAutoShareInfoDAO;
+import edu.ur.ir.user.FolderInviteInfo;
+import edu.ur.ir.user.IrUser;
 
 /**
  * Hibernate implementation of the FolderAutoShareInfoDAO
@@ -90,5 +93,19 @@ public class HbFolderAutoShareInfoDAO implements FolderAutoShareInfoDAO{
 	public List<FolderAutoShareInfo> getAll() {
 		return hbCrudDAO.getAll();
 	}
+	
+	/**
+     * Get all folder auto shares made to a given user.
+     * 
+     * @param user - user who was auto shared with
+     * @return - list of all folder auto share infos.
+     */
+    @SuppressWarnings("unchecked")
+	public List<FolderAutoShareInfo> getAllAutoSharesForUser(IrUser user)
+    {
+    	Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFolderAutoShareInfoForUser");
+		q.setParameter("userId", user.getId());
+		return (List<FolderAutoShareInfo>)q.list();
+    }
 
 }

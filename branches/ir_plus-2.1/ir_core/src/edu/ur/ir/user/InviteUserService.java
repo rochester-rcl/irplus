@@ -341,4 +341,12 @@ public interface InviteUserService extends Serializable{
 	public void addNewFilesFoldersToFolderWithAutoShare(PersonalFolder parentFolder, 
 			List<PersonalFolder> folders, List<PersonalFile> files) throws FileSharingException, 
 			PermissionNotGrantedException;
+	
+    /**
+     * Get all folder auto shares made to a given user.
+     * 
+     * @param user - user who was auto shared with
+     * @return - list of all folder auto share infos.
+     */
+    public List<FolderAutoShareInfo> getAllAutoSharesForUser(IrUser user);
 }
