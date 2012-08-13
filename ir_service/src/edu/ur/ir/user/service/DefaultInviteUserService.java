@@ -648,6 +648,21 @@ public class DefaultInviteUserService implements InviteUserService {
 			}
 		}
 		
+		List<FolderInviteInfo> folderInvites = folderInviteInfoDAO.getInviteInfoByEmail(email.trim().toLowerCase());
+		for( FolderInviteInfo folderInvite : folderInvites)
+		{
+			if( folderInvite != null )
+			{
+				// create permissions for the shared file
+				Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+				permissions.addAll(folderInvite.getPermissions());
+				FolderAutoShareInfo autoShare = new FolderAutoShareInfo(folderInvite.getPersonalFolder(), 
+						permissions, invitedUser);
+				folderAutoShareInfoDAO.makePersistent(autoShare);
+				folderInviteInfoDAO.makeTransient(folderInvite);
+			}
+		}
+		
 		return inboxFiles;
 	}
 	
@@ -1381,4 +1396,15 @@ public class DefaultInviteUserService implements InviteUserService {
 			SimpleMailMessage newFileVersionMailMessage) {
 		this.newFileVersionMailMessage = newFileVersionMailMessage;
 	}
+	
+    /**
+     * Get all folder auto shares made to a given user.
+     * 
+     * @param user - user who was auto shared with
+     * @return - list of all folder auto share infos.
+     */
+    public List<FolderAutoShareInfo> getAllAutoSharesForUser(IrUser user)
+    {
+    	return folderAutoShareInfoDAO.getAllAutoSharesForUser(user);
+    }
 }
