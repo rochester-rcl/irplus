@@ -82,8 +82,6 @@ UPDATE ir_user.user_email set token = null
 where ir_user.user_email.isverified = true
 and token is not null;
 
-ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
-
 -- -------------------------------------------------------
 -- create an index on the handle info local name
 -- -------------------------------------------------------
