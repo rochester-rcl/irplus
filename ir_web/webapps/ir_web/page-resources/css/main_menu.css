@@ -117,34 +117,33 @@ span.reportEditBtnImg, span.arrowBtnImg, span.addBtnImg
 	background: url(../images/all-images/xr_sprites.gif) no-repeat;
 	padding: 0px 2px 2px 16px;
 	margin: 2px;
-	height: 16px;
 	width:16px;
 	align:bottom;
 	font-size: 15px;
 }
 
-span.addBtnImg {background-position: 0 -20px;}
-span.addFolderBtnImg {background-position: 0 -320px;}
-span.arrowBtnImg {background-position: 0 -57px;}
-span.deleteBtnImg{background-position: 0 -180px;}
-span.pageAddBtnImg{background-position: 0 -800px;}
-span.pageCopyBtnImg{background-position: 0 -820px;}
-span.pageWhiteGoBtnImg{background-position: 0 -940px;}
-span.reportGoBtnImg {background-position: 0 -1160px;}
-span.groupAddBtnImg {background-position: 0 -380px;}
-span.worldAddBtnImg {background-position: 0 -1300px;}
-span.packageAddBtnImg {background-position: 0 -760px;}
-span.magnifierBtnImg {background-position: 0 -600px;}
-span.folderBtnImg {background-position: 0 -300px;}
-span.blueDownBtnImg {background-position: 0 -640px;}
-span.lockBtnImg {background-position: 0 -520px;}
-span.wrenchBtnImg {background-position: 0 -1080px;}
-span.pageWhitePutBtnImg {background-position: 0 -1020px;}
-span.unlockBtnImg {background-position: 0 -560px;}
-span.deleteLockBtnImg {background-position: 0 -540px;}
-span.worldBtnImg {background-position: 0 -1280px;}
-span.packageBtnImg {background-position: 0 -740px;}
-span.reportEditBtnImg{background-position: 0 -1140px;}
+span.addBtnImg {background-position: 0 -18px;}
+span.addFolderBtnImg {background-position: 0 -317px;}
+span.arrowBtnImg {background-position: 0 -55px;}
+span.deleteBtnImg{background-position: 0 -178px;}
+span.pageAddBtnImg{background-position: 0 -798px;}
+span.pageCopyBtnImg{background-position: 0 -818px;}
+span.pageWhiteGoBtnImg{background-position: 0 -938px;}
+span.reportGoBtnImg {background-position: 0 -1158px;}
+span.groupAddBtnImg {background-position: 0 -378px;}
+span.worldAddBtnImg {background-position: 0 -1298px;}
+span.packageAddBtnImg {background-position: 0 -758px;}
+span.magnifierBtnImg {background-position: 0 -598px;}
+span.folderBtnImg {background-position: 0 -298px;}
+span.blueDownBtnImg {background-position: 0 -638px;}
+span.lockBtnImg {background-position: 0 -518px;}
+span.wrenchBtnImg {background-position: 0 -1078px;}
+span.pageWhitePutBtnImg {background-position: 0 -1018px;}
+span.unlockBtnImg {background-position: 0 -558px;}
+span.deleteLockBtnImg {background-position: 0 -538px;}
+span.worldBtnImg {background-position: 0 -1278px;}
+span.packageBtnImg {background-position: 0 -738px;}
+span.reportEditBtnImg{background-position: 0 -1138px;}
 
 
 /* file images */
