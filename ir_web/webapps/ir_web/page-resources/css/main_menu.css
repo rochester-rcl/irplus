@@ -161,15 +161,15 @@ span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFile
 	font-size: 15px;
 }
 
-span.whiteFileImg{background-position: 0 -840px;}
-span.wordFileImg{background-position: 0 -1060px;}
-span.imgFileImg{background-position: 0 -880px;}
-span.pdfFileImg{background-position: 0 -860px;}
-span.excelFileImg{background-position: 0 -920px;}
-span.textFileImg{background-position: 0 -1040px;}
-span.compressedFileImg{background-position: 0 -900px;}
-span.powerPointFileImg{background-position: 0 -1000px;}
-span.musicFileImg{background-position: 0 -1360px;}
+span.whiteFileImg{background-position: 0 -838px;}
+span.wordFileImg{background-position: 0 -1058px;}
+span.imgFileImg{background-position: 0 -878px;}
+span.pdfFileImg{background-position: 0 -858px;}
+span.excelFileImg{background-position: 0 -918px;}
+span.textFileImg{background-position: 0 -1038px;}
+span.compressedFileImg{background-position: 0 -898px;}
+span.powerPointFileImg{background-position: 0 -998px;}
+span.musicFileImg{background-position: 0 -1358px;}
 
 
 /* Icons for Researcher folders */
