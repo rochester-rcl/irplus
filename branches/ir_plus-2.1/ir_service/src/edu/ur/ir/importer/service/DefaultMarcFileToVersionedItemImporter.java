@@ -454,6 +454,7 @@ public class DefaultMarcFileToVersionedItemImporter
 		
 		List<Subfield> fields = field.getSubfields();
 		Collections.sort(fields, this);
+		String oField = null;
 		
 		for(Subfield f : fields)
 		{
@@ -465,9 +466,22 @@ public class DefaultMarcFileToVersionedItemImporter
 			{
 			    if( f.getData() != null )
 			    {
-				    data += f.getData() + " ";
+			    	if(  f.getCode() != 'o'  )
+			    	{
+				        data += f.getData() + " ";
+			    	}
+			    	else
+			    	{
+			    		oField = f.getData();
+			    	}
 			    }
 			}
+		}
+		
+		// add the o field of the 240 to the very end
+		if( oField != null )
+		{
+			data += oField;
 		}
 		
 		if(  data != null && !data.trim().equals(""))
