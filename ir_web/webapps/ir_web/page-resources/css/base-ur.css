@@ -70,6 +70,19 @@ p,fieldset,table,pre {
 	/*so things don't run into each other*/
 	margin-bottom:1em;
 }
+
+.link-button {
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+   }
+
 /* setting a consistent width, 160px; 
    control of type=file still not possible */
 /*input[type=text],input[type=password],textarea{width:12.25em;*width:11.9em;}*/
