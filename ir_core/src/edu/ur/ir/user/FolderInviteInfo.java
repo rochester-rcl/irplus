@@ -68,7 +68,10 @@ public class FolderInviteInfo extends BasePersistent
 		this.personalFolder = personalFolder;
 		this.email = email.trim().toLowerCase();
 		this.createdDate = new Timestamp(new Date().getTime());
-		this.permissions = permissions;
+		if( permissions != null )
+		{
+		    this.permissions.addAll( permissions );
+		}
 	}
 	
 	/**

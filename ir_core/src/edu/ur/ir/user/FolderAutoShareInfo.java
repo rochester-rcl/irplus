@@ -64,7 +64,10 @@ public class FolderAutoShareInfo extends BasePersistent{
 			IrUser collaborator)
 	{
 		setPersonalFolder(personalFolder);
-		setPermissions(permissions);
+		if( permissions != null )
+		{
+		  this.permissions.addAll(permissions);
+		}
 		setCollaborator(collaborator);
 		createdDate = new Timestamp(new Date().getTime());
 	}

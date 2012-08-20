@@ -768,9 +768,10 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 			throw new FileSharingException("Cann't set auto share with yourself");
 		}
 		FolderAutoShareInfo autoShareInfo = getAutoShareInfo(collaborator);
+		
 		if( autoShareInfo != null )
 		{
-			autoShareInfo.setPermissions(permissions);  
+			autoShareInfo.changePermissions(permissions);  
 		}
 		else
 		{
