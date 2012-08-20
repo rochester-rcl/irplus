@@ -28,10 +28,18 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.IrAcl;
+import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.security.SecurityService;
+import edu.ur.ir.user.FileSharingException;
+import edu.ur.ir.user.FolderAutoShareInfo;
+import edu.ur.ir.user.FolderInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
@@ -113,9 +121,15 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	
 	/** service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
-
-
 	
+	/* service to send emails when an error occurs */
+	private ErrorEmailService errorEmailService;
+	
+	/* Data access for ACL */
+	private SecurityService securityService;
+
+
+
 	private void moveToUser(Repository repository)
 	{
  		for(SharedInboxFile inboxFile : filesToMove)
@@ -145,6 +159,7 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	 */
 	private void moveToFolder(Repository repository)
 	{
+		List<PersonalFile> filesToShare = new LinkedList<PersonalFile>();
 		for(SharedInboxFile inboxFile : filesToMove)
 		{
 			PersonalFile pf = null;
@@ -154,16 +169,60 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		        try 
 		        {
 				    pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
+				    IrAcl acl = securityService.getAcl(pf.getVersionedFile(), destination.getOwner());
+				    
+				    if (acl.isGranted(VersionedFile.SHARE_PERMISSION, destination.getOwner(), false)) {
+				    	filesToShare.add(pf);
+					}
 					
 					userWorkspaceIndexProcessingRecordService.save(inboxFile.getSharedWithUser().getId(), inboxFile, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 					userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+					
+
 		        } catch (DuplicateNameException e) {
 		            filesNotMoved.add(inboxFile);
 				}
 			}
 		}
+		// re-share files that are set to be automatically be shared
+		if( destination != null)
+	    {
+			for(FolderAutoShareInfo info: destination.getAutoShareInfos())
+			{
+				LinkedList<String> emails = new LinkedList<String>();
+				emails.add(info.getCollaborator().getDefaultEmail().getEmail());
+				try {
+					inviteUserService.inviteUsers(destination.getOwner(), emails, info.getPermissions(), filesToShare, "");
+				} catch (FileSharingException e) {
+					// this should never happen so log and send email
+					log.error(e);
+					errorEmailService.sendError(e);
+				} catch (PermissionNotGrantedException e) {
+					// this should never happen so log and send email
+					log.error(e);
+					errorEmailService.sendError(e);
+				}
+			}
+			
+			for(FolderInviteInfo info: destination.getFolderInviteInfos())
+			{
+				LinkedList<String> emails = new LinkedList<String>();
+				emails.add(info.getEmail());
+				try {
+					inviteUserService.inviteUsers(destination.getOwner(), emails, info.getPermissions(), filesToShare, "These files were automatically shared");
+				} catch (FileSharingException e) {
+					// this should never happen so log and send email
+					log.error(e);
+					errorEmailService.sendError(e);
+				} catch (PermissionNotGrantedException e) {
+					// this should never happen so log and send email
+					log.error(e);
+					errorEmailService.sendError(e);
+				}
+			}
+	    }
 	}
 	
 	/**
@@ -457,6 +516,14 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 
 }
