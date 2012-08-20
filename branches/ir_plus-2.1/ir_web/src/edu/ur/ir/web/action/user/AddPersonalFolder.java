@@ -82,6 +82,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	
 	private boolean useParentAutoShareProperties = false;
 	
+
+
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
@@ -153,6 +155,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			    personalFolder.setDescription(folderDescription);
 			    userFileSystemService.makePersonalFolderPersistent(parentFolder);
 			    
+			    log.debug("use parent auto share properties = " + useParentAutoShareProperties);
 			    if(useParentAutoShareProperties)
 			    {
 			    	Set<FolderAutoShareInfo> shareInfos = parentFolder.getAutoShareInfos();
@@ -430,6 +433,10 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 
 	public PersonalFolder getParentFolder() {
 		return parentFolder;
+	}
+	
+	public void setUseParentAutoShareProperties(boolean useParentAutoShareProperties) {
+		this.useParentAutoShareProperties = useParentAutoShareProperties;
 	}
 
 }
