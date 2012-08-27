@@ -152,4 +152,5 @@ CREATE TABLE ir_user.folder_auto_share_permissions
 );
 ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
 
-
+-- Authoring type for contributors
+ALTER TABLE person.contributor_type ADD COLUMN author_type BOOLEAN NOT NULL DEFAULT FALSE;

@@ -581,6 +581,7 @@ CREATE TABLE person.contributor_type
     version INTEGER,
     name TEXT NOT NULL,
     unique_system_code TEXT,
+    author_type BOOLEAN NOT NULL DEFAULT FALSE,
     description TEXT,
     UNIQUE(name)
 );
