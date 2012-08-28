@@ -1044,9 +1044,19 @@ public class DefaultInviteUserService implements InviteUserService {
 		}
 		if( cascadeFiles )
 		{
-			 // take care of files in all folders and sub folders
-	         List<PersonalFile> files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(), 
+			 List<PersonalFile> files = new LinkedList<PersonalFile>();
+			 
+			 if( cascadeFolders )
+			 {
+			     // take care of files in all folders and sub folders
+	             files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(), 
 	        		 userFileSystemService.getAllFilesForFolder(folderAutoShareInfo.getPersonalFolder()));
+			 }
+			 else
+			 {
+				 files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(),
+						 folderAutoShareInfo.getPersonalFolder().getFiles());
+			 }
 	         if( files.size() > 0 )
 	         {
 	        	 LinkedList<Long> versionedFileIds = new LinkedList<Long>();
@@ -1187,9 +1197,19 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		if( cascadeToFiles )
 		{
-			// take care of files in all folders and sub folders
-	        List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), 
+			List<PersonalFile> files = new LinkedList<PersonalFile>();
+			
+			if( cascadeToSubFolders )
+			{
+			    // take care of files in all folders and sub folders
+	            files = getOnlyShareableFiles(personalFolder.getOwner(), 
 	        		 userFileSystemService.getAllFilesForFolder(personalFolder));
+			}
+			else
+			{
+				files = getOnlyShareableFiles(personalFolder.getOwner(), 
+		        		 personalFolder.getFiles());
+			}
 	        log.debug("cascade to file, files size = " + files.size());
 	        if( files.size() > 0 )
 	        {
@@ -1301,9 +1321,17 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		if( cascadeToFiles )
 		{
-			// take care of files in all folders and sub folders
-	        List<PersonalFile> files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(), 
+			List<PersonalFile> files = new LinkedList<PersonalFile>();
+			if( cascadeToSubFolders ){
+			    // take care of files in all folders and sub folders
+	            files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(), 
 	        		 userFileSystemService.getAllFilesForFolder(folderAutoShareInfo.getPersonalFolder()));
+			}
+			else
+			{
+			    files = getOnlyShareableFiles(folderAutoShareInfo.getPersonalFolder().getOwner(),
+						folderAutoShareInfo.getPersonalFolder().getFiles());
+			}
 	        if( files.size() > 0 )
 	        {
 	        	 LinkedList<Long> versionedFileIds = new LinkedList<Long>();
