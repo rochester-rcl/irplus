@@ -167,7 +167,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 					repositoryService.unlockVersionedFile(versionedFile, user);
 				}
 				
-				if( collaboratorIds.length > 0 )
+				if( collaboratorIds != null && collaboratorIds.length > 0 )
 				{
 					List<Long> collaborators = Arrays.asList(collaboratorIds);
 				    inviteUserService.notifyCollaboratorsOfNewVersion(personalFile, collaborators);
