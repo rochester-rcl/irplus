@@ -14,4 +14,5 @@ select *
 from ir_user.user_email email1
 where exists( select * from ir_user.user_email email2
 where email2.user_email_id != email1.user_email_id
-and lower(email2.email) = lower(email1.email));
+and lower(email2.email) = lower(email1.email))
+order by user_id;
