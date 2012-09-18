@@ -16,8 +16,6 @@
 
 package edu.ur.ir.security;
 
-import java.io.Serializable;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
@@ -28,7 +26,7 @@ import org.springframework.security.core.AuthenticationException;
  * @author Nathan Sarr
  *
  */
-public interface ExternalAuthenticationProvider extends Serializable{
+public interface ExternalAuthenticationProvider {
 	
 	/**
 	 * Attempt to authenticate with the givein information

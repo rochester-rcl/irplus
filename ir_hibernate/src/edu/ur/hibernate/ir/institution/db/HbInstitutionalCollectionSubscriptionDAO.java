@@ -10,7 +10,9 @@ import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
+import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.user.IrUser;
+import edu.ur.order.OrderType;
 
 /**
  * Hibernate implementation of data access object for institutional collection subscriptions
@@ -43,6 +45,16 @@ public class HbInstitutionalCollectionSubscriptionDAO implements InstitutionalCo
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 	
+	
+	/**
+	 * Get all institutional collection subscriptions.
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	
 	/**
 	 * Get institutional collection subscription by id.

@@ -55,7 +55,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	private static final long serialVersionUID = -2058783531945128792L;
 
 	/** Java mail sender to send emails */
-    private transient JavaMailSender mailSender;
+    private JavaMailSender mailSender;
     
     /** Service for dealing with institutional items  */
     private InstitutionalItemService institutionalItemService;
@@ -252,51 +252,51 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	
 	private String showLastNameFirst(PersonName personName, boolean displayDates)
 	{
-		StringBuffer output = new StringBuffer("");
+		String output = "";
 		if( personName.getSurname() != null &&  personName.getSurname().trim().length() > 0)
     	{
-    		output.append(personName.getSurname().trim());
+    		output += personName.getSurname();
     	}
 		if( personName.getForename() != null && personName.getForename().trim().length() > 0)
     	{
-			if(output.length() > 0 )
+			if(output.trim().length() > 0 )
 			{
-				output.append(", ");
+				output +=", ";
 			}
-    		output.append(personName.getForename().trim());
+    		output += personName.getForename();
     	}
 		if( personName.getMiddleName() != null &&  personName.getMiddleName().trim().length() > 0)
     	{
-			if(output.length() > 0 )
+			if(output.trim().length() > 0 )
 			{
-				output.append(", ");
+				output +=", ";
 			}
-    		output.append(personName.getMiddleName().trim());
+    		output += personName.getMiddleName();
     	}
 		if( personName.getNumeration() != null && personName.getNumeration().trim().length() > 0)
     	{
-			if(output.length() > 0 )
+			if(output.trim().length() > 0 )
 			{
-				output.append(", ");
+				output +=", ";
 			}
-    		output.append(personName.getNumeration().trim());
+    		output += personName.getNumeration();
     	}
 		if( personName.getPersonNameTitles() != null && personName.getPersonNameTitles().size() > 0)
     	{
-			if(output.length() > 0 )
+			if(output.trim().length() > 0 )
 			{
-				output.append(", ");
+				output +=", ";
 			}
     	    for( PersonNameTitle title: personName.getPersonNameTitles())
     	    {
-    		    output.append(title.getTitle().trim() + " ");
+    		    output += title.getTitle() + " ";
     	    }
     	}
     	
     	
     	if(displayDates)
     	{
-    		output.append(" ");
+    		output += " ";
     	    BirthDate birthDate = personName.getPersonNameAuthority().getBirthDate();
     	    DeathDate deathDate = personName.getPersonNameAuthority().getDeathDate();
     	    int birthYear = 0;
@@ -315,21 +315,21 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
     	    
     		if( birthYear > 0 || deathYear > 0 )
     		{
-    		    output.append("(");
+    		    output += "(";
     		    if( birthYear > 0)
     		    {
-    			    output.append(birthYear);
+    			    output += birthYear;
     		    }
-    		    output.append(" - ");
+    		    output += " - ";
     		
     		    if(  deathYear > 0 )
     		    {
-    			    output.append(deathYear);
+    			    output += deathYear;
     		    }
-    		    output.append(")");
+    		    output += ")";
     	    }
     	}
-    	return output.toString();
+    	return output;
 	}
 
 	public RepositoryService getRepositoryService() {

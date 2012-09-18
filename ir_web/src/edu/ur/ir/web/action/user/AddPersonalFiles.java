@@ -91,8 +91,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	private String[] fileFileName;
 				
 	/* Repository service for placing information in the repository */
-	private RepositoryService repositoryService;
-	
+	private RepositoryService repositoryService;	
 	
 	/* Files not added due to errors */
 	LinkedList<FileUploadInfo> filesNotAdded = new LinkedList<FileUploadInfo>();
@@ -111,19 +110,17 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	
 	/* invite user service. */
 	private InviteUserService inviteUserService;
-
 	
 	/* service to send emails when an error occurs */
 	private ErrorEmailService errorEmailService;
 
 
-
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
@@ -231,8 +228,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 					    			 fileFileName[index],
 									 userFileDescription[index]);
 					    	     addedFiles.add(pf);
-					    	     
-					    	     
 					    	}
 					    	catch(DuplicateNameException e)
 					    	{

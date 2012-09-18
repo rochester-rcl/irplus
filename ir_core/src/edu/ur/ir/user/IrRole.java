@@ -46,18 +46,12 @@ public class IrRole extends CommonPersistent implements GrantedAuthority, Persis
 	
 	/** user can be a researcher  */
 	public static final String RESEARCHER_ROLE ="ROLE_RESEARCHER";
-	
+
 	/** basic user role to log into the system  */
 	public static final String USER_ROLE ="ROLE_USER";
 	
 	/** user can administer collections in the system  */
 	public static final String COLLECTION_ADMIN_ROLE = "ROLE_COLLECTION_ADMIN";
-	
-	/** user can administer approve affiliations  */
-	public static final String APPROVE_USER_AFFILIATION_ROLE = "ROLE_AFFLIATION_APPROVER";
-	
-	/** user can create group workspaces  */
-	public static final String GROUP_WORKSPACE_CREATOR_ROLE = "ROLE_GROUP_WORKSPACE_CREATOR";
 	
 	/** this class is a type of security id */
 	public static final String ROLE_SID_TYPE = "ROLE_SID_TYPE";

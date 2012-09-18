@@ -205,7 +205,7 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -304,7 +304,7 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 		this.newsService = newsService;
 	}
 
-	public int getTotalResearcherCount() {
+	public int getResearcherCount() {
 		return researcherCount;
 	}
 	

@@ -18,10 +18,14 @@
 -->
 
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!--  represents a successful submission -->
 <input type="hidden" id="newFolderForm_success" 
 		   value="${folderAdded}"/>
+
+<input type="hidden" id="newFolderForm_parentFolderId"
+		 name="parentFolderId" value="${parentFolderId}"/>
 		   		               
 <input type="hidden" id="newFolderForm_new"
        name="newFolder" value="true"/>
@@ -49,4 +53,11 @@
          <td class="label"> Folder Description:</td>
          <td align="left" class="input"><textarea cols="45" rows="3" name="folderDescription">${folderDescription}</textarea></td>
      </tr>
+     <c:if test="${ (updateFolderId == null || updateFolderId <= 0) && (parentFolderId != null && parentFolderId > 0)  }">
+         <c:if test="${parentFolder.hasAutoSharing}">
+         <tr>
+             <td class="label" colspan="2">Apply Parent Folder Auto Share Permissions &nbsp;<input type="checkbox"  checked="checked" name="useParentAutoShareProperties" value="true"/></td>
+         </tr>
+         </c:if>
+     </c:if>
  </table>

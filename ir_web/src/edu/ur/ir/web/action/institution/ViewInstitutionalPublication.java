@@ -163,6 +163,12 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 				{
 					institutionalItemVersion =  institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber);
 				}
+				
+				if(institutionalItemVersion == null )
+				{
+					message = "The publication does not exist";
+		        	return "not_found";
+				}
 			} 
 			else 
 			{
@@ -201,6 +207,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
          	user = userService.getUser(userId, false);
         }
 		
+		
+		
 		if (!institutionalItemVersion.getItem().isEmbargoed()) 
 		{
 			if (!institutionalItemVersion.getItem().isPubliclyViewable()) 
@@ -210,8 +218,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	            	if (!user.hasRole(IrRole.ADMIN_ROLE)) 
 	            	{
 	            		// check user permissions if they are not an administrator
-	            	    if ( !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) 
-	            			&& !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) )  {
+	            	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0
+	            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
 	            		
 	            	    	log.debug("User has no Read / edit metadata permission for this item");
 	            	    	message = "Restricted Access";
@@ -237,8 +245,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
             	if (!user.hasRole(IrRole.ADMIN_ROLE)  && !user.equals(institutionalItemVersion.getItem().getOwner())) 
             	{
             		// check user permissions if they are not an administrator - view privileges override embargo date
-            	    if ( !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) 
-            			&& !itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) )  {
+            	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0
+            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
             		
             	    	log.debug("User has no Read / edit metadata permission for this item and it is embargoed");
             	    	message = "The publication will be available to view starting on date : " + institutionalItemVersion.getItem().getReleaseDate();
@@ -383,7 +391,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

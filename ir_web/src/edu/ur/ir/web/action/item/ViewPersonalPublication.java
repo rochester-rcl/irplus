@@ -219,7 +219,7 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 		this.personalItemId = personalItemId;
 	}
 	
-	public void injectUserId(Long userId)
+	public void setUserId(Long userId)
 	{
 		this.userId = userId;
 	}

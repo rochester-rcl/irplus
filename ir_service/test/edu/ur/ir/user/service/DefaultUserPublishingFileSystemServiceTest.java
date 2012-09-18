@@ -499,19 +499,34 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		// new transaction - create two new collections
 		ts = tm.getTransaction(td);
 		
-	
-		PersonalCollection  myCollection = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection1", "desc1");
-		assert myCollection != null : "collection should be created ";
-
-		PersonalCollection subCollection = myCollection.createChild("subCollection");
-		// create a sub collection
-		assert subCollection != null : "collection should be created ";
+		PersonalCollection myCollection = null;
+		PersonalCollection subCollection = null;
+		try
+		{
+		    myCollection = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection1", "desc1");
+		    subCollection = myCollection.createChild("subCollection");
+		}
+		catch(Exception e)
+		{
+			throw new IllegalStateException(e);
+		}
 		
 		userPublishingFileSystemService.makePersonalCollectionPersistent(myCollection);
 		
+		assert myCollection != null : "collection should be created";
 		
-	
-		PersonalItem it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
+		// create a sub collection
+		assert subCollection != null : "collection should be created";
+		
+		PersonalItem it = null;
+		try
+		{
+		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
+		}
+		catch(Exception e)
+		{
+			throw new IllegalStateException(e);
+		}
 		tm.commit(ts);
          
 		// start new transaction

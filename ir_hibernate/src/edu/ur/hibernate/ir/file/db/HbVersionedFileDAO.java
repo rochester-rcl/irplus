@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.file.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -67,8 +66,8 @@ public class HbVersionedFileDAO implements VersionedFileDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("versionedIrFileCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionedIrFileCount"));
 	}
 
 	/**
@@ -100,6 +99,10 @@ public class HbVersionedFileDAO implements VersionedFileDAO {
 	@SuppressWarnings("unchecked")
 	public List<VersionedFile> findByName(String name) {
 	  	return (List<VersionedFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getVersionedIrFileByName", name);
+	}
+
+	public List<VersionedFile> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public VersionedFile getById(Long id, boolean lock) {

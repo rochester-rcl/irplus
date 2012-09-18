@@ -47,11 +47,11 @@
  	<ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
         
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
- 	<ur:js src="page-resources/js/util/ur_table.js"/>
+ 	<ur:js src="pages/js/ur_table.js"/>
  	
  	<ur:js src="page-resources/js/user/researcher_tabs.js"/>
  	<ur:js src="page-resources/js/user/edit_researcher.js"/>
@@ -406,7 +406,7 @@
 	      </div>
   	  </div>
   
-      <div id="newFolderDialog" class="hidden">
+        <div id="newFolderDialog" class="hidden">
             <div class="hd">Folder Information</div>
             <div class="bd">
                   <form id="addFolder" name="newFolderForm" 
@@ -469,7 +469,7 @@
        </div>
        <!--  end private page confirm dialog -->
 
-       <div id="newLinkDialog" class="hidden">
+        <div id="newLinkDialog" class="hidden">
             <div class="hd">Link Information</div>
             <div class="bd">
                   <form id="addLink" name="newLinkForm" 

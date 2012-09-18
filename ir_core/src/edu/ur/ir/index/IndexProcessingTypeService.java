@@ -18,6 +18,7 @@
 package edu.ur.ir.index;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -36,9 +37,6 @@ public interface IndexProcessingTypeService  extends Serializable {
 	
 	/** default delete processing type */
 	public static final String DELETE = "DELETE";
-	
-	/** indicates the index needs to be deleted and re-built */
-	public static final String DELETE_INDEX = "DELETE_INDEX";
 	
     /**
      * Get a count of index processing types
@@ -78,4 +76,11 @@ public interface IndexProcessingTypeService  extends Serializable {
      */
     public void save(IndexProcessingType indexProcessingType);
  
+	/**
+	 * Get all index processing types
+	 * 
+	 * @return List of all index processing types
+	 */
+	public List<IndexProcessingType> getAll();
+	
 }

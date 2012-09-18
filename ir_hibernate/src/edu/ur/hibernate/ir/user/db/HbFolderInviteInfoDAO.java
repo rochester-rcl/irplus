@@ -136,5 +136,15 @@ public class HbFolderInviteInfoDAO implements FolderInviteInfoDAO {
 	public Long getCount() {
 		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("folderInviteInfoCount").uniqueResult();
 	}
+	
+	/**
+	 * Get all user external accounts.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<FolderInviteInfo> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 
 }

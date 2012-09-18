@@ -52,10 +52,11 @@ public class ItemTransformDownloadUrl  extends SimpleTagSupport{
 		
 		PageContext pageContext = (PageContext) this.getJspContext();
 
+  
         IrFile irFile = itemFile.getIrFile();
         
         // make sure the transformed file is available
-		if( systemCode != null && irFile != null)
+		if( itemFile != null && systemCode != null && irFile != null)
 		{   
 			log.debug("item file system code and ir file are NOT NULL");
 			if(itemFile.getIrFile().getTransformedFileBySystemCode(systemCode) != null)
@@ -100,9 +101,8 @@ public class ItemTransformDownloadUrl  extends SimpleTagSupport{
 		                 {
 		            	     log.debug("itemFileSecurityService manager found");
 		                 }
-			             if( genericItem.getOwner().equals(user) || 
-			                 user.hasRole(IrRole.ADMIN_ROLE)|| 
-			                 itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) )
+			             if( genericItem.getOwner().equals(user) || user.hasRole(IrRole.ADMIN_ROLE)|| 
+			                (itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
 			             {
 			            	log.debug("User can view by permission access");
 			                canView = true;	

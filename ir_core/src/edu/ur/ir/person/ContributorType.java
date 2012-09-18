@@ -34,6 +34,9 @@ public class ContributorType extends CommonPersistent implements UniqueSystemCod
 	/** System code for this contributor type */
 	private String uniqueSystemCode;
 	
+	/** determine if this is an authoring type of contributor */
+	private boolean authorType = false;
+
 	/**
 	 * Package protected constructor 
 	 */
@@ -104,4 +107,14 @@ public class ContributorType extends CommonPersistent implements UniqueSystemCod
 	public void setUniqueSystemCode(String systemCode) {
 		this.uniqueSystemCode = systemCode;
 	}
+	
+	
+	public boolean getAuthorType() {
+		return authorType;
+	}
+
+	public void setAuthorType(boolean authorType) {
+		this.authorType = authorType;
+	}
+
 }

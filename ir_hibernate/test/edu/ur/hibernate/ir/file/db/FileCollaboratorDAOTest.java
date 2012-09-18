@@ -18,6 +18,8 @@ package edu.ur.hibernate.ir.file.db;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -179,6 +181,15 @@ public class FileCollaboratorDAOTest {
 		
 		assert collaboratorDAO.findCollaboratorsForVerionedFileId(vif.getId()).size() == 1 : "Should be equal to 1";
 		assert collaboratorDAO.getCount() == 1 : "Should be equal to 1";
+		
+		otherFc = collaboratorDAO.findByUserIdVersionedFileId(user1.getId(), vif.getId());
+		assert otherFc != null : "Could not find collaborator with user id = " + user1.getId() + " versioned file id = " + vif.getId();
+		
+		List<Long> versionedFileIds = new LinkedList<Long>();
+		versionedFileIds.add(vif.getId());
+		
+		assert collaboratorDAO.findByUserIdVersionedFileId(user1.getId(), versionedFileIds).size() == 1 : "Should find collaborator";
+		
 		vif.removeCollaborator(otherFc);
 		versionedIrFileDAO.makePersistent(vif);
 		tm.commit(ts);

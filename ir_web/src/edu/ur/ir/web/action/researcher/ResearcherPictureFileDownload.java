@@ -43,34 +43,33 @@ public class ResearcherPictureFileDownload extends ActionSupport
 implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
 	
-	// Eclipse generated id
+	/** Eclipse generated id*/
 	private static final long serialVersionUID = -6039053858718096614L;	
 
-	//  Logger for file upload */
+	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(ResearcherPictureFileDownload.class);
 	
-	//  The new researcher */
+	/**  The new researcher */
 	private Researcher researcher;
 	
-	// Id of researcher */
+	/** Id of researcher */
 	private Long researcherId;
 
-	// Service for dealing with researcher */
+	/** Service for dealing with researcher */
 	private ResearcherService researcherService;
 	
-	//  Servlet response to write to */
-	private transient HttpServletResponse response;
+	/**  Servlet response to write to */
+	private HttpServletResponse response;
 	
-	// id of the ir file to download */
+	/** id of the ir file to download */
 	private Long irFileId;
 	
-	// request made to the server */
-	private transient HttpServletRequest request;
+	/** request made to the server */
+	private HttpServletRequest request;
 	
-	// Utility for web utils */
+	/** Utility for web utils */
 	private WebIoUtils webIoUtils;
 	
-	// id of the user accessing the file */
 	private Long userId;
 
 	/**
@@ -89,7 +88,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	    // to the files.
 		researcher = researcherService.getResearcher(researcherId, false);
 		if( researcher != null && 
-				(researcher.isPublic() || researcher.getUser().getId().equals(userId)))
+				(researcher.isPublic() || researcher.getUser().getId().equals(userId)) )
 		{
 			// causes a load form the database;
 		    IrFile irFile = researcher.getPicture(irFileId);
@@ -99,19 +98,14 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		    	    irFile = researcher.getPrimaryPicture();
 		        }
 		    }
-		    
-		    if( irFile != null )
-		    {
-                FileInfo fileInfo = irFile.getFileInfo();
+            FileInfo fileInfo = irFile.getFileInfo();
 
-                if( log.isDebugEnabled() )
-                {
-                    log.debug("Found ir File " + irFile);
-                }
+            if( log.isDebugEnabled() )
+            {
+                log.debug("Found ir File " + irFile);
+            }
            
-                webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
-		
-		    }
+            webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 		}
         
         return SUCCESS;
@@ -125,53 +119,60 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.response = arg0;
 	}
 
-	/**
-	 * Set the researcher service.
-	 * 
-	 * @param researcherService
-	 */
+	public Researcher getResearcher() {
+		return researcher;
+	}
+
+
+	public void setResearcher(Researcher researcher) {
+		this.researcher = researcher;
+	}
+
+
+	public ResearcherService getResearcherService() {
+		return researcherService;
+	}
+
+
 	public void setResearcherService(ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
 
-	/**
-	 * Set the file 
-	 * 
-	 * @param irFileId
-	 */
+	public Long getIrFileId() {
+		return irFileId;
+	}
+
+
 	public void setIrFileId(Long irFileId) {
 		this.irFileId = irFileId;
 	}
+
+
 	
-	/* (non-Javadoc)
-	 * @see org.apache.struts2.interceptor.ServletRequestAware#setServletRequest(javax.servlet.http.HttpServletRequest)
-	 */
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
 
-	/**
-	 * Set the web io utils.
-	 * 
-	 * @param webIoUtils
-	 */
+
+	public WebIoUtils getWebIoUtils() {
+		return webIoUtils;
+	}
+
+
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}
 
-	/**
-	 * Set the researcher id.
-	 * 
-	 * @param researcherId
-	 */
+
+	public Long getResearcherId() {
+		return researcherId;
+	}
+
 	public void setResearcherId(Long researcherId) {
 		this.researcherId = researcherId;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
-	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

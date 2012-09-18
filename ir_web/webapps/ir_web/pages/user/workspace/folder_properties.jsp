@@ -51,7 +51,7 @@
     <ur:js src="page-resources/yui/menu/menu-min.js"/>
     
  	<!--  base path information -->
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="page-resources/js/user/folder_properties.js"/>

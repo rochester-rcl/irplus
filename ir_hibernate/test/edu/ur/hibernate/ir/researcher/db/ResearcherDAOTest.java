@@ -238,11 +238,11 @@ public class ResearcherDAOTest {
 	}
 	
 	/**
-	 * Test Institutional researcher personal link persistence
+	 * Test Institutional researcherlection link persistence
 	 * @throws DuplicateNameException 
 	 */
 	@Test
-	public void researcherPersonalLinkDAOTest() throws DuplicateNameException {
+	public void researcherlectionLinkDAOTest() throws DuplicateNameException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

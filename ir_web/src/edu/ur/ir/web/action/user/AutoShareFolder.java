@@ -54,7 +54,6 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger( AutoShareFolder.class);
 
-	
 	/* id of the personal folder */
 	private Long personalFolderId;
 	
@@ -70,6 +69,9 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	/* Permission types for the files within folders */
 	private List<IrClassTypePermission> classTypePermissions;
 	
+	/* Permissions given to the collaborator for a given auto share */
+	private List<IrClassTypePermission> collaboratorPermissions;
+
 	/* Service for dealing with security information */
 	private SecurityService securityService;
 	
@@ -87,6 +89,9 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	
 	/* determine if the permissions should cascade down to sub folders */
 	private boolean includeSubFolders = false;
+	
+	/* determine if the permissions should cascade down to sub files */
+	private boolean includeSubFiles = false;
 
 	/* Permissions to be assigned while sharing the file */
 	private List<Long> selectedPermissions = new ArrayList<Long>();
@@ -94,11 +99,13 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	/* id of the auto share info to be removed - THIS doubles as the invite id*/
 	private Long folderAutoShareInfoId;
 	
+	/* single auto share info */
+	private FolderAutoShareInfo folderAutoShareInfo;
 
 	/* (non-Javadoc)
 	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;	
 	}
 	
@@ -136,6 +143,7 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	{
 		FolderAutoShareInfo folderAutoShareInfo = inviteUserService.getFolderAutoShareInfoById(folderAutoShareInfoId, false);
 		
+		IrUser user = userService.getUser(userId, false);
 		if( folderAutoShareInfo != null )
 		{
 			personalFolder = folderAutoShareInfo.getPersonalFolder();
@@ -145,22 +153,7 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 			}
 			else
 			{
-				
-				if( includeSubFolders )
-				{
-					List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
-					for( PersonalFolder aFolder : folders)
-					{
-					    FolderAutoShareInfo info = aFolder.getAutoShareInfo(folderAutoShareInfo.getCollaborator());
-					    if( info != null )
-					    {
-					    	aFolder.removeAutoShareInfo(info);
-					    	inviteUserService.delete(info);
-					    }
-					}
-				}
-				personalFolder.removeAutoShareInfo(folderAutoShareInfo);
-				inviteUserService.delete(folderAutoShareInfo);
+				inviteUserService.delete(user, folderAutoShareInfo, includeSubFolders, includeSubFiles);
 			}
 			
 		}
@@ -191,22 +184,7 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 			}
 			else
 			{
-				
-				if( includeSubFolders )
-				{
-					List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
-					for( PersonalFolder aFolder : folders)
-					{
-					    FolderInviteInfo info = aFolder.getFolderInviteInfo(folderInviteInfo.getEmail());
-					    if( info != null )
-					    {
-					    	aFolder.removeFolderInviteInfo(info);
-					    	inviteUserService.delete(info);
-					    }
-					}
-				}
-				personalFolder.removeFolderInviteInfo(folderInviteInfo);
-				inviteUserService.delete(folderInviteInfo);
+				inviteUserService.delete(folderInviteInfo, includeSubFolders, includeSubFiles);
 			}
 			
 		}
@@ -221,11 +199,18 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	public String autoShareFolder()
 	{
 		log.debug("auto share folder");
-		
+		if(!personalFolder.getOwner().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		if ( emails.trim().length() == 0) {
+			return SUCCESS;
+		}
 		if (selectedPermissions.size() == 0) {
 			inviteErrorMessage = getText("emptyPermissions");
 			return "added";
 		}
+		
 		
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
@@ -273,11 +258,72 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 			}
 		}
 		
-		// reload the personal folder
-		personalFolder = userFileSystemService.getPersonalFolder(personalFolderId, false);
-		
 		log.debug("Personal Folder  auto share info = " + personalFolder.getAutoShareInfos().size() + " invite infos =  "
 				+ personalFolder.getFolderInviteInfos().size());
+		return SUCCESS;
+	}
+	
+	/**
+	 * Get permissions for an auto share info
+	 * 
+	 * @return permissions for an auto shared folder
+	 */
+	public String getPermissions() 
+	{
+		// user who is getting the permissions
+	    IrUser user = userService.getUser(userId, true);
+	
+	    folderAutoShareInfo = inviteUserService.getFolderAutoShareInfoById(folderAutoShareInfoId, 
+	    		false);
+
+	    if( folderAutoShareInfo != null )
+	    {
+	        if( !folderAutoShareInfo.getPersonalFolder().getOwner().equals(user) ){
+	    	    return "accessDenied";
+	        }
+		    collaboratorPermissions = new LinkedList<IrClassTypePermission>();
+		    collaboratorPermissions.addAll(folderAutoShareInfo.getPermissions());
+		    classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(VersionedFile.class.getName()));
+	    }
+		return SUCCESS;
+		
+	}
+	
+	/**
+	 * Change the permissions for a given folder auto share info.
+	 * 
+	 * @return
+	 */
+	public String updatePermissions(){
+		// user who is getting the permissions
+	    IrUser user = userService.getUser(userId, true);
+	
+	    folderAutoShareInfo = inviteUserService.getFolderAutoShareInfoById(folderAutoShareInfoId, 
+	    		false);
+
+	    if( folderAutoShareInfo != null )
+	    {
+	        if( !folderAutoShareInfo.getPersonalFolder().getOwner().equals(user) ){
+	    	    return "accessDenied";
+	        }
+	    
+	        // Create the list of permissions
+		    Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		    for(Long id : selectedPermissions)
+		    {
+			    permissions.add(securityService.getIrClassTypePermissionById(id, false));
+		    }
+		    
+		    inviteUserService.updateAutoSharePermissions(folderAutoShareInfo, permissions, includeSubFolders, includeSubFiles);
+	    
+		    
+		
+		    inviteUserService.save(folderAutoShareInfo);
+		
+		    collaboratorPermissions = new LinkedList<IrClassTypePermission>();
+		    collaboratorPermissions.addAll(folderAutoShareInfo.getPermissions());
+		    classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(VersionedFile.class.getName()));
+	    }
 		return SUCCESS;
 	}
 
@@ -451,6 +497,33 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	 */
 	public void setFolderAutoShareInfoId(Long folderAutoShareInfoId) {
 		this.folderAutoShareInfoId = folderAutoShareInfoId;
+	}
+	
+	/**
+	 * Get the auto share folder info.
+	 * 
+	 * @return
+	 */
+	public FolderAutoShareInfo getFolderAutoShareInfo() {
+		return folderAutoShareInfo;
+	}
+
+	/**
+	 * List of permissions given to a collaborator for a given auto share id.
+	 * 
+	 * @return
+	 */
+	public List<IrClassTypePermission> getCollaboratorPermissions() {
+		return collaboratorPermissions;
+	}
+
+	/**
+	 * Apply permission changes to sub files.
+	 * 
+	 * @param includeSubFiles
+	 */
+	public void setIncludeSubFiles(boolean includeSubFiles) {
+		this.includeSubFiles = includeSubFiles;
 	}
 
 }

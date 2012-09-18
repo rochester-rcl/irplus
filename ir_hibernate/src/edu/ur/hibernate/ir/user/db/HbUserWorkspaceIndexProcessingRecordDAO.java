@@ -2,7 +2,6 @@ package edu.ur.hibernate.ir.user.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -57,6 +56,9 @@ public class HbUserWorkspaceIndexProcessingRecordDAO implements UserWorkspaceInd
 		return (List<UserWorkspaceIndexProcessingRecord>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserWorkspaceIndexProcessingRecordsByUserIdDateItemId");
 	}
 
+	public List<UserWorkspaceIndexProcessingRecord> getAll() {
+		return hbCrudDAO.getAll();
+	}
 
 	public UserWorkspaceIndexProcessingRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
@@ -71,8 +73,7 @@ public class HbUserWorkspaceIndexProcessingRecordDAO implements UserWorkspaceInd
 	}
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userWorkspaceIndexProcessingRecordCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userWorkspaceIndexProcessingRecordCount"));
 	}
 
 }

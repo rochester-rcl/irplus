@@ -70,16 +70,9 @@
 	<query name="instItemProcessingRecByItemIdProcessingType">
 	   select institutionalItemIndexProcessingRecord 
 	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
-	   where institutionalItemIndexProcessingRecord.institutionalItemId = :itemId
-	   and institutionalItemIndexProcessingRecord.indexProcessingType.id = :processingTypeId
+	   where institutionalItemIndexProcessingRecord.institutionalItemId = ?
+	   and institutionalItemIndexProcessingRecord.indexProcessingType.id = ?
 	</query>
-	
-	<query name="instItemProcessingRecByProcessingType">
-	   select institutionalItemIndexProcessingRecord 
-	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
-	   where institutionalItemIndexProcessingRecord.indexProcessingType.id = :processingTypeId
-	</query>
-	
 	
 	<!--  this retrieves all items within the collection including all child items in child
 	      collections - this also does not re-insert any items that are already inserted based

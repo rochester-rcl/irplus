@@ -69,6 +69,13 @@ public interface IgnoreIpAddressService extends Serializable{
     public void saveIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress);
  
 	/**
+	 * Get all  ip addresses.
+	 * 
+	 * @return List of all  ip addresses
+	 */
+	public List<IgnoreIpAddress> getAllIgnoreIpAddress();
+
+	/**
 	 * Get ip address for specified range
 	 * 
 	 * @param ignoreIpAddress Ip address range

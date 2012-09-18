@@ -250,7 +250,7 @@ public class ManageResearcherPicture extends ActionSupport implements Preparable
 		this.repositoryService = repositoryService;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 }

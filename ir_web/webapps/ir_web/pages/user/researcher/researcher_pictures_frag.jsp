@@ -101,7 +101,7 @@
                             <c:param name="irFileId" value="${picture.id}"/>
                             <c:param name="researcherId" value="${researcher.id}"/>
                         </c:url>
-                        <img  src="${url}"/>
+                        <img src="${url}"/>
                     </c:if>	    
 				    				   
 				 </td>
