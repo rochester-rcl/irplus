@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!--
+     This is the build file for ur_common_util
+-->
+<project name="dspace_urresearch_import" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
+
+    <!-- Use the build.properties file for user specific settings -->
+    <property file="build.properties"/>
+
+    <!-- project name -->
+    <property name="project.name" value="dspace_urresearch_import"/> 
+
+    <!-- location of the base build file -->
+    <property name="base.build.file" value="../base.xml"/>
+	
+	<!-- top level folder for ir plus properties files -->
+	<property name="ir.plus.properties" value="../properties"/> 
+
+	<!-- folder that contains the properties for running the system in production -->
+	<property name="ir.plus.properties.production" value="${ir.plus.properties}/production/ir_plus.properties"/>
+
+	<!-- folder that contains session factory for production web -->
+	<property name="web.session.factory" value="../ir_web/spring-config/local/session-factory.xml"/>
+
+	<!-- import the base set of files -->
+    <import file="${base.build.file}"/>
+	
+
+    <!-- Allow users to see their properties and how they are set -->
+    <target name="echo-properties" 
+        description="Ouput the project properties for users when needed" >
+	    <echo message="build.dir = ${build.dir}"/>
+	    <echo message="src.dir = ${src.dir}"/>
+	    <echo message="dist.dir = ${dist.dir}"/>
+	    <echo message="test.dir = ${test.dir}"/>
+	    <echo message="lib.dir = ${lib.dir}"/>
+	    <echo message="project.name = ${project.name}"/>
+	    <echo message="project.version = ${project.version}"/>
+	    <echo message="dist.dir = ${dist.dir}"/>
+	    <echo message="report.dir = ${report.dir}"/>
+    	
+    	<echo message="${spring.config.data.source.test}"/>
+    	<echo message="${spring.config.common.config}"/>
+    	<echo message="${spring.project.config}"/>
+    </target>
+
+
+    <!-- Set the location where the libraries this project is dependent -->
+    <path id="libraries">
+	  <fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
+
+    <!-- This is the path for testing -->
+	<path id="test.libraries">
+		<path refid="libraries"/>
+		<pathelement location="${build.dir}/classes"/>
+		
+		<!-- spring configuration files for testing -->
+		<pathelement location="${spring.config.data.source.test}"/>
+		
+	    <!-- common spring configuration files -->
+		<pathelement location="${spring.config.common.config}"/>
+		<pathelement location="${spring.project.config}"/>
+		<pathelement location="${spring.config.common.config.test}"/>
+		<pathelement location="${ir.plus.properties.production}"/>
+		
+		<!-- test file configurations and properties -->
+		<pathelement location="${testng.config}"/>
+	</path>
+
+    <!-- Copy non java resources -->
+	<target name="copy-resources" description="-->Copy the non java resources into the build directory">
+		<copy todir="${build.dir}/classes">
+			
+			<!-- logger configuration-->
+			<fileset dir="${log4j.production.appender}"/>
+			
+			<!-- local spring project configuration files -->
+			<fileset dir="${spring.project.config}"/>
+			
+			<!-- common spring configuration files -->
+			<fileset dir="${spring.config.common.config}"/>
+			
+			<!-- session factory file -->
+			<fileset file="${web.session.factory}"/>
+			
+			<!-- session factory file -->
+		    <fileset file="${ir.plus.properties.production}"/>
+			
+		</copy>
+		
+		<!-- copy the most recent jar files created by the application-->
+		<!-- copy the most recent jar files created by the application-->
+		<copy todir="${lib.dir}">
+			<fileset file="../file_db/file_db/file_db-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../file_db_dao/file_db_dao/file_db_dao-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_common_util/ur_common_util/ur_common_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_persistence_util/ur_persistence_util/ur_persistence_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../file_db_hibernate/file_db_hibernate/file_db_hibernate-${project.version}.jar"/>
+		</copy>		
+		<copy todir="${lib.dir}">
+			<fileset file="../file_db_service/file_db_service/file_db_service-${project.version}.jar"/>
+		</copy>		
+		
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_common_util/ur_common_util/ur_common_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_persistence_util/ur_persistence_util/ur_persistence_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ir_core/ir_core/ir_core-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ir_dao/ir_dao/ir_dao-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ir_hibernate/ir_hibernate/ir_hibernate-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ir_service/ir_service/ir_service-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../dspace_urresearch_import_export/dspace_urresearch_import_export/dspace_urresearch_import_export-${project.version}.jar"/>
+		</copy>
+	</target>
+
+	<!-- compile the java source files -->
+    <target name="build" depends="retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
+        <mkdir dir="${build.dir}/classes"/>
+        <ext:javac srcdir="${src.dir}"
+			 destdir="${build.dir}/classes"
+			 classpathref="libraries"/>
+    </target>
+
+	<!-- clean up the build directories -->
+    <target name="clean" description="-->Clean the project">
+        <delete dir="${build.dir}"/>
+        <delete dir="${report.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+	
+	<!-- clean up the build directories plus lib directory -->
+    <target name="full-clean" depends="clean" description="-->Clean the project and lib directory">
+        <delete dir="${lib.dir}"/>
+    	<delete dir="${ivy.dir}"/>
+    </target>	
+
+	
+    <!-- build the test class files of the project -->
+    <target name="test-build" depends="build" description="-->Compile the test classes"
+    xmlns:ext="http://edu.ur/d1/ext">
+        <ext:javac srcdir="${test.dir}"
+			 destdir="${build.dir}/classes"
+			 classpathref="libraries"/>
+    </target>
+
+
+	<target name="test" depends="test-build" description="-->Run the tests">
+		<echo message="running tests" />
+		 <!-- run the tests -->
+	</target>
+
+    <!-- generate the documentation -->
+    <target name="docs" description="-->build the javadocs">
+        <mkdir dir="${dist.dir}/docs"/>
+		<javadoc
+	           destdir="${dist.dir}/docs/api"
+	           author="true"
+	           version="true"
+	           use="true"
+	           windowtitle="University of Rochester DSpace Import API">
+
+			<fileset dir="${src.dir}" defaultexcludes="yes">
+				<include name="edu/ur/**"/>
+			</fileset>
+
+			<doctitle><![CDATA[<h1>University of Rochester DSpace Import API</h1>]]></doctitle>
+		    <bottom>
+			<![CDATA[<i>Copyright &#169; 2006 University of Rochester Libraries</i>]]></bottom>
+	       <tag name="todo" scope="all" description="To do:"/>
+	       <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+        </javadoc>
+    </target>
+
+    <!-- generate a distribution jar file -->
+    <target name="dist" depends="test" description="-->generate a distribution jar file">
+        <mkdir dir="${dist.dir}"/>
+		<!-- Put everything in ${build} into the {project.name}-version.jar file -->
+		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
+			basedir="${build.dir}/classes"
+			excludes="**/*Test.class,
+						**/*testng*, 
+						testing_unix.properties, 
+						testing_windows.properties,
+						log4j.properties"/>
+    </target>
+	
+	<!-- publish the distribution jar file to the local repository -->
+	<target name="publish-local" depends="dist" description="-->publishes the jar file to the local ivy repository">
+		<ivy:publish resolver="local" pubrevision="${project.version}" overwrite="true">
+		   <artifacts pattern="${dist.dir}/${project.name}-${project.version}.[ext]" />
+		</ivy:publish>
+	</target>
+
+	
+   
+
+</project>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!--
+     This is the build file for ur_common_util
+-->
+<project name="file_db_service" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
+
+    <!-- Use the build.properties file for user specific settings -->
+    <property file="build.properties"/>
+	
+    <!-- project name -->
+    <property name="project.name" value="file_db_service"/> 
+
+    <!-- location of the base build file -->
+    <property name="base.build.file" value="../base.xml"/>
+
+	<!-- import the base set of files -->
+    <import file="${base.build.file}"/>
+	
+	
+
+    <!-- Allow users to see their properties and how they are set -->
+    <target name="echo-properties" 
+        description="Ouput the project properties for users when needed" >
+	    <echo message="build.dir = ${build.dir}"/>
+	    <echo message="src.dir = ${src.dir}"/>
+	    <echo message="dist.dir = ${dist.dir}"/>
+	    <echo message="test.dir = ${test.dir}"/>
+	    <echo message="lib.dir = ${lib.dir}"/>
+	    <echo message="project.name = ${project.name}"/>
+	    <echo message="project.version = ${project.version}"/>
+	    <echo message="dist.dir = ${dist.dir}"/>
+	    <echo message="report.dir = ${report.dir}"/>
+    </target>
+
+
+    <!-- Set the location where the libraries this project is dependent -->
+    <path id="libraries">
+	  <fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
+
+
+    <!-- This is the path for testing -->
+	<path id="test.libraries">
+		<path refid="libraries"/>
+		<pathelement location="${test.build.dir}/classes"/>
+		
+	    <!-- common spring configuration files -->
+		<pathelement location="${spring.config.common.config}"/>
+		<pathelement location="${spring.project.config}"/>
+		
+		<!-- test file configurations and properties -->
+		<pathelement location="${testng.config}"/>
+		
+		<!-- ir_plus configuration properties -->
+		<pathelement location="${properties.config.test}"/>
+
+	</path>
+
+    <!-- Copy non java resources -->
+	<target name="copy-resources" description="-->Copy the non java resources into the build directory">
+		<copy todir="${build.dir}/classes">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+			
+			<!-- logger configuration-->
+			<fileset dir="${log4j.production.appender}"/>
+		</copy>
+	</target>
+
+	<!-- compile the java source files -->
+    <target name="build" depends="clean, retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
+        <mkdir dir="${build.dir}/classes"/>
+        <ext:javac srcdir="${src.dir}"
+			 destdir="${build.dir}/classes"
+			 classpathref="libraries"/>
+    </target>
+
+	<!-- clean up the build directories -->
+    <target name="clean" description="-->Clean the project">
+        <delete dir="${build.dir}"/>
+    	<delete dir="${test.build.dir}"/>
+        <delete dir="${report.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+	
+	<!-- clean up the build directories plus lib directory -->
+    <target name="full-clean" depends="clean" description="-->Clean the project and lib directory">
+        <delete dir="${lib.dir}"/>
+    	<delete dir="${ivy.dir}"/>
+    </target>	
+	
+
+    <!-- build the test class files of the project -->
+    <target name="test-build" depends="build" description="-->Compile the test classes"
+    xmlns:ext="http://edu.ur/d1/ext">
+       	<mkdir dir="${test.build.dir}/classes"/>
+        	
+        <!-- copy the src build classes over --> 	
+        <copy todir="${test.build.dir}/classes">
+            <fileset dir="${build.dir}/classes"/>
+        </copy>
+        
+    	<ext:javac srcdir="${test.dir}"
+			 destdir="${test.build.dir}/classes"
+			 classpathref="libraries"/>
+    </target>
+
+
+    <!-- this target runs the tests - the default is NOT to run the tests -->
+	<target name="test" depends="test-build, emma" if="run.tests" description="-->Run the tests">
+		<echo message="running tests" />
+		
+		<!-- this loads <emma> and <emmajava> custom tasks: -->
+		<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+		
+		<!-- emma code coverage -->
+		<emma enabled="${emma.enabled}" verbosity="verbose">
+		    <instr instrpath="${test.build.dir}" mode="overwrite" metadatafile="${coverage.dir}/metadata.emma">
+
+		        <!-- note that coverage filters can be set through nested <filter>
+		        elements as well: many of EMMA setting are 'mergeable' in the
+		        sense that they can be specified multiple times and the result
+		        is a union of all such values. Here we are not merging several
+		        filters together but merely demonstrating that it is possible:
+		        -->
+		    	<filter excludes="*Test*" />
+		    </instr>
+		</emma>
+		
+		 <!-- run the tests -->
+		<taskdef resource="testngtasks" classpathref="test.libraries"  
+	        classpath="testng-5.8.jar"/>
+		<testng classpathref="test.libraries"
+				        outputDir="${test.report.dir}"
+					    haltOnfailure="true"
+					    verbose="2"
+					    dumpCommand="true">
+
+		   <xmlfileset dir="${testng.config}" includes="testng.xml"/>
+		    <!-- set emma coverage -->
+		    <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
+		    <jvmarg value="-Demma.coverage.out.merge=false" />
+		</testng>
+		
+		<!-- if enabled, generate coverage report(s): -->
+		<emma enabled="${emma.enabled}">
+		    <report sourcepath="${src}" sort="+block,+name,+method,+class" metrics="method:70,block:80,line:80,class:100">
+		        <!-- collect all EMMA data dumps (metadata and runtime)
+		        [this can be done via nested <fileset> fileset elements
+		        or <file> elements pointing to a single file]:
+		        -->
+		       <fileset dir="${coverage.dir}">
+		           <include name="*.emma" />
+		       </fileset>
+
+		        <!-- for every type of report desired, configure a nested
+		        element; various report parameters
+		        can be inherited from the parent <report>
+		        and individually overridden for each report type:
+		        -->
+		        <txt outfile="${coverage.dir}/coverage.txt" depth="package" columns="class,method,block,line,name" />
+		        <xml outfile="${coverage.dir}/coverage.xml" depth="package" />
+		        <html outfile="${coverage.dir}/coverage.html" depth="method" columns="name,class,method,block,line" />
+		    </report>
+		</emma>			
+	</target>
+
+    <!-- generate the documentation -->
+    <target name="docs" description="-->build the javadocs">
+        <mkdir dir="${dist.dir}/docs"/>
+		<javadoc
+	           destdir="${dist.dir}/docs/api"
+	           author="true"
+	           version="true"
+	           use="true"
+	           windowtitle="University of Rochester Libraries File Database Service API">
+
+			<fileset dir="${src.dir}" defaultexcludes="yes">
+				<include name="edu/ur/**"/>
+			</fileset>
+
+			<doctitle><![CDATA[<h1>University of Rochester Libraries File Database Service API</h1>]]></doctitle>
+		    <bottom>
+			<![CDATA[<i>Copyright &#169; 2006 University of Rochester Libraries</i>]]></bottom>
+	       <tag name="todo" scope="all" description="To do:"/>
+	       <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+        </javadoc>
+    </target>
+
+    <!-- generate a distribution jar file -->
+    <target name="dist" depends="test" description="-->generate a distribution jar file">
+        <mkdir dir="${dist.dir}"/>
+		<!-- Put everything in ${build} into the {project.name}-version.jar file -->
+		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
+			basedir="${build.dir}/classes"
+			excludes="**/*Test.class,
+						**/*testng*, log4j.xml"/>
+    </target>
+	
+	<!-- publish the distribution jar file to the local repository -->
+	<target name="publish-local" depends="dist" description="-->publishes the jar file to the local ivy repository">
+		<ivy:publish resolver="local" pubrevision="${project.version}" overwrite="true">
+		   <artifacts pattern="${dist.dir}/${project.name}-${project.version}.[ext]" />
+		</ivy:publish>
+	</target>
+
+	
+   
+
+</project>

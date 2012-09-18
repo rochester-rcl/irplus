@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an Personal folder.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.user">
+	<class name="PersonalFolder" table="ir_user.personal_folder"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+		<!-- Common id property. -->
+		<id name="id" type="long" column="personal_folder_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_user.personal_folder_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+			
+		<property name="leftValue" column="left_value" type="long"
+			not-null="true" access="field" />
+			
+		<property name="rightValue" column="right_value" type="long"
+			not-null="true" access="field" />
+		
+		<property name="path" column="path" type="string"
+			not-null="false" access="field" />
+		
+		<!--  Parent Folder -->
+		<many-to-one class="PersonalFolder" 
+			name="parent" column="parent_id" insert="true"
+			update="true" access="field"/>
+			
+	    <!--  Root Personal folder of the tree-->
+		<many-to-one class="PersonalFolder" 
+			name="treeRoot"
+			column="root_personal_folder_id" 
+			insert="true"
+			update="true" 
+			not-null="true"
+			access="field"/>
+		
+			    
+	    <!-- User This folder belongs to -->
+		<many-to-one class="IrUser" 
+			name="owner" 
+			column="user_id" 
+			insert="true"
+			update="true" 
+			unique="true"/>
+			
+		<!--  Children folders - we cannot cascade the delete orphan
+		      because children folders can be promoted to root folders -->
+		<set name="children" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all" 
+		     access="field"
+			 fetch="subselect" 
+			 lazy="true">
+			<key column="parent_id"/>
+			<one-to-many class="PersonalFolder"/>
+		</set>
+
+		<!--  Children files - cannot cascade the delete orphan because child
+		files can be promoted to root files -->
+		<set name="files" 
+		    optimistic-lock="false"
+		    inverse="true" 
+		    cascade="all" 
+		    access="field" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="personal_folder_id" not-null="true"/>
+			<one-to-many class="PersonalFile"/>
+		</set>
+		
+		<!--  Folder auto share information -->
+		<set name="autoShareInfos" 
+		    optimistic-lock="false"
+		    inverse="true" 
+		    cascade="all, delete-orphan" 
+		    access="field" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="personal_folder_id" not-null="true"/>
+			<one-to-many class="FolderAutoShareInfo"/>
+		</set>
+		
+		<!--  Folder auto share information emails - when users shared with have not
+		      yet created accounts -->
+		<set name="folderInviteInfos" 
+		    optimistic-lock="false"
+		    inverse="true" 
+		    cascade="all, delete-orphan" 
+		    access="field" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="personal_folder_id" not-null="true"/>
+			<one-to-many class="FolderInviteInfo"/>
+		</set>
+
+	</class>
+		
+	<!--  All files for the specified folder including files in sub folders -->
+	<query name="getAllPersonalFilesForFolder">
+	    from PersonalFile as personalFile
+	    where  personalFile.personalFolder.leftValue between :leftValue and :rightValue
+	    and personalFile.personalFolder.treeRoot.id = :rootId
+	</query>
+	
+    <!--  All children folders for the specified folder including sub folders -->
+	<query name="getAllChildrenFoldersForFolder">
+	    from PersonalFolder as personalFolder
+	    where personalFolder.leftValue &gt; :leftValue 
+	    and  personalFolder.rightValue &lt; :rightValue
+	    and personalFolder.treeRoot.id = :rootId
+	</query>
+	
+    <!--  All versioned files for the specified folder including 
+          versioned files in sub folders -->
+	<query name="getAllVersionedFilesForFolder">
+	    select versionedFile from PersonalFolder folder
+	        inner join folder.files file
+	        inner join file.versionedFile versionedFile
+	    where folder.leftValue between ? and ?
+	    and folder.treeRoot.id = ?
+	</query>
+	
+	<!--  Get a count of personal folders in the system -->
+	<query name="personalFolderCount">
+	    select count(*) from PersonalFolder
+	</query>
+	
+	<!-- named query for getting all collections ordered by name -->
+    <query name="getAllPersonalFolderNameAsc">from PersonalFolder order by name </query>
+    
+    <!-- named query for getting a personalFolder by name -->
+	<query name="getPersonalFolderByName">
+		from PersonalFolder as PersonalFolder where
+		PersonalFolder.name = ?
+	</query>
+	
+	<!-- named query for getting a root personal folder by name/user -->
+	<query name="getRootPersonalFolderByNameUser">
+		from PersonalFolder as PersonalFolder where
+		PersonalFolder.name = ?
+		and PersonalFolder.owner.id = ?
+		and PersonalFolder.id = PersonalFolder.treeRoot.id
+	</query>
+	
+	<!-- named query for getting a personal folder by name parent id -->
+	<query name="getPersonalFolderByNameParent">
+		from PersonalFolder as PersonalFolder where
+		PersonalFolder.name = ?
+		and PersonalFolder.parent.id = ?
+	</query>
+	
+	<!--  Get all personal folders that have a left or right value greater than the
+           specified value -->	
+	<query name="getAllPersonalFoldersValueGreaterEqual">
+	   from PersonalFolder as personalFolder
+	   where ( personalFolder.leftValue >= ?
+	   or personalFolder.rightValue >= ? )
+	   and personalFolder.treeRoot.id = ?
+	</query>
+	
+	<!-- Gets the all personal folders within the specified tree that are not within the child tree
+         Specified.  This also does not retrieve the child tree specified.  
+         This only works across the specified root personal folder -->
+	<query name="getAllPersonalFoldersNotInChildTree">
+	    from PersonalFolder as personalFolder 	    
+	    where personalFolder.owner.id = ?
+	    and personalFolder.treeRoot.id = ?
+	    and personalFolder.leftValue not between ? and ? 
+	    order by personalFolder.name
+	</query>
+	
+     <!-- Gets the all folders for the specified database except the specified collection and
+	     all it's children.  This works across all root folders   -->
+	<query name="getAllFoldersNotInChild">
+	    from PersonalFolder as personalFolder 	    
+	    where ( personalFolder.leftValue not between ? and ? 
+	    and personalFolder.treeRoot.id = ? 
+	    and personalFolder.owner.id = ?)
+	    or ( personalFolder.owner.id = ? and personalFolder.treeRoot.id != ? )
+	    order by personalFolder.name
+	</query>
+	
+	<!-- Gets all collections for the specified repository-->
+	<query name="getPersonalFoldersForUser">
+	    from PersonalFolder as personalFolder	    
+	    where personalFolder.owner.id = ?
+	    order by personalFolder.name
+	</query>
+	
+    <!-- Gets the path for a given folder-->
+	<query name="getPersonalFolderPath">
+	    from PersonalFolder as personalFolder 	    
+	    where :leftValue between personalFolder.leftValue and personalFolder.rightValue
+	    and personalFolder.treeRoot.id = :rootId
+	    and personalFolder.owner.id = :userId
+	    order by personalFolder.leftValue
+	</query>
+	
+	<!-- Gets all sub folders within the parent folder -->
+	<query name="getPersonalFoldersForFolder">
+	    from PersonalFolder as personalFolder	    
+	    where personalFolder.owner.id = :userId
+	    and personalFolder.parent.id = :parentId
+	</query>
+
+	<!-- Get root folders -->
+	<query name="getPersonalRootFolders">
+	    from PersonalFolder as personalFolder	    
+	    where personalFolder.owner.id = :userId
+	    and personalFolder.id = personalFolder.treeRoot.id
+	</query>
+	
+    <!--  Size of folder -->
+	<query name="getPersonalFolderSize">
+	    select sum(versionedFile.totalSizeForAllFilesBytes) from PersonalFolder folder
+	        inner join folder.files file
+	        inner join file.versionedFile versionedFile
+	    where 
+	    versionedFile.owner.id = ?
+	    and folder.id = ?
+	</query>
+	
+	<!-- Get all other root folders -->
+	<query name="getAllOtherRootPersonalFolders">
+	    from PersonalFolder as personalFolder	    
+	    where personalFolder.owner.id = :ownerId
+	    and personalFolder.treeRoot.id not in(:folders)
+	</query>	
+	
+		<!-- Get all other root folders -->
+	<query name="getPersonalFoldersInList">
+	    from PersonalFolder as personalFolder	    
+	    where personalFolder.owner.id = :ownerId
+	    and personalFolder.id in(:folders)
+	</query>	
+</hibernate-mapping>
