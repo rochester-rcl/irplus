@@ -886,5 +886,14 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	public void setInviteTokenService(InviteTokenService inviteTokenService) {
 		this.inviteTokenService = inviteTokenService;
 	}
+	
+	/**
+	 * Determine if external authentication enabled.
+	 * 
+	 * @return - true if external authentication enabled
+	 */
+	public boolean getExternalAuthenticationEnabled(){
+		return repositoryService.isExternalAuthenticationEnabled();
+	}
 
 }

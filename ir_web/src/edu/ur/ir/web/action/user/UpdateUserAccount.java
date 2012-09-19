@@ -498,5 +498,14 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	/**
+	 * Determine if external authentication enabled.
+	 * 
+	 * @return - true if external authentication enabled
+	 */
+	public boolean getExternalAuthenticationEnabled(){
+		return repositoryService.isExternalAuthenticationEnabled();
+	}
 
 }
