@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an Personal Collection.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.user">
+	<class name="PersonalCollection" table="ir_user.personal_collection"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="personal_collection_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_user.personal_collection_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+			
+		<property name="leftValue" column="left_value" type="long"
+			not-null="true" access="field" />
+			
+		<property name="rightValue" column="right_value" type="long"
+			not-null="true" access="field" />
+		
+		<property name="path" column="path" type="string"
+			not-null="false" access="field" />
+		
+		<!--  Parent Folder -->
+		<many-to-one class="PersonalCollection"
+			name="parent" column="parent_id" insert="true"
+			update="true" access="field"/>
+			
+		<!--  Children collections - cannot cascade the delete orphan because child
+		collections can be promoted to root  -->
+		<set name="children" inverse="true" 
+		    cascade="all"
+		    access="field"
+		    optimistic-lock="false"
+			fetch="subselect"
+			lazy="true">
+			<key column="parent_id"/>
+			<one-to-many class="PersonalCollection"/>
+		</set>
+		
+	    <!--  Root Personal Collection of the tree-->
+		<many-to-one class="PersonalCollection"
+			name="treeRoot"
+			column="root_personal_collection_id" 
+			insert="true"
+			update="true" 
+			access="field"/>
+		
+		<!--  Children items - cannot cascade the delete orphan because child
+		collections can be promoted to root  -->
+		<set name="personalItems" 
+		    inverse="true" 
+		    cascade="all" 
+		    optimistic-lock="false"
+		    access="field" 
+		    lazy="true" 
+		    fetch="subselect">
+			<key column="personal_collection_id" not-null="true"/>
+			<one-to-many class="PersonalItem"/>
+		</set>
+		
+	    
+	    <!-- User this personal collection belongs to -->
+		<many-to-one class="IrUser" 
+			name="owner" 
+			column="user_id" 
+			insert="true"
+			update="true" 
+			unique="true"/>
+	</class>
+		
+
+	<!-- named query for getting a root personal collection by name/user -->
+	<query name="getRootPersonalCollectionByNameUser">
+		from PersonalCollection as PersonalCollection where
+		PersonalCollection.name = ?
+		and PersonalCollection.owner.id = ?
+		and PersonalCollection.id = PersonalCollection.treeRoot.id
+	</query>
+	
+	<query name="getAllPersonalItemsForCollection">
+	    from PersonalItem as personalItem
+	    where  personalItem.personalCollection.leftValue between ? and ?
+	    and personalItem.personalCollection.treeRoot.id = ?
+	</query>
+	
+	<!-- named query for getting a personal collection by name parent id -->
+	<query name="getPersonalCollectionByNameParent">
+		from PersonalCollection as PersonalCollection where
+		PersonalCollection.name = ?
+		and PersonalCollection.parent.id = ?
+	</query>
+	
+	<!--  Get all personal collections that have a left or right value greater than the
+           specified value -->	
+	<query name="getAllPersonalCollectionsValueGreaterEqual">
+	   from PersonalCollection as personalCollection
+	   where ( personalCollection.leftValue >= ?
+	   or personalCollection.rightValue >= ? )
+	   and personalCollection.treeRoot.id = ?
+	</query>
+	
+	<!-- Gets the all personal collections within the specified tree 
+	     that are not within the child tree
+         Specified.  This only works across the specified root personal collection -->
+	<query name="getAllPersonalCollectionsNotInChildTree">
+	    from PersonalCollection as personalCollection 	    
+	    where personalCollection.owner.id = ?
+	    and personalCollection.treeRoot.id = ?
+	    and personalCollection.leftValue not between ? and ? 
+	    order by personalCollection.name
+	</query>
+	
+	<!-- Gets all collections for the specified repository-->
+	<query name="getPersonalCollectionsForUser">
+	    from PersonalCollection as personalCollection	    
+	    where personalCollection.owner.id = ?
+	    order by personalCollection.name
+	</query>
+	
+    <!-- Gets the path for a given collection-->
+	<query name="getPersonalCollectionPath">
+	    from PersonalCollection as personalCollection 	    
+	    where ? between personalCollection.leftValue and personalCollection.rightValue
+	    and personalCollection.treeRoot.id = ?
+	    and personalCollection.owner.id = ?
+	    order by personalCollection.leftValue
+	</query>
+	
+	<!-- Get root collections for a user -->
+	<query name="getRootPersonalCollections">
+	    from PersonalCollection as personalCollection	    
+	    where personalCollection.owner.id = ?
+	    and personalCollection.id = personalCollection.treeRoot.id	   
+	</query>
+	
+	<!-- Gets all sub collections within the parent collection -->
+	<query name="getPersonalSubCollectionsForCollection">
+	    from PersonalCollection as personalCollection	    
+	    where personalCollection.owner.id = ?
+	    and personalCollection.parent.id = ?
+	</query>
+	
+	<!-- Get specified collections for user -->
+	<query name="getAllPersonalCollectionsInList">
+	   from PersonalCollection as personalCollection 
+	    where personalCollection.owner.id = :ownerId
+	    and personalCollection.id in (:collections)
+	</query>
+	
+	<!-- Get specified collections not in list for user -->
+	<query name="getAllOtherRootCollections">
+	   from PersonalCollection as personalCollection 
+	    where personalCollection.owner.id = :ownerId
+	    and personalCollection.treeRoot.id not in (:collections)
+	</query>
+	
+	
+</hibernate-mapping>

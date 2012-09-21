@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	
+	Mapping for file database
+	
+	@author Nathan Sarr
+	
+-->
+<hibernate-mapping package="edu.ur.file.db">
+	<class name="DefaultFileDatabase" table="file_system.file_database"
+		lazy="true">
+
+		
+		<!-- Common id property. -->
+		<id name="id" type="long" column="file_database_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">file_system.file_database_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="displayName" column="display_name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" access="field" />
+			
+		<property name="prefix" column="prefix" type="string"
+			not-null="true" access="field"/>
+
+		<property name="path" column="path" type="string"
+			not-null="true" access="field"/>
+		    
+	    <!--  Root Folders -->
+		<set name="rootFolders" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="folder_id = root_folder_id"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="file_system">
+			<key column="file_database_id"/>
+			<one-to-many class="TreeFolderInfo"/>
+		</set>
+		
+	    <!-- default folder to store files in -->
+		<many-to-one class="TreeFolderInfo" 
+		    name="currentFileFolder" 
+		    column="current_folder_id" 
+		    insert="true"
+		    update="true"
+		    access="field" 
+		    unique="true" />
+		
+		<!-- Parent file server -->
+		<many-to-one class="DefaultFileServer" 
+		    insert="true" 
+		    optimistic-lock="false"
+		    update="true" name="fileServer" 
+		    column="file_server_id" unique="true" />
+		
+	</class>
+		
+	<!--  Get a count of folders in the system -->
+	<query name="fileDatabaseCount">
+	    select count(*) from DefaultFileDatabase
+	</query>
+	
+	<!-- named query for getting all file databases ordered by name -->
+    <query name="getAllfileDatabasesNameAsc">from DefaultFileDatabase order by name </query>
+    
+    <!-- named query for getting a file database -->
+	<query name="getFileDatabaseByName">
+		from DefaultFileDatabase as DefaultFileDatabase where
+		DefaultFileDatabase.name = ?
+		and DefaultFileDatabase.fileServer.id = ?
+	</query>
+	
+	<!-- named query for getting a file database -->
+	<query name="getFileDatabaseByDisplayName">
+		from DefaultFileDatabase as DefaultFileDatabase where
+		DefaultFileDatabase.displayName = ?
+		and DefaultFileDatabase.fileServer.id = ?
+	</query>
+	
+</hibernate-mapping>

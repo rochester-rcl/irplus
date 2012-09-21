@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an User access control entry.  These are the permissions given to a 
+	specified user.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.security">
+	<class name="IrUserAccessControlEntry" schema="ir_security" table="user_control_entry"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="user_control_entry_id"
+			unsaved-value="0" access="field" >
+			<generator class="sequence">
+				<param name="sequence">ir_security.user_control_entry_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<!--  Parent ACL -->
+		<many-to-one class="IrAcl"
+			name="irAcl" column="acl_id" insert="true"
+			update="true" access="field" not-null="true"/>
+		
+		<!--  User this entry is for -->
+		<many-to-one class="edu.ur.ir.user.IrUser"
+			name="irUser" column="user_id" insert="true"
+			update="true" access="field" not-null="true"/>
+			
+		
+		<!--  permissions for the user control entry -->
+		<set lazy="true"
+		     fetch="subselect"
+		     name="irClassTypePermissions"
+		     schema="ir_security" 
+		     access="field" 
+		     optimistic-lock="false" 
+		     table="user_control_entry_permission" cascade="save-update">
+		    <key column="user_control_entry_id"/>
+		    <many-to-many column="class_type_permission_id" class="IrClassTypePermission"/>
+		</set>
+			
+	 </class>
+		
+	<!--  Get a count of user access control entries -->
+	<query name="irUserAccessEntryCount">
+	    select count(*) from IrUserAccessControlEntry
+	</query>
+	
+</hibernate-mapping>

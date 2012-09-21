@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a Repository.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.repository">
+	<class name="Repository" schema="ir_repository" table="repository"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="repository_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.repository_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+			
+		<property name="suspendSubscriptionEmails" column="suspend_subscription_emails" type="boolean"
+			access="field" />
+			
+		<property name="institutionName" column="institution_name" type="string"
+			not-null="false" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+		
+		<!-- folder for person name / name authority data -->
+		<property name="nameIndexFolder" column="name_index_folder" type="string"
+			not-null="false" />
+		
+		<!-- folder for indexed user data -->
+		<property name="userIndexFolder" column="user_index_folder" type="string"
+			not-null="false" />
+			
+		<property name="lastSubscriptionProcessEmailDate" column="last_email_subscriber_process_sent_date" type="timestamp" 
+		          access="field" />	
+		
+		<!-- folder for indexed institutional item data -->
+		<property name="institutionalItemIndexFolder" column="institutional_item_index_folder" type="string"
+			not-null="false" />
+			
+		<!-- location where all user workspace indexed data  -->
+		<property name="userWorkspaceIndexFolder" column="user_workspace_index_folder" type="string"
+			not-null="false" />
+			
+		<!-- folder for indexed researcher data -->
+		<property name="researcherIndexFolder" column="researcher_index_folder" type="string"
+			not-null="false" />
+			
+		<!-- Default file database for the repository to files-->
+		<many-to-one class="edu.ur.file.db.DefaultFileDatabase" cascade="save-update"
+			name="fileDatabase" column="file_database_id" insert="true"
+			update="true" unique="true"/>
+	
+		<!-- Default handle name authority to use for the repository -->
+		<many-to-one class="edu.ur.ir.handle.HandleNameAuthority" 
+			name="defaultHandleNameAuthority"
+			cascade="save-update" 
+			column="default_handle_authority_id" 
+			insert="true"
+			update="true" 
+			access="field" 
+			unique="true"/>
+			
+	
+		<!-- Default license version to use for the repository -->
+		<many-to-one class="LicenseVersion" 
+			name="defaultLicense"
+			cascade="save-update" 
+			column="default_license_version_id" 
+			insert="true"
+			update="true" 
+			access="field" 
+			unique="true"/>
+		
+	    <!--  Top level institutional collections in the repository -->
+		<set name="retiredLicenses" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     access="field"
+			 lazy="true"
+			 schema="ir_repository"
+			 fetch="subselect">
+			<key column="repository_id"/>
+			<one-to-many class="edu.ur.ir.repository.RetiredRepositoryLicense"/>
+		</set>
+		
+	    <!--  Top level institutional collections in the repository -->
+		<set name="institutionalCollections" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     where="institutional_collection_id = root_collection_id"
+		     access="field"
+			 order-by="name" 
+			 lazy="true"
+			 schema="ir_repository">
+			<key column="repository_id"/>
+			<one-to-many class="edu.ur.ir.institution.InstitutionalCollection"/>
+		</set>
+		
+		<!--  set of images for this institutional repository -->
+		<set name="pictures"
+		     optimistic-lock="false" 
+		     cascade="all"
+		     access="field"
+		     table="repository_picture"
+		     schema="ir_repository"
+		     fetch="subselect">
+            <key column="repository_id"/>
+            <many-to-many column="ir_file_id"
+                         unique="true"
+                         class="edu.ur.ir.file.IrFile"/>
+        </set>
+		     
+	 </class>
+		
+	<!--  Get a count of repositories in the system -->
+	<query name="repositoryCount">
+	    select count(*) from Repository
+	</query>
+	
+    <!-- named query for getting a repository by name -->
+	<query name="getRepositoryByName">
+		from Repository as Repository where
+		Repository.name = ?
+	</query>
+	
+	<query name="getAvailableLicensesForRepository">
+	    select licenseVersion 
+        from LicenseVersion licenseVersion
+        where licenseVersion not in
+        ( select licenseVersion 
+          from Repository repository
+          join repository.retiredLicenses as retiredLicense
+          join retiredLicense.licenseVersion as licenseVersion
+          where repository.id = ? )
+	</query>
+	
+	<!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getRepositoryDownloadCount">
+		select sum(irFile.downloadCount) from IrFile irFile
+	</query>
+	
+</hibernate-mapping>
