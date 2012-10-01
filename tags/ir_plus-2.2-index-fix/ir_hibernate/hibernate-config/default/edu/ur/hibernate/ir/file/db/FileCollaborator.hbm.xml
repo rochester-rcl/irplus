@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a Person name title
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.file">
+	<class name="FileCollaborator" table="ir_file.file_collaborator"
+		lazy="true">
+        
+		<!-- Common id property. -->
+		<id name="id" type="long" column="file_collaborator_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_file.file_collaborator_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+		<!--  User who collaborates on this file -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+		    not-null="true"
+		    optimistic-lock="false"
+			name="collaborator" 
+			column="user_id" 
+			insert="true"
+			update="true" 
+			unique="true" 
+			access="field"/>
+
+		<!--  Versioned file that is collaborated -->
+		<many-to-one class="VersionedFile" 
+		    optimistic-lock="false"
+			not-null="true"
+			name="versionedFile" 
+			column="versioned_file_id" 
+			insert="true"
+			update="true" 
+			unique="true" 
+			access="field"/>
+    </class>
+		
+	<!--  Get a count of collaborators -->
+	<query name="fileCollaboratorCount">
+	    select count(*) from FileCollaborator
+	</query>
+
+    <!-- named query for getting all person name titles for person name like the specified person name id -->
+    <query name="findCollaboratorsForVersionedFileId">from FileCollaborator as FileCollaborator where FileCollaborator.versionedFile.id = ? </query>
+
+    <!-- named query for getting all person name titles for person name like the specified person name id -->
+    <query name="findCollaboratorForUserVersionedFileId">from FileCollaborator as fileCollaborator 
+      where  fileCollaborator.versionedFile.id = :versionedFileId
+      and fileCollaborator.collaborator.id = :userId
+    </query>
+    
+    <!-- named query for getting all person name titles for person name like the specified person name id -->
+    <query name="findCollaboratorForUserVersionedFileIdList">from FileCollaborator as fileCollaborator 
+      where  fileCollaborator.versionedFile.id in (:versionedFileIds)
+      and fileCollaborator.collaborator.id = :userId
+    </query>
+    
+    
+	
+</hibernate-mapping>
