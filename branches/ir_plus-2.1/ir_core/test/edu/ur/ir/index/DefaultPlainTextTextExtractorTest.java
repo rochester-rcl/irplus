@@ -35,6 +35,8 @@ import org.apache.lucene.store.RAMDirectory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.checksum.ChecksumCalculator;
+import edu.ur.file.checksum.InMemoryChecksumService;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -58,6 +60,8 @@ public class DefaultPlainTextTextExtractorTest {
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
 	
+	InMemoryChecksumService checksumService = new InMemoryChecksumService();
+
 	
 	/**
 	 * Setup for testing
@@ -106,9 +110,14 @@ public class DefaultPlainTextTextExtractorTest {
 				"Hello  - irFile This is text in a file");
 		
 		
+		ChecksumCalculator calc = checksumService.getChecksumCalculator("MD5");
+		String checksum1  = calc.calculate(f1);
+		
 		FileInfo info = repo.getFileDatabase().addFile(f1, "indexed_file");
 		info.setExtension("txt");
 		
+		String checksum2  = calc.calculate(new File(info.getFullPath()));
+		assert checksum1.equals(checksum2) : "Checksum 1 : " + checksum1 + " should equal checksum2 : " + checksum2;
 		
 		FileTextExtractor documentCreator = new DefaultPlainTextExtractor();
         assert documentCreator.canExtractText(info.getExtension()) :
@@ -116,6 +125,10 @@ public class DefaultPlainTextTextExtractorTest {
        
         
         String text = documentCreator.getText(new File(info.getFullPath()));
+        
+        String checksum3  = calc.calculate(new File(info.getFullPath()));
+		assert  checksum2.equals(checksum3) : "Checkusm 2 " + checksum2 + " does not eqaual 3: " + checksum3;
+        
 		Document doc = new Document();
 		doc.add(new Field("body", text, Field.Store.NO, Field.Index.ANALYZED));
 		

@@ -35,6 +35,8 @@ import org.apache.lucene.store.RAMDirectory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.checksum.ChecksumCalculator;
+import edu.ur.file.checksum.InMemoryChecksumService;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -57,6 +59,8 @@ public class DefaultPowerPointXmlTextExtractorTest {
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
 
+	InMemoryChecksumService checksumService = new InMemoryChecksumService();
+	
 	/**
 	 * Setup for testing
 	 * 
@@ -99,12 +103,18 @@ public class DefaultPowerPointXmlTextExtractorTest {
 		String powerPointXmlFile = properties.getProperty("power_point_xml_file");
 		File f1 = new File(baseLocation + powerPointXmlFile);
 		
+		ChecksumCalculator calc = checksumService.getChecksumCalculator("MD5");
+		String checksum1  = calc.calculate(f1);
+		
 		assert f1 != null : "File should not be null";
 		assert f1.canRead(): "Should be able to read the file " 
 			+ f1.getAbsolutePath();
 
 		FileInfo info = repo.getFileDatabase().addFile(f1, "indexed_power_point_file");
 		info.setExtension("pptx");
+		
+		String checksum2  = calc.calculate(new File(info.getFullPath()));
+		assert checksum1.equals(checksum2) : "Checksum 1 : " + checksum1 + " should equal checksum2 : " + checksum2;
 
 		FileTextExtractor documentCreator = new DefaultPowerPointXmlTextExtractor();
 		assert documentCreator.canExtractText(info.getExtension()) : "Cannot create document for extension "
@@ -112,6 +122,10 @@ public class DefaultPowerPointXmlTextExtractorTest {
 
 		String text = documentCreator
 				.getText(new File(info.getFullPath()));
+		
+	    String checksum3  = calc.calculate(new File(info.getFullPath()));
+		assert  checksum2.equals(checksum3) : "Checkusm 2 " + checksum2 + " does not eqaual 3: " + checksum3;
+
 
 		Document doc = new Document();
 		doc.add(new Field("body", text, Field.Store.NO, Field.Index.ANALYZED));
