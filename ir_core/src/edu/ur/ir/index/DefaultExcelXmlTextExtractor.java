@@ -17,7 +17,6 @@
 package edu.ur.ir.index;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackageAccess;
 
 
 public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
@@ -71,14 +71,11 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		OPCPackage p = null;
+		OPCPackage p = OPCPackage.open(f.getAbsolutePath(), PackageAccess.READ);
 		try
 		{
-	
-			p = XSSFWorkbook.openPackage(f.getAbsolutePath());
 			XSSFWorkbook workbook = new XSSFWorkbook(p);
 			XSSFExcelExtractor extractor = new XSSFExcelExtractor(workbook);
-			
 
 			String myText = extractor.getText();
 			if( myText != null && !myText.trim().equals(""))
@@ -102,13 +99,8 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 		{
 			if(p!=null)
 			{
-				try {
-					p.close();
-					p = null;
-				} catch (IOException e) {
-					log.debug(e);
-					p = null;
-				}
+				p.revert();
+				p = null;
 			}
 		}
 		return text;
