@@ -89,8 +89,6 @@
 		    <key column="acl_id" not-null="true"/>
 		    <one-to-many class="IrUserGroupAccessControlEntry"/>
 		</set>
-		
-	
 			
 	 </class>
 		
@@ -103,83 +101,80 @@
 	<query name="irAclByUserAndObjectIdentity" >
 	    select irAcl from IrAcl irAcl
 	    join irAcl.userEntries as entry 
-        where entry.irUser.id = :userId 
-        and irAcl.objectId = :objectId
-        and irAcl.classType.name = :name
+        where entry.irUser.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
 	</query>
 	
 	<!--  get the Acl entries for a group and object identity -->
 	<query name="irAclByUserGroupAndObjectIdentity" >
 	    select irAcl from IrAcl irAcl
 	    join irAcl.groupEntries as entry 
-        where entry.userGroup.id = :groupId 
-        and irAcl.objectId = :objectId
-        and irAcl.classType.name = :name
+        where entry.userGroup.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
 	</query>
-	
-
 	
 	<!--  get the Acl entries for a role and object identity -->
 	<query name="irAclByRoleAndObjectIdentity" >
 	    select irAcl from IrAcl irAcl
 	    join irAcl.roleEntries as entry 
-        where entry.irRole.id = :roleId 
-        and irAcl.objectId = :objectId
-        and irAcl.classType.name = :name
+        where entry.irRole.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
 	</query>
 	
 	<!--  get the Acl entries for a user -->
 	<query name="irAclByObjectIdentity" >
 	    select irAcl from IrAcl irAcl
-        where irAcl.objectId = :objectId
-        and irAcl.classType.name = :name
+        where irAcl.objectId = ?
+        and irAcl.classType.name = ?
 	</query>
 
 	<!--  get the Acl entries for a user -->
 	<query name="irAclByUser" >
 	    select irAcl from IrAcl irAcl
 	    join irAcl.userEntries as entry 
-        where entry.irUser.id = :userId 
+        where entry.irUser.id = ? 
 	</query>
 	
 	<!--  get the Acl entries for a user group-->
 	<query name="irAclByUserGroup" >
 	    select irAcl from IrAcl irAcl
 	    join irAcl.groupEntries as entry 
-        where entry.userGroup.id = :groupId 
+        where entry.userGroup.id = ? 
 	</query>
 
 	<!--  get the Acl entries for a role-->
 	<query name="irAclByRole" >
 	    select irAcl from IrAcl irAcl
 	    join irAcl.roleEntries as entry 
-        where entry.irRole.id = :roleId 
+        where entry.irRole.id = ? 
 	</query>
 	
-	<!--  get the count of Acl entries for a user and object identity and permission -->
+	<!--  get the Acl entries for a user and object identity -->
 	<query name="userHasPermissionDirectCount" >
 	    select count(*) from IrAcl irAcl
 	      join irAcl.userEntries as entry 
 	      join entry.irClassTypePermissions as classPermission
-        where entry.irUser.id = :userId 
-        and irAcl.objectId = :objectId
-        and irAcl.classType.name = :className
-        and classPermission.name = :permissionName
+        where entry.irUser.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
 	</query>
 	
-	<!--  get the a count Acl entries for a user in a group and object identity with 
+	<!--  get the Acl entries for a user and object identity with 
 	      the specified permission-->
 	<query name="userHasPermissionByGroupCount" >
 	    select count(*) from IrAcl irAcl
 	      join irAcl.groupEntries as groupEntries 
 	      join groupEntries.userGroup.users as user
 	      join groupEntries.irClassTypePermissions as classPermission
-        where user.id = :userId 
-        and irAcl.objectId = :objectId
-        and irAcl.classType.name = :className
-        and classPermission.name = :permissionName
+        where user.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
 	</query>
-	
 	
 	<!--  get the Acl entries for a group that has the specified permission for the 
 	      given object -->
@@ -188,9 +183,9 @@
 	      join irAcl.groupEntries as groupEntries 
 	      join groupEntries.userGroup as userGroup
 	      join groupEntries.irClassTypePermissions as classPermission
-        where  irAcl.objectId = :objectId
-        and irAcl.classType.name = :className
-        and classPermission.name = :permissionName
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
 	</query>
 		
     <!--  get the Acl entries for a user and object identity with the specified permissions -->
@@ -199,12 +194,10 @@
 	      join irAcl.userEntries as userEntries 
 	      join userEntries.irUser as user
 	      join userEntries.irClassTypePermissions as classPermission
-        where  irAcl.objectId = :objectId
-        and irAcl.classType.name = :className
-        and classPermission.name = :permissionName
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
 	</query>
-	
-
 	
 	<!--  get the Acl entries for a group that has the specified permission for the 
 	      given object -->
@@ -213,9 +206,9 @@
 	      join irAcl.groupEntries as groupEntries 
 	      join groupEntries.userGroup as userGroup
 	      join groupEntries.irClassTypePermissions as classPermission
-        where  irAcl.objectId = :objectId
-        and irAcl.classType.name = :className
-        and classPermission.name = :permissionName
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
         and userGroup.id in (:groupIds)
 	</query>
 	
@@ -225,9 +218,9 @@
 	      join irAcl.userEntries as userEntries 
 	      join userEntries.irUser as user
 	      join userEntries.irClassTypePermissions as classPermission
-        where  irAcl.objectId = :objectId
-        and irAcl.classType.name = :className
-        and classPermission.name = :permissionName
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
         and user.id in (:userIds)
 	</query>
 

@@ -20,7 +20,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 
@@ -31,7 +30,7 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface PublisherDAO extends CountableDAO, 
-CrudDAO<Publisher>, NameListDAO, UniqueNameDAO<Publisher>, ListAllDAO{
+CrudDAO<Publisher>, NameListDAO, UniqueNameDAO<Publisher>{
 	
 	/**
 	 * Get the list of Publisher.

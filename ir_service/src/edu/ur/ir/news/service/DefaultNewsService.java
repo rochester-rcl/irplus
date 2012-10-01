@@ -261,6 +261,15 @@ public class DefaultNewsService  implements NewsService {
 		this.repositoryService = repositoryService;
 	}
 
+	/**
+	 * Return the news items
+	 * 
+	 * @see edu.ur.ir.news.NewsService#getNewsItems()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<NewsItem> getNewsItems() {
+		return (List<NewsItem>)newsDAO.getAll();
+	}
 
 	/**
 	 * Get the availabe news items.

@@ -30,9 +30,6 @@ import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapperService;
  */
 public class DefaultIdentifierTypeSubFieldMapperService implements IdentifierTypeSubFieldMapperService {
 	
-	/* eclipse generated id */
-	private static final long serialVersionUID = 7990629282383838505L;
-	
 	private IdentifierTypeSubFieldMapperDAO identifierTypeSubFieldMapperDAO;
 
 	/**

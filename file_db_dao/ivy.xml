@@ -27,6 +27,6 @@
 <ivy-module version="2.0">
     <info organisation="file_db_dao" module="file_db_dao"/>
     <dependencies>
-        <dependency org="file_db" name="file_db" rev="3.0" changing="true"/>
+        <dependency org="file_db" name="file_db" rev="2.2" changing="true"/>
     </dependencies>
 </ivy-module>

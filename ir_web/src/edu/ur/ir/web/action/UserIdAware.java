@@ -18,13 +18,13 @@
 package edu.ur.ir.web.action;
 
 /**
- * Allows a user id to be set.
+ * Allows a user to be set.
  * 
  * @author Nathan Sarr
  *
  */
 public interface UserIdAware {
 	
-	public void injectUserId(Long userId);
+	public void setUserId(Long userId);
 
 }

@@ -35,7 +35,7 @@ import edu.ur.simple.type.AscendingNameComparator;
 import edu.ur.tag.TagUtil;
 
 /**
- * Tag to output researcher folder information
+ * Tag to output researcher information
  * 
  * @author Nathan Sarr
  *

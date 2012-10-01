@@ -35,6 +35,7 @@ import net.handle.hdllib.HandleStorage;
 import net.handle.hdllib.HandleValue;
 import net.handle.hdllib.ScanCallback;
 import net.handle.util.StreamTable;
+import net.cnri.util.StreamUtil;
 
 import net.handle.hdllib.Util;
 
@@ -270,6 +271,21 @@ public class IrHandleStorage implements HandleStorage{
 
 	public void setHandleService(HandleService handleService) {
 		this.handleService = handleService;
+	}
+
+	
+	public void init(net.cnri.util.StreamTable arg0) throws Exception {
+		log.debug("init called - initializing spring context");
+		/** Application context for loading bean specific information */
+		ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		
+		log.debug("loading handle service ");
+		handleService = (HandleService)ctx.getBean("handleService");
+		
+		if( handleService == null )
+		{
+			throw new RuntimeException("handle service not found");
+		}
 	}
 	
 }

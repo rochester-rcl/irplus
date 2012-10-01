@@ -21,7 +21,6 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp" />
@@ -54,7 +53,7 @@
     <ur:js src="page-resources/js/menu/main_menu.js"/>
 
     <!--  base path information -->
-    <ur:js src="page-resources/js/util/base_path.jsp" />
+    <ur:js src="pages/js/base_path.js" />
     <ur:js src="page-resources/js/util/ur_util.js" />
     <ur:js src="page-resources/js/util/wait_dialog.js" />
     <ur:js src="page-resources/js/user/move_personal_folder.js" />
@@ -69,164 +68,9 @@
 
         <!--  this is the body regin of the page -->
         <div id="bd">
-               <c:url var="cancelUrl" value="/user/workspace.action">
-        <c:param name="parentFolderId" value="${parentFolderId}"/>
-    </c:url>
-    
-    <button class="ur_button"
-			onmouseover="this.className='ur_buttonover';"
-			onmouseout="this.className='ur_button';"
-			onclick="location.href='${cancelUrl}';">Cancel</button>
-
-    <h3 class="errorMessage"><ir:printError key="moveError" errors="${fieldErrors}"></ir:printError></h3>
-    <table>
-        <tr>
-		    <td width="400px" align="left" valign="top"></td>
-		    <td width="100px"></td>
-		    <td width="400px" align="left" valign="top">
-		
-		
-		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.folder.move.getMoveFolder('0');">${user.username}</ur:a>/
-		            <c:forEach var="folder" items="${destinationPath}">
-			            <ur:a href="javascript:YAHOO.ur.folder.move.getMoveFolder('${folder.id}')">${folder.name}</ur:a>/
-                    </c:forEach>
-                </div>
-            
-                <br/>
-                <br/>                                 
-            
-            </td>
-	    </tr>
-	    <tr>
-		    <td width="400px" align="left" valign="top">
-		        <div class="dataTable">
-		        <table width="400px">
-			        <thead>
-				        <tr>
-					        <td>Folders &amp; Files to Move</td>
-				        </tr>
-			        </thead>
-			        <tbody>
-				        <c:forEach items="${foldersToMove}"  varStatus="status" var="folder">
-				            <c:if test="${ (status.count % 2) == 1}">
-                                <c:set value="even" var="rowType"/>
-                                <c:set value="this.className='even'" var="onmouseout"/>
-                            </c:if>
-                            <c:if test="${ (status.count % 2) == 0}">
-                                <c:set value="odd" var="rowType"/>
-                                <c:set value="this.className='odd'" var="onmouseout"/>
-                            </c:if>
-					        <tr onmouseout="${onmouseout}" onmouseover="this.className='highlight'" class="${rowType}">
-						        <td><span class="folderBtnImg">&nbsp;</span>${folder.name}</td>
-					        </tr>
-					        <c:if test="${ (status.count % 2) == 1}">
-					            <c:set value="0" var="modEven"/>
-					            <c:set value="1" var="modOdd"/>
-					        </c:if>
-					        <c:if test="${(status.count % 2) == 0}">
-					            <c:set value="1" var="modEven"/>
-					            <c:set value="0" var="modOdd"/>
-					        </c:if>
-				        </c:forEach>
-                        
-                        <c:if test="${ur:isEmpty(foldersToMove)}">
-                             <c:set value="1" var="modEven"/>
-					         <c:set value="0" var="modOdd"/>
-                        </c:if>
-
-				        <c:forEach items="${filesToMove}"  varStatus="status" var="file">
-				            <c:if test="${ (status.count % 2) == modEven}">
-                                <c:set value="even" var="rowType"/>
-                                <c:set value="this.className='even'" var="onmouseout"/>
-                            </c:if>
-                            <c:if test="${ (status.count % 2) == modOdd}">
-                                <c:set value="odd" var="rowType"/>
-                                <c:set value="this.className='odd'" var="onmouseout"/>
-                            </c:if>
-					        <tr onmouseout="${onmouseout}" onmouseover="this.className='highlight'" class="${rowType}"> 
-						        <td><ir:fileTypeImg cssClass="tableImg" versionedFile="${file.versionedFile}"/>${file.name}</td>
-					        </tr>
-				        </c:forEach>
-			        </tbody>
-		        </table>
-		        </div>
-		    </td>
-		    <td width="100px" valign="top" align="center">
-		
-		        <button class="ur_button" id="move_button"
-			            onclick="javascript:YAHOO.ur.folder.move.moveFolder();"
-			            onmouseover="this.className='ur_buttonover';"
-			            onmouseout="this.className='ur_button';"
-			            >Move<span class="pageWhiteGoBtnImg">&nbsp;</span>
-			    </button>
-		   </td>
-		   <td width="400px" align="left" valign="top">
-		       <form name="viewChildContentsForMove"
-	              id="move_folder_form"><input type="hidden"
-	              id="destination_id" name="destinationId" value="${destinationId}" />
-	              <input type="hidden" name="parentFolderId" value="${parentFolderId}" /> 
-	
-	               <c:forEach items="${foldersToMove}" var="folder">
-	                   <input type="hidden" value="${folder.id}" name="folderIds" />
-                   </c:forEach> 
- 
-                   <c:forEach items="${filesToMove}" var="file">
-	                   <input type="hidden" value="${file.id}" name="fileIds" />
-                   </c:forEach>
-    
-	               <!-- set to indicate a success full move -->
-	               <input type="hidden" id="action_success" value="${actionSuccess}" name="actionSuccess"/>
-               </form>
-               <div class="dataTable">
-              <urstb:table width="100%">
-                  <urstb:thead>
-                      <urstb:tr>
-                          <urstb:td>Destination</urstb:td>
-                      </urstb:tr>
-                  </urstb:thead>
-                  <urstb:tbody
-                      var="fileSystemObject" 
-                      oddRowClass="odd"
-                      evenRowClass="even"
-                      currentRowClassVar="rowClass"
-                      collection="${currentDestinationContents}">
-                      <urstb:tr 
-                          cssClass="${rowClass}"
-                          onMouseOver="this.className='highlight'"
-                          onMouseOut="this.className='${rowClass}'">
-                          <urstb:td>
-                            <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-                               <c:set var="canMove" value="${ir:canMoveToFolder(foldersToMove, fileSystemObject)}"/>
-					           <c:if test="${canMove}">
-						            <span class="folderBtnImg"></span><a
-							            href="javascript:YAHOO.ur.folder.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a>
-					           </c:if>
-					           <c:if test="${!canMove}">
-						
-						           <span class="folderBtnImg"></span><span class="errorMessage">${fileSystemObject.name} [Moving]</span>
-					           </c:if>
-					       </c:if>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-			           	        <c:set var="beingMoved" value="${ir:isFileToBeMoved(filesToMove, fileSystemObject)}"/>
-			           	   		<c:if test="${!beingMoved}">
-						            <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}
-						        </c:if>
-			           	   		<c:if test="${beingMoved}">
-						            <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><span class="errorMessage">${fileSystemObject.name}[Moving] </span>
-						        </c:if>
-					       </c:if>	 
-                          </urstb:td>
-                      </urstb:tr>
-                  </urstb:tbody>
-              </urstb:table>
-              </div>
-		   </td>
-	   </tr>
-   </table>
-
-
-
+            <div id="move_folder_frag">
+                <c:import url="move_folder_frag.jsp"/>
+            </div>
 
             <!--  end the body tag --> <!--  this is the footer of the page --> 
             <c:import url="/inc/footer.jsp" />
@@ -234,7 +78,14 @@
     </div>
     <!-- end doc -->
     
-  
+    <!--  generic error dialog -->   	     
+    <div id="error_dialog_box" class="hidden">
+        <div class="hd">Error</div>
+	    <div class="bd">
+	        <div id="default_error_dialog_content"></div>
+	    </div>
+    </div>
+    <!-- End generic error dialog -->
     
     <!--  wait div -->
 	<div id="wait_dialog_box" class="hidden">

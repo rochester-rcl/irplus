@@ -9,7 +9,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeCount;
+import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.simple.type.AscendingNameComparator;
@@ -58,6 +60,8 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	/** get a count of content types */
 	private List<ContentTypeCount> contentTypeCounts = new LinkedList<ContentTypeCount>();
 	
+	/** service to get content type information */
+	private ContentTypeService contentTypeService;
 	
 	/** Service for sponsor information */
 	private SponsorService sponsorService;
@@ -165,6 +169,10 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 
 	public Long getSponsorCount() {
 		return sponsorCount;
+	}
+
+	public void setContentTypeService(ContentTypeService contentTypeService) {
+		this.contentTypeService = contentTypeService;
 	}
 
 	public void setSponsorService(SponsorService sponsorService) {

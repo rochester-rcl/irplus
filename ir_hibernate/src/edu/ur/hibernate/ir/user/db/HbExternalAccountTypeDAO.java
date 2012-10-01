@@ -101,8 +101,7 @@ public class HbExternalAccountTypeDAO implements ExternalAccountTypeDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("externalAccountTypeCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("externalAccountTypeCount"));
 	}
 
 	

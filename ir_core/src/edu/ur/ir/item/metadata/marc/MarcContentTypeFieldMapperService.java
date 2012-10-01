@@ -16,7 +16,6 @@
 
 package edu.ur.ir.item.metadata.marc;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface  MarcContentTypeFieldMapperService extends Serializable {
+public interface  MarcContentTypeFieldMapperService {
 	
 	/**
 	 * Get the field mapper by content type id.

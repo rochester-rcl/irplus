@@ -64,7 +64,10 @@ public class FolderAutoShareInfo extends BasePersistent{
 			IrUser collaborator)
 	{
 		setPersonalFolder(personalFolder);
-		setPermissions(permissions);
+		if( permissions != null )
+		{
+		  this.permissions.addAll(permissions);
+		}
 		setCollaborator(collaborator);
 		createdDate = new Timestamp(new Date().getTime());
 	}
@@ -123,8 +126,31 @@ public class FolderAutoShareInfo extends BasePersistent{
 	 * 
 	 * @param permissions
 	 */
-	void setPermissions(Set<IrClassTypePermission> permissions) {
+	void setPermissions(Set<IrClassTypePermission> permissions) 
+	{
 		this.permissions = permissions;
+	}
+	
+	/**
+	 * Change the permissions for the folder auto share.  This will remove
+	 * all of the old permissions and set the new list of permissions to the set
+	 * given.
+	 * 
+	 * @param newPermissions - new permissions to give the user
+	 */
+	public void changePermissions(Set<IrClassTypePermission> newPermissions)
+	{
+		Set<IrClassTypePermission> oldPermissions = new HashSet<IrClassTypePermission>();
+		oldPermissions.addAll(getPermissions());
+		for(IrClassTypePermission permission : oldPermissions)
+		{
+			removePermission(permission);
+		}
+		
+		for(IrClassTypePermission p : newPermissions)
+		{
+			addPermission(p);
+		}
 	}
 
 	/**

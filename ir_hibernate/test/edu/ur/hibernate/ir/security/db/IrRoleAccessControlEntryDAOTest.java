@@ -142,17 +142,14 @@ public class IrRoleAccessControlEntryDAOTest {
 		// commit the transaction
 		tm.commit(ts);
 		
-		ts = tm.getTransaction(td);
 		// clean up the database
 		irAclDAO.makeTransient(irAclDAO.getById(irAcl.getId(), false));
 		
 		assert raceDAO.getById(race.getId(), false) == null : "Should not be able to find the access control entry";
 		
- 	    classTypePermissionDAO.makeTransient(classTypePermissionDAO.getById(classTypePermission.getId(), false));
- 	    irClassTypeDAO.makeTransient(irClassTypeDAO.getById(languageTypeClass.getId(), false));
+ 	    classTypePermissionDAO.makeTransient(classTypePermission);
+ 	    irClassTypeDAO.makeTransient(languageTypeClass);
  		irRoleDAO.makeTransient(irRoleDAO.getById(role.getId(), false));
  		languageTypeDAO.makeTransient(languageTypeDAO.getById(lt.getId(), false));
- 		
- 		tm.commit(ts);
 	}
 }

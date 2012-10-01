@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.user.db;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -101,7 +102,7 @@ public class FileInviteInfoDAOTest {
 	.getBean("irFileDAO");
      
 	/**
-	 * Test Invite user persistence
+	 * Test File Invite persistence
 	 */
 	@Test
 	public void baseInviteInfoDAOTest()throws Exception{
@@ -140,34 +141,71 @@ public class FileInviteInfoDAOTest {
 		FileUtil testUtil = new FileUtil();
 		testUtil.createDirectory(directory);
 
-		File f = testUtil.creatFile(directory, "testFile", 
+		// file 1
+		File f1 = testUtil.creatFile(directory, "testFile", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test");
 		
 		FileServerService fileServerService = repoHelper.getFileServerService();
-		FileInfo fileInfo = fileServerService.addFile(repo.getFileDatabase(), f,
+		FileInfo fileInfo1 = fileServerService.addFile(repo.getFileDatabase(), f1,
 				uniqueNameGenerator.getNextName(), "txt");
-		fileInfo.setDisplayName("name");
-		VersionedFile vf = new VersionedFile(user, fileInfo, "name");
-		versionedFileDAO.makePersistent(vf);
-		Long irFileId = vf.getCurrentVersion().getIrFile().getId(); 
+		fileInfo1.setDisplayName("name");
+		VersionedFile vf1 = new VersionedFile(user, fileInfo1, "name");
+		versionedFileDAO.makePersistent(vf1);
+		Long irFileId1 = vf1.getCurrentVersion().getIrFile().getId(); 
+		
+		
+		// file 2
+		File f2 = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		FileInfo fileInfo2 = fileServerService.addFile(repo.getFileDatabase(), f2,
+				uniqueNameGenerator.getNextName(), "txt");
+		fileInfo2.setDisplayName("name");
+		VersionedFile vf2 = new VersionedFile(user, fileInfo2, "name");
+		versionedFileDAO.makePersistent(vf2);
+		Long irFileId2 = vf2.getCurrentVersion().getIrFile().getId(); 
+		
+		// file 3
+		File f3 = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		FileInfo fileInfo3 = fileServerService.addFile(repo.getFileDatabase(), f3,
+				uniqueNameGenerator.getNextName(), "txt");
+		fileInfo3.setDisplayName("name");
+		VersionedFile vf3 = new VersionedFile(user, fileInfo3, "name");
+		versionedFileDAO.makePersistent(vf3);
+		Long irFileId3 = vf3.getCurrentVersion().getIrFile().getId(); 
+		
+		
 
 		IrClassTypePermission permission 
 			= irClassTypePermissionDAO.getClassTypePermissionByNameAndClassType("edu.ur.ir.file.VersionedFile", "VIEW");
 
+		
+		// invite 1
 		InviteToken token = new InviteToken("test@mail.com", "123", user);
 		token.setInviteMessage("invite message");
 		
 		Set<VersionedFile> files = new HashSet<VersionedFile>();
-		files.add(vf);
+		files.add(vf1);
+		files.add(vf2);
+		
 		
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 		permissions.add(permission);
 		
 		FileInviteInfo inviteInfo = new FileInviteInfo(files, permissions, token );
-		
-		
-
 		inviteInfoDAO.makePersistent(inviteInfo);
+		
+		//invite 2
+		InviteToken token2 = new InviteToken("test@mail.com", "4", user);
+		token2.setInviteMessage("invite message");
+
+		files = new HashSet<VersionedFile>();
+		files.add(vf3);
+		FileInviteInfo inviteInfo2 = new FileInviteInfo(files, permissions, token2 );
+		inviteInfoDAO.makePersistent(inviteInfo2);
+		
 		
 		//complete the transaction
 		tm.commit(ts);
@@ -180,27 +218,43 @@ public class FileInviteInfoDAOTest {
 		assert inviteInfo.getInviteToken().getToken() == "123" : "inviteInfo should be equal";
 		assert inviteInfo.getPermissions().contains(permission) : "Permissions should exit";
 		assert inviteInfo.getInviteToken().getInvitingUser().equals(user) : "User should be equal";
-		assert inviteInfo.getFiles().contains(vf) : "VersionedFile should be equal";
+		assert inviteInfo.getFiles().contains(vf1) : "VersionedFile should be found";
+		assert inviteInfo.getFiles().contains(vf2) : "VersionedFile should be found";
+		assert !inviteInfo.getFiles().contains(vf3) : "VersionedFile should not be found";
 		assert (inviteInfoDAO.findInviteInfoForToken("123")).equals(inviteInfo) : "The user inviteInfo should be equal";
 		List<FileInviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail("TeSt@Mail.com");
-		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
-		assert invites.get(0).equals(inviteInfo) : "invite " + invites.get(0) + " should equal " + inviteInfo;
+		assert invites.size() == 2 : "Should find two invites but found " + invites.size();
+		assert invites.contains(inviteInfo) : "invites should contain " + inviteInfo;
+		assert invites.contains(inviteInfo2) : "invites should contain " + inviteInfo2;
 		
 		
 		invites = inviteInfoDAO.getInviteInfoByEmail("test@mail.com");
-		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
+		assert invites.size() == 2 : "Should find one invite but found " + invites.size();
 		assert invites.get(0).equals(inviteInfo) : "invite " + invites.get(0) + " should equal " + inviteInfo;
+		
+		LinkedList<Long> versionedFileIds = new LinkedList<Long>();
+		versionedFileIds.add(vf1.getId());
+		versionedFileIds.add(vf2.getId());
+		
+		invites = inviteInfoDAO.getInviteInfosWithVersionedFilesAndEmail(versionedFileIds, "test@mail.com");
+		assert invites.size() == 1 : "Should only find one invite but found " + invites.size();
+		
 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
 		inviteInfoDAO.makeTransient(inviteInfoDAO.getById(other.getId(), false));
+		inviteInfoDAO.makeTransient(inviteInfoDAO.getById(inviteInfo2.getId(), false));
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
 		assert inviteInfoDAO.getById(other.getId(), false) == null : "Should not be able to find other";
-		versionedFileDAO.makeTransient(versionedFileDAO.getById(vf.getId(), false));
-		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
+		versionedFileDAO.makeTransient(versionedFileDAO.getById(vf1.getId(), false));
+		fileDAO.makeTransient(fileDAO.getById(irFileId1, false));
+		versionedFileDAO.makeTransient(versionedFileDAO.getById(vf2.getId(), false));
+		fileDAO.makeTransient(fileDAO.getById(irFileId2, false));
+		versionedFileDAO.makeTransient(versionedFileDAO.getById(vf3.getId(), false));
+		fileDAO.makeTransient(fileDAO.getById(irFileId3, false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
 		
@@ -209,6 +263,8 @@ public class FileInviteInfoDAOTest {
 		tm.commit(ts);
 		
 	}
+	
+
 	
 	
 }

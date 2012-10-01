@@ -117,11 +117,11 @@ public class HbUserEmailDAO implements UserEmailDAO {
 		return (UserEmail)	HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserEmailByToken", token));
 	}	
 
-	/**
-	 * Get the email by id.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
-	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public UserEmail getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

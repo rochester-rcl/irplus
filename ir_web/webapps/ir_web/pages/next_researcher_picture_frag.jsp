@@ -32,7 +32,7 @@
 	<table class="baseTable">
 	    
 	    <tr>
-			<td class="researcherTableImage"> 
+			<td class="baseTableImage"> 
 			    <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
 			        <c:url var="url" value="/researcherThumbnailDownloader.action">
                         <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
@@ -41,7 +41,7 @@
                     <img src="${url}"/>
                 </c:if>
                 <c:if test="${!ir:hasThumbnail(researcher.primaryPicture)}">
-                	   <img class="noimage_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" />
+                	   <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
                 </c:if>	    												
 	        </td>   
 	        <td>
@@ -54,19 +54,23 @@
 	</table>
 	</c:forEach>
 	
-	<c:if test="${totalResearcherCount > 2}">
-	<div class="button_next_left">
+	<c:if test="${researcherCount > 2}">
+	<table class="buttonTable">
+	    <tr>
+	        <td class="leftButton">
 	            <button class="ur_button" 
 		            onmouseover="this.className='ur_buttonover';"
 	 		        onmouseout="this.className='ur_button';"
 	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentResearcherLocation}, 'PREV');">&lt; Previous</button>
-	</div>
-	<div class="button_next_right">
+	 		</td>
+	 		<td class="rightButton">
 	 		    <button class="ur_button" 
 		            onmouseover="this.className='ur_buttonover';"
 	 		        onmouseout="this.className='ur_button';"
 	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentResearcherLocation}, 'NEXT');">Next &gt;</button>
-	</div>
+	        </td>
+	     </tr>
+	</table>
 	</c:if>
 </c:if>
 

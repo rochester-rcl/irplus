@@ -19,6 +19,7 @@ package edu.ur.ir.security.service;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -156,6 +157,42 @@ public class DefaultSecurityService implements SecurityService {
 			irAcl.createUserAccessControlEntry(user);
 		
 		for (IrClassTypePermission classTypePermission: permissions) {
+			// add permission
+			userAccessControlEntry.addPermission(classTypePermission);
+		}
+		irAclDAO.makePersistent(irAcl);
+	}
+	
+	/**
+	 * Update the permissions for the user - first removes all old permissions
+	 * then updates with the new permissions.
+	 * 
+	 * @param domainInstance - domain instance to update the permissions for
+	 * @param user - user to update the permissions for
+	 * @param newPermissions - new permissions to give to the user
+	 */
+	public void updatePermissions(Object domainInstance, IrUser user, 
+			Collection<IrClassTypePermission> newPermissions)
+	{
+		log.debug("Update Permission for " + user.getUsername() 
+				+ ". Permissions = " + newPermissions);
+		IrAcl irAcl = getAcl(domainInstance);
+		
+		if (irAcl == null) {
+			irAcl = new IrAcl(domainInstance, getClassType(domainInstance));
+		}
+		
+		IrUserAccessControlEntry userAccessControlEntry = 
+			irAcl.createUserAccessControlEntry(user);
+		
+		LinkedList<IrClassTypePermission> oldPermissions = new LinkedList<IrClassTypePermission>();
+		oldPermissions.addAll(userAccessControlEntry.getIrClassTypePermissions());
+		for(IrClassTypePermission permission : oldPermissions)
+		{
+			userAccessControlEntry.removePermission(permission);
+		}
+		
+		for (IrClassTypePermission classTypePermission: newPermissions) {
 			// add permission
 			userAccessControlEntry.addPermission(classTypePermission);
 		}
@@ -453,12 +490,7 @@ public class DefaultSecurityService implements SecurityService {
 		irAclDAO.makeTransient(acl);
 	}
 
-	public boolean hasPermission(Object domainInstance, Sid sid, String permission) {
-		return getPermissionCount(domainInstance, sid, permission) > 0;
-	}
-	
-	public Long getPermissionCount(Object domainInstance, Sid sid, String permission)
-	{
+	public Long hasPermission(Object domainInstance, Sid sid, String permission) {
 		Long objectId = getObjectId(domainInstance);
 		String className = CgLibHelper.cleanClassName(domainInstance.getClass().getName());
 		return irAclDAO.hasPermission(objectId, className, sid, permission);
@@ -488,63 +520,5 @@ public class DefaultSecurityService implements SecurityService {
 		return irAclDAO.getSidsWithPermissionForObject(objectId, className, permission, specificSids);
 	}
 
-	
-	/**
-	 * Create the permissions for user control entries.  This is a bulk operation.
-	 * 
-	 * @param entries - list of entries
-	 * @param permissions - list of permissions to give to each entry
-	 * 
-	 * @return number of entries created
-	 */
-	public int createPermissionsForUserControlEntries(List<IrUserAccessControlEntry> entries,
-			List<IrClassTypePermission> permissions)
-	{
-		return irUserAccessControlEntryDAO.createPermissionsForUserControlEntries(entries, permissions);
-	}
-	
-	/**
-	 * Create user control entries for the list of users for the
-	 * specified acls.  This is a bulk operation
-	 * 
-	 * @param users - list of users to create the entries for
-	 * @param acl - acl to add the entries to
-	 * 
-	 * @return number of entries created
-	 */
-	public int createUserControlEntriesForUsers(List<IrUser> users, List<IrAcl> acls )
-	{
-		return irUserAccessControlEntryDAO.createUserControlEntriesForUsers(users, acls);
-	}
-	
-	/**
-	 * Get the list of users for the given access control list.
-	 * 
-	 * @param acl - acl to the the access control entries for
-	 * @param users - list of users to get for the acl
-	 * 
-	 * @return - list of users found.
-	 */
-	public List<IrUserAccessControlEntry> getUserControlEntriesForUsers(IrAcl acl, List<IrUser> users)
-	{
-		return irUserAccessControlEntryDAO.getUserControlEntriesForUsers(acl, users);
-	}
-
-	/**
-	 * Returns all users with the specified permission on the domain instance.  This
-	 * should only return users with explicit permissions set on them.  This will NOT
-	 * return a user who has the permission by being within a group that is given the permission.
-	 * 
-	 * @param domainInstance - domain instance to check
-	 * @param permission - permissions the sid must have
-	 * 
-	 * @return List of sids with the specified permissions.
-	 */
-	public Set<IrUser> getUsersWithPermissionForObject(Object domainInstance,
-			String permission) {
-		Long objectId = getObjectId(domainInstance);
-		String className = CgLibHelper.cleanClassName(domainInstance.getClass().getName());
-		return irAclDAO.getUsersWithPermissionForObject(objectId, className, permission);
-	}
 
 }

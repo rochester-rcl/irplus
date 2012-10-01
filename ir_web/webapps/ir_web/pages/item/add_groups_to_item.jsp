@@ -46,7 +46,7 @@
 
  	<ur:js src="page-resources/js/admin/add_group_to_item.js"/>
  	
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	
@@ -82,13 +82,13 @@
                 <c:param name="itemId" value="${item.id}"/>
                 <c:param name="institutionalItemId" value="${institutionalItemId}"/> 
             </c:url>
-            <a href="${viewItem}">Done</a>
+            <a class="link-button" href="${viewItem}">Done</a>
             <br/>
             <br/>
             <div id="all_user_groups">
                 <c:import url="all_item_user_groups_frag.jsp"></c:import>
             </div>
-
+            <a class="link-button" href="${viewItem}">Done</a>
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
         

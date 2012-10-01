@@ -26,6 +26,8 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -39,13 +41,13 @@ import edu.ur.ir.web.action.UserIdAware;
 public class PublicResearcherPageView extends ActionSupport implements
 Comparator<IrFile>, UserIdAware {
 
-	//  Eclipse generated id 
+	/**  Eclipse generated id */
 	private static final long serialVersionUID = 5154383076462883720L;
 
-	//  Logger
+	/**  Logger. */
 	private static final Logger log = Logger.getLogger(PublicResearcherPageView.class);
 	
-	// determine what the user is trying to do 
+	/** determine what the user is trying to do */
 	
 	// this if when the page is first initalized
 	public static final String INIT = "INIT";
@@ -56,30 +58,37 @@ Comparator<IrFile>, UserIdAware {
 	// get the previous picture
 	public static final String PREV = "PREV";
 	
-	// Researcher 
+	/** Researcher */
 	private Researcher researcher;
 	
-	// Id of researcher 
+	/** Id of researcher */
 	private Long researcherId;
 	
-	// Service class for researcher 
+	/** Service class for researcher */
 	private ResearcherService researcherService;
 	
-	// Number of researcher pictures 
+	/** Number of researcher pictures */
 	private int numResearcherPictures;
 	
-	// Researcher picture IrFile 
+	/** Researcher picture IrFile */
 	private IrFile irFile;
 	
-	// Represents the location of current picture displayed */
+	/** Represents the location of current picture displayed */
 	private int currentLocation;
 	
-	// Type represents NEXT, PREVIOUS, INIT 
+	/** Type represents NEXT, PREVIOUS, INIT */
 	private String type;
 	
-	// id of the user trying to access the data 
+	/** id of the user trying to access the data */
 	private Long userId;
 	
+	/** Service for dealing with repositories */
+	private RepositoryService repositoryService;
+	
+	/** repository object */
+	private Repository repository;
+
+
 	/**
 	 * View the researcher page.
 	 * 
@@ -88,6 +97,7 @@ Comparator<IrFile>, UserIdAware {
 	public String view()
 	{
 		log.debug("View Researcher page:researcherId="+ researcherId);
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
 		if( researcherId != null && researcherId > 0)
 		{	
@@ -206,6 +216,15 @@ Comparator<IrFile>, UserIdAware {
 	}
 
 	/**
+	 * Set researcher
+	 * 
+	 * @param researcher
+	 */
+	public void setResearcher(Researcher researcher) {
+		this.researcher = researcher;
+	}
+
+	/**
 	 * Get researcher id
 	 * 
 	 * @return
@@ -224,6 +243,15 @@ Comparator<IrFile>, UserIdAware {
 	}
 
 	/**
+	 * Get researcher service
+	 * 
+	 * @return
+	 */
+	public ResearcherService getResearcherService() {
+		return researcherService;
+	}
+
+	/**
 	 * Set researcher service
 	 * 
 	 * @param researcherService
@@ -233,45 +261,22 @@ Comparator<IrFile>, UserIdAware {
 	}
 
 
-	/**
-	 * Get the ir file 
-	 * @return
-	 */
 	public IrFile getIrFile() {
 		return irFile;
 	}
 
-	/**
-	 * Get the current location in the list.
-	 * @return
-	 */
 	public int getCurrentLocation() {
 		return currentLocation;
 	}
 
-	/**
-	 * Set the current location
-	 * 
-	 * @param currentLocation
-	 */
 	public void setCurrentLocation(int currentLocation) {
 		this.currentLocation = currentLocation;
 	}
 
-	/**
-	 * Get the type of action NEXT, PREVIOUS, INIT
-	 * 
-	 * @return
-	 */
 	public String getType() {
 		return type;
 	}
 
-	/**
-	 * Set the type of action NEXT, PREVIOUS, INIT
-	 * 
-	 * @param type
-	 */
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -279,20 +284,33 @@ Comparator<IrFile>, UserIdAware {
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	/**
-	 * Get the number of researcher pictures.
-	 * 
-	 * @return
-	 */
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
 	public int getNumResearcherPictures() {
 		return numResearcherPictures;
 	}
 
-
+	public void setNumResearcherPictures(int numResearcherPictures) {
+		this.numResearcherPictures = numResearcherPictures;
+	}
 }

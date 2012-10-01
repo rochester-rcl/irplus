@@ -170,9 +170,9 @@
 
     <!-- generate the documentation -->
     <target name="docs" description="-->build the javadocs">
-        <mkdir dir="${basedir}/docs/api"/>
+        <mkdir dir="${dist.dir}/docs"/>
 		<javadoc
-	           destdir="${basedir}/docs/api"
+	           destdir="${dist.dir}/docs/api"
 	           author="true"
 	           version="true"
 	           use="true"

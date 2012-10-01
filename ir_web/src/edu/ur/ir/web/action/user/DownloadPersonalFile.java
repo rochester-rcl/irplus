@@ -68,10 +68,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	private UserFileSystemService userFileSystemService;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility for streaming files */
 	private WebIoUtils webIoUtils;
@@ -118,7 +118,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         			" and file version number " + versionNumber + " could not be found");
         }
       
-        webIoUtils.streamFileInfo(fileVersion.getVersionedFile().getName(), fileInfo, response, request, (1024*4), false, true);
+        webIoUtils.StreamFileInfo(fileVersion.getVersionedFile().getName(), fileInfo, response, request, (1024*4), false, true);
         return SUCCESS;
     }
 	
@@ -171,6 +171,16 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 
 
 	/**
+	 * User service
+	 * 
+	 * @return
+	 */
+	public UserService getUserService() {
+		return userService;
+	}
+
+
+	/**
 	 * Set the user service
 	 * 
 	 * @param userService
@@ -179,8 +189,18 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.userService = userService;
 	}
 
+
+	/**
+	 * Get the user file system service.
+	 * 
+	 * @return
+	 */
+	public UserFileSystemService getUserFileSystemService() {
+		return userFileSystemService;
+	}
+
 	/** id of the user */
-	public void injectUserId(Long userId)
+	public void setUserId(Long userId)
 	{
 		this.userId = userId;
 	}
@@ -194,20 +214,15 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.userFileSystemService = userFileSystemService;
 	}
 
-	/**
-	 * Set the servlet request.
-	 * 
-	 * @see org.apache.struts2.interceptor.ServletRequestAware#setServletRequest(javax.servlet.http.HttpServletRequest)
-	 */
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
 
-	/**
-	 * Set the web io utils.
-	 * 
-	 * @param webIoUtils
-	 */
+	public WebIoUtils getWebIoUtils() {
+		return webIoUtils;
+	}
+
+
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}

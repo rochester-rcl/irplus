@@ -71,7 +71,11 @@
 			<key column="folder_auto_share_info_id" />
 			<many-to-many column="class_type_permission_id" class="edu.ur.ir.security.IrClassTypePermission"/>
 		</set>
+		
 			
     </class>
+	
+	<!-- named query for getting invite information for given email -->
+    <query name="getFolderAutoShareInfoForUser">from FolderAutoShareInfo info where collaborator.id = :userId </query> 
 	
 </hibernate-mapping>

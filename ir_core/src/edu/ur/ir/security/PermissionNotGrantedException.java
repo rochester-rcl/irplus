@@ -31,11 +31,11 @@ public class PermissionNotGrantedException extends Exception{
 	/**
 	 * Constructor 
 	 * 
-	 * @param message - reason for permission not granted
+	 * @param permission - permission needed to perform the given action.
 	 */
-	public PermissionNotGrantedException(String message)
+	public PermissionNotGrantedException(String permission)
 	{
-		super(message);
+		super("Permission " + permission + " not granted");
 	}
 
 }

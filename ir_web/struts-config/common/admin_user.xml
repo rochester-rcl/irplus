@@ -14,31 +14,11 @@
    limitations under the License.
 -->   
 
-
- 
-        <!--  ************************************ -->
-        <!--  View Invite Information                       -->
-        <!--  ************************************ -->
-        <action name="viewInviteInfos"
-                class="edu.ur.ir.web.action.user.admin.ManageInviteInfo"
-                method="viewInviteInfos">
-                <interceptor-ref name="crudStack" />
-                <result name="success">/pages/admin/invite_info/invite_info.jsp</result>
-        </action>
-        
-        <action name="deleteInviteInfo"
-                class="edu.ur.ir.web.action.user.admin.ManageInviteInfo"
-                method="delete">
-                <interceptor-ref name="crudStack" />
-                <result name="success">/pages/admin/invite_info/invite_info.jsp</result>
-        </action>
         
         <!--  ************************************ -->
         <!--  User Actions                         -->
         <!--  ************************************ -->
-         <action name="viewUsers" 
-                 class="edu.ur.ir.web.action.user.admin.ManageUsers"
-                 method="viewUsers">
+         <action name="viewUsers" class="edu.ur.ir.web.action.user.admin.ManageUsers">
             <result name="success">/pages/admin/user/users.jsp</result>
         </action>
         
@@ -174,7 +154,6 @@
         <!--  User Affiliation Actions                         -->
         <!--  ************************************ -->
          <action name="viewPendingApproval">
-            <interceptor-ref name="crudStack" />
             <result name="success">/pages/admin/user/affiliation/approve_affiliation.jsp</result>
         </action>
         
@@ -287,12 +266,6 @@
             <result name="updated">/pages/admin/user_group/edit_user_group.jsp</result>
             <result name="view">/pages/admin/user_group/edit_user_group.jsp</result>            
             <result name="deleted">/pages/admin/user_group/user_group_deleted.jsp</result>
-        </action>
-        
-        <action name="userGroupSearch"
-            class="edu.ur.ir.web.action.group.UserGroupSearch">
-            <interceptor-ref name="editStack" />
-            <result name="success">/pages/admin/user_group/user_group_search_table.jsp</result>
         </action>
         
         <action name="userGroupUserSearch"

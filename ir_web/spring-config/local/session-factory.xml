@@ -121,23 +121,6 @@
                         
                 <value>edu/ur/hibernate/ir/invite/db/InviteToken.hbm.xml</value>      
                 
-                <value>edu/ur/hibernate/ir/invite/db/InviteToken.hbm.xml</value>
-                
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspace.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFolder.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFile.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceUser.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceEmailInvite.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFileDeleteRecord.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPage.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageMember.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageImage.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageFile.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageFileSystemLink.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageFolder.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPageInstitutionalItem.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceProjectPagePublication.hbm.xml</value>
-                                
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrAcl.hbm.xml</value>

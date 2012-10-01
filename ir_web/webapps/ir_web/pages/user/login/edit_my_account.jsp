@@ -46,12 +46,12 @@
  	    <ur:js src="page-resources/yui/menu/menu-min.js"/>
         <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
-	    <ur:js src="page-resources/js/util/base_path.jsp"/>
+	    <ur:js src="pages/js/base_path.js"/>
 	    <ur:js src="page-resources/js/util/ur_util.js"/>
 	    <ur:js src="page-resources/js/util/wait_dialog.js" />
 	    <ur:js src="page-resources/js/menu/main_menu.js"/>
 	 	
-	 	<ur:js src="page-resources/js/util/ur_table.js"/>
+	 	<ur:js src="pages/js/ur_table.js"/>
  	    <ur:js src="page-resources/js/admin/edit_user.js"/>
         <ur:js src="page-resources/js/user/edit_my_account.js"/>
         <ur:js src="page-resources/js/admin/edit_person.js"/>
@@ -91,7 +91,7 @@
 	                               onmouseout="this.className='ur_button';"
 	                               >Change Password</button>
 	                       
-	                      <c:if test="${repositoryService.externalAuthenticationEnabled }">
+	                      <c:if test="${externalAuthenticationEnabled }">
 	                      <button class="ur_button" id="edit_external_account" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
@@ -119,7 +119,7 @@
 						      <td> ${irUser.username}</td>
 					      </tr>
 					      
-					      <c:if test="${repositoryService.externalAuthenticationEnabled }">
+					      <c:if test="${externalAuthenticationEnabled }">
 					          <tr>
 				                  <td>External Account: </td>
 				                  <c:if test="${irUser.externalAccount != null}">
@@ -320,11 +320,73 @@
 	     <div id="newPersonNameDialog" class="hidden">
 	         <div class="hd">Name Information</div>
 	         <div class="bd">
-	             <div id="nameDialogForm">
-	                 <c:import url="add_authoring_name_form_frag.jsp"/>
-	             </div>
-	         </div>
-	     </div>
+	             <form id="addPersonName" name="newPersonNameForm" 
+	                       method="post" 
+	                       action="<c:url value="/user/createPersonName.action"/>">
+		           	
+		           	<input type="hidden" id="newPersonNameForm_id"
+		                   name="id" value=""/>
+   	             	<input type="hidden" id="newPersonNameForm_personId"
+		                   name="personId" value="${irUser.personNameAuthority.id}"/>
+		                   
+  					<input type="hidden" id="newPersonNameForm_userId"
+		                   name="addToUserId" value="${irUser.id}"/>		                   
+		               
+		         	<input type="hidden" id="newPersonNameForm_new"
+		                   name="newPersonName" value="true"/>
+					
+					<input type="hidden" id="newPersonNameForm_myName"
+		                   name="myName" value="true"/>		                   
+		                   	             
+	             <div id="personError"class="errorMessage"></div>
+		          
+		         <label for="newPersonNameFormFirstName">First Name:</label><input type="text" 
+		              id="newPersonNameFormFirstName" 
+		              name="personName.forename" 
+		              value=""/>
+		          
+		         <div class="clear">&nbsp;</div>
+		          
+		         <label for="newPersonNameFormLastName">Last Name*:</label><input type="text" 
+		              id="newPersonNameFormLastName" 
+		              name="personName.surname" 
+		              value=""/>
+		          
+		         <div class="clear">&nbsp;</div>
+		          
+		         <label for="newPersonNameFormNameMiddleName">Middle Name:</label><input type="text" 
+		              id="newPersonNameFormMiddleName" 
+		              name="personName.middleName" 
+		              value=""/>
+		          
+		         <div class="clear">&nbsp;</div>
+		          
+		         <label for="newPersonNameFormNameFamilyName">Family Name:</label><input type="text" 
+		             id="newPersonNameFormFamilyName" 
+		             name="personName.familyName" 
+		             value=""/>
+		          
+		         <div class="clear">&nbsp;</div>
+		          
+		         <label for="newPersonNameFormInitials">Initials:</label><input type="text" 
+		              id="newPersonNameFormInitials" 
+		              name="personName.initials" 
+		              value=""/>
+		          
+		         <div class="clear">&nbsp;</div>
+		          
+		         <label for="newPersonNameFormNumeration">Numeration:</label><input type="text" 
+		              id="newPersonNameFormNumeration" 
+		              name="personName.numeration" 
+		              value=""/>
+		          
+		         <div class="clear">&nbsp;</div>
+	             <label for="newPersonNameFormAuthoritative">Authoritative Name</label><input 
+	                   id="newPersonNameFormAuthoritative"
+	                   type="checkbox" name="authoritative" value="true"/>
+	          </form>
+	      </div>
+	  </div>
 	  
 	  <div id="deletePersonNameDialog" class="hidden">
 	      <div class="hd">Delete People</div>

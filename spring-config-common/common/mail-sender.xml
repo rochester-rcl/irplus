@@ -38,22 +38,10 @@
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
 	   <property name="host" value="${mail.sender.host}" /> 
 	   <property name="port" value="${mail.sender.port}"/>
+	   <property name="defaultEncoding" value="UTF-8"/>
 	   <!--  uncomment for ssl
 	       <property name="session" ref="mailSession" /> 
 	    -->
-	   
-	   <!--  these would need to be set to send emails through gmail 
-	   <property name="username" value="username" />
-	   <property name="password" value="password" />
- 
-	   
-	   <property name="javaMailProperties">
-	       <props>
-       	      <prop key="mail.smtp.auth">true</prop>
-       	      <prop key="mail.smtp.starttls.enable">true</prop>
-       	   </props>
-	   </property>
-	    --> 
     </bean>
     
     
@@ -67,7 +55,7 @@
     			<![CDATA[
     			**DO NOT REPLY TO THIS MESSAGE**
     			
-    			You are invited to collaborate on the document(s) - '%NAME%'. The shared document(s) have been placed in your Shared file inbox.
+    			You are invited to collaborate on the document(s) - %NAME%. The shared document(s) have been placed in your Shared file inbox.
     			
     			You can login into the system using the link below:
     			%BASE_WEB_APP_PATH%home.action
@@ -86,7 +74,7 @@
     			<![CDATA[
     			**DO NOT REPLY TO THIS MESSAGE**
     			
-    			You have been invited to collaborate on the document(s) - '%NAME%'. 
+    			You have been invited to collaborate on the document(s) - %NAME%. 
     			Please click on the link below to register with the system:
     			
     			%BASE_WEB_APP_PATH%inviteLogin.action?token=%TOKEN%
@@ -105,7 +93,7 @@
     		<value>
     			<![CDATA[
     			
-    			The document - '%NAME%' has been un-shared with you. You no longer have access to this document.
+    			The document - %NAME% has been un-shared with you. You no longer have access to this document.
     			
     			]]>
     		</value>
@@ -326,7 +314,7 @@
     			You can login into the system using the link below:
     			%BASE_WEB_APP_PATH%home.action
     			
-    			A new version of '%NAME%' has been updated in your workspace. ]]>
+    			A new version of %NAME% has been updated in your workspace. ]]>
     		</value>
     	</property>
     </bean> 

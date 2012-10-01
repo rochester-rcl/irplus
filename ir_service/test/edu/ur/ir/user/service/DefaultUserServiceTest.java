@@ -34,6 +34,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.Repository;
@@ -162,7 +163,7 @@ public class DefaultUserServiceTest {
 	
 	public void testHandleForgotPassword() throws UserHasPublishedDeleteException, UserDeletedPublicationException { 
 		// determine if we should be sending emails 
-		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails"));
+		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
 
 		log.debug("Send email for testHandleForgotPassword test = " + sendEmail);
 		// Start the transaction 

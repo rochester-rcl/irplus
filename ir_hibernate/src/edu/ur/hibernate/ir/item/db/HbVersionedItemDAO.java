@@ -18,12 +18,12 @@ package edu.ur.hibernate.ir.item.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.item.VersionedItemDAO;
 import edu.ur.ir.user.IrUser;
@@ -61,8 +61,8 @@ public class HbVersionedItemDAO implements VersionedItemDAO{
 
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("versionedItemCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionedItemCount"));
 	}
 
 	public VersionedItem getById(Long id, boolean lock) {
@@ -75,6 +75,11 @@ public class HbVersionedItemDAO implements VersionedItemDAO{
 
 	public void makeTransient(VersionedItem entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	@SuppressWarnings("unchecked")

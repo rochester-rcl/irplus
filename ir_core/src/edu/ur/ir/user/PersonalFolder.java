@@ -91,8 +91,6 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 
 	/* set of invite infos for auto sharing folder information  */
 	private Set<FolderInviteInfo> folderInviteInfos = new HashSet<FolderInviteInfo>();
-	
-
 
 	/*
 	 * This is the conceptual path to the folder.
@@ -770,9 +768,10 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 			throw new FileSharingException("Cann't set auto share with yourself");
 		}
 		FolderAutoShareInfo autoShareInfo = getAutoShareInfo(collaborator);
+		
 		if( autoShareInfo != null )
 		{
-			autoShareInfo.setPermissions(permissions);  
+			autoShareInfo.changePermissions(permissions);  
 		}
 		else
 		{
@@ -803,7 +802,18 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 		{
 		    inviteInfo = new FolderInviteInfo(this, email, permissions);
 		}
+		folderInviteInfos.add(inviteInfo);
 		return inviteInfo;
+	}
+	
+	/**
+	 * Determine if this folder object has auto sharing set up.   
+	 * 
+	 * @return true if there is one or more auto shares or invites to auto share on the folder
+	 */
+	public boolean getHasAutoSharing()
+	{
+		return (autoShareInfos.size() > 0 || folderInviteInfos.size() > 0); 
 	}
 	
 	/**
@@ -845,7 +855,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	{
 		for(FolderInviteInfo inviteInfo : folderInviteInfos)
 		{
-			if( inviteInfo.getEmail().equalsIgnoreCase(email))
+			if( inviteInfo.getEmail().equalsIgnoreCase(email.trim()))
 			{
 				return inviteInfo;
 			}

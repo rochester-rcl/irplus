@@ -79,7 +79,6 @@
                 <br/>
                 <br/>
                 <h3><fmt:message key="unknown.action"/></h3>
-                <p>The action could not be completed if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> </p>
                 <p><fmt:message key="unknown.action.message"/> - <a href="<c:url value="/home.action"/>">return to home page</a></p>
             </div>
             <!--  end the body tag --> 

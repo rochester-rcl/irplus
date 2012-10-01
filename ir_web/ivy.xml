@@ -28,8 +28,8 @@
     <info organisation="ir_web" module="ir_web"/>
     <dependencies>
      
-        <dependency org="ir_service" name="ir_service" rev="3.0" changing="true"/>
-        <dependency org="ur_tags" name="ur_tags" rev="3.0" transitive="false" changing="true"/>
+        <dependency org="ir_service" name="ir_service" rev="2.2" changing="true"/>
+        <dependency org="ur_tags" name="ur_tags" rev="2.2" transitive="false" changing="true"/>
         
         <!--  struts 2 files and dependencies -->
         <dependency org="org.apache.struts" name="struts2-core" rev="2.3.4" transitive="false">
@@ -40,12 +40,12 @@
             <artifact name="struts2-spring-plugin" type="jar"/>
         </dependency>
         
-        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" transitive="false">
-            <artifact name="commons-fileupload" type="jar"/>
-        </dependency>
-        
         <dependency org="org.apache.commons" name="commons-lang3" rev="3.1" transitive="false">
             <artifact name="commons-lang3" type="jar"/>
+        </dependency>
+        
+        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.1" transitive="false">
+            <artifact name="commons-fileupload" type="jar"/>
         </dependency>
         
         <dependency org="org.freemarker" name="freemarker" rev="2.3.16" transitive="false">
@@ -62,7 +62,7 @@
         </dependency>
         
         <!--  jstl files -->
-        <dependency org="javax.servlet" name="jstl" rev="1.2" transitive="false">
+        <dependency org="jstl" name="jstl" rev="1.2" transitive="false">
             <artifact name="jstl" type="jar"/>
         </dependency>
         
@@ -82,22 +82,21 @@
         </dependency>
         
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-web" rev="3.1.0.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-web" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-web" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework.security" name="spring-security-config" rev="3.0.4.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-config" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-security-config" type="jar"/>
         </dependency>
 
         <!--  yui download -->
-	    <dependency org="yui" name="yui" rev="2.9.0" transitive="false" changing="true">
-	        <artifact name="yui" type="zip"
- 	        url="http://yui.zenfs.com/releases/yui2/yui_2.9.0.zip"/> 
+	    <dependency org="yui" name="yui" rev="2.7.0" transitive="false" changing="true">
+	        <artifact name="yui" type="zip" url="http://yui.zenfs.com/releases/yui2/yui_2.7.0r2.zip"/> 
         </dependency>
 
          <!--  spring security libraries --> 
-        <dependency org="org.springframework.security" name="spring-security-web" rev="3.0.4.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-web" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-security-web" type="jar"/> 
         </dependency>
     </dependencies>

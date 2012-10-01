@@ -663,7 +663,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Metadata Modified");
-
 		return SUCCESS;
 	}
 
@@ -919,7 +918,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<PlaceOfPublication> getPlacesOfPublication() {
-		List<PlaceOfPublication> placesOfPublication = placeOfPublicationService.getAll();
+		 List<PlaceOfPublication> placesOfPublication = placeOfPublicationService.getAll();
 		Collections.sort(placesOfPublication, nameComparator);
 		return placesOfPublication;
 	}
@@ -1454,7 +1453,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		this.userService = userService;
 	}
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

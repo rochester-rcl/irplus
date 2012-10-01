@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<taglib>
+    <tlibversion>2.0</tlibversion>
+    <jspversion>1.2</jspversion>
+    <shortname>Prize Tags - Ajax Tags</shortname>
+    <uri>urn:www.jenkov.com/projects/prizetags</uri>
+
+    <!--
+    <displayname>Prize Tags - Bean Tags</displayname>
+
+    <description>
+    </description>
+    -->
+
+    <tag>
+        <name>link</name>
+        <tagclass>com.jenkov.prizetags.ajax.impl.LinkTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+
+        <attribute>
+            <name>targetElement</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>reload</name>
+        <tagclass>com.jenkov.prizetags.ajax.impl.ReloadTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+
+        <attribute>
+            <name>targetElement</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>time</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>form</name>
+        <tagclass>com.jenkov.prizetags.ajax.impl.FormTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+
+        <attribute>
+            <name>targetElement</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>submit</name>
+        <tagclass>com.jenkov.prizetags.ajax.impl.SubmitTag</tagclass>
+        <bodycontent>JSP</bodycontent>
+    </tag>
+
+</taglib>
