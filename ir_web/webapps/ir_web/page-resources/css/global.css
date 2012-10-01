@@ -21,29 +21,6 @@
 
 /* set the thumbnail and general picture sizes */
 
-
-.button_next_left
-{
-	padding-left: 5px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	float: left;
-}
-
-.button_next_right
-{
-	padding-right: 5px;
-    padding-top: 5px;
-	padding-bottom: 5px;
-	float: right;
-}
-
-.researcherTableImage
-{
-	width: 120px;
-}
-
-
 .basic_thumbnail
 {
 	height: 66px;
@@ -52,6 +29,8 @@
 
 .centered_thumbnail
 {
+	height: 66px;
+	width: 100px;
 	align: middle;
 }
 
@@ -289,7 +268,7 @@ ul.basicNav {
 	margin: 0px;
     border: 1px solid #B9C0C2;
     background: url(../images/all-images/button_background.gif);
-    height: 25px;
+    height: 28px;
     font-family: Verdana;
     color: #454545;
     cursor:pointer;
@@ -404,6 +383,9 @@ facet and searching
     padding-bottom: 6px;
 }
 
+.p_indent {
+	 padding: 5px;
+}
 
 /******************************
 override yui css files
@@ -422,26 +404,4 @@ override yui css files
 	border: 0px;
 	border-top-color: #ffffff;
 	padding: 0.25em 0.5em;
-}
-
-/******************************
-workspace header
-*********************************/
-.workspace_head
-{
-	clear: both;
-	width: 100%;
-	height: 50px;
-}
-
-.workspace_head_float_left
-{
-	 float: left;
-}
-
-.workspace_head_float_right
-{
-	float: right;
-	padding-top: 15px;
-	text-align: bottom;
 }

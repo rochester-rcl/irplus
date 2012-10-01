@@ -24,7 +24,11 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.security.PermissionNotGrantedException;
+import edu.ur.ir.user.FileSharingException;
+import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
@@ -87,6 +91,19 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
     /** current root location where all files are being moved from*/
     private Long parentFolderId;
 	
+    /* invite service to deal with auto shared files and folders */
+    private InviteUserService inviteUserService;
+    
+	/* service to send emails when an error occurs */
+	private ErrorEmailService errorEmailService;
+	
+	/* if set to true auto-sharing will be applied to the folders being moved */
+	private boolean applyAutoShare;
+	
+ 
+
+
+
 	/**
 	 * Takes the user to view the locations that the folder can be moved to.
 	 * 
@@ -162,7 +179,7 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		log.debug("move files and folders called");
 		user = userService.getUser(userId, false);
 
-		List<FileSystem> notMoved;
+		List<FileSystem> notMoved = new LinkedList<FileSystem>();
 		actionSuccess = true;
 
 		List<Long> listFolderIds = new LinkedList<Long>();
@@ -214,15 +231,39 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		{
 			String message = getText("folderNamesAlreadyExist");
 			actionSuccess = false;
-			StringBuffer sb = new StringBuffer(message);
 			for(FileSystem fileSystem : notMoved)
 			{
-			    sb.append( " " + fileSystem.getName() );
+			    message = message + " " + fileSystem.getName();
 			}
-			addFieldError("moveError", sb.toString());
-			viewLocations();
-			return ERROR;
+			addFieldError("moveError", message);
 		}
+		else
+		{
+			try {
+				
+				
+				LinkedList<PersonalFolder> autoShareFolders = new LinkedList<PersonalFolder>();
+				LinkedList<PersonalFile> autoShareFiles = new LinkedList<PersonalFile>();
+				if( applyAutoShare )
+				{
+					autoShareFolders.addAll(foldersToMove);
+					autoShareFiles.addAll(filesToMove);
+				    inviteUserService.addNewFilesFoldersToFolderWithAutoShare(destination, autoShareFolders, autoShareFiles);
+				}
+			} catch (FileSharingException e) {
+				// this should never happen so log and send email
+				log.error(e);
+				errorEmailService.sendError(e);
+			} catch (PermissionNotGrantedException e) {
+				// this should never happen so log and send email
+				log.error(e);
+				errorEmailService.sendError(e);
+			}
+		}
+		
+		
+		//load the data
+        viewLocations();		
 		
 		return SUCCESS;
 	}
@@ -282,9 +323,9 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 	/**
 	 * Allow a user id to be passed in.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -319,5 +360,19 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 	public IrUser getUser() {
 		return user;
 	}
+	
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
+	}
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+	
+	public void setApplyAutoShare(boolean applyAutoShare) {
+		this.applyAutoShare = applyAutoShare;
+	}
+
+
 	
 }

@@ -58,8 +58,7 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("ipCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("ipCount"));
 	}
 	
 	/**
@@ -71,6 +70,15 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }	
+
+	/**
+	 * Get all ip addresses.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<IgnoreIpAddress> getAll() {
+		return hbCrudDAO.getAll();
+	}
 
 	/**
 	 * GEt the ignore ip address by id.

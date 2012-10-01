@@ -31,26 +31,21 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.MapFieldSelector;
+import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.ChainedFilter;
+import org.apache.lucene.misc.ChainedFilter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.DocIdSet;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.OpenBitSet;
 import org.apache.lucene.util.OpenBitSetDISI;
-import org.apache.lucene.util.Version;
 
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.SearchHelper;
@@ -72,7 +67,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	private static final long serialVersionUID = 4908678264742124106L;
 
 	/** Analyzer to use for parsing the queries */
-	private transient Analyzer analyzer;
+	private Analyzer analyzer;
 	
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemSearchService.class);
@@ -81,7 +76,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	private int maxNumberOfMainQueryHits = 10000;
 	
 	/** Key word analyzer */
-	private transient KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
+	private KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
 	
 	
 	/** fields to search in the index*/
@@ -124,12 +119,10 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		}
 		
-		FSDirectory directory = FSDirectory.open(new File(indexFolder));
-		IndexReader reader = IndexReader.open(directory, true);
-		IndexSearcher searcher = new IndexSearcher(reader);
+		IndexSearcher searcher = new IndexSearcher(indexFolder);
+		IndexReader reader = searcher.getIndexReader();
 		
-		
-		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer, getBoostedFields());
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
@@ -174,7 +167,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
         		searcher);
 		helper.setExecutedQuery(executedQuery);
         searcher.close();
-        reader.close();
         return helper;
 	}
 	
@@ -350,7 +342,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			
 			if( !searchString.trim().equals(""))
 			{
-				QueryParser subQueryParser = new QueryParser(Version.LUCENE_35, f.getField(), keywordAnalyzer);
+				QueryParser subQueryParser = new QueryParser(f.getField(), keywordAnalyzer);
 				searchString = "\"" + searchString +"\"";
 			    Query subQuery = subQueryParser.parse(searchString);
 			    
@@ -406,11 +398,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		}
 		
-		FSDirectory directory = FSDirectory.open(new File(indexFolder));
-		IndexReader reader = IndexReader.open(directory, true);
-		IndexSearcher searcher = new IndexSearcher(reader);
-		
-		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer, getBoostedFields());
+		IndexSearcher searcher = new IndexSearcher(indexFolder);
+		IndexReader reader = searcher.getIndexReader();
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
@@ -478,7 +468,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
         helper.setFacetTrail(filters);
         
         searcher.close();
-        reader.close();
         return helper;
 	}
 	
@@ -504,11 +493,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		}
 		
-		FSDirectory directory = FSDirectory.open(new File(indexFolder));
-		IndexReader reader = IndexReader.open(directory, true);
-		IndexSearcher searcher = new IndexSearcher(reader);
-		
-		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer, getBoostedFields());
+		IndexSearcher searcher = new IndexSearcher(indexFolder);
+		IndexReader reader = searcher.getIndexReader();
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
@@ -574,7 +561,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
         helper.setFacetTrail(filters);
         helper.setExecutedQuery(executedQuery);
         searcher.close();
-        reader.close();
         return helper;
 	}
 	
@@ -598,7 +584,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			}
 
 			String fixedQuery = filter.getQuery();
-		    QueryParser subQueryParser = new QueryParser(Version.LUCENE_35, filter.getField(), keywordAnalyzer);
+		    QueryParser subQueryParser = new QueryParser(filter.getField(), keywordAnalyzer);
 		    fixedQuery = "\"" + fixedQuery +"\"";
 		    Query subQuery = subQueryParser.parse(fixedQuery);
 		   
@@ -790,7 +776,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	    for( int index = idsToCollectStartPosition; index < endPosition; index ++ )
 	    {
 	    	Document doc = searcher.doc(hits.scoreDocs[index].doc,fieldSelector);
-	    	ids.add(NumericUtils.prefixCodedToLong(doc.get(DefaultInstitutionalItemIndexService.ID)) );
+	    	ids.add(NumberTools.stringToLong(doc.get(DefaultInstitutionalItemIndexService.ID)));
 	    }
         FacetSearchHelper helper = new FacetSearchHelper(ids, hits.totalHits, facetResults, mainQueryString);
         return helper;
@@ -854,11 +840,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		}
 		
-		FSDirectory directory = FSDirectory.open(new File(indexFolder));
-		IndexReader reader = IndexReader.open(directory, true);
-		IndexSearcher searcher = new IndexSearcher(reader);
-		
-		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer, getBoostedFields());
+		IndexSearcher searcher = new IndexSearcher(indexFolder);
+		IndexReader reader = searcher.getIndexReader();
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 
@@ -915,7 +899,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
         
 		helper.setExecutedQuery(executedQuery);
         searcher.close();
-        reader.close();
         return helper;
 	}
 	
@@ -932,13 +915,16 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		List<Filter> filters = new LinkedList<Filter>();
 		
         //isolate the collection root
-		Term t = new Term("collection_root_id", NumericUtils.longToPrefixCoded(collection.getTreeRoot().getId()));
-		Query subQuery = new TermQuery( t );
+   	    QueryParser subQueryParser = new QueryParser("collection_root_id", analyzer);
+		subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+		Query subQuery = subQueryParser.parse(NumberTools.longToString(collection.getTreeRoot().getId()));
 		filters.add(new QueryWrapperFilter(subQuery));
 		
 		
 		//isolate the range of children
-		subQuery = NumericRangeQuery.newLongRange("collection_left_value", collection.getLeftValue(), collection.getRightValue(), true, true);
+		subQueryParser = new QueryParser("collection_left_value", analyzer);
+		subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+		subQuery = subQueryParser.parse("[" + NumberTools.longToString(collection.getLeftValue()) + " TO " + NumberTools.longToString(collection.getRightValue()) + "]" );
 		filters.add(new QueryWrapperFilter(subQuery));
 	    return filters;
 	}

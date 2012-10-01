@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -31,7 +30,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -166,15 +164,13 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		IndexReader reader = IndexReader.open(dir,  true);
-		IndexSearcher searcher = new IndexSearcher(reader);
-		QueryParser parser = new QueryParser(Version.LUCENE_35, field, new StandardAnalyzer(Version.LUCENE_35));
+		IndexSearcher searcher = new IndexSearcher(dir);
+		QueryParser parser = new QueryParser(field, new StandardAnalyzer());
 		Query q1 = parser.parse(queryString);
 		TopDocs hits = searcher.search(q1, 1000);
 		int hitCount = hits.totalHits;
 
 		searcher.close();
-		reader.close();
 
 		return hitCount;
 	}
@@ -248,7 +244,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -277,7 +273,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFileFromIndex(personalFile.getOwner(), personalFile.getId());
 		
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -366,19 +362,19 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
 		// search the document and make sure we can find the stored data
 		try {
 
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.FOLDER_NAME, 
+			int hits = executeQuery(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME, 
 					personalFolder.getName(), 
 					lucenDirectory);
 
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.FOLDER_NAME + " "
+			+ " for finding " + DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME + " "
 			+ personalFolder.getName();
 			
 			
@@ -389,19 +385,19 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFolderFromIndex(personalFolder.getOwner(), personalFolder.getId());
 		
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
 		// search the document and make sure we can find the stored data
 		try {
 
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.FOLDER_NAME, 
+			int hits = executeQuery(DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME, 
 					personalFolder.getName(), 
 					lucenDirectory);
 
 			assert hits == 0 : "Hit count should equal 0 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.FOLDER_NAME + " " + personalFolder.getName();
+			+ " for finding " + DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME + " " + personalFolder.getName();
 			
 			
 		} catch (Exception e) {
@@ -494,7 +490,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -517,7 +513,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteItemFromIndex(personalItem.getOwner(), personalItem.getId());
 		
 		try {
-			lucenDirectory = FSDirectory.open(new File(user.getPersonalIndexFolder()));
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}

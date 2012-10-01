@@ -38,16 +38,16 @@
         </dependency>
         
         <!-- hiberante files -->
-        <dependency org="org.hibernate" name="hibernate-core" rev="3.6.0.Final" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.5.3-Final" transitive="false">
             <artifact name="hibernate-core" type="jar"/>
         </dependency>
         
          <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.1.0.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-orm" rev="3.1.0.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-orm" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-orm" type="jar"/>
         </dependency>
             

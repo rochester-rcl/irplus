@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.security.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -65,8 +64,7 @@ public class HbIrClassTypeDAO implements IrClassTypeDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irClassTypeCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irClassTypeCount"));
 	}
 
 	/**
@@ -99,6 +97,18 @@ public class HbIrClassTypeDAO implements IrClassTypeDAO {
 		return (IrClassType) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIrClassTypeByName", name));
 	}
+
+	
+	/**
+	 * Get all class types.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	
 	/**
 	 * Get the class type by id.

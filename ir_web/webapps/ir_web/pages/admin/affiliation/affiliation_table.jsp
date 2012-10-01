@@ -24,7 +24,6 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 	<c:import url="browse_all_affiliation_pager.jsp"/>
-	<br/>
 </c:if>
 
 <div class="dataTable">
@@ -46,7 +45,6 @@
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					<urstb:td>Author Permission</urstb:td>
-					<urstb:td>Workspace Creator Permission</urstb:td>
 					<urstb:td>Researcher Permission</urstb:td>
 					<urstb:td>Approval Required</urstb:td>
 					<urstb:td>Description</urstb:td>
@@ -75,10 +73,6 @@
 		                        <input type="checkbox" disabled="disabled" 
                                <c:if test='${affiliation.author}'>checked="checked"</c:if>/>
 	                        </urstb:td>
-	                         <urstb:td>
-			                   <input type="checkbox" disabled="disabled" 
-                               <c:if test='${affiliation.workspaceCreator}'>checked="checked"</c:if>/>
-	                        </urstb:td>
 	                        <urstb:td>
 			                   <input type="checkbox" disabled="disabled" 
                                <c:if test='${affiliation.researcher}'>checked="checked"</c:if>/>
@@ -97,7 +91,6 @@
 </div>	
 
 <c:if test="${totalHits > 0}">
-    <br/>
 	<c:import url="browse_all_affiliation_pager.jsp"/>
 </c:if>
 

@@ -1,5 +1,5 @@
-<!-- NOTE this need to be plain text for YUI 2.9.0 -->
-<jsp:directive.page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" />
+
+<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
 <!--  
    Copyright 2008 University of Rochester
@@ -20,6 +20,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 
 <table class="formTable">
     <tr>

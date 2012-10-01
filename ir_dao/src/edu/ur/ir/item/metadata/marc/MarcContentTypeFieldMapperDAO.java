@@ -19,7 +19,6 @@ package edu.ur.ir.item.metadata.marc;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * Data access object for marc to content types field mapping
@@ -27,7 +26,7 @@ import edu.ur.dao.ListAllDAO;
  * @author Nathan Sarr
  *
  */
-public interface MarcContentTypeFieldMapperDAO extends CrudDAO<MarcContentTypeFieldMapper>, ListAllDAO
+public interface MarcContentTypeFieldMapperDAO extends CrudDAO<MarcContentTypeFieldMapper>
 {
 	/**
 	 * Get the mapper by content type.

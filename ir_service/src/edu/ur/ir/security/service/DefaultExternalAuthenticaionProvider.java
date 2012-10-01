@@ -38,13 +38,10 @@ import edu.ur.ir.security.ExternalAuthenticationProvider;
  */
 public class DefaultExternalAuthenticaionProvider implements ExternalAuthenticationProvider{
 
-	/** eclipse generated id  */
-	private static final long serialVersionUID = -8552847690615321354L;
-
 	/** list of authentication providers.  */
 	private List<AuthenticationProvider> authenticationProviders = new LinkedList<AuthenticationProvider>();
 	
-    protected transient MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 	
 	/**
 	 * Authenticate against the given external providers.

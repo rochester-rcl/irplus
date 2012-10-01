@@ -40,44 +40,40 @@ import edu.ur.ir.web.action.UserIdAware;
 public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 	
 	
-	//  Eclipse generated id */
+	/**  Eclipse generated id */
 	private static final long serialVersionUID = -642221640484799568L;
 
-	// User trying to upload the file */
+	/** User trying to upload the file */
 	private Long userId;
 	
-	// Id of the researcher to add the picture to 
+	/**  Id of the researcher to add the picture to */
 	private Long researcherId;
 
-	// service to create thumbnails  */
+	/** service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
 		
-	// Service for dealing with news information */
+	/** Service for dealing with news information */
 	private Researcher researcher ;
 	
-	// Repository service */
+	/** Repository service */
 	private RepositoryService repositoryService;
 	
-	// file uploaded */
+	/** file uploaded */
 	private File file;
 	
-	//  File name uploaded from the file system */
+	/**  File name uploaded from the file system */
 	private String fileFileName;
 		
-	//  Logger for add personal folder action */
+	/**  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(UploadResearcherImage.class);
 	
-	// Indicates if the picture is the primary picture  */
+	/** Indicates if the picture is the primary picture  */
 	private boolean primaryResearcherPicture = false;
 	
-	// Indicates the file has been added. */
+	/** Indicates the file has been added. */
 	private boolean added = false;
 	
-	public void setAdded(boolean added) {
-		this.added = added;
-	}
-
-	// Institutional Researcher service */
+	/** Institutional Researcher service */
 	private ResearcherService researcherService;
 
 	
@@ -156,6 +152,7 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 	    return SUCCESS;
 	}
 	
+	
 	/**
 	 * Get the user id uploading the image.
 	 * 
@@ -168,10 +165,19 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 	/**
 	 * Set the user id uploading the image.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	/**
+	 * Repository service 
+	 * 
+	 * @return the repository service
+	 */
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
 	}
 
 	/**
@@ -181,6 +187,15 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	/**
+	 * Get the file to be added.
+	 * 
+	 * @return
+	 */
+	public File getFile() {
+		return file;
 	}
 
 	/**
@@ -210,12 +225,13 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		this.fileFileName = fileFileName;
 	}
 
-	/**
-	 * Get the researcher the image was added to.
-	 * @return
-	 */
 	public Researcher getResearcher() {
 		return researcher;
+	}
+
+
+	public void setResearcher(Researcher researcher) {
+		this.researcher = researcher;
 	}
 
 	/**
@@ -238,6 +254,7 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		return isPrimaryResearcherPicture();
 	}
 
+
 	/**
 	 * Set to true if this is the primary picture for the researcher.
 	 * 
@@ -246,6 +263,7 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 	public void setPrimaryResearcherPicture(boolean primaryResearcherPicture) {
 		this.primaryResearcherPicture = primaryResearcherPicture;
 	}
+
 
 	/**
 	 * Id of the researcher to add the image to.
@@ -256,6 +274,7 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		return researcherId;
 	}
 
+
 	/**
 	 * Id of the researcher to add the image to.
 	 * 
@@ -265,31 +284,42 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		this.researcherId = researcherId;
 	}
 
+
 	/**
-	 * Added if the picture was added.
+	 * True if the image is added.
 	 * 
 	 * @return
 	 */
-	public boolean getAdded()
-	{
+	public boolean isAdded() {
 		return added;
 	}
 
+
 	/**
-	 * Set the researcher service.
+	 * Set to true if the image is added.
 	 * 
-	 * @param researcherService
+	 * @param added
 	 */
+	public void setAdded(boolean added) {
+		this.added = added;
+	}
+
+
+	public ResearcherService getResearcherService() {
+		return researcherService;
+	}
+
+
 	public void setResearcherService(
 			ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
 	
-	/**
-	 * Set the thumbnail transformer service.
-	 * 
-	 * @param thumbnailTransformerService
-	 */
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
 	public void setThumbnailTransformerService(
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;

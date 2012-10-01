@@ -49,10 +49,10 @@ public class RandomResearcherPictureHelper implements Serializable{
 	// get the previous picture
 	public static final String PREV = "PREV";
 	
-	// current researcher location */
+	/** current researcher location */
 	private int currentResearcherLocation = 0;
 	
-	// count of available researchers  */
+	/** count of available researchers  */
 	private int researcherCount;
 	
 	
@@ -195,20 +195,10 @@ public class RandomResearcherPictureHelper implements Serializable{
 		return researchers;
 	}
 
-	/**
-	 * Current location in the list of researchers.
-	 * 
-	 * @return
-	 */
 	public int getCurrentResearcherLocation() {
 		return currentResearcherLocation;
 	}
 
-	/**
-	 * Total number of researchers that are public / available for display
-	 * 
-	 * @return
-	 */
 	public int getResearcherCount() {
 		return researcherCount;
 	}

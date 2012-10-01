@@ -142,39 +142,39 @@
 	<!--  All files for the specified folder including files in sub folders  -->
 	<query name="getAllResearcherFilesForFolder">
 	    from ResearcherFile as researcherFile
-	    where  researcherFile.parentFolder.leftValue between :leftValue and :rightValue
-	    and researcherFile.parentFolder.treeRoot.id = :rootId
+	    where  researcherFile.parentFolder.leftValue between ? and ?
+	    and researcherFile.parentFolder.treeRoot.id = ?
 	</query>
 	
 	<!--  All publications for the specified folder including files in sub folders  -->
 	<query name="getAllResearcherPublicationsForFolder">
 	    from ResearcherPublication as researcherPublication
-	    where  researcherPublication.parentFolder.leftValue between :leftValue and :rightValue
-	    and researcherPublication.parentFolder.treeRoot.id = :rootId
+	    where  researcherPublication.parentFolder.leftValue between ? and ?
+	    and researcherPublication.parentFolder.treeRoot.id = ?
 	</query>
 
 	<!--  All institutional items for the specified folder including institutional items in sub folders  -->
 	<query name="getAllResearcherInstitutionalItemsForFolder">
 	    from ResearcherInstitutionalItem as researcherInstitutionalItem
-	    where  researcherInstitutionalItem.parentFolder.leftValue between :leftValue and :rightValue
-	    and researcherInstitutionalItem.parentFolder.treeRoot.id = :rootId
+	    where  researcherInstitutionalItem.parentFolder.leftValue between ? and ?
+	    and researcherInstitutionalItem.parentFolder.treeRoot.id = ?
 	</query>
 		
 	<!--  All links for the specified folder including files in sub folders  -->
 	<query name="getAllResearcherLinksForFolder">
 	    from ResearcherLink as researcherLink
-	    where  researcherLink.parentFolder.leftValue between :leftValue and :rightValue
-	    and researcherLink.parentFolder.treeRoot.id = :rootId
+	    where  researcherLink.parentFolder.leftValue between ? and ?
+	    and researcherLink.parentFolder.treeRoot.id = ?
 	</query>
 	
     <!--  All versioned files for the specified folder including 
           versioned files in sub folders  -->
-	<query name="getAllIrFilesForResearcherPageFolder">
+	<query name="getAllIrFilesForFolder">
 	    select irFile from ResearcherFolder folder
 	        inner join folder.files file
 	        inner join file.irFile irFile
-	    where folder.leftValue between :leftValue and :rightValue
-	    and folder.treeRoot.id = :rootId
+	    where folder.leftValue between ? and ?
+	    and folder.treeRoot.id = ?
 	</query>
 	
 	<!--  Get a count of researcher folders in the system -->
@@ -182,28 +182,37 @@
 	    select count(*) from ResearcherFolder
 	</query>
 	
+	<!-- named query for getting all collections ordered by name -->
+    <query name="getAllResearcherFolderNameAsc">from ResearcherFolder order by name </query>
+    
+    <!-- named query for getting a researcherFolder by name -->
+	<query name="getResearcherFolderByName">
+		from ResearcherFolder as ResearcherFolder where
+		ResearcherFolder.name = ?
+	</query>
+	
 	<!-- named query for getting a root researcher folder by name/user -->
 	<query name="getRootResearcherFolderByNameResearcher">
 		from ResearcherFolder as ResearcherFolder where
-		ResearcherFolder.name = :name
-		and ResearcherFolder.researcher.id = :researcherId
+		ResearcherFolder.name = ?
+		and ResearcherFolder.researcher.id = ?
 		and ResearcherFolder.id = ResearcherFolder.treeRoot.id
 	</query>
 	
 	<!-- named query for getting a researcher folder by name parent id -->
 	<query name="getResearcherFolderByNameParent">
 		from ResearcherFolder as ResearcherFolder where
-		ResearcherFolder.name = :name
-		and ResearcherFolder.parent.id = :parentId
+		ResearcherFolder.name = ?
+		and ResearcherFolder.parent.id = ?
 	</query>
 	
 	<!--  Get all researcher folders that have a left or right value greater than the
            specified value -->	
 	<query name="getAllResearcherFoldersValueGreaterEqual">
 	   from ResearcherFolder as researcherFolder
-	   where ( researcherFolder.leftValue >= :leftValue
-	   or researcherFolder.rightValue >= :rightValue )
-	   and researcherFolder.treeRoot.id = :rootId
+	   where ( researcherFolder.leftValue >= ?
+	   or researcherFolder.rightValue >= ? )
+	   and researcherFolder.treeRoot.id = ?
 	</query>
 	
 	<!-- Gets the all researcher folders within the specified tree that are not within the child tree
@@ -211,39 +220,50 @@
          This only works across the specified root researcher folder -->
 	<query name="getAllResearcherFoldersNotInChildTree">
 	    from ResearcherFolder as researcherFolder 	    
-	    where researcherFolder.leftValue not between :leftValue and :rightValue 
-	    and researcherFolder.treeRoot.id = :rootId
+	    where researcherFolder.leftValue not between ? and ? 
+	    and researcherFolder.treeRoot.id = ?
+	    order by researcherFolder.name
+	</query>
+	
+     <!-- Gets the all folders for the specified database except the specified collection and
+	     all it's children.  This works across all root folders   -->
+	<query name="getAllResearcherFoldersNotInChild">
+	    from ResearcherFolder as researcherFolder 	    
+	    where ( researcherFolder.leftValue not between ? and ? 
+	    and researcherFolder.treeRoot.id = ? 
+	    and researcherFolder.researcher.id = ?)
+	    or ( researcherFolder.researcher.id = ? and researcherFolder.treeRoot.id != ? )
 	    order by researcherFolder.name
 	</query>
 	
 	<!-- Gets all collections for the specified repository-->
 	<query name="getResearcherFoldersForResearcher">
 	    from ResearcherFolder as researcherFolder	    
-	    where researcherFolder.researcher.id = :id
+	    where researcherFolder.researcher.id = ?
 	    order by researcherFolder.name
 	</query>
 	
     <!-- Gets the path for a given collection-->
 	<query name="getResearcherFolderPath">
 	    from ResearcherFolder as researcherFolder 	    
-	    where :leftValue between researcherFolder.leftValue and researcherFolder.rightValue
-	    and researcherFolder.treeRoot.id = :rootId
-	    and researcherFolder.researcher.id = :researcherId
+	    where ? between researcherFolder.leftValue and researcherFolder.rightValue
+	    and researcherFolder.treeRoot.id = ?
+	    and researcherFolder.researcher.id = ?
 	    order by researcherFolder.leftValue
 	</query>
 	
 	<!-- Gets all sub folders within the parent folder -->
 	<query name="getSubFoldersForResearcherFolder">
 	    from ResearcherFolder as researcherFolder	    
-	    where researcherFolder.researcher.id = :researcherId
-	    and researcherFolder.parent.id = :parentFolderId
+	    where researcherFolder.researcher.id = ?
+	    and researcherFolder.parent.id = ?
 	    order by researcherFolder.name
 	</query>
 
 	<!-- Get root folders -->
 	<query name="getRootResearcherFolders">
 	    from ResearcherFolder as researcherFolder	    
-	    where researcherFolder.researcher.id = :researcherId
+	    where researcherFolder.researcher.id = ?
 	    and researcherFolder.parent.id is null
 	    order by researcherFolder.name
 	</query>
@@ -265,9 +285,9 @@
 	 <!-- Gets the all folders except those in the specified set of child folders  -->
 	<query name="getAllResearcherFoldersNotInChildFolders">
 	    from ResearcherFolder as researcherFolder 	   
-	    where researcherFolder.researcher.id = :researcherId
-	    and researcherFolder.treeRoot.id = :rootId
-	    and researcherFolder.leftValue not between :leftValue and :rightValue 
+	    where researcherFolder.researcher.id = ?
+	    and researcherFolder.treeRoot.id = ?
+	    and researcherFolder.leftValue not between ? and ? 
 	</query>
 
 	

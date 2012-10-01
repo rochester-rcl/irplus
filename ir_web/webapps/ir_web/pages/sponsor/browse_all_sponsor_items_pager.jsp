@@ -22,6 +22,7 @@
 
 
 <div class="pager">
+
 	<ur:pager currentPageNumber="${currentPageNumber}" 
 	     startPageNumber="${startPageNumber}"  
 		 totalHits="${totalHits}"

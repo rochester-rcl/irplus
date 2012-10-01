@@ -28,6 +28,9 @@ var viewInstitutionalCollectionAction = basePath + 'admin/viewInstitutionalColle
 // action to perform when submitting the personal collectino form.
 var deleteInstiutionalCollectionsAction = basePath + 'admin/deleteInstitutionalCollections.action';
 
+// object to hold the specified collection data.
+var institutionalCollectionTable = new  YAHOO.ur.table.Table('institutionalCollections', 'newInstitutionalCollections');
+
 // create a new institutional collection
 var newInstitutionalCollectionAction = basePath + 'admin/createInstitutionalCollection.action';
 
@@ -265,15 +268,6 @@ YAHOO.ur.institution = {
 	    YAHOO.ur.institution.errorDialog.render();
     },
     
-    /**
-     *  Handle a user selecting the browse 
-     */
-    handleBrowseClick : function(e) {  
-    	var parentId = document.getElementById('newCollectionForm_parentCollectionId').value;
-        window.location = getInstitutionalCollectionsAction + '?parentCollectionId='+parentId;
-    },
-
-    
 
     /** initialize the page
         this is called once the dom has been created */    
@@ -282,10 +276,6 @@ YAHOO.ur.institution = {
         YAHOO.ur.institution.createNewCollectionDialog();
         YAHOO.ur.institution.createCollectionDeleteConfirmDialog();
         YAHOO.ur.institution.createErrorDialog();
-        var myTabs = new YAHOO.widget.TabView("collection-tabs");
-        var tab0 = myTabs.getTab(0);
-        tab0.addListener('click',YAHOO.ur.institution.handleBrowseClick);
-        
     } 
 };
 

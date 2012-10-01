@@ -35,6 +35,8 @@
        <property name="repositoryService" ref="repositoryService"/>
    </bean>
    
+
+
    <!-- File group entries for the web application -->
    <bean id="fileGroupEntriesTag" class="edu.ur.tag.repository.FileGroupEntriesTag">
        <property name="securityService" ref="securityService"/>
@@ -56,7 +58,6 @@
                 <value>png</value>
                 <value>gif</value>
                 <value>bmp</value>
-                <value>pdf</value>
            </list>
       </property>
    </bean>

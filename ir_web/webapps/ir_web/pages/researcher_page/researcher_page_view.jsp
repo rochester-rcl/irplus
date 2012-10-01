@@ -51,7 +51,7 @@
         
         <!-- Source File -->
         <ur:js src="page-resources/js/menu/main_menu.js"/>
-        <ur:js src="page-resources/js/util/base_path.jsp"/>
+        <ur:js src="pages/js/base_path.js"/>
         <ur:js src="page-resources/js/util/ur_util.js"/>
  	    <ur:js src="page-resources/js/public/researcher_page_view.js"/> 
       
@@ -71,26 +71,8 @@
                 padding: 0px;
             }
             
-		    #treeDiv { background: #fff; padding:1em; margin-top:1em; }
-            
-            .name_div
-            {
-                margin-top: 10px;
-                float: left;
-                width: 100%;
-            }
-            
-            .edit_researcher_link
-            {
-                float: right;
-            }
-            
-   
-            .researcher_world_image
-            {
-                float: left;
-                padding-right: 10px;
-            }
+		#treeDiv { background: #fff; padding:1em; margin-top:1em; }
+
         </style>
         
             
@@ -104,7 +86,7 @@
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
             
-            <!--  this is the body region of the page -->
+            <!--  this is the body regin of the page -->
             <div id="bd">
  				
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
@@ -114,29 +96,36 @@
 
                 <c:if test="${researcher == null}">
                 	<br/>
+                	
                 	The researcher page is not available.
                 </c:if>
 				 
 				<c:if test="${researcher != null && (researcher.isPublic || user.id == researcher.user.id)}">
-				
-	            	<div class="name_div">
-	            	       <c:if test="${user != null && user.id == researcher.user.id}">	
-	            	           <c:url var="editResearcherPageUrl" value="/user/viewResearcher.action">
+	            	<table width="100%">
+	            	<tr> <td width="9%">
+		            		<img src="${pageContext.request.contextPath}/page-resources/images/all-images/researcher.jpg" height="50" width="55"/>
+	            		</td> 
+	            		<td>
+		                    <h4> <font color="grey" ><i> The Researcher page of </i> </font> </h4>
+		                    <font size="+2" > ${researcher.user.firstName}&nbsp;${researcher.user.lastName}  </font>
+		                </td> 
+		                <td align="right" valign="bottom">
+							<c:if test="${user != null && user.id == researcher.user.id}">	
+							    <c:url var="editResearcherPageUrl" value="/user/viewResearcher.action">
 					        	    <c:param name="researcherId" value="${researcher.id}"/>
 					            </c:url>
-						        <a class="edit_researcher_link" href="${editResearcherPageUrl}">Edit Researcher Page</a> 
-						     </c:if>	   
-		            		<img class="researcher_world_image" src="${pageContext.request.contextPath}/page-resources/images/all-images/researcher.jpg" height="50" width="55"/>
-	            		    <div class="researcher_name_div">
-		                        <h4> <font color="grey" ><i> The Researcher page of </i> </font> </h4>
-		                        <font size="+2" > ${researcher.user.firstName}&nbsp;${researcher.user.lastName}  </font>
-		                    </div>
-		            </div>
-		            
+						        <a href="${editResearcherPageUrl}">Edit Researcher Page</a> 
+					        </c:if>	                
+		                </td>
+	                </tr>
+	                </table>
+
 		            	                
 	                <!--  create the first column -->
 	                <div class="yui-g">
 	                <div class="yui-u first">
+	                   
+	                   
 	                   <div class="contentContainer">
 	                       <div class="contentBoxTitle">
 	                           <p>${researcher.user.firstName}&nbsp;${researcher.user.lastName}  </p>
@@ -205,6 +194,9 @@
 								</div>																												
 	                       </div>
 	                   </div>
+	                   
+	                   
+	                    
 	                </div>
 	                <!--  end the first column -->
 	            

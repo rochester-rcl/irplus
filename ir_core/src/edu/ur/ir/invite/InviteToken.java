@@ -65,7 +65,7 @@ public class InviteToken extends BasePersistent{
 	 */
 	public InviteToken(String email, String token, IrUser invitingUser)
 	{
-		this.email = email;
+		this.email = email.trim().toLowerCase();
 		this.token = token;
 		this.invitingUser = invitingUser; 
 		this.createdDate = new Timestamp(new Date().getTime());		

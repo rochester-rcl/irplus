@@ -17,7 +17,6 @@
 package edu.ur.ir.index;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackageAccess;
 
 
 public class DefaultWordXmlTextExtractor implements FileTextExtractor{
@@ -72,10 +72,9 @@ public class DefaultWordXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		OPCPackage p = null;
+		OPCPackage p = OPCPackage.open(f.getAbsolutePath(), PackageAccess.READ);
 		try
 		{
-			p = XWPFDocument.openPackage(f.getAbsolutePath());
 			XWPFDocument wordDocument = new XWPFDocument(p);
 			XWPFWordExtractor wordExtractor = new XWPFWordExtractor(wordDocument);
 			
@@ -104,13 +103,8 @@ public class DefaultWordXmlTextExtractor implements FileTextExtractor{
 		{
 			if(p!=null)
 			{
-				try {
-					p.close();
-					p = null;
-				} catch (IOException e) {
-					log.debug(e);
-					p = null;
-				}
+				p.revert();
+				p = null;
 			}
 		}
 		return text;

@@ -73,8 +73,8 @@ public class HbInstitutionalCollectionDAO implements InstitutionalCollectionDAO 
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irCollectionCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irCollectionCount"));
 	}
 
 	/**

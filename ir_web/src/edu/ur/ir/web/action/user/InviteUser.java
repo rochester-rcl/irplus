@@ -44,7 +44,6 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
-import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
@@ -197,7 +196,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 				IrAcl acl = securityService.getAcl(personalFile.getVersionedFile(), user);
 				
 				// Check if the user has SHARE permission for the file
-				if (acl.isGranted(InviteUserService.SHARE_PERMISSION, user, false)) {
+				if (acl.isGranted(VersionedFile.SHARE_PERMISSION, user, false)) {
 					buffer.append(fileId);
 					buffer.append(",");
 				} else {
@@ -223,7 +222,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			{
 				IrAcl acl = securityService.getAcl(file.getVersionedFile(), user);
 				
-				if (acl.isGranted(InviteUserService.SHARE_PERMISSION, user, false)) {
+				if (acl.isGranted(VersionedFile.SHARE_PERMISSION, user, false)) {
 					buffer.append(file.getId());
 					buffer.append(",");
 				} else {
@@ -264,7 +263,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
@@ -379,36 +378,9 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		IrUser unInvitingUser = userService.getUser(userId, true);
 		
 		IrAcl acl = securityService.getAcl(fileCollaborator.getVersionedFile(), unInvitingUser);
-		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
+		if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, unInvitingUser, false))
 		{
 		    return("accessDenied");
-		}
-		
-		IrUser user = fileCollaborator.getCollaborator();
-
-		// If user is unsharing themselves, then unshare the user and load the parent folder
-		if (userId.equals(user.getId())) {
-			returnResult =  "workspace";
-		} 
-
-		// un-index the file
-		PersonalFile pf = userFileSystemService.getPersonalFile(user, fileCollaborator.getVersionedFile());
-
-		// Check if personal file exist. Sometimes the file may be still in Shared file inbox.
-		// In that case, there is no need to delete from index
-		if (pf != null) {
-			
-			userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
-	    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-		}
-		else
-		{
-			SharedInboxFile sif = user.getSharedInboxFile(fileCollaborator.getVersionedFile());
-			if( sif != null )
-			{
-				userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
-		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-			}
 		}
 		
 		inviteUserService.unshareFile(fileCollaborator, unInvitingUser);
@@ -431,7 +403,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		    IrUser unInvitingUser = userService.getUser(userId, true);
 		
 		    IrAcl acl = securityService.getAcl(unsharingUserPersonalFile.getVersionedFile(), unInvitingUser);
-		    if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, unInvitingUser, false))
+		    if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, unInvitingUser, false))
 		    {
 			    return("accessDenied");
 		    }
@@ -505,7 +477,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		IrUser changingPermissionsUser = userService.getUser(userId, true);
 		
 		IrAcl acl = securityService.getAcl(versionedFile, changingPermissionsUser);
-		if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, changingPermissionsUser, false))
+		if( acl == null || !acl.isGranted(VersionedFile.SHARE_PERMISSION, changingPermissionsUser, false))
 		{
 		    return("accessDenied");
 		}

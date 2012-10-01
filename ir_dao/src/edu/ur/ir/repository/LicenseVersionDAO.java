@@ -18,7 +18,6 @@
 package edu.ur.ir.repository;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * Represents data access for a particular version of a given license.
@@ -26,4 +25,4 @@ import edu.ur.dao.ListAllDAO;
  * @author Nathan Sarr
  *
  */
-public interface LicenseVersionDAO extends CrudDAO<LicenseVersion>, ListAllDAO{}
+public interface LicenseVersionDAO extends CrudDAO<LicenseVersion>{}

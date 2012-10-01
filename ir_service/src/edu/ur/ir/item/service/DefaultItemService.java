@@ -26,8 +26,6 @@ import org.apache.log4j.Logger;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TransformedFile;
-import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
-import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFileSystemService;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
@@ -110,12 +108,6 @@ public class DefaultItemService implements ItemService {
 	
 	/** Reviewable item service */
 	private ReviewableItemService reviewableItemService;
-	
-	// group workspace project page file system service
-	private GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService;
-
-	// group workspace file system service
-	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
 	
 
 	/**
@@ -251,11 +243,8 @@ public class DefaultItemService implements ItemService {
 
 			//Check if this IrFile is being used by any Item or PersonalFile.
 			//If yes, then do not add the IrFile and FileInfo to the list to be deleted.
-			if ( (userFileSystemService.getPersonalFileCount(irFile) == 0) 
-					&& (getItemFileCount(irFile) == 0)
-					&& (researcherFileSystemService.getResearcherFileCount(irFile) == 0)
-					&& (groupWorkspaceFileSystemService.getGroupWorkspaceFileCount(irFile) == 0) 
-					&& (groupWorkspaceProjectPageFileSystemService.getFileCount(irFile) == 0)) {
+			if ( (userFileSystemService.getPersonalFileCount(irFile) == 0) && (getItemFileCount(irFile) == 0)
+					&& (researcherFileSystemService.getResearcherFileCount(irFile) == 0)) {
 				log.debug("Adding Ir file " + irFile);
 				files.add(irFile);
 				fileInfos.add(irFile.getFileInfo());
@@ -316,14 +305,9 @@ public class DefaultItemService implements ItemService {
 			Long itemFileCount = getItemFileCount(irFile);
 			Long fileSystemFileCount = userFileSystemService.getPersonalFileCount(irFile);
 			Long researcherFileCount = researcherFileSystemService.getResearcherFileCount(irFile);
-			Long groupWorkspaceFileCount = groupWorkspaceFileSystemService.getGroupWorkspaceFileCount(irFile);
-			Long groupWorkspaceProjectPageFileCount = groupWorkspaceProjectPageFileSystemService.getFileCount(irFile);
 			
-			if ( itemFileCount == 1l 
-				 && fileSystemFileCount == 0
-				 && researcherFileCount == 0
-				 && groupWorkspaceFileCount == 0
-				 && groupWorkspaceProjectPageFileCount == 0) {
+			if (itemFileCount == 1l && fileSystemFileCount == 0
+						&& researcherFileCount == 0) {
 				
 				log.debug("Adding Ir file " + irFile);
 				files.add(irFile);
@@ -589,14 +573,4 @@ public class DefaultItemService implements ItemService {
 		return itemDAO.getContributorTypeCount(contributorType);
 	}
 
-	
-	public void setGroupWorkspaceProjectPageFileSystemService(
-			GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService) {
-		this.groupWorkspaceProjectPageFileSystemService = groupWorkspaceProjectPageFileSystemService;
-	}
-
-	public void setGroupWorkspaceFileSystemService(
-			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
-		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
-	}
 }
