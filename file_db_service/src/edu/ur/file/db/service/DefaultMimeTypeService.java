@@ -38,6 +38,9 @@ import edu.ur.file.mime.TopMediaTypeDAO;
  */
 public class DefaultMimeTypeService implements MimeTypeService{
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 7576783157449909674L;
+
 	/** Top media type persistance.  */
 	private TopMediaTypeDAO topMediaTypeDAO;
 	
