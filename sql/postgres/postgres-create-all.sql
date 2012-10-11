@@ -414,6 +414,11 @@ CREATE TABLE file_system.file_checksum
   checksum TEXT NOT NULL,
   algorithm_type TEXT NOT NULL,
   date_calculated TIMESTAMP WITH TIME ZONE NOT NULL ,
+  date_re_calculated TIMESTAMP WITH TIME ZONE NOT NULL,
+  date_last_check_passed TIMESTAMP WITH TIME ZONE,
+  re_calculated_passed BOOLEAN NOT NULL DEFAULT TRUE,
+  re_calculated_value TEXT NOT NULL,
+  re_calculate_checksum BOOLEAN NOT NULL DEFAULT TRUE,
   version INTEGER,
   FOREIGN KEY (file_id) REFERENCES file_system.file (file_id)
 );
