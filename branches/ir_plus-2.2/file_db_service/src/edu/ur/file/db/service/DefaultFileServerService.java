@@ -55,6 +55,9 @@ import edu.ur.file.db.TreeFolderInfoDAO;
  */
 public class DefaultFileServerService implements FileServerService{
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 7485322616249733422L;
+
 	/** Data access for file servers in the database  */
 	private FileServerDAO fileServerDAO;
 
