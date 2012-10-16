@@ -110,13 +110,23 @@
 	</query>
 	
 	<!-- named query for getting files in a folder -->
-	<query name="getPersonalFilesWithIrFileId">
+	<query name="getPersonalFileCountWithIrFileId">
 		select count(*)
 		from PersonalFile as personalFile 
 		join personalFile.versionedFile versionedFile
 		join versionedFile.versions fileVersion
 		join fileVersion.irFile irFile
 		where irFile.id = ? 
+	</query>
+	
+		<!-- named query for getting files in a folder -->
+	<query name="getPersonalFilesWithIrFileId">
+		select personalFile 
+		from PersonalFile as personalFile 
+		join personalFile.versionedFile versionedFile
+		join versionedFile.versions fileVersion
+		join fileVersion.irFile irFile
+		where irFile.id = :irFileId 
 	</query>
 	
 	<!-- named query for a getting files shared with a given user  -->

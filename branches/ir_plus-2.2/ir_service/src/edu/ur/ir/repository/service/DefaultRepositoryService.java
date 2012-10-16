@@ -929,4 +929,14 @@ public class DefaultRepositoryService implements RepositoryService {
 			boolean externalAuthenticationEnabled) {
 		this.externalAuthenticationEnabled = externalAuthenticationEnabled;
 	}
+
+	
+	/**
+	 * Get the IrFile by the file info id otherwise return null.
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryService#getIrFileByFileInfoId(java.lang.Long)
+	 */
+	public IrFile getIrFileByFileInfoId(Long fileInfoId) {
+		return irFileDAO.getByFileInfoId(fileInfoId);
+	}
 }

@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.file.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -125,6 +126,18 @@ public class HbIrFileDAO implements IrFileDAO{
 	 */
 	public void makeTransient(IrFile entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	
+	/**
+	 * Get the IrFile by the specified file info id.
+	 * 
+	 * @see edu.ur.ir.file.IrFileDAO#getByFileInfoId(java.lang.Long)
+	 */
+	public IrFile getByFileInfoId(Long fileInfoId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIrFileByFileInfoId");
+		q.setParameter("fileInfoId", fileInfoId);
+		return (IrFile)q.uniqueResult();
 	}
 
 }

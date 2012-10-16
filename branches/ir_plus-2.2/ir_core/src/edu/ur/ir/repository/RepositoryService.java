@@ -309,6 +309,14 @@ public interface RepositoryService extends Serializable{
 	public IrFile getIrFile(Long id, boolean lock);
 	
 	/**
+	 * Get the IrFile by the file info id.
+	 * 
+	 * @param fileInfoId - id of the file info
+	 * @return - the IrFile otherwise null.
+	 */
+	public IrFile getIrFileByFileInfoId(Long fileInfoId);
+	
+	/**
 	 * Get the file info object for the transformed file by the
 	 * ir file id and system code.
 	 * 

@@ -11,3 +11,6 @@ UPDATE file_system.file_checksum set re_calculated_value = checksum;
 
 ALTER TABLE file_system.file_checksum ALTER COLUMN date_re_calculated SET NOT NULL;
 ALTER TABLE file_system.file_checksum ALTER COLUMN re_calculated_value SET NOT NULL;
+
+-- make file id unique on the ir_file table
+ALTER TABLE ir_file.ir_file ADD CONSTRAINT ir_file_file_id_unique UNIQUE (file_id);

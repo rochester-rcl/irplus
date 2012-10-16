@@ -90,19 +90,21 @@
 		ResearcherFile.researcher.id = ? and ResearcherFile.parentFolder.id is NULL
 	</query>
 	
-	<!-- named query for getting files in a folder -->
-	<query name="getResearcherFilesWithIrFileId">
-		select count(*)
-		from ResearcherFile as researcherFile 
-		where
-		researcherFile.irFile.id = ? 
-	</query>	
 
-	  <!-- named query for getting the count of irFile being used in item files -->
+	<!-- named query for getting the count of irFile being used in item files -->
 	<query name="getResearcherFileCount">
 		select count(*) 
 		from ResearcherFile as ResearcherFile where
 		ResearcherFile.irFile.id = ?
 	</query>
+	
+	<!-- named query for getting the count of irFile being used in item files -->
+	<query name="getResearcherFilesWithIrFileId">
+		select researcherFile 
+		from ResearcherFile as researcherFile where
+		researcherFile.irFile.id = :irFileId
+	</query>
+	
+	
     
 </hibernate-mapping>
