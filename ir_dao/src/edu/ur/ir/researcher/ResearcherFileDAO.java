@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.file.IrFile;
 
 
 /**
@@ -74,15 +75,6 @@ CrudDAO<ResearcherFile>
 	public List<ResearcherFile> getRootFiles(Long researcherId);
 	
 	/**
-	 * Get the files with specified ir file id .
-	 * 
-	 * @param irFileId
-	 * 
-	 * @return the found files
-	 */
-	public Long getFileWithSpecifiedIrFile(Long irFileId);
-
-	/**
 	 * Get a count of the researcher files containing this irFile
 	 * 
 	 * @param irFileId IrFile id to find in researcher files
@@ -90,4 +82,12 @@ CrudDAO<ResearcherFile>
 	 *  @return Count of researcher files containing this ir file
 	 */
 	public Long getResearcherFileCount(Long irFileId) ;
+	
+	/**
+	 * Get all researcher files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of researcher files being used.
+	 */
+	public List<ResearcherFile> getResearcherFilesWithIrFile(IrFile irFile);
 }

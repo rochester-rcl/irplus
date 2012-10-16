@@ -94,6 +94,12 @@
 		IrFile.fileInfo.name = ?
 	</query>
 	
+	<!-- named query for getting an item by name -->
+	<query name="getIrFileByFileInfoId">
+		from IrFile as IrFile where
+		IrFile.fileInfo.id = :fileInfoId
+	</query>
+	
 
     
 </hibernate-mapping>

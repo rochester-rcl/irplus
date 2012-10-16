@@ -573,4 +573,15 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 			PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO) {
 		this.personalItemDeleteRecordDAO = personalItemDeleteRecordDAO;
 	}
+	
+	/**
+	 * Get all personal items which have the specified generic item ids 
+	 * 
+	 * @param itemIds - list of generic item ids
+	 * @return - all personal items that contain the generic item id.
+	 */
+	public List<PersonalItem> getAllPersonalItems(List<Long> itemIds)
+	{
+		return personalItemDAO.getAllPersonalItems(itemIds);
+	}
 }

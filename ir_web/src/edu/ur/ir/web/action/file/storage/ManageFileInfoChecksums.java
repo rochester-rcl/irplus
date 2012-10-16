@@ -1,12 +1,33 @@
 package edu.ur.ir.web.action.file.storage;
 
 
+import java.io.File;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
+import edu.ur.file.checksum.ChecksumCalculator;
+import edu.ur.file.checksum.ChecksumService;
+import edu.ur.file.db.ChecksumCheckerService;
 import edu.ur.file.db.FileInfoChecksumService;
 import edu.ur.file.db.FileInfoChecksum;
+import edu.ur.ir.file.IrFile;
+import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.ItemFile;
+import edu.ur.ir.item.ItemService;
+import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.researcher.ResearcherFile;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
+import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalItem;
+import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
+
+
 
 /**
  * Allow administrators to view and deal with file checksums.
@@ -36,8 +57,42 @@ public class ManageFileInfoChecksums extends Pager {
     
     /* file info for the checksum */
     private FileInfoChecksum fileInfoChecksum;
+    
+    /* Checksum service to check checksums */
+    private ChecksumService checksumService;
+    
+    private ChecksumCheckerService checksumCheckerService;
+
+    private ResearcherFileSystemService researcherFileSystemService;
+
+	/** Service for dealing with items. */
+	private ItemService itemService;
+	
+	/** service for dealing with user file system */
+	private UserFileSystemService userFileSystemService;
+	
+	/** set the repository service */
+	private RepositoryService repositoryService;
+    
+    private InstitutionalItemService institutionalItemService;
+
+    private List<InstitutionalItem> institutionalItems = new LinkedList<InstitutionalItem>();
+    
+    private UserPublishingFileSystemService userPublishingFileSystemService;
+    
 
 
+	// actually only one but using list for display in table
+    private List<IrFile> irFiles = new LinkedList<IrFile>();
+
+    // list of personal files who use the IrFile
+    private List<PersonalFile> personalFiles = new LinkedList<PersonalFile>();
+    
+    // list of researcher files who use the IrFile
+    private List<ResearcherFile> researcherFiles = new LinkedList<ResearcherFile>();
+
+    private List<PersonalItem> personalItems = new LinkedList<PersonalItem>();
+    
 
 
 	/** type of sort [ ascending | descending ] 
@@ -55,11 +110,30 @@ public class ManageFileInfoChecksums extends Pager {
 		numberOfPagesToShow = 10;
 	}
 	
-	public String viewChecksum()
+	public String viewFileInfoChecksum()
 	{
 		if( checksumId != null )
 		{
 			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
+			IrFile irFile = repositoryService.getIrFileByFileInfoId(fileInfoChecksum.getFileInfo().getId());
+			if( irFile != null )
+			{
+			    irFiles.add(irFile);
+			    // get the item ids to show
+			    List<ItemFile> files = itemService.getItemFilesWithIrFile(irFile);
+			    HashSet<Long> itemIds = new HashSet<Long>();
+			    for(ItemFile f : files ){
+				    itemIds.add(f.getItem().getId());
+			    }
+			    if( itemIds.size() > 0 ){
+				    institutionalItems = institutionalItemService.getInstitutionalItems(new LinkedList<Long>(itemIds));
+				    personalItems = userPublishingFileSystemService.getAllPersonalItems(new LinkedList<Long>(itemIds));
+			    }
+			    personalFiles = userFileSystemService.getPersonalFilesWithIrFile(irFile);
+			    researcherFiles = researcherFileSystemService.getResearcherFilesWithIrFile(irFile);
+			   
+			}
+			
 		}
 		return SUCCESS;
 	}
@@ -95,6 +169,20 @@ public class ManageFileInfoChecksums extends Pager {
 	
 		return SUCCESS;
 
+	}
+	
+	public String resetFileInfoChecksum()
+	{
+		if( checksumId != null )
+		{
+			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
+			ChecksumCalculator calc = checksumService.getChecksumCalculator(fileInfoChecksum.getAlgorithmType());
+			String checksum = calc.calculate(new File(fileInfoChecksum.getFileInfo().getFullPath()));
+			fileInfoChecksum.setChecksum(checksum);
+			fileInfoChecksum.setReCalculateChecksum(true);
+			checksumCheckerService.checkChecksum(fileInfoChecksum);
+		}
+		return SUCCESS;
 	}
 	
 	public int getTotalHits() {
@@ -187,5 +275,64 @@ public class ManageFileInfoChecksums extends Pager {
 		return fileInfoChecksum;
 	}
 
+	/**
+	 * Set the checksum service.
+	 * 
+	 * @param checksumService
+	 */
+	public void setChecksumService(ChecksumService checksumService) {
+		this.checksumService = checksumService;
+	}
 
+	public void setChecksumCheckerService(
+			ChecksumCheckerService checksumCheckerService) {
+		this.checksumCheckerService = checksumCheckerService;
+	}
+	
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
+	}
+
+	public void setItemService(ItemService itemService) {
+		this.itemService = itemService;
+	}
+
+	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
+		this.userFileSystemService = userFileSystemService;
+	}
+	
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public void setInstitutionalItemService(
+			InstitutionalItemService institutionalItemService) {
+		this.institutionalItemService = institutionalItemService;
+	}
+	
+	public List<InstitutionalItem> getInstitutionalItems() {
+		return institutionalItems;
+	}
+	
+	public List<IrFile> getIrFiles() {
+		return irFiles;
+	}
+	
+	public List<PersonalFile> getPersonalFiles() {
+		return personalFiles;
+	}
+
+	public List<ResearcherFile> getResearcherFiles() {
+		return researcherFiles;
+	}
+
+    public void setUserPublishingFileSystemService(
+			UserPublishingFileSystemService userPublishingFileSystemService) {
+		this.userPublishingFileSystemService = userPublishingFileSystemService;
+	}
+    
+	public List<PersonalItem> getPersonalItems() {
+		return personalItems;
+	}
 }
