@@ -19,7 +19,6 @@ package edu.ur.ir.web.action.user;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -100,6 +99,11 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	/* notify collaborators */
 	private Long[] collaboratorIds;
 	
+	/* notify owner of change */
+	private boolean notifyOwner = false;
+	
+
+
 
 
 
@@ -170,7 +174,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 				if( collaboratorIds != null && collaboratorIds.length > 0 )
 				{
 					List<Long> collaborators = Arrays.asList(collaboratorIds);
-				    inviteUserService.notifyCollaboratorsOfNewVersion(personalFile, collaborators);
+				    inviteUserService.notifyCollaboratorsOfNewVersion(personalFile, collaborators, notifyOwner);
 				}
 			}
 			else
@@ -329,5 +333,13 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 
 	public void setCollaboratorIds(Long[] collaboratorIds) {
 		this.collaboratorIds = collaboratorIds;
+	}
+	
+	public boolean getNotifyOwner() {
+		return notifyOwner;
+	}
+
+	public void setNotifyOwner(boolean notifyOwner) {
+		this.notifyOwner = notifyOwner;
 	}
 }

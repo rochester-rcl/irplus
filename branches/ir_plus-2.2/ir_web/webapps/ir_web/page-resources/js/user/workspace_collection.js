@@ -102,6 +102,7 @@ YAHOO.ur.personal.collection =
     {
         document.getElementById('myCollections_parentCollectionId').value = collectionId;
         YAHOO.ur.personal.collection.destroyMenus();
+
         myPersonalCollectionsTable.submitForm(myCollectionAction);
         YAHOO.ur.personal.collection.insertHiddenParentCollectionId();
     },

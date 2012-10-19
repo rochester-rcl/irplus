@@ -54,6 +54,10 @@
     <tr>
         <td colspan="2">Select collaborators to notify of update by Email</td>
     </tr>
+    <tr>
+        <td class="label">${personalFile.versionedFile.owner.firstName}&nbsp;${personalFile.versionedFile.owner.lastName} </td>
+        <td align="left" class="input"><input type="checkbox"  name="notifyOwner" value="true"/></td>
+    </tr>
     <c:forEach items="${personalFile.versionedFile.collaborators}" var="collaborator">
     <tr>
          <td class="label">${collaborator.collaborator.firstName}&nbsp;${collaborator.collaborator.lastName} </td>
