@@ -53,3 +53,27 @@
             <result name="deleted">/pages/admin/file_storage/file_database_deleted.jsp</result>
         </action>
         
+        
+       <!--  ************************************ -->
+       <!--  Checksum Infos    -->
+       <!--  ************************************ -->
+       <action name="viewFileInfoChecksums" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="viewChecksumInfos" >
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_infos.jsp</result>
+        </action>
+        
+        <action name="viewFileInfoChecksum" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="viewFileInfoChecksum" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+        </action>
+        
+        <action name="resetFileInfoChecksum" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="resetFileInfoChecksum" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+        </action>

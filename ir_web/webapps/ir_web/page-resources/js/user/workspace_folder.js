@@ -168,6 +168,7 @@ YAHOO.ur.folder =
 	    //destroy the folder menus
         YAHOO.ur.folder.destroyFolderMenus();
     
+        YAHOO.ur.util.wait.waitDialog.showDialog();
         // set the state for the folder id
         personalFolderState = folderId;
  

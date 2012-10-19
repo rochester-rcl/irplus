@@ -673,55 +673,64 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @param collaboratorIds - list of collaborators to notify
 	 * @return - list of collaborators where the email could not be sent
 	 */
-	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds)
+	public List<IrUser> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds, boolean notifyOwner)
 	{
-		List<FileCollaborator> emailsNotSent = new LinkedList<FileCollaborator>();
+		List<IrUser> emailsNotSent = new LinkedList<IrUser>();
 		VersionedFile versionedFile = personalFile.getVersionedFile();
+		List<IrUser> users = new LinkedList<IrUser>();
 		for(long id : collaboratorIds)
 		{	
-	        FileCollaborator collaborator = versionedFile.getCollaboratorById(id);
+			FileCollaborator collaborator = versionedFile.getCollaboratorById(id);
 	        if( collaborator != null )
 	        {
-			    try 
-			    {
-				    SimpleMailMessage message = new SimpleMailMessage(newFileVersionMailMessage);
-				    message.setTo(collaborator.getCollaborator().getDefaultEmail().getEmail());
+	        	users.add(collaborator.getCollaborator());
+	        }
+		}
+		if( notifyOwner )
+		{
+			users.add(personalFile.getVersionedFile().getOwner());
+		}
+		
+		for(IrUser user: users)
+		{	
+		    try 
+			{
+			    SimpleMailMessage message = new SimpleMailMessage(newFileVersionMailMessage);
+				message.setTo(user.getDefaultEmail().getEmail());
 				
-				    String subject = message.getSubject();
-				    subject = StringUtils.replace(subject, "%FIRST_NAME%", personalFile.getOwner().getFirstName());
-				    subject = StringUtils.replace(subject, "%LAST_NAME%", personalFile.getOwner().getLastName());
-				    subject = StringUtils.replace(subject, "%NAME%", personalFile.getName());
-				    message.setSubject(subject);
+				String subject = message.getSubject();
+				subject = StringUtils.replace(subject, "%FIRST_NAME%", personalFile.getOwner().getFirstName());
+				subject = StringUtils.replace(subject, "%LAST_NAME%", personalFile.getOwner().getLastName());
+				subject = StringUtils.replace(subject, "%NAME%", personalFile.getName());
+				message.setSubject(subject);
 				
-				    String text = message.getText();
-				    String path = personalFile.getName();
+				String text = message.getText();
+				String path = personalFile.getName();
 				    
-				    PersonalFile collabPersonalFile = personalFileDAO.getFileForUserWithSpecifiedVersionedFile(collaborator.getCollaborator().getId(), 
+				PersonalFile collabPersonalFile = personalFileDAO.getFileForUserWithSpecifiedVersionedFile(user.getId(), 
 								versionedFile.getId());
 				    
-				    // may be null if user has not yet moved the file into their worksapce
-				    if( collabPersonalFile != null )
-				    {
-				      path = collabPersonalFile.getFullPath();
-				    }
-				    // Get the name of files
-				    text = StringUtils.replace(text, "%NAME%", path);
-				    text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
+				// may be null if user has not yet moved the file into their worksapce
+				if( collabPersonalFile != null )
+				{
+				    path = collabPersonalFile.getFullPath();
+				}
+				// Get the name of files
+				text = StringUtils.replace(text, "%NAME%", path);
+				text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
 				
-				    if( personalFile.getDescription() != null && !personalFile.getDescription().trim().equals(""))
-				    {
-					    text = text + "\n Notes: \n\n" + personalFile.getDescription();
-				    }
+				if( personalFile.getDescription() != null && !personalFile.getDescription().trim().equals(""))
+				{
+				    text = text + "\n Notes: \n\n" + personalFile.getDescription();
+				}
 				
-				    message.setText(text);
-				    sendEmail(message);
-			    } 
-			    catch(IllegalStateException e) 
-			    {
-				    emailsNotSent.add(collaborator);
-			    }
-	        }
-	        
+				message.setText(text);
+				sendEmail(message);
+			} 
+			catch(IllegalStateException e) 
+			{
+			    emailsNotSent.add(user);
+			}
 		}
 		return emailsNotSent;
 	}
