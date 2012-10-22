@@ -115,24 +115,7 @@ public class ManageFileInfoChecksums extends Pager {
 		if( checksumId != null )
 		{
 			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
-			IrFile irFile = repositoryService.getIrFileByFileInfoId(fileInfoChecksum.getFileInfo().getId());
-			if( irFile != null )
-			{
-			    irFiles.add(irFile);
-			    // get the item ids to show
-			    List<ItemFile> files = itemService.getItemFilesWithIrFile(irFile);
-			    HashSet<Long> itemIds = new HashSet<Long>();
-			    for(ItemFile f : files ){
-				    itemIds.add(f.getItem().getId());
-			    }
-			    if( itemIds.size() > 0 ){
-				    institutionalItems = institutionalItemService.getInstitutionalItems(new LinkedList<Long>(itemIds));
-				    personalItems = userPublishingFileSystemService.getAllPersonalItems(new LinkedList<Long>(itemIds));
-			    }
-			    personalFiles = userFileSystemService.getPersonalFilesWithIrFile(irFile);
-			    researcherFiles = researcherFileSystemService.getResearcherFilesWithIrFile(irFile);
-			   
-			}
+			getIrFileInfo();
 			
 		}
 		return SUCCESS;
@@ -181,8 +164,43 @@ public class ManageFileInfoChecksums extends Pager {
 			fileInfoChecksum.setChecksum(checksum);
 			fileInfoChecksum.setReCalculateChecksum(true);
 			checksumCheckerService.checkChecksum(fileInfoChecksum);
+			getIrFileInfo();
 		}
 		return SUCCESS;
+	}
+	
+	
+	public String checkFileInfoChecksum()
+	{
+		if( checksumId != null )
+		{
+			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
+			checksumCheckerService.checkChecksum(fileInfoChecksum);
+			getIrFileInfo();
+		}
+		return SUCCESS;
+	}
+	
+	private void getIrFileInfo()
+	{
+		IrFile irFile = repositoryService.getIrFileByFileInfoId(fileInfoChecksum.getFileInfo().getId());
+		if( irFile != null )
+		{
+		    irFiles.add(irFile);
+		    // get the item ids to show
+		    List<ItemFile> files = itemService.getItemFilesWithIrFile(irFile);
+		    HashSet<Long> itemIds = new HashSet<Long>();
+		    for(ItemFile f : files ){
+			    itemIds.add(f.getItem().getId());
+		    }
+		    if( itemIds.size() > 0 ){
+			    institutionalItems = institutionalItemService.getInstitutionalItems(new LinkedList<Long>(itemIds));
+			    personalItems = userPublishingFileSystemService.getAllPersonalItems(new LinkedList<Long>(itemIds));
+		    }
+		    personalFiles = userFileSystemService.getPersonalFilesWithIrFile(irFile);
+		    researcherFiles = researcherFileSystemService.getResearcherFilesWithIrFile(irFile);
+		   
+		}
 	}
 	
 	public int getTotalHits() {

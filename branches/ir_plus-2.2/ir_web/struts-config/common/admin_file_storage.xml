@@ -77,3 +77,10 @@
             <interceptor-ref name="crudStack"/>
             <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
         </action>
+        
+        <action name="checkFileInfoChecksum"
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="checkFileInfoChecksum" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+        </action>
