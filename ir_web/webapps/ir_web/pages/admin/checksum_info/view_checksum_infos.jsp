@@ -69,7 +69,7 @@
         <c:import url="/inc/header.jsp"/>
       
         <h3>Checksum Information</h3>
-         <c:url var="viewFileInfoChecksums" value="/admin//viewFileInfoChecksums.action"/>
+         <c:url var="viewFileInfoChecksums" value="/admin/viewFileInfoChecksums.action"/>
         <div id="bd">
             <form name="checksumStatus" action="${viewFileInfoChecksums}" method="get">
 				             <input type="hidden" name="rowStart" value="0"/>

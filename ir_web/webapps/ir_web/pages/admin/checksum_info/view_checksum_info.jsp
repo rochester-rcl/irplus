@@ -134,6 +134,12 @@
             </form>
         </c:if>
         
+        <c:url var="checkFileInfoChecksumUrl" value="/admin/checkFileInfoChecksum.action"/>
+        <form method="post" action="${checkFileInfoChecksumUrl}">
+                <input type="hidden" name="checksumId" value="${fileInfoChecksum.id}"/>
+                <input type="submit" value="Check Now"/>
+        </form>
+        
         <h3>Repository File</h3>
                 <div class="dataTable">
             <urstb:table width="100%">
