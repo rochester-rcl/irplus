@@ -61,10 +61,10 @@
                             <ul>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewAffiliations.action" />"><span class="menu_text"><fmt:message key="menu.affiliations" /></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPendingApproval.action" />"><span class="menu_text"><fmt:message key="menu.viewPendingApproval" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileInfoChecksums.action"/>"><span class="menu_text">Checksum Information</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewContentTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewContributorTypes" /></span></a></li>
                                 
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileInfoChecksums.action"/>"><span class="menu_text">Checksum Information</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewCopyrightStatements.action"/>"><span class="menu_text">Copyright Statements</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDepartments.action" />"><span class="menu_text"><fmt:message key="menu.departments"/></span></a></li>
                                 <li class="yuimenuitem">
