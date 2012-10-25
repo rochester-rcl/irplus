@@ -194,8 +194,8 @@ public class ManageFileInfoChecksums extends Pager {
 			    itemIds.add(f.getItem().getId());
 		    }
 		    if( itemIds.size() > 0 ){
-			    institutionalItems = institutionalItemService.getInstitutionalItems(new LinkedList<Long>(itemIds));
-			    personalItems = userPublishingFileSystemService.getAllPersonalItems(new LinkedList<Long>(itemIds));
+			    institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemIds(new LinkedList<Long>(itemIds));
+			    personalItems = userPublishingFileSystemService.getAllPersonalItemsByGenericItemIds(new LinkedList<Long>(itemIds));
 		    }
 		    personalFiles = userFileSystemService.getPersonalFilesWithIrFile(irFile);
 		    researcherFiles = researcherFileSystemService.getResearcherFilesWithIrFile(irFile);
