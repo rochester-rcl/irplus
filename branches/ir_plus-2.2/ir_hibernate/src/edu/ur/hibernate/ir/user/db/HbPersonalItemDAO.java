@@ -172,7 +172,7 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
 	 * @return - all personal items that contain the generic item id.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersonalItem> getAllPersonalItems(List<Long> itemIds)
+	public List<PersonalItem> getAllPersonalItemsByGenericItemIds(List<Long> itemIds)
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllPersonalItemByGenericId");
 		q.setParameterList("itemIds", itemIds);

@@ -887,6 +887,14 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public Long getCountByGenericItem(Long genericItemId);
 	
 	/**
+	 * Get all institutional items that contain any of the generic item ids in the given list.
+	 * 
+	 * @param genericItemIds - list of generic item ids
+	 * @return list of institutional items found.
+	 */
+	public List<InstitutionalItem> getInstitutionalItemsByGenericItemIds(List<Long> genericItemIds);
+	
+	/**
 	 * Get a count of institutional items in the repository with a name
 	 * that starts with the specified first character.
 	 * 

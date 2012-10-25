@@ -597,6 +597,14 @@
 	    where version.item.id = ?
 	</query>
 	
+	<!-- get all institutional items that use the generic items with the specified ids-->
+	<query name="getInstitutionalItemsForGenericItemIds">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.institutionalItemVersions as version
+	    where version.item.id in (:itemIds)
+	</query>
+	
 	<query name="institutionalItemCountForCollection">
 	    select count(*) from InstitutionalItem as institutionalItem
 	    where institutionalItem.institutionalCollection.id = ?

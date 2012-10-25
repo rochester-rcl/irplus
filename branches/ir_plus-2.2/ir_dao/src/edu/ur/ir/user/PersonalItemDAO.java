@@ -75,5 +75,5 @@ public interface PersonalItemDAO  extends CrudDAO<PersonalItem>
 	 * @param itemIds - list of generic item ids
 	 * @return - all personal items that contain the generic item id.
 	 */
-	public List<PersonalItem> getAllPersonalItems(List<Long> itemIds);
+	public List<PersonalItem> getAllPersonalItemsByGenericItemIds(List<Long> itemIds);
 }
