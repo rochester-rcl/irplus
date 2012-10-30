@@ -3,7 +3,6 @@ package edu.ur.file.db;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -12,7 +11,7 @@ import edu.ur.persistent.BasePersistent;
  * @author Nathan Sarr
  *
  */
-public class FileInfoChecksumResetHistory  extends BasePersistent{
+public class FileInfoChecksumResetHistory extends BasePersistent{
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = -5473495136284347371L;
@@ -33,11 +32,10 @@ public class FileInfoChecksumResetHistory  extends BasePersistent{
 	private FileInfoChecksum fileInfoChecksum;
 	
 	/** user who updated the checksum */
-	private IrUser user;
+	private Long userId;
 	
 	/** notes for the reset */
 	private String notes;
-
 
 	/**
 	 * Package protected constructor
@@ -47,23 +45,22 @@ public class FileInfoChecksumResetHistory  extends BasePersistent{
 	/**
 	 * The checksum reset history information
 	 * 
-	 * @param originalChecksum
-	 * @param fileInfoChecksum
-	 * @param user
-	 * @param notes
+	 * @param newChecksum - new checksum value
+	 * @param fileInfoChecksum - parent file info checksum BEFORE change
+	 * @param userId - id of the user who made the change.
+	 * @param notes - set of notes
 	 */
-	public FileInfoChecksumResetHistory (String originalChecksum, 
-			FileInfoChecksum fileInfoChecksum, IrUser user, String notes )
+	FileInfoChecksumResetHistory (String newChecksum, 
+			FileInfoChecksum fileInfoChecksum, Long userId, String notes)
 	{
-		dateReset = new Timestamp(new Date().getTime());
-		this.originalChecksum = originalChecksum;
-		this.newChecksum = fileInfoChecksum.getChecksum();
+		this.dateReset = new Timestamp(new Date().getTime());
+		this.originalChecksum = fileInfoChecksum.getChecksum();
+		this.newChecksum =  newChecksum;
 		this.algorithmType = fileInfoChecksum.getAlgorithmType();
 		this.fileInfoChecksum = fileInfoChecksum;
-		this.user = user;
+		this.userId = userId;
 		this.notes = notes;
 	}
-
 
 	/**
 	 * Get the algorithm type used to calculate the checksum.
@@ -74,18 +71,24 @@ public class FileInfoChecksumResetHistory  extends BasePersistent{
 		return algorithmType;
 	}
 
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString()
 	{
-
 		StringBuffer sb = new StringBuffer(" [id = " );
 		sb.append(id);
-		
+		sb.append("originalChecksum = ");
+		sb.append(originalChecksum);
+		sb.append("newChecksum = ");
+		sb.append(newChecksum);
+		sb.append("user id = ");
+		sb.append(userId);
+		sb.append("notes = ");
+		sb.append(notes);
+		sb.append("dateReset = ");
+		sb.append(dateReset);
 		sb.append(" ] ");
-		
 		return sb.toString();
 	}
 	
@@ -95,11 +98,10 @@ public class FileInfoChecksumResetHistory  extends BasePersistent{
 	public int hashCode()
 	{
 		int value = 0;
-		
+		value += dateReset == null ? 0 : dateReset.hashCode();
 		value += newChecksum == null ? 0 : newChecksum.hashCode();
+		value += originalChecksum == null ? 0 : originalChecksum.hashCode();
 		value += algorithmType == null ? 0 : algorithmType.hashCode();
-		value += fileInfoChecksum == null ? 0 : fileInfoChecksum.hashCode();
-		
 		return value;
 	}
 	
@@ -115,13 +117,15 @@ public class FileInfoChecksumResetHistory  extends BasePersistent{
 
 		if( ( newChecksum != null && !newChecksum.equals(other.getNewChecksum()) ) ||
 			( newChecksum == null && other.getNewChecksum() != null ) ) return false;
-		
+
+		if( ( originalChecksum != null && !originalChecksum.equals(other.getOriginalChecksum()) ) ||
+			( originalChecksum == null && other.getOriginalChecksum() != null ) ) return false;
+
 		if( ( algorithmType != null && !algorithmType.equals(other.getAlgorithmType()) ) ||
 			( algorithmType == null && other.getAlgorithmType() != null ) ) return false;
 
-		if( ( fileInfoChecksum != null && !fileInfoChecksum.equals(other.getFileInfoChecksum()) ) ||
-			( fileInfoChecksum == null && other.getFileInfoChecksum() != null ) ) return false;
-
+		if( ( dateReset != null && !dateReset.equals(other.getDateReset()) ) ||
+			( dateReset == null && other.getDateReset() != null ) ) return false;
 		
 		return true;
 	}
@@ -185,7 +189,7 @@ public class FileInfoChecksumResetHistory  extends BasePersistent{
 	 * 
 	 * @return
 	 */
-	public IrUser getUser() {
-		return user;
+	public Long getUserId() {
+		return userId;
 	}
 }

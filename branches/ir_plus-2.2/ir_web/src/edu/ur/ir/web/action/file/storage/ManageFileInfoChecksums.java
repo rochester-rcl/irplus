@@ -24,6 +24,7 @@ import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
@@ -35,13 +36,16 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class ManageFileInfoChecksums extends Pager {
+public class ManageFileInfoChecksums extends Pager implements UserIdAware {
 
 	/* eclipse generated id  */
 	private static final long serialVersionUID = -4604714764397456045L;
 	
 	/* Total number of user groups  */
 	private int totalHits;
+	
+	/* id of the user managing the file info checksums */
+	private Long userId;
 	
 	/* Row End */
 	private int rowEnd;
@@ -61,7 +65,12 @@ public class ManageFileInfoChecksums extends Pager {
     /* Checksum service to check checksums */
     private ChecksumService checksumService;
     
-    private ChecksumCheckerService checksumCheckerService;
+    /* notes for the reset */
+    private String notes;
+    
+
+
+	private ChecksumCheckerService checksumCheckerService;
 
     private ResearcherFileSystemService researcherFileSystemService;
 
@@ -159,11 +168,13 @@ public class ManageFileInfoChecksums extends Pager {
 		if( checksumId != null )
 		{
 			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
-			ChecksumCalculator calc = checksumService.getChecksumCalculator(fileInfoChecksum.getAlgorithmType());
-			String checksum = calc.calculate(new File(fileInfoChecksum.getFileInfo().getFullPath()));
-			fileInfoChecksum.setChecksum(checksum);
-			fileInfoChecksum.setReCalculateChecksum(true);
-			checksumCheckerService.checkChecksum(fileInfoChecksum);
+			if( !fileInfoChecksum.getReCalculatedPassed()){
+			    ChecksumCalculator calc = checksumService.getChecksumCalculator(fileInfoChecksum.getAlgorithmType());
+			    String checksum = calc.calculate(new File(fileInfoChecksum.getFileInfo().getFullPath()));
+			    fileInfoChecksum.reset(checksum, userId, notes);
+			    fileInfoChecksum.setReCalculateChecksum(true);
+			    checksumCheckerService.checkChecksum(fileInfoChecksum);
+			}
 			getIrFileInfo();
 		}
 		return SUCCESS;
@@ -352,5 +363,17 @@ public class ManageFileInfoChecksums extends Pager {
     
 	public List<PersonalItem> getPersonalItems() {
 		return personalItems;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+    public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 }

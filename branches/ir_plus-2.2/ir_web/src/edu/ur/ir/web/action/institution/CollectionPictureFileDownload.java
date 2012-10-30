@@ -75,11 +75,15 @@ implements ServletResponseAware, ServletRequestAware
     	{
 	        log.debug("Trying to download collection picture with id " + collectionId);
     	}
-	    
+    	InstitutionalCollection institutionalCollection = null;
+    	
 	    // make sure this is a picture in the repository - otherwise anyone could get
 	    // to the files.
-		InstitutionalCollection institutionalCollection = 
+    	if( collectionId != null )
+    	{
+		  institutionalCollection = 
 			institutionalCollectionService.getCollection(collectionId, false);
+    	}
 		
 		if( institutionalCollection != null )
 		{

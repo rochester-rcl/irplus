@@ -71,6 +71,16 @@
 		<property name="reCalculateChecksum" column="re_calculate_checksum" type="boolean"
 			 access="field" not-null="true"  />	
 	
+	    <!--  Reset history information -->
+		<set name="resetHistory" 
+		    inverse="true" 
+		    cascade="all" 
+		    access="field"
+			order-by="date_reset" 
+			lazy="true">
+			<key column="file_checksum_id"/>
+			<one-to-many class="FileInfoChecksumResetHistory"/>
+		</set>
 	</class>
 	
 	<!--  Get a count of folders in the system -->

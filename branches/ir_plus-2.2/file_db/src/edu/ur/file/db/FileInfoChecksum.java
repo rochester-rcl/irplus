@@ -16,6 +16,9 @@
 package edu.ur.file.db;
 
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.ur.persistent.BasePersistent;
 
@@ -27,36 +30,38 @@ import edu.ur.persistent.BasePersistent;
  */
 public class FileInfoChecksum extends BasePersistent{
 	
-	/**  Eclipse generated id */
+	/*  Eclipse generated id */
 	private static final long serialVersionUID = 6519842197106981561L;
 
-	/**  The checksum value  */
+	/*  The checksum value  */
 	private String checksum;
 	
-	/**  The checksum algorithm used  */
+	/*  The checksum algorithm used  */
 	private String algorithmType;
 	
-	/** File info object representing the file the checksum is for */
+	/* File info object representing the file the checksum is for */
 	private FileInfo fileInfo;
 	
-	/** Date the checksum was calculated */
+	/* Date the checksum was calculated */
 	private Timestamp dateCalculated;
 	
-	/** date the checksum was re-calculated */
+	/* date the checksum was re-calculated */
 	private Timestamp dateReCalculated;
 	
-	/** last time the check passed */
+	/* last time the check passed */
 	private Timestamp dateLastCheckPassed;
 
-	/** indicates if the last check passed */
+	/* indicates if the last check passed */
 	private boolean reCalculatedPassed = true;
 	
-	/** the calculated checksum check value on the given date */
+	/* the calculated checksum check value on the given date */
 	private String reCalculatedValue;
 	
-	/** indicates the checksum should be checked */
+	/* indicates the checksum should be checked */
 	private boolean reCalculateChecksum = true;
 
+	/*  list of reset history */
+	private Set<FileInfoChecksumResetHistory> resetHistory = new HashSet<FileInfoChecksumResetHistory>();
 
 	/**
 	 * Package protected constructor
@@ -93,7 +98,7 @@ public class FileInfoChecksum extends BasePersistent{
 	 * 
 	 * @param checksum
 	 */
-	public void setChecksum(String checksum) {
+	void setChecksum(String checksum) {
 		this.checksum = checksum;
 	}
 
@@ -297,5 +302,27 @@ public class FileInfoChecksum extends BasePersistent{
 		this.dateLastCheckPassed = dateLastCheckPassed;
 	}
 
+	
+	public FileInfoChecksumResetHistory reset(String newChecksum, 
+			 Long userId, String notes){
+		FileInfoChecksumResetHistory resetHistory = new FileInfoChecksumResetHistory (newChecksum, 
+				this, userId, notes);
+		this.checksum = newChecksum;
+		this.resetHistory.add(resetHistory);
+		return resetHistory;
+	}
+	
+	/**
+	 * List of unmodifiable reset histories.
+	 * 
+	 * @return list of reset histories
+	 */
+	public Set<FileInfoChecksumResetHistory> getResetHistory() {
+		return Collections.unmodifiableSet(resetHistory);
+	}
+
+	void setResetHistory(Set<FileInfoChecksumResetHistory> resetHistory) {
+		this.resetHistory = resetHistory;
+	}
 
 }
