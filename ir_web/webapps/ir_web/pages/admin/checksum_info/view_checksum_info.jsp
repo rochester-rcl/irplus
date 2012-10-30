@@ -130,8 +130,9 @@
             <!--  end body div -->
             <form method="post" action="${resetChecksumUrl}">
                 <input type="hidden" name="checksumId" value="${fileInfoChecksum.id}"/>
+                Reset Reason:<input type="text" name="notes" size="70"/> <br/><br/>
                 <input type="submit" value="Reset Checksum"/>
-            </form>
+            </form> <br/><br/>
         </c:if>
         
         <c:url var="checkFileInfoChecksumUrl" value="/admin/checkFileInfoChecksum.action"/>
@@ -139,6 +140,53 @@
                 <input type="hidden" name="checksumId" value="${fileInfoChecksum.id}"/>
                 <input type="submit" value="Check Now"/>
         </form>
+        
+        <h3>Reset History</h3>
+          <div class="dataTable">
+            <urstb:table width="100%">
+	            <urstb:thead>
+		            <urstb:tr>
+		                <urstb:td>Reset history Id</urstb:td>
+			            <urstb:td>Original checksum</urstb:td>
+			            <urstb:td>New Checksum</urstb:td>
+			            <urstb:td>User Id</urstb:td>
+			            <urstb:td>Date Reset</urstb:td>
+			            <urstb:td>Notes</urstb:td>
+		            </urstb:tr>
+	            </urstb:thead>
+	               <urstb:tbody var="resetRecord" oddRowClass="odd"
+		                        evenRowClass="even" currentRowClassVar="rowClass"
+		                        collection="${fileInfoChecksum.resetHistory}">
+		           <urstb:tr cssClass="${rowClass}"
+			                 onMouseOver="this.className='highlight'"
+			                  onMouseOut="this.className='${rowClass}'">
+
+			           <urstb:td>
+			              ${resetRecord.id}
+			           </urstb:td>
+			           <urstb:td>
+			              ${resetRecord.originalChecksum}
+			           </urstb:td>
+			           <urstb:td>
+			             ${resetRecord.newChecksum}
+			           </urstb:td>
+			           <urstb:td>
+			              <c:url var="viewUserUrl" value="/admin/userEditView.action">
+			                  <c:param name="id" value="${resetRecord.userId}"/>
+			              </c:url>
+			             <a href="${viewUserUrl}">${resetRecord.userId} - view user</a>
+			           </urstb:td>
+			            <urstb:td>
+			             ${resetRecord.dateReset}
+			           </urstb:td>
+			           <urstb:td>
+			             ${resetRecord.notes}
+			           </urstb:td>
+		           </urstb:tr>
+	           </urstb:tbody>
+           </urstb:table>
+        </div>
+        
         
         <h3>Repository File</h3>
                 <div class="dataTable">
