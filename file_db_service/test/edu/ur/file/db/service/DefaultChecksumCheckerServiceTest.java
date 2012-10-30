@@ -199,7 +199,7 @@ public class DefaultChecksumCheckerServiceTest {
 		assert myInfo.getFileInfoChecksums().size() >= 1 : "The file checksum should not be calculated size = " + myInfo.getFileInfoChecksums().size();
 		
 		FileInfoChecksum checksum = myInfo.getFileInfoChecksum("MD5");
-		checksum.setChecksum("badchecksum");
+		checksum.reset("badchecksum", 1l, "");
 		checksum = checksumCheckerService.checkChecksum(checksum);
 		assert checksum.getDateReCalculated() != null : "Date re-calculated should be set";
 		assert checksum.getReCalculatedPassed() == false : "Recalucation should have NOT passed";
