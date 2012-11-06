@@ -69,6 +69,7 @@
             method="viewFileInfoChecksum" >
             <interceptor-ref name="crudStack"/>
             <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+            <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
         </action>
         
         <action name="resetFileInfoChecksum" 
@@ -76,6 +77,7 @@
             method="resetFileInfoChecksum" >
             <interceptor-ref name="crudStack"/>
             <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+            <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
         </action>
         
         <action name="checkFileInfoChecksum"
@@ -83,4 +85,5 @@
             method="checkFileInfoChecksum" >
             <interceptor-ref name="crudStack"/>
             <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+            <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
         </action>

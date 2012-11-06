@@ -36,6 +36,7 @@
 		<urstb:tr>
 			<urstb:td>Id</urstb:td>
 			<urstb:td>File Id</urstb:td>
+			<urstb:td>Extension</urstb:td>
 			<urstb:td>Upload Date Checked</urstb:td>
 			<urstb:td>Original Checksum</urstb:td>
 			<urstb:td>Check Passed</urstb:td>
@@ -58,6 +59,9 @@
 			</urstb:td>
 			<urstb:td>
 			    ${checksum.fileInfo.id}
+			</urstb:td>
+			<urstb:td>
+			    ${checksum.fileInfo.extension}
 			</urstb:td>
 			<urstb:td>
 			    ${checksum.dateCalculated}
