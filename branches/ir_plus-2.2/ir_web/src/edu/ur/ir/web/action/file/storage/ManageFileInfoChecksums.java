@@ -124,8 +124,11 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
 		if( checksumId != null )
 		{
 			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
+			if( fileInfoChecksum == null )
+			{
+				return "notFound";
+			}
 			getIrFileInfo();
-			
 		}
 		return SUCCESS;
 	}
@@ -168,6 +171,10 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
 		if( checksumId != null )
 		{
 			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
+			if( fileInfoChecksum == null )
+			{
+				return "notFound";
+			}
 			if( !fileInfoChecksum.getReCalculatedPassed()){
 			    ChecksumCalculator calc = checksumService.getChecksumCalculator(fileInfoChecksum.getAlgorithmType());
 			    String checksum = calc.calculate(new File(fileInfoChecksum.getFileInfo().getFullPath()));
@@ -186,7 +193,11 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
 		if( checksumId != null )
 		{
 			fileInfoChecksum = fileInfoChecksumService.getById(checksumId, false);
-			checksumCheckerService.checkChecksum(fileInfoChecksum);
+			if( fileInfoChecksum == null )
+			{
+				return "notFound";
+			}
+	        checksumCheckerService.checkChecksum(fileInfoChecksum);
 			getIrFileInfo();
 		}
 		return SUCCESS;
