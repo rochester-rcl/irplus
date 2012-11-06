@@ -79,14 +79,14 @@
             <recover>false</recover>
      </job>
       
-     <!--  run every 4 minutes -->
+     <!--  run every 1 minute -->
      <trigger>
             <cron>
                 <name>checksumChecker</name>
                 <group>DEFAULT</group>
                 <job-name>ChecksumChecker</job-name>
                 <job-group>DEFAULT</job-group>
-                <cron-expression>0 0/4 * * * ?</cron-expression>
+                <cron-expression>0 0/1 * * * ?</cron-expression>
             </cron>
      </trigger>
    
