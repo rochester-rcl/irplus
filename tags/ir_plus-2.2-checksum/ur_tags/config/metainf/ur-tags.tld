@@ -1,0 +1,1970 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+ 
+ <!--  
+     Use this section to copy and paste 
+     the given attributes
+     
+     ******** Core Attributes *******
+     <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     
+     ******** Language Attributes *******
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     
+     ******** Keyboard Attributes *******
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+     </attribute>
+     
+     ******** Window Events ******* 
+     
+    <attribute>
+       <name>onLoad</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onLoad</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+ 
+    ******** Form Element Events *******
+ 
+    <attribute>
+       <name>onChange</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onSubmit</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onReset</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onSelect</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onBlur</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onFocus</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    
+    ******** Keyboard Events *******
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    
+    ******** Mouse Events *******
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+       <required>false</required>
+    </attribute>
+    
+ -->
+ 
+  <tlib-version>1.0</tlib-version>
+  <short-name>ir</short-name>
+  <uri>ur-tags</uri>
+ 
+ <!--  form tag -->
+  <tag>
+   <name>basicForm</name>
+   <tag-class>edu.ur.tag.BasicFormTag</tag-class>
+   <body-content>scriptless</body-content>
+   
+   <!--  Form specific attributes -->
+   <attribute>
+       <name>method</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>action</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>accept</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>accept</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>acceptCharset</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>enctype</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>name</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>target</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+     <!--  Form javascript events  -->
+    <attribute>
+       <name>onSubmit</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onReset</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+ </tag>
+ 
+ <tag>
+   <name>table</name>
+   <tag-class>edu.ur.tag.BasicTableTag</tag-class>
+   <body-content>scriptless</body-content>
+   
+   
+    <!--  Table specific attributes -->
+    <attribute>
+       <name>collection</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>align</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>bgColor</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>border</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cellPadding</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cellSpacing</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>frame</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>rules</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>summary</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>width</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>caption</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+ </tag>
+ 
+  <tag>
+   <name>th</name>
+   <tag-class>edu.ur.tag.TableThTag</tag-class>
+   <body-content>scriptless</body-content>
+   
+    <!--  th specific attributes -->
+    <attribute>
+       <name>align</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>myChar</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>charOff</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>vAlign</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    	
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+ </tag>
+ 
+ <tag>
+   <name>tableHeaderToolbar</name>
+   <tag-class>edu.ur.tag.TableToolBarHeaderTag</tag-class>
+   <body-content>scriptless</body-content>
+ </tag> 
+ 
+  <tag>
+   <name>simpleTablePager</name>
+   <tag-class>edu.ur.tag.SimpleTablePagerToolBarTag</tag-class>
+   <body-content>scriptless</body-content>
+    <attribute>
+       <name>firstPageActiveImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>firstPageDisabledImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   <attribute>
+       <name>lastPageActiveImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lastPageDisabledImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>nextPageActiveImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>nextPageDisabledImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+	<attribute>
+       <name>previousPageActiveImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>previousPageDisabledImg</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>nextPageClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>previousPageClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lastPageClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>firstPageClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>  
+  
+  <tag>
+   <name>maxResultsPicker</name>
+   <tag-class>edu.ur.tag.MaxTableResultsPickerTag</tag-class>
+   <body-content>empty</body-content>
+    <attribute>
+       <name>choices</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>maxResultsPerPage</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onChange</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+ </tag>  
+ 
+  <tag>
+   <name>tableRow</name>
+   <tag-class>edu.ur.tag.TableRowTag</tag-class>
+   <body-content>scriptless</body-content>
+   <attribute>
+       <name>var</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   	<attribute>
+       <name>totalNumberOfPages</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>currentPage</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>totalResults</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>rowStart</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>rowEnd</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+       <attribute>
+       <name>javascriptObject</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>divId</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>submitUrl</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>processToolBarFooter</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>basicRow</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>    
+    
+  </tag>
+  
+  <tag>
+   <name>column</name>
+   <tag-class>edu.ur.tag.ColumnTag</tag-class>
+   <body-content>scriptless</body-content>
+   <attribute>
+       <name>filter</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>dropHandleImg</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>sortFilterProperty</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+  </tag>
+  
+  <tag>
+   <name>columnHeader</name>
+   <tag-class>edu.ur.tag.ColumnHeaderTag</tag-class>
+   <body-content>scriptless</body-content>
+   <attribute>
+       <name>sort</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>header</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>sortOrder</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>ignoreCaseSort</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+  </tag>
+    <tag>
+   <name>columnContent</name>
+   <tag-class>edu.ur.tag.ColumnContentTag</tag-class>
+   <body-content>scriptless</body-content>
+  </tag>
+  
+  
+  <tag>
+   <name>checkbox</name>
+   <tag-class>edu.ur.tag.BasicCheckboxInputTag</tag-class>
+   <body-content>empty</body-content>
+   
+    <!--  Checkbox specific attributes -->
+    <attribute>
+       <name>disabled</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>value</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>checked</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>name</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   
+   <!-- Base Input attributes -->
+    <attribute>
+       <name>name</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+       	
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+    <!--   Keyboard Attributes -->
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+   
+  </tag>
+  
+  <tag>
+     <name>div</name>
+     <tag-class>edu.ur.tag.DivTag</tag-class>
+     <body-content>scriptless</body-content>
+
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+  </tag>
+  
+  <tag>
+   <name>fileInput</name>
+   <tag-class>edu.ur.tag.BasicFileInputTag</tag-class>
+   <body-content>empty</body-content>
+   
+    <!--  File input specific attributes -->
+    <attribute>
+       <name>disabled</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>file</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>accept</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>size</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   
+    <!-- Base Input attributes -->
+    <attribute>
+       <name>name</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+    <!--   Keyboard Attributes -->
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+  </tag>
+
+  <tag>
+   <name>textInput</name>
+   <tag-class>edu.ur.tag.BasicTextInputTag</tag-class>
+   <body-content>empty</body-content>
+
+    <!--  Text input specific attributes -->
+    <attribute>
+       <name>disabled</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>maxLength</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>value</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>readOnly</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>size</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   
+    <!-- Base Input attributes -->
+    <attribute>
+       <name>name</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+    <!--   Keyboard Attributes -->
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+   
+  </tag>
+  
+  
+  <tag>
+   <name>hidden</name>
+   <tag-class>edu.ur.tag.BasicHiddenInputTag</tag-class>
+   <body-content>empty</body-content>
+
+    <!--  Text input specific attributes -->
+   <attribute>
+       <name>value</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+
+   
+    <!-- Base Input attributes -->
+    <attribute>
+       <name>name</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+    <!--   Keyboard Attributes -->
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+   
+  </tag>
+  
+  <tag>
+   <name>js</name>
+   <tag-class>edu.ur.tag.JavascriptTag</tag-class>
+   <body-content>scriptless</body-content>
+    <!--  Javascript input specific attributes -->
+    <attribute>
+       <name>type</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>charset</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>defer</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>src</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>xmlSpace</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+  </tag>
+  
+  <tag>
+   <name>a</name>
+   <tag-class>edu.ur.tag.AnchorTag</tag-class>
+   <body-content>scriptless</body-content>
+   
+   <attribute>
+       <name>charset</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>coords</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>href</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>hreflang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>name</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>rel</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>rev</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>shape</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>target</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   <attribute>
+       <name>type</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   
+   <!-- Base Input attributes -->
+    <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+       	
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+    <!--   Keyboard Attributes -->
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+   
+  </tag>
+  
+  <tag>
+   <name>styleSheet</name>
+   <tag-class>edu.ur.tag.StyleSheetTag</tag-class>
+   <body-content>empty</body-content>
+   
+   <attribute>
+       <name>charset</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>media</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>href</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>rel</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>rev</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>	
+   <attribute>
+       <name>target</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   <attribute>
+       <name>type</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+  </tag>
+  
+  <tag>
+   <name>textArea</name>
+   <tag-class>edu.ur.tag.BasicTextAreaTag</tag-class>
+   <body-content>scriptless</body-content>
+
+    <!--  Text input specific attributes -->
+    <attribute>
+       <name>disabled</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>cols</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>readOnly</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+   <attribute>
+       <name>rows</name>
+       <rtexprvalue>true</rtexprvalue>
+   </attribute>
+    <attribute>
+       <name>name</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  
+    
+    <!--  Core attributes -->
+    
+    <attribute>
+       <name>id</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>cssClass</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>title</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>style</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>xmlLang</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+     <!--   Keyboard Events -->
+    
+    <attribute>
+       <name>onKeyDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyPress</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onKeyUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--   Mouse Events -->
+    
+    <attribute>
+       <name>onClick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>ondblclick</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseDown</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseMove</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOver</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseOut</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>onMouseUp</name>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    
+    <!--  Language Attributes  -->
+     
+     <attribute>
+       <name>dir</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>lang</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     
+    <!--   Keyboard Attributes -->
+     
+     <attribute>
+       <name>accessKey</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>tabIndex</name>
+       <rtexprvalue>true</rtexprvalue>
+     </attribute>
+   
+  </tag>
+  
+  <tag>
+  <name>maxText</name>
+  <tag-class>edu.ur.tag.MaxText</tag-class>
+  <body-content>scriptless</body-content>
+		<attribute>
+			<name>text</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+                String to check the maximum on
+			</description>
+		</attribute>
+		<attribute>
+			<name>numChars</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+                Maximum nuber of characters to show
+			</description>
+		</attribute>
+		<attribute>
+			<name>showEllipsis</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+                If true an ellipsis is shown after the text
+			</description>
+		</attribute>
+		<attribute>
+			<name>ellipsisText</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+               ellipsis text to show default is: ...
+			</description>
+		</attribute>
+    </tag>
+ 
+  <tag>
+  <name>pager</name>
+  <tag-class>edu.ur.tag.pager.PagerTag</tag-class>
+  <body-content>scriptless</body-content>
+		<!--  Table specific attributes -->
+		<attribute>
+			<name>currentPageNumber</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>startPageNumber</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>totalHits</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>numberOfResultsToShow</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>	
+		<attribute>
+			<name>numberOfPagesToShow</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>			
+		<attribute>
+			<name>morePages</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>				
+    </tag>
+  
+  <tag>
+  <name>previousPage</name>
+  <tag-class>edu.ur.tag.pager.PreviousPageTag</tag-class>
+  <body-content>scriptless</body-content>
+  </tag>  
+    
+  <tag>
+  <name>forEachPage</name>
+  <tag-class>edu.ur.tag.pager.PageIteratorTag</tag-class>
+  <body-content>scriptless</body-content>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>		
+    </tag> 
+  
+  <tag>
+  <name>nextPage</name>
+  <tag-class>edu.ur.tag.pager.NextPageTag</tag-class>
+  <body-content>scriptless</body-content>
+  </tag> 
+  
+  <tag>
+  <name>firstPage</name>
+  <tag-class>edu.ur.tag.pager.FirstPageTag</tag-class>
+  <body-content>scriptless</body-content>
+  </tag> 
+  
+  <tag>
+  <name>lastPage</name>
+  <tag-class>edu.ur.tag.pager.LastPageTag</tag-class>
+  <body-content>scriptless</body-content>
+  </tag>   
+  
+  <tag>
+  <name>moreNext</name>
+  <tag-class>edu.ur.tag.pager.MoreNextTag</tag-class>
+  <body-content>scriptless</body-content>
+  </tag> 
+  
+  <tag>
+  <name>morePrevious</name>
+  <tag-class>edu.ur.tag.pager.MorePreviousTag</tag-class>
+  <body-content>scriptless</body-content>
+  </tag> 
+        
+  <function>
+    <name>isEmpty</name>
+    <function-class>edu.ur.tag.CollectionUtil</function-class>
+    <function-signature>
+        boolean isEmpty(java.util.Collection)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>collectionSize</name>
+    <function-class>edu.ur.tag.CollectionUtil</function-class>
+    <function-signature>
+        int size(java.util.Collection)
+    </function-signature>
+  </function>
+  
+  <function>
+    <name>escapeSingleQuote</name>
+    <function-class>edu.ur.tag.util.StringUtil</function-class>
+    <function-signature>
+        String escapeSingleQuote(java.lang.String)
+    </function-signature>
+  </function>
+  
+</taglib>

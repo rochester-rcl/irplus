@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+
+   <!-- ****************************************** --> 
+   <!-- IR Dublin Core Metadata   -->
+   <!-- ****************************************** --> 
+   
+   <bean id="contributorTypeDublinCoreMappingDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.dc.db.HbContributorTypeDublinCoreMappingDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="contributorTypeDublinCoreMappingDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="contributorTypeDublinCoreMappingDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <bean id="identifierTypeDublinCoreMappingDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.dc.db.HbIdentifierTypeDublinCoreMappingDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="identifierTypeDublinCoreMappingDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="identifierTypeDublinCoreMappingDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- IR Marc Metadata   -->
+   <!-- ****************************************** --> 
+   <bean id="marcContentTypeFieldMapperDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.marc.db.HbMarcContentTypeFieldMapperDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="marcContentTypeFieldMapperDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="marcContentTypeFieldMapperDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+  <!-- ****************************************** --> 
+  <!-- IR Contributor type relator code DAO  -->
+  <!-- ****************************************** --> 
+   <bean id="marcContributorTypeRelatorCodeDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.marc.db.HbMarcContributorTypeRelatorCodeDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="marcContributorTypeRelatorCodeDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="marcContributorTypeRelatorCodeDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Marc data field mapper DAO  -->
+   <!-- ****************************************** --> 
+   <bean id="marcDataFieldMapperDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.marc.db.HbMarcDataFieldMapperDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="marcDataFieldMapperDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="marcDataFieldMapperDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Identifier type sub filed  mapper DAO  -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeSubFieldMapperDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.marc.db.HbIdentifierTypeSubFieldMapperDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="identifierTypeSubFieldMapperDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="identifierTypeSubFieldMapperDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Extent type sub filed  mapper DAO  -->
+   <!-- ****************************************** --> 
+   <bean id="extentTypeSubFieldMapperDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.marc.db.HbExtentTypeSubFieldMapperDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="extentTypeSubFieldMapperDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="extentTypeSubFieldMapperDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+ </beans>

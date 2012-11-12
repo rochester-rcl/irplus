@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for item file.
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.item">
+	<class name="ItemFile" schema="ir_item" table="item_file"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="item_file_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_item.item_file_seq</param>
+			</generator>
+		</id>
+		
+		<property name="order" column="file_order" type="int"
+			not-null="false" access="field" />
+			
+		<property name="versionNumber" column="version_number" type="int"
+			not-null="true" access="field" />			
+
+		<property name="description" column="description" type="string"
+			not-null="false" access="field" />			
+ 
+ 		<property name="isPublic" column="is_public" type="boolean"
+			not-null="false" access="field" />	
+						
+ 		<many-to-one class="edu.ur.ir.file.IrFile" 
+			name="irFile" 
+			column="ir_file_id" insert="true"
+			update="true" 
+			cascade="save-update" access="field"/>
+						
+		<many-to-one class="edu.ur.ir.item.GenericItem"
+			name="item" column="item_id" access="field"/>			
+	 </class>
+	 
+	 <!-- named query for getting the count of irFile being used in item files -->
+	<query name="getItemFileCount">
+		select count(*) 
+		from ItemFile as ItemFile where
+		ItemFile.irFile.id = ?
+	</query>
+	
+	 <!-- named query for all item files by ir file id-->
+	<query name="getItemFileByIrFileId">
+		select itemFile
+		from ItemFile as itemFile where
+		itemFile.irFile.id = :irFileId
+	</query>
+		
+</hibernate-mapping>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a reviewable items.
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+
+	<class name="ReviewableItem" schema="ir_repository" table="reviewable_item"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="reviewable_item_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.reviewable_item_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="date" column="date_reviewed" type="timestamp" 
+		          access="field" 
+		          not-null="false"/>		     
+
+		<property name="reasonForRejection" column="rejection_reason" type="string" 
+		          access="field" 
+		          not-null="false"/>
+		
+		<property name="reviewStatus" column="review_status" type="string" 
+		          access="field" 
+		          not-null="false"/>
+		          			
+        <!--  The item   -->
+        <many-to-one name="item" class="edu.ur.ir.item.GenericItem"
+              optimistic-lock="false" 
+              unique="true" column="item_id" cascade="save-update"
+              not-null="true" access="field"/>
+
+        <!--  The reviewer -->
+        <many-to-one name="reviewer" class="edu.ur.ir.user.IrUser" 
+              optimistic-lock="false"
+              unique="true" column="user_id" cascade="save-update"
+              not-null="false" access="field"/>
+              
+        <!--  The institutional collection that holds the item -->
+        <many-to-one name="institutionalCollection" class="InstitutionalCollection" 
+             optimistic-lock="false"
+              unique="true" column="institutional_collection_id" cascade="save-update"
+               access="field"/>
+
+		
+	</class>
+
+	<!--  get the items pending review -->
+	<query name="getAllPendingItems" >
+	    select reviewableItem from ReviewableItem reviewableItem
+        where reviewableItem.reviewStatus = ?
+	</query>  
+	
+	<!--  get the review history for specified iem id -->
+	<query name="geReviewItemByGenericItemId" >
+	    select reviewableItem from ReviewableItem reviewableItem
+        where reviewableItem.item.id = ?
+	</query>    
+</hibernate-mapping>

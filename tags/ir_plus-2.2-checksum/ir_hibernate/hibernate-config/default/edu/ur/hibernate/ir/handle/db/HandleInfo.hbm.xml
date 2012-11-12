@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for handle info
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.handle">
+	<class name="HandleInfo" schema="handle" table="handle_info"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="handle_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">handle.handle_info_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+  	
+		<property name="index" column="handle_idx" type="int"
+			not-null="true" access="field" />
+		
+		<property name="localName" column="local_name" type="string"
+			not-null="true" access="field" />
+
+        <property name="dataType" column="data_type" type="string"
+			not-null="false" access="field" />
+			 
+        <property name="data" column="data" type="string"
+			not-null="false" access="field" />
+			
+	    <property name="timeToLiveType" column="time_to_live_type" type="int"
+			not-null="false" access="field" />
+	
+	    <property name="timeToLive" column="time_to_live" type="int"
+			not-null="false" access="field" />
+	
+	    <property name="timestamp" column="time_stamp" type="int"
+			not-null="false" access="field" />
+			
+		<property name="references" column="refs" type="string"
+			not-null="false" access="field" />
+			
+		<property name="adminRead" column="admin_read" type="boolean"
+			not-null="false" access="field" />
+		
+		<property name="adminWrite" column="admin_write" type="boolean"
+			not-null="false" access="field" />
+		
+		<property name="publicRead" column="public_read" type="boolean"
+			not-null="false" access="field" />
+		
+		<property name="publicWrite" column="public_write" type="boolean"
+			not-null="false" access="field" />
+					
+	    <!-- Handle info name authority -->
+		<many-to-one class="HandleNameAuthority" 
+		    cascade="save-update"
+			name="nameAuthority" 
+			access="field"
+			not-null="true"
+			column="handle_name_authority_id" 
+			insert="true"
+			unique="true"/>
+			
+	 </class>
+	 
+	 <!--  Get a count of handles in the system -->
+	<query name="handleInfoCount">
+	    select count(*) from HandleInfo
+	</query>
+	
+	<!--  Get a handle by local name and naming authority -->
+	<query name="handleByNameAuthorityLocalName">
+	    select handleInfo from HandleInfo handleInfo
+	    where handleInfo.nameAuthority.namingAuthority = ?
+	    and handleInfo.localName = ? 
+	</query>
+	
+    <!--  Get all of the handles for a handle name authority -->
+	<query name="findAllHandlesByNameAuthority">
+	    select handleInfo from HandleInfo handleInfo
+	    where handleInfo.nameAuthority.namingAuthority = ?
+	</query>
+	
+	<!--  Get a count of handles in the system for a given name authority -->
+	<query name="countHandleByNameAuthority">
+	    select count(*) from HandleInfo handleInfo
+	    where handleInfo.nameAuthority.id = ?
+	</query>
+	 
+		
+</hibernate-mapping>

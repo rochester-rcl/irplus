@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	
+	Mapping for file checksum information
+	
+	@author Nathan Sarr
+	
+-->
+<hibernate-mapping package="edu.ur.file.db">
+	<class name="FileInfoChecksum" table="file_system.file_checksum"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="file_checksum_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">file_system.file_checksum_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<!-- checksum information -->
+		<property name="checksum" column="checksum" type="string"
+			not-null="true" access="field" />
+		
+		<property name="algorithmType" column="algorithm_type" type="string"
+			not-null="true" access="field" />
+			
+		<!-- File Info this file is for -->
+		<many-to-one class="edu.ur.file.db.DefaultFileInfo" access="field" 
+			name="fileInfo" column="file_id" unique="true"/>
+			
+		<property name="dateCalculated" column="date_calculated" type="timestamp"
+			not-null="true" access="field" />
+		
+		<property name="dateLastCheckPassed" column="date_last_check_passed" type="timestamp"
+			 access="field" />
+		
+		<property name="dateReCalculated" column="date_re_calculated" type="timestamp"
+			 access="field" not-null="true"/>
+	
+	    <property name="reCalculatedPassed" column="re_calculated_passed" type="boolean"
+			 access="field" not-null="true" />
+			 
+	    <property name="reCalculatedValue" column="re_calculated_value" type="string"
+			 access="field" not-null="true" />
+			
+		<property name="reCalculateChecksum" column="re_calculate_checksum" type="boolean"
+			 access="field" not-null="true"  />	
+	
+	    <!--  Reset history information -->
+		<set name="resetHistory" 
+		    inverse="true" 
+		    cascade="all" 
+		    access="field"
+			order-by="date_reset" 
+			lazy="true">
+			<key column="file_checksum_id"/>
+			<one-to-many class="FileInfoChecksumResetHistory"/>
+		</set>
+	</class>
+	
+	<!--  Get a count of folders in the system -->
+	<query name="fileInfoChecksumCount">
+	    select count(*) from FileInfoChecksum
+	</query>
+	
+	<!-- Gets all checksums where they are to be rechecked and -->
+	<query name="getOlderChecksumForChecker">
+	    from FileInfoChecksum as checksum	    
+	    where checksum.dateReCalculated &lt; :minDate
+	    and checksum.reCalculateChecksum = true
+	    order by checksum.dateReCalculated ASC
+	</query>
+	
+	<!-- Gets all checksums where the checksum failed by date ascending -->
+	<query name="getChecksumInfoFailsDateOrderAsc">
+	    from FileInfoChecksum as checksum	    
+	    where checksum.reCalculatedPassed = false
+	    order by checksum.dateReCalculated ASC
+	</query>
+	
+	 <!-- Gets all checksums where the checksum failed by date ascending -->
+	<query name="getChecksumInfoFailsCount">
+	    select count(*) from FileInfoChecksum as checksum	    
+	    where checksum.reCalculatedPassed = false
+	</query>
+	
+	<!--  Gets all checksums where the checksum failed by date descending -->
+	<query name="getChecksumInfoDateOrderAsc">
+	    from FileInfoChecksum as checksum	    
+	    order by checksum.dateReCalculated DESC
+	</query>
+	
+	<!-- Gets all checksums date order ascending -->
+	<query name="getChecksumInfoDateOrderDesc">
+	    from FileInfoChecksum as checksum	    
+	    order by checksum.dateReCalculated ASC
+	</query>
+	
+</hibernate-mapping>
