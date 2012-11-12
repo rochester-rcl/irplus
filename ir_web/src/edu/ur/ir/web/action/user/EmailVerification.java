@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.FileSharingException;
@@ -63,11 +62,6 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 	
 	/** repository object */
 	private Repository repository;
-	
-	/* service to deal with invitations to a group workspace */
-	private GroupWorkspaceInviteService groupWorkspaceInviteService;
-
-
 
 	/**
 	 * Execute method to verify email
@@ -85,7 +79,6 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 				
 				try {
 					// Share files -  If there are any invitations sent to this email address 
-					groupWorkspaceInviteService.addUserToGroupsForEmail(email.getEmail());
 					inviteUserService.sharePendingFilesForEmail(userId, email.getEmail());
 					
 				} catch (UnVerifiedEmailException e) {
@@ -131,7 +124,7 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 	 * 
 	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -187,16 +180,6 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 	 */
 	public void setRepository(Repository repository) {
 		this.repository = repository;
-	}
-	
-	/**
-	 * Set the group workspace invite service.
-	 * 
-	 * @param groupWorkspaceInviteService
-	 */
-	public void setGroupWorkspaceInviteService(
-			GroupWorkspaceInviteService groupWorkspaceInviteService) {
-		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
 	}
 
 }

@@ -36,6 +36,27 @@
    </bean>
 
    <!-- ****************************************** --> 
+   <!--Checksum checker service                  -->
+   <!-- ****************************************** -->
+ 
+   <!--  stores all files in a single folder  -->
+   <bean id="fileInfoChecksumService" 
+       class="edu.ur.file.db.service.DefaultFileInfoChecksumService">
+       <property name="fileInfoChecksumDAO" ref="fileInfoChecksumDAO"/>
+   </bean> 
+
+   <!-- ****************************************** --> 
+   <!--Checksum checker service                  -->
+   <!-- ****************************************** -->
+ 
+   <!--  stores all files in a single folder  -->
+   <bean id="checksumCheckerService" 
+       class="edu.ur.file.db.service.DefaultChecksumCheckerService">
+       <property name="fileInfoChecksumService" ref="fileInfoChecksumService"/>
+       <property name="checksumService" ref="checksumService"/>
+   </bean> 
+
+   <!-- ****************************************** --> 
    <!-- File storage strategies                    -->
    <!-- ****************************************** -->
    <bean id="simpleFileStoreStrategy" 

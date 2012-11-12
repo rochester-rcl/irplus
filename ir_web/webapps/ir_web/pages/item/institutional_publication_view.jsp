@@ -29,6 +29,18 @@
 
 <html>
     <head>
+        <c:if test="${!showPublication}">
+            <meta name="robots" content="noindex">
+        </c:if>
+         <c:if test="${showPublication}">
+            <meta name="citation_title" content="${institutionalItemVersion.item.fullName}"/>
+            <c:forEach items="${institutionalItemVersion.item.contributors}" var="itemContributor">
+                <c:if test="${itemContributor.contributor.contributorType.authorType}">
+                    <meta name="citation_author" content="${itemContributor.contributor.personName.surname}, ${itemContributor.contributor.personName.forename}"/>
+                </c:if>
+            </c:forEach>
+            <meta name="citation_publication_date" content="${ir:getGoogleScholarDate(institutionalItemVersion)}">
+        </c:if>
         <title>${institutionalItemVersion.item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
@@ -48,10 +60,10 @@
     <ur:js src="page-resources/yui/menu/menu-min.js"/>
     
  	<!--  base path information -->
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-    <ur:js src="page-resources/js/util/ur_table.js"/>
+    <ur:js src="pages/js/ur_table.js"/>
     <ur:js src="page-resources/js/public/institutional_publication_view.js"/>
     
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -202,7 +214,7 @@
 				              method="post" action="<c:url value="/admin/viewMoveInstitutionalItemLocations.action"/>">
 								
 								<input type="hidden" id="move_items_destination_id" name="destinationId" value="${institutionalItem.institutionalCollection.id}"/>
-								<input type="hidden" id="move_items_item_ids" name="itemIds" value="${institutionalItem.id}"/>
+								<input type="hidden" id="move_items_item_ids" name="itemIds" value="${institutionalItemId}"/>
 				            </form>  
 		 				
 		 		   </c:if>
@@ -322,7 +334,7 @@
                                  <c:if test="${ir:hasThumbnail(version.item.primaryImageFile.irFile)}">
                                      <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
                                         <c:if test="${url != null}">
-                                            <img class="basic_thumbnail" src="${url}"/>
+                                            <img src="${url}"/>
                                         </c:if>
                                  </c:if>
                               </c:if>

@@ -55,7 +55,70 @@
 			
 		<property name="dateCalculated" column="date_calculated" type="timestamp"
 			not-null="true" access="field" />
+		
+		<property name="dateLastCheckPassed" column="date_last_check_passed" type="timestamp"
+			 access="field" />
+		
+		<property name="dateReCalculated" column="date_re_calculated" type="timestamp"
+			 access="field" not-null="true"/>
+	
+	    <property name="reCalculatedPassed" column="re_calculated_passed" type="boolean"
+			 access="field" not-null="true" />
+			 
+	    <property name="reCalculatedValue" column="re_calculated_value" type="string"
+			 access="field" not-null="true" />
 			
+		<property name="reCalculateChecksum" column="re_calculate_checksum" type="boolean"
+			 access="field" not-null="true"  />	
+	
+	    <!--  Reset history information -->
+		<set name="resetHistory" 
+		    inverse="true" 
+		    cascade="all" 
+		    access="field"
+			order-by="date_reset" 
+			lazy="true">
+			<key column="file_checksum_id"/>
+			<one-to-many class="FileInfoChecksumResetHistory"/>
+		</set>
 	</class>
+	
+	<!--  Get a count of folders in the system -->
+	<query name="fileInfoChecksumCount">
+	    select count(*) from FileInfoChecksum
+	</query>
+	
+	<!-- Gets all checksums where they are to be rechecked and -->
+	<query name="getOlderChecksumForChecker">
+	    from FileInfoChecksum as checksum	    
+	    where checksum.dateReCalculated &lt; :minDate
+	    and checksum.reCalculateChecksum = true
+	    order by checksum.dateReCalculated ASC
+	</query>
+	
+	<!-- Gets all checksums where the checksum failed by date ascending -->
+	<query name="getChecksumInfoFailsDateOrderAsc">
+	    from FileInfoChecksum as checksum	    
+	    where checksum.reCalculatedPassed = false
+	    order by checksum.dateReCalculated ASC
+	</query>
+	
+	 <!-- Gets all checksums where the checksum failed by date ascending -->
+	<query name="getChecksumInfoFailsCount">
+	    select count(*) from FileInfoChecksum as checksum	    
+	    where checksum.reCalculatedPassed = false
+	</query>
+	
+	<!--  Gets all checksums where the checksum failed by date descending -->
+	<query name="getChecksumInfoDateOrderAsc">
+	    from FileInfoChecksum as checksum	    
+	    order by checksum.dateReCalculated DESC
+	</query>
+	
+	<!-- Gets all checksums date order ascending -->
+	<query name="getChecksumInfoDateOrderDesc">
+	    from FileInfoChecksum as checksum	    
+	    order by checksum.dateReCalculated ASC
+	</query>
 	
 </hibernate-mapping>

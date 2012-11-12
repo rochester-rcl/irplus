@@ -20,19 +20,6 @@
     
 <beans>
 
-   <!-- ****************************************** --> 
-   <!-- Contributor related data service -->
-   <!-- ****************************************** --> 
-    <bean id="systemPropertyInitializingService" 
-          class="edu.ur.ir.util.service.SystemPropertyInitializingService">
-        <property name="systemProperties">
-            <map>
-                 <!-- Set headless mode to true -->
-                 <entry key="java.awt.headless" value="true"/>
-            </map>
-         </property>
-   </bean>
-
    <!-- Sha Password encoder to use SHA-1 password encoding -->
    <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder"/>
     
@@ -128,20 +115,6 @@
        <property name="irUserGroupDAO" ref="irUserGroupDAO"/>
    </bean>
    
-    <!--  Service for helping searching for user groups --> 
-    <bean id="userGroupSearchService" 
-       class="edu.ur.ir.user.service.DefaultUserGroupSearchService">
-       <property name="userGroupService" ref="userGroupService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
-   </bean>
- 
- 
-    <bean id="userGroupIndexService" 
-       class="edu.ur.ir.user.service.DefaultUserGroupIndexService">
-       <property name="analyzer" ref="standardWithACIIFolding"/>
-       <property name="errorEmailService" ref="errorEmailService"/>
-   </bean>
-   
    <!-- ****************************************** --> 
    <!-- Item related services -->
    <!-- ****************************************** --> 
@@ -158,8 +131,6 @@
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="securityService" ref="securityService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
-       <property name="groupWorkspaceProjectPageFileSystemService" ref="groupWorkspaceProjectPageFileSystemService"/>
-       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
    </bean>
    
    <!-- ****************************************** --> 
@@ -194,11 +165,8 @@
        <property name="fileVersionDAO" ref="fileVersionDAO"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="externalAuthenticationEnabled" value="${external.authentication.enabled}"/>
-       <property name="groupWorkspaceProjectPageFileSystemService" ref="groupWorkspaceProjectPageFileSystemService"/>
-       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
    </bean>
- 
- 
+
     <!--  Service for helping with item file security --> 
    <bean id="itemFileSecurityService" 
        class="edu.ur.ir.item.service.DefaultItemFileSecurityService">
@@ -264,20 +232,6 @@
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
-   </bean>
- 
-    <!--  Service for helping searching for institutional collections --> 
-    <bean id="institutionalCollectionSearchService" 
-       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSearchService">
-       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
-   </bean>
- 
- 
-    <bean id="institutionalCollectionIndexService" 
-       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionIndexService">
-       <property name="analyzer" ref="standardWithACIIFolding"/>
-       <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
    <bean id="institutionalCollectionSecurityService" 
@@ -421,17 +375,16 @@
            </list>
        </property>
    </bean>
-       
-   <bean id="standardWithACIIFolding"
-         class="edu.ur.lucene.analysis.StandardWithACIIFoldingFilter"
-         singleton="false">
-   </bean>
+   
+   <bean id="defaultTextAnalyzer" 
+       class="edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter" 
+       singleton="false" />
    
    <bean id="userWorkspaceIndexService" 
        class="edu.ur.ir.user.service.DefaultUserWorkspaceIndexService">
        <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
        <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="irFileIndexingFailureRecordDAO" ref="irFileIndexingFailureRecordDAO"/>
@@ -440,7 +393,7 @@
    <bean id="nameAuthorityIndexService" 
        class="edu.ur.ir.person.service.DefaultNameAuthorityIndexService">
        <property name="errorEmailService" ref="errorEmailService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
    
    <bean id="reIndexPersonNameAuthoritiesService" 
@@ -449,16 +402,9 @@
        <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
    </bean>
    
-   <bean id="reIndexInstitutionalCollectionService" 
-       class="edu.ur.ir.institution.service.DefaultReIndexInstitutionalCollectionService">
-       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
-       <property name="institutionalCollectionIndexService" ref="institutionalCollectionIndexService"/>
-   </bean>
-   
-   
    <bean id="userIndexService" 
        class="edu.ur.ir.user.service.DefaultUserIndexService">
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
        <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
@@ -473,7 +419,7 @@
        <property name="collectionBatchSize" value="10"/>
        <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="irFileIndexingFailureRecordDAO" ref="irFileIndexingFailureRecordDAO"/>
    </bean>
@@ -481,7 +427,7 @@
    <bean id="researcherIndexService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherIndexService">
        <property name="errorEmailService" ref="errorEmailService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
    
    <bean id="reIndexResearchersService" 
@@ -490,43 +436,36 @@
        <property name="researcherService" ref="researcherService"/>
    </bean>
    
-   <bean id="reIndexUserGroupsService" 
-       class="edu.ur.ir.user.service.DefaultReIndexUserGroupsService">
-       <property name="userGroupIndexService" ref="userGroupIndexService"/>
-       <property name="userGroupService" ref="userGroupService"/>
-   </bean>
-   
    <!-- ****************************************** --> 
    <!-- Searching related services                 -->
    <!-- ****************************************** -->
    <bean id="userWorkspaceSearchService" 
        class="edu.ur.ir.user.service.DefaultUserWorkspaceSearchService">
        <property name="userFileSystemService" ref="userFileSystemService"/>
-       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
        <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
 
    <bean id="nameAuthoritySearchService" 
        class="edu.ur.ir.person.service.DefaultNameAuthoritySearchService">
        <property name="personService" ref="personService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
 
    <bean id="userSearchService" 
        class="edu.ur.ir.user.service.DefaultUserSearchService">
        <property name="userService" ref="userService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
    
    <bean id="institutionalItemSearchService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalItemSearchService">
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
 
    <bean id="researcherSearchService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherSearchService">
-       <property name="analyzer" ref="standardWithACIIFolding"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
    
    <!-- ****************************************** --> 
@@ -585,9 +524,6 @@
        <property name="itemService" ref="itemService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="researcherInstitutionalItemDAO" ref="researcherInstitutionalItemDAO"/>
-       <property name="groupWorkspaceProjectPageFileSystemService" ref="groupWorkspaceProjectPageFileSystemService"/>
-       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
-
    </bean>
    
    <!-- ****************************************** --> 
@@ -725,8 +661,6 @@
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
-       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
-       <property name="securityService" ref="securityService"/>
        <property name="userService" ref="userService"/>
    </bean>
    
@@ -884,34 +818,7 @@
        <property name="listMetadataFormatsService" ref="listMetadataFormatsService"/>
    </bean>
    
-   <!-- ****************************************** --> 
-   <!-- Group workspace service -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceService"
-         class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceService">
-         <property name="groupWorkspaceDAO" ref="groupWorkspaceDAO"/>
-         <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>
-         <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
-         <property name="securityService" ref="securityService"/>
-   </bean>
    
-   
-     <!-- ****************************************** --> 
-   <!-- Service to invite user for personal workspace -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceInviteService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceInviteService">
-	   <property name="groupWorkspaceEmailInviteDAO" ref="groupWorkspaceEmailInviteDAO"/>
-       <property name="mailSender" ref="mailSender"/>
-       <property name="userService" ref="userService"/>
-       <property name="userWorkspaceInviteUserExists" ref="userWorkspaceInviteUserExists"/>
-       <property name="userWorkspaceInviteUserNotExistsMessage" ref="userWorkspaceInviteUserNotExistsMessage"/>
-       <property name="baseWebAppPath" value="${base.web.path}"/>
-       <property name="errorEmailService" ref="errorEmailService"/>
-       <property name="securityService" ref="securityService"/>
-       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
-       <property name="groupWorkspaceUserDAO" ref="groupWorkspaceUserDAO"/>      
-   </bean>
    <!-- ****************************************** --> 
    <!-- Service that deals with Marc Conntent type -->
    <!--  mapping                                   -->
@@ -981,23 +888,6 @@
    </bean>
    
    <!-- ****************************************** --> 
-   <!-- Group workspace project page service  -->
-   <!-- ****************************************** --> 
-    <bean id="groupWorkspaceProjectPageService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageService">
-       <property name="groupWorkspaceProjectPageDAO" ref="groupWorkspaceProjectPageDAO"/>
-       <property name="repositoryService" ref="repositoryService"/>
-   </bean>
-   
-   <!-- ****************************************** --> 
-   <!-- Group workspace project page member service  -->
-   <!-- ****************************************** --> 
-    <bean id="groupWorkspaceProjectPageMemberService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageMemberService">
-       <property name="groupWorkspaceProjectPageMemberDAO" ref="groupWorkspaceProjectPageMemberDAO"/>
-   </bean>
-   
-   <!-- ****************************************** --> 
    <!--  Service that deals with importing marc    -->
    <!--     files                                  -->
    <!-- ****************************************** --> 
@@ -1021,52 +911,16 @@
 	    <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
+      <!-- ****************************************** --> 
+   <!-- User related data service -->
    <!-- ****************************************** --> 
-   <!--  group workspace index service             -->
-   <!--  used for searching for group workspaces   -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceIndexService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceIndexService">
-       <property name="analyzer" ref="standardWithACIIFolding"/>
-       <property name="errorEmailService" ref="errorEmailService"/>
-   </bean>
-   
-   <bean id="groupWorkspaceSearchService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceSearchService">
-       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
-       <property name="analyzer" ref="standardWithACIIFolding"/>
-   </bean>
-   
-   <!-- ****************************************** --> 
-   <!-- Group workspace file system service        -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceFileSystemService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemService">
-       <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
-       <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
-       <property name="groupWorkspaceFileDeleteRecordDAO" ref="groupWorkspaceFileDeleteRecordDAO"/>
+   <bean id="checksumCheckerReportService" 
+       class="edu.ur.ir.repository.service.DefaultChecksumCheckerReportService">
+       <property name="fileInfoChecksumService" ref="fileInfoChecksumService"/>
        <property name="repositoryService" ref="repositoryService"/>
-       <property name="securityService" ref="securityService"/>
-       <property name="groupWorkspaceService" ref="groupWorkspaceService"/>
-    </bean>
-
-   <!-- ****************************************** --> 
-   <!-- Group workspace project page file system service        -->
-   <!-- ****************************************** --> 
-   <bean id="groupWorkspaceProjectPageFileSystemService" 
-       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceProjectPageFileSystemService">
-       <property name="groupWorkspaceProjectPageFolderDAO" ref="groupWorkspaceProjectPageFolderDAO"/>
-       <property name="groupWorkspaceProjectPageFileDAO" ref="groupWorkspaceProjectPageFileDAO"/>
-       <property name="groupWorkspaceProjectPagePublicationDAO" ref="groupWorkspaceProjectPagePublicationDAO"/>
-       <property name="groupWorkspaceProjectPageInstitutionalItemDAO" ref="groupWorkspaceProjectPageInstitutionalItemDAO"/>
-       <property name="groupWorkspaceProjectPageFileSystemLinkDAO" ref="groupWorkspaceProjectPageFileSystemLinkDAO"/>
-       <property name="repositoryService" ref="repositoryService"/>
-       <property name="itemService" ref="itemService"/>
-       <property name="userFileSystemService" ref="userFileSystemService"/>
-       <property name="groupWorkspaceProjectPageDAO" ref="groupWorkspaceProjectPageDAO"/>
-       <property name="groupWorkspaceFileSystemService" ref="groupWorkspaceFileSystemService"/>
-       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
-    </bean>
-
-
+       <property name="mailSender" ref="mailSender"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
+       <property name="fromAddress" value="${mail.sender.from}"/>
+       <property name="email" value="${email.error.address}"/>
+   </bean>
 </beans>

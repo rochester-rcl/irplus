@@ -20,9 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.PersonalItemDAO;
 
@@ -62,6 +64,13 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 	
+	/**
+	 * Return all PersonalItems in the system
+	 */
+	public List<PersonalItem> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	/**
 	 * Return PersonalItem by id
 	 */
@@ -154,5 +163,19 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
 			return items.get(0);
 		}
 		
+	}
+	
+	/**
+	 * Get all personal items which have the specified generic item ids 
+	 * 
+	 * @param itemIds - list of generic item ids
+	 * @return - all personal items that contain the generic item id.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonalItem> getAllPersonalItemsByGenericItemIds(List<Long> itemIds)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllPersonalItemByGenericId");
+		q.setParameterList("itemIds", itemIds);
+		return q.list();
 	}
 }

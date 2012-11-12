@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
-import edu.ur.ir.groupspace.GroupWorkspaceProjectPageFileSystemService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
@@ -37,43 +35,37 @@ import edu.ur.ir.user.UserFileSystemService;
  */
 public class DefaultResearcherFileSystemService implements ResearcherFileSystemService {
 	
-	// eclipse generated id 
+	/** eclipse generated id */
 	private static final long serialVersionUID = 8168747479279250084L;
 
-	// Data access for researcher folder 
+	/** Data access for researcher folder */
 	private ResearcherFolderDAO researcherFolderDAO;
 
-	// Data access for researcher file 
+	/** Data access for researcher file */
 	private ResearcherFileDAO researcherFileDAO;
 	
-	// Data access for researcher publication
+	/** Data access for researcher publication*/
 	private ResearcherPublicationDAO researcherPublicationDAO;
 
-	// Data access for researcher institutional item 
+	/** Data access for researcher institutional item */
 	private ResearcherInstitutionalItemDAO researcherInstitutionalItemDAO;
 
-	// Data access for researcher link
+	/** Data access for researcher link*/
 	private ResearcherLinkDAO researcherLinkDAO;
 	
-	// Service for dealing with the repository 
+	/** Service for dealing with the repository */
 	private RepositoryService repositoryService;
 	
-	// Service for dealing with items. 
+	/** Service for dealing with items. */
 	private ItemService itemService;
 	
-	// service for dealing with user file system 
+	/** service for dealing with user file system */
 	private UserFileSystemService userFileSystemService;
 	
-	// Service for dealing with researcher information 
+	/** Service for dealing with researcher information */
 	private ResearcherDAO researcherDAO;
 	
-	// group workspace project page file system service
-	private GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService;
-
-	// group workspace file system service
-	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
-	
-	//  Logger for add files to item action 
+	/**  Logger for add files to item action */
 	private static final Logger log = Logger.getLogger(DefaultResearcherFileSystemService.class);
 
 	
@@ -141,6 +133,8 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		researcherFolderDAO.makePersistent(parentFolder);
 		return rp;
 	}
+	
+	
 
 	/**
 	 * Allows a researcher to create a new Institutional Item.
@@ -228,11 +222,8 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		researcherFileDAO.makeTransient(rf);
 
 		// Check if irFile is used by PersonalFile or Item or researcher 
-		if ((userFileSystemService.getPersonalFileCount(irFile) == 0) 
-				&& (itemService.getItemFileCount(irFile) == 0)
-				&& (getResearcherFileCount(irFile) == 0)
-				&& (groupWorkspaceProjectPageFileSystemService.getFileCount(irFile) == 0)
-				&& (groupWorkspaceFileSystemService.getGroupWorkspaceFileCount(irFile) == 0)) {
+		if ((userFileSystemService.getPersonalFileCount(irFile) == 0) && (itemService.getItemFileCount(irFile) == 0)
+				&& (getResearcherFileCount(irFile) == 0)) {
 			repositoryService.deleteIrFile(irFile);
 		}
 
@@ -548,6 +539,16 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	}
 	
 	/**
+	 * Get all researcher files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of researcher files being used.
+	 */
+	public List<ResearcherFile> getResearcherFilesWithIrFile(IrFile irFile){
+		return researcherFileDAO.getResearcherFilesWithIrFile(irFile);
+	}
+	
+	/**
 	 * Get the count of researcher publication using this generic item
 	 * 
 	 * @see edu.ur.ir.researcher.ResearcherService#getResearcherPublicationCount(GenericItem)
@@ -657,7 +658,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to destination " + destination);
-		    	if( destination.getByIrFileId(file.getIrFile().getId()) == null)
+		    	if( !destination.getFiles().contains(file))
 		    	{
 		    		destination.addResearcherFile(file);
 		    	}
@@ -762,7 +763,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to researcher " + researcher);
-		    	if( researcher.getByIrFileId(file.getIrFile().getId()) == null)
+		    	if( !researcher.getRootFiles().contains(file))
 		    	{
 			        researcher.addRootFile(file);
 		    	}
@@ -929,14 +930,4 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	}
 	
 
-	public void setGroupWorkspaceProjectPageFileSystemService(
-			GroupWorkspaceProjectPageFileSystemService groupWorkspaceProjectPageFileSystemService) {
-		this.groupWorkspaceProjectPageFileSystemService = groupWorkspaceProjectPageFileSystemService;
-	}
-
-
-	public void setGroupWorkspaceFileSystemService(
-			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
-		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
-	}
 }

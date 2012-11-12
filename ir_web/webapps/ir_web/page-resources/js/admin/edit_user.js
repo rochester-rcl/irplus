@@ -62,8 +62,6 @@ YAHOO.ur.email = {
         var researcherRole = document.getElementById("editUserForm_isResearcher");
         var collectionAdminRole = document.getElementById("editUserForm_isCollectionAdmin");
         var importerRole = document.getElementById("editUserForm_isImporter");
-        var approveAffiliationRole = document.getElementById("editUserForm_isAffilationApprover");
-        var createGroupWorkspaceRole = document.getElementById("editUserForm_isGroupWorkspaceCreator");
         
 	    if (permission.id == 'editUserForm_isAdmin') 
 	    {
@@ -71,33 +69,8 @@ YAHOO.ur.email = {
 		    {
 		        userRole.checked = true;
 		        authorRole.checked = true;
-		        importerRole.checked = true;
+		        importer.checked = true;
 		    }
-		    else
-		    {
-		    	approveAffiliationRole.checked = false;
-		    }
-	    }
-	    
-	    if (permission.id == 'editUserForm_isGroupWorkspaceCreator') 
-	    {
-		    if (permission.checked) 
-		    {
-		        userRole.checked = true;
-		        authorRole.checked = true;
-		    } 
-		    
-	    }
-	    
-	    if (permission.id == 'editUserForm_isAffilationApprover') 
-	    {
-		    if (permission.checked) 
-		    {
-		    	userRole.checked = true;
-		        authorRole.checked = true;
-		        adminRole.checked= true;
-		    } 
-		    
 	    }
 	
 	    if (permission.id == 'editUserForm_isResearcher') 
@@ -121,9 +94,6 @@ YAHOO.ur.email = {
 		        adminRole.checked = false;
 		        researcherRole.checked = false;
 		        importerRole.checked = false;
-		        createGroupWorkspaceRole.checked = false;
-		        approveAffiliationRole.checked = false;
-		        
 		    }
 	    }
 	    
@@ -145,8 +115,6 @@ YAHOO.ur.email = {
 		        researcherRole.checked = false;
 		        collectionAdminRole.checked = false;
 		        importerRole.checked = false;
-		        approveAffiliationRole.checked = false;
-		        createGroupWorkspaceRole.checked = false;
 		    }
 	    }
 	    

@@ -42,7 +42,7 @@
                         <c:param name="collectionId" value="${collection.id}"/>
                         <c:param name="irFileId" value="${collection.primaryPicture.id}"/>
                      </c:url>
-                     <img class="basic_thumbnail" src="${url}"/><br/>
+                     <img src="${url}"/><br/>
                  </c:if>
                  File Location: ${collection.primaryPicture.fileInfo.fullPath}
 				</td>
@@ -92,7 +92,7 @@ There is currently no primary picture.
                                        <c:param name="collectionId" value="${collection.id}"/>
                                        <c:param name="irFileId" value="${irFile.id}"/>
                                    </c:url>
-                                   <img class="basic_thumbnail" src="${url}"/>
+                                   <img src="${url}"/>
                                    <br/>
                                </c:if>
                                File Location: ${irFile.fileInfo.fullPath}

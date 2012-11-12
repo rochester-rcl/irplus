@@ -43,7 +43,7 @@
 <table class="itemFolderTable" width="100%">
 	<thead>
 		<tr>
-			<th class="thItemFolder">Researcher File System</th>
+			<th class="thItemFolder">Researcher Folder Information</th>
 		</tr>
 	</thead>
 	<tbody>

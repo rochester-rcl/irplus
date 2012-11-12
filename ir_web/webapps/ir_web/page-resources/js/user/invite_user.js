@@ -1,5 +1,5 @@
 /*
-   Copyright 2008-2011 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -150,8 +150,8 @@ YAHOO.ur.invite =
 	    var handleSuccess = function(o) 
 	    {
 	    	 YAHOO.ur.invite.waitDialog.hide();
-			// check for the timeout - forward user to login page if timout
-	        // occured
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       	    
 	            //get the response from adding a contributor type

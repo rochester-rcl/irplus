@@ -111,7 +111,7 @@
     <property name="ivy.report.dir" value="${report.dir}/ivy_report" />
 
     <!-- version of ivy to be used -->
-    <property name="ivy.version" value="2.2.0" />
+    <property name="ivy.version" value="2.2.0-rc1" />
 
     <!-- set the javac debug mode -->
     <property name="javac.debug.mode" value="on" />
@@ -126,7 +126,7 @@
     <property name="javac.java.version" value="1.5"/>
 	
     <!-- project version -->
-    <property name="project.version" value="3.0"/> 
+    <property name="project.version" value="2.2"/> 
 	
 	<!-- test properties file location -->
 	<property name="properties.config.test" value="../properties/test"/>
@@ -187,7 +187,6 @@
     </target>
 
 
-	
     <!--   =================================
            target: clean-ivy
            =================================
@@ -214,7 +213,6 @@
     <target name="resolve"
         depends="install-ivy"
         description="--> places the files in the ivy repository">
-    	<ivy:settings file="../ivysettings.xml"/>
         <ivy:resolve />
     </target>
 

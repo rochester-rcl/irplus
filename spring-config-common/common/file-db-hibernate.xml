@@ -110,6 +110,50 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- File Checksum Information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="fileInfoChecksumDAOTarget" 
+       class="edu.ur.hibernate.file.db.HbDefaultFileInfoChecksumDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="fileInfoChecksumDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="fileInfoChecksumDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- File Checksum Reset History Information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="fileInfoChecksumResetHistoryDAOTarget" 
+       class="edu.ur.hibernate.file.db.HbDefaultFileInfoChecksumResetHistoryDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="fileInfoChecksumResetHistoryDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="fileInfoChecksumResetHistoryDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
    <!-- Unique name generatation  -->
    <!-- ****************************************** --> 
    

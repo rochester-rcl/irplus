@@ -24,4 +24,13 @@ import edu.ur.ir.file.IrFile;
 
 public interface IrFileDAO  extends CountableDAO, 
 CrudDAO<IrFile>, NameListDAO, NonUniqueNameDAO<IrFile>
-{}
+{
+	/**
+	 * Get the IrFile by the given file info id if it exists
+	 * otherwise null is returned.
+	 * 
+	 * @param fileInfoId - id of the file Info
+	 * @return the irFile
+	 */
+	public IrFile getByFileInfoId(Long fileInfoId);
+}

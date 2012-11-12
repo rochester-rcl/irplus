@@ -71,9 +71,4 @@
 	    select count(*) from IrUserAccessControlEntry
 	</query>
 	
-	<query name="userControlEntriesForUsers">
-	select entry from IrUserAccessControlEntry entry
-        where  entry.irAcl.id = :aclId
-        and entry.irUser.id in (:userIds)
-    </query>
 </hibernate-mapping>

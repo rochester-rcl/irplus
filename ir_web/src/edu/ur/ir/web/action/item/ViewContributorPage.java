@@ -392,6 +392,8 @@ public class ViewContributorPage extends Pager {
 		return contributorPublications;
 	}
 
+
+
 	public long getPublicationsCount() {
 		return publicationsCount;
 	}

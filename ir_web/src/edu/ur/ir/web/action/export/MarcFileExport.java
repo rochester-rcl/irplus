@@ -220,7 +220,7 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	

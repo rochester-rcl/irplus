@@ -23,7 +23,7 @@ public class ReIndexResearchers extends ActionSupport{
 	private static final long serialVersionUID = -3469784982224968731L;
 
 	/** Quartz scheduler instance to schedule jobs  */
-	private transient Scheduler quartzScheduler;
+	private Scheduler quartzScheduler;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(ReIndexResearchers.class);
@@ -38,7 +38,7 @@ public class ReIndexResearchers extends ActionSupport{
 		JobDetail jobDetail = new JobDetail("reIndexResearchersJob", Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.researcher.service.DefaultReIndexResearchersJob.class);
 		
-		jobDetail.getJobDataMap().put("batchSize", Integer.valueOf(batchSize));
+		jobDetail.getJobDataMap().put("batchSize", new Integer(batchSize));
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);

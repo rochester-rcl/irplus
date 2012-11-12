@@ -28,16 +28,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumericField;
+import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.util.NumericUtils;
-import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -71,25 +68,25 @@ import edu.ur.ir.person.PersonName;
  */
 public class DefaultInstitutionalItemIndexService implements InstitutionalItemIndexService {
 	
-	/* eclipse generated id */
+	/** eclipse generated id */
 	private static final long serialVersionUID = 2088750504787725269L;
 
-	/* Service for sending email errors */
+	/** Service for sending email errors */
 	private ErrorEmailService errorEmailService;
 	
-	/* data access for indexing record failure data access */
+	/** data access for indexing record failure data access */
 	private IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO;
 	
-	/* Batch size for processing collections */
+	/** Batch size for processing collections */
 	private int collectionBatchSize = 1;
 	
-	/* Analyzer for dealing with text indexing */
-	private transient Analyzer analyzer;
+	/** Analyzer for dealing with text indexing */
+	private Analyzer analyzer;
 	
-	/* Service that maintains file text extractors */
+	/** Service that maintains file text extractors */
 	private FileTextExtractorService fileTextExtractorService;
 	
-	/* Service for dealing with institutional items */
+	/** Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
 		
 	/** separator used for multi-set data */
@@ -213,7 +210,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.open(institutionalItemIndex); 
+			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
 			if( overwriteExistingIndex )
 			{
 			    writer = getWriterOverwriteExisting(directory);
@@ -291,9 +288,9 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	    
 		try 
 		{
-			directory = FSDirectory.open(institutionalItemIndex);
+			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
 			writer = getWriter(directory);
-			Term term = new Term(ID, NumericUtils.longToPrefixCoded(id));
+			Term term = new Term(ID, NumberTools.longToString(id));
 			writer.deleteDocuments(term);
 			  
 		} 
@@ -341,11 +338,11 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#addItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
 	 */
-	public void addItem(InstitutionalItem institutionalItem, File institutionalItemIndex, boolean create) throws NoIndexFoundException {
+	public void addItem(InstitutionalItem institutionalItem, File institutionalItemIndex) throws NoIndexFoundException {
 		if (institutionalItemIndex == null) {
 			throw new NoIndexFoundException("Institutional item index folder not found ");
 		} 
-		writeDocument(institutionalItemIndex, getDocument(institutionalItem, true), create);
+		writeDocument(institutionalItemIndex.getAbsolutePath(),	getDocument(institutionalItem, true ));
 	}
 	
 	/**
@@ -360,7 +357,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		Document doc = new Document();
 		doc.add(new Field(ID, 
-				NumericUtils.longToPrefixCoded(institutionalItem.getId()), 
+				NumberTools.longToString(institutionalItem.getId()), 
 				Field.Store.YES, 
 				Field.Index.NOT_ANALYZED));
 		
@@ -398,26 +395,35 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				Field.Store.YES, 
 				Field.Index.ANALYZED ));;
 		
-		doc.add(new NumericField(COLLECTION_ID, 
+		String collectionId =  NumberTools.longToString(institutionalItem.getInstitutionalCollection().getId());
+		doc.add(new Field(COLLECTION_ID, 
+				collectionId, 
 				Field.Store.YES, 
-				true).setLongValue(institutionalItem.getInstitutionalCollection().getId()) ); 
-
-		doc.add(new NumericField(REPOSITORY_ID, 
-				Field.Store.YES, 
-				true).setLongValue(institutionalItem.getInstitutionalCollection().getRepository().getId()) ); 
+				Field.Index.ANALYZED ));
 		
-		doc.add(new NumericField(COLLECTION_ROOT_ID, 
+		String repositoryId = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getRepository().getId());
+		doc.add(new Field(REPOSITORY_ID, 
+				repositoryId, 
 				Field.Store.YES, 
-				true).setLongValue(institutionalItem.getInstitutionalCollection().getTreeRoot().getId()) ); 
+				Field.Index.ANALYZED ));
 		
-		doc.add(new NumericField(COLLECTION_LEFT_VALUE, 
+		String rootCollectionId = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getTreeRoot().getId());
+		doc.add(new Field(COLLECTION_ROOT_ID, 
+				rootCollectionId, 
 				Field.Store.YES, 
-				true).setLongValue(institutionalItem.getInstitutionalCollection().getLeftValue()) ); 
-
-		doc.add(new NumericField(COLLECTION_RIGHT_VALUE, 
+				Field.Index.ANALYZED ));
+		
+		String collectionLeftValue = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getLeftValue());		
+		doc.add(new Field(COLLECTION_LEFT_VALUE, 
+				collectionLeftValue, 
 				Field.Store.YES, 
-				true).setLongValue(institutionalItem.getInstitutionalCollection().getRightValue()) ); 
-
+				Field.Index.ANALYZED ));
+		
+		String collectionRightValue = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getRightValue());		
+		doc.add(new Field(COLLECTION_RIGHT_VALUE, 
+				collectionRightValue, 
+				Field.Store.YES, 
+				Field.Index.ANALYZED ));
 		
 		// get the contributors
 		String contributorString = getContributorNames(genericItem);
@@ -642,9 +648,9 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#updateItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
 	 */
-	public void updateItem(InstitutionalItem institutionalItem, File institutionalItemIndex, boolean create) throws NoIndexFoundException{
+	public void updateItem(InstitutionalItem institutionalItem, File institutionalItemIndex, boolean filesChanged) throws NoIndexFoundException{
 		deleteItem(institutionalItem.getId(), institutionalItemIndex);
-		addItem(institutionalItem, institutionalItemIndex, create);
+		addItem(institutionalItem, institutionalItemIndex);
 	}
 	
 	/**
@@ -653,21 +659,14 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(File path, Document document, boolean create)
+	private void writeDocument(String directoryPath, Document document)
 	{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try 
 		{
-		    directory = FSDirectory.open(path);
-		    if(!create)
-		    {
-			    writer = getWriter(directory);
-		    }
-		    else
-		    {
-		    	writer = getWriterOverwriteExisting(directory);
-		    }
+		    directory = FSDirectory.getDirectory(directoryPath);
+			writer = getWriter(directory);
 		    writer.addDocument(document);
 			writer.commit();
 		} 
@@ -1104,55 +1103,38 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	}
 	
 	
-	/**
-	 * Get the institutional item service.
-	 * 
-	 * @return - institutional item service.
-	 */
 	public InstitutionalItemService getInstitutionalItemService() {
 		return institutionalItemService;
 	}
 
-	/**
-	 * Set the institutional item service.
-	 * @param institutionalItemService
-	 */
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	/**
-	 * Get the collection batch size.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#getCollectionBatchSize()
-	 */
 	public int getCollectionBatchSize() {
 		return collectionBatchSize;
 	}
 
-	/**
-	 * Set the collection batch size.
-	 * 
-	 * @param collectionBatchSize
-	 */
 	public void setCollectionBatchSize(int collectionBatchSize) {
 		this.collectionBatchSize = collectionBatchSize;
 	}
 	
 	/**
-	 * All methods should use this to obtain a writer on the directory.  
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
 	 * 
 	 * @param directory
-	 * @return - writer
+	 * @return
 	 * @throws CorruptIndexException
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
+		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 	
@@ -1170,44 +1152,87 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
-		IndexWriter  writer = new IndexWriter(directory, indexWriterConfig);
+		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 
 
 	/**
-	 * Get the error email service.
+	 * Optimize the index.
 	 * 
-	 * @return email error service
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#optimize(java.io.File)
 	 */
+	public void optimize(File institutionalItemIndex) {
+		IndexWriter writer = null;
+		Directory directory = null;
+		try 
+		{
+		    directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+			writer = getWriter(directory);
+			writer.optimize();
+		} 
+		catch (Exception e) 
+		{
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally 
+        {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try 
+		    {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (Exception e1)
+	    	{
+				log.error(e1);
+			}
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
+	    }
+	}
+
+
+
+
 	public ErrorEmailService getErrorEmailService() {
 		return errorEmailService;
 	}
 
-	/**
-	 * Set the email error service.
-	 * 
-	 * @param errorEmailService
-	 */
+
+
+
 	public void setErrorEmailService(ErrorEmailService errorEmailService) {
 		this.errorEmailService = errorEmailService;
 	}
 
-	/**
-	 * Get the ir file indexing failure record.
-	 * @return
-	 */
+
+
+
 	public IrFileIndexingFailureRecordDAO getIrFileIndexingFailureRecordDAO() {
 		return irFileIndexingFailureRecordDAO;
 	}
 
-	/**
-	 * Set the ir file indexing failure record data access object.
-	 * 
-	 * @param irFileIndexingFailureRecordDAO
-	 */
+
+
+
 	public void setIrFileIndexingFailureRecordDAO(
 			IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO) {
 		this.irFileIndexingFailureRecordDAO = irFileIndexingFailureRecordDAO;

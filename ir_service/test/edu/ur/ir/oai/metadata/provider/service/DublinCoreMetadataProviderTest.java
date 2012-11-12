@@ -31,6 +31,7 @@ import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.DuplicateContributorException;
@@ -41,6 +42,7 @@ import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
+import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingService;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
@@ -75,8 +77,14 @@ public class DublinCoreMetadataProviderTest {
 	/** Transaction definition */
 	TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 
+	/** Contributor type mapping services */
+	ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService = (ContributorTypeDublinCoreMappingService) ctx.getBean("contributorTypeDublinCoreMappingService");
+
 	/** Contributor type services */
 	ContributorTypeService contributorTypeService = (ContributorTypeService) ctx.getBean("contributorTypeService");
+
+	/** dublin core metadata provider */
+	DefaultDublinCoreOaiMetadataProvider provider = (DefaultDublinCoreOaiMetadataProvider) ctx.getBean("dublinCoreOaiMetadataProvider");
 	
 	/** User data access */
 	UserService userService = (UserService) ctx.getBean("userService");
@@ -87,6 +95,8 @@ public class DublinCoreMetadataProviderTest {
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
 	
+	/** service for dealing with institutional items */
+	InstitutionalItemService institutionalItemService = (InstitutionalItemService)ctx.getBean("institutionalItemService");
 
 	/** Repository data access */
 	RepositoryService repositoryService = (RepositoryService) ctx.getBean("repositoryService");

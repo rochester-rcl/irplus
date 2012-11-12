@@ -63,10 +63,10 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private ItemService itemService;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility for streaming file */
 	private WebIoUtils webIoUtils;
@@ -78,16 +78,26 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	private Long userId;
 	
 	/** User service */
-	private UserService userService; 	
-	
-	
-	/** Item file security service */
-	private ItemFileSecurityService itemFileSecurityService; 
+	private UserService userService; 
 	
 	/** file types that can be opened by the browser */
 	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
 	
+	
 	/**
+	 * Set the web frowser file viewer helper.
+	 * 
+	 * @param webBrowserFileViewerHelper
+	 */
+	public void setWebBrowserFileViewerHelper(
+			WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
+		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
+	}
+
+	/** Item file security service */
+	private ItemFileSecurityService itemFileSecurityService; 
+	
+    /**
      * Checks for user permission and then downloads the file 
      * 
      * @return
@@ -161,7 +171,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         			itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) +
         			" is admin = " + user.hasRole(IrRole.ADMIN_ROLE));
         	if( genericItem.getOwner().equals(user) || 
-            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION)) || 
+            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) || 
             	user.hasRole(IrRole.ADMIN_ROLE)
                )
         	{
@@ -206,13 +216,14 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private void downloadFile(ItemFile itemFile) throws Exception {
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
+        
         boolean forceDownload = true;
+        
         if( webBrowserFileViewerHelper.canShowFileTypeInBrowser(fileInfo.getExtension()) )
         {
             forceDownload = false;	
         }
-        
-        webIoUtils.streamFileInfo(fileName, fileInfo, response, request, (1024*4), false, forceDownload);
+        webIoUtils.StreamFileInfo(fileName, fileInfo, response, request, (1024*4), false, forceDownload);
         
     }
     
@@ -276,7 +287,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	}
 
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -290,8 +301,5 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 		this.itemFileSecurityService = itemFileSecurityService;
 	}
 
-	public void setWebBrowserFileViewerHelper(
-				WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
-		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
-	}
+
 }

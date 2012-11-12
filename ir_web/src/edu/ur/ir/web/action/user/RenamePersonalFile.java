@@ -25,12 +25,10 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
-import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
-import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
@@ -42,40 +40,32 @@ import edu.ur.ir.web.action.UserIdAware;
  */
 public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 
-	// Eclipse generated Id	 
+	/** Eclipse generated Id	 */
 	private static final long serialVersionUID = -7262077243101493697L;
 	
-	// User file system service. 
+	/** User file system service. */
 	private UserFileSystemService userFileSystemService;
 	
-	//  Indicates the file has been renamed 
+	/**  Indicates the file has been renamed */
 	private boolean fileRenamed = false;
 	
-	// Message that can be displayed to the user. 
+	/** Message that can be displayed to the user. */
 	private String renameMessage;
 	
-	// New file name 
+	/** New file name */
 	private String newFileName;
 	
-	// description of the file 
+	/** description of the file */
 	private String fileDescription;
 	
-	//  Logger for action 
+	/**  Logger for action */
 	private static final Logger log = Logger.getLogger(RenamePersonalFile.class);
 	
-	// Id of personal file 
+	/** Id of personal file */
 	private Long personalFileId;
 	
-	// id of the user trying to make the change 
+	/** id of the user trying to make the change */
 	private Long userId;
-	
-	/* process for setting up personal workspace information to be indexed */
-	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
-
-
-
-	/* service for accessing index processing types */
-	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/**
 	 * Renames a file
@@ -103,14 +93,16 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 			StringBuffer buffer = new StringBuffer();
 			String conflictingUserNames = null;
 			
-		    if (checkFileNameExist(ownerPf.getVersionedFile().getOwner(), ownerPf.getPersonalFolder(), newFileName)) {
-			    buffer.append(" ");
-				buffer.append(ownerPf.getOwner().getFirstName());
-				buffer.append(" ");
-				buffer.append(ownerPf.getOwner().getLastName());
-				buffer.append(",");
-			}
-		    
+		    // Can be null when owner deletes the file from the system
+		    if (ownerPf != null) {
+			    if (checkFileNameExist(ownerPf.getVersionedFile().getOwner(), ownerPf.getPersonalFolder(), newFileName)) {
+				    buffer.append(" ");
+				    buffer.append(ownerPf.getOwner().getFirstName());
+				    buffer.append(" ");
+				    buffer.append(ownerPf.getOwner().getLastName());
+				    buffer.append(",");
+			    }
+		    }
 		    // Check collaborator's file system
 		    for (FileCollaborator collaborator: collaborators) {
 			    PersonalFile pf  = userFileSystemService.getPersonalFile(collaborator.getCollaborator(), collaborator.getVersionedFile());
@@ -150,12 +142,6 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 			fileRenamed = true;
 			// assume description change
 			userFileSystemService.makePersonalFilePersistent(personalFile);
-		}
-		
-		if( fileRenamed )
-		{
-			userWorkspaceIndexProcessingRecordService.saveAll(personalFile, 
-	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		return SUCCESS;
@@ -277,49 +263,16 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
-	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	/**
-	 * Get the file description
-	 * 
-	 * @return
-	 */
 	public String getFileDescription() {
 		return fileDescription;
 	}
 
-	/**
-	 * Set the file description.
-	 * 
-	 * @param fileDescription
-	 */
 	public void setFileDescription(String fileDescription) {
 		this.fileDescription = fileDescription;
-	}
-	
-	/**
-	 * Set the user workspace index processing record service.
-	 * 
-	 * @param userWorkspaceIndexProcessingRecordService
-	 */
-	public void setUserWorkspaceIndexProcessingRecordService(
-			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
-		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
-	}
-
-	/**
-	 * Set the index processing type service.
-	 * 
-	 * @param indexProcessingTypeService
-	 */
-	public void setIndexProcessingTypeService(
-			IndexProcessingTypeService indexProcessingTypeService) {
-		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

@@ -49,7 +49,7 @@ implements ServletResponseAware, ServletRequestAware
 	private InstitutionalCollectionService institutionalCollectionService;
 
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/** id of the ir file to download */
 	private Long irFileId;
@@ -58,7 +58,7 @@ implements ServletResponseAware, ServletRequestAware
 	private Long collectionId;
 	
 	/** request sent by the user */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility to help stream files */
 	private WebIoUtils webIoUtils;
@@ -75,11 +75,15 @@ implements ServletResponseAware, ServletRequestAware
     	{
 	        log.debug("Trying to download collection picture with id " + collectionId);
     	}
-	    
+    	InstitutionalCollection institutionalCollection = null;
+    	
 	    // make sure this is a picture in the repository - otherwise anyone could get
 	    // to the files.
-		InstitutionalCollection institutionalCollection = 
+    	if( collectionId != null )
+    	{
+		  institutionalCollection = 
 			institutionalCollectionService.getCollection(collectionId, false);
+    	}
 		
 		if( institutionalCollection != null )
 		{
@@ -95,7 +99,7 @@ implements ServletResponseAware, ServletRequestAware
                 {
                     log.debug("sending file for download " + irFile);
                 }
-                webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+                webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 			}
 		}
         

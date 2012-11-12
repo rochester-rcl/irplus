@@ -54,7 +54,6 @@
     <!-- Email Sender 		 -->
     <!-- ****************************************** --> 
     <import resource="mail-sender.xml"/>   
-    <import resource="group-workspaces-mail-sender.xml"/>   
     
     <!-- ****************************************** --> 
     <!-- Ir core resources	 -->
@@ -84,20 +83,13 @@
     <import resource="ir-news-hibernate.xml"/>
     <import resource="ir-researcher-hibernate.xml"/>
     <import resource="ir-statistics-hibernate.xml"/>
-    <import resource="ir-group-workspace-hibernate.xml"/>
     <import resource="ir-invite-hibernate.xml"/>
-    
     
    <!-- ****************************************** --> 
    <!-- Institutional Repository services  -->
    <!-- ****************************************** --> 
    <import resource="ir-service.xml"/>
   
-   <!-- ****************************************** --> 
-   <!-- Export/Import services  -->
-   <!-- ****************************************** --> 
-   <import resource="ir-export-import-service.xml"/>
-
    <!-- ****************************************** --> 
    <!-- File Service  -->
    <!-- ****************************************** --> 
@@ -138,6 +130,5 @@
     <!-- ****************************************** -->
     <import resource="metadata-hibernate.xml"/> 
     <import resource="metadata-service.xml"/>
-    
    
 </beans>

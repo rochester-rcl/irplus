@@ -24,9 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -34,15 +32,16 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.checksum.ChecksumCalculator;
+import edu.ur.file.checksum.InMemoryChecksumService;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.lucene.analysis.StandardWithACIIFoldingFilter;
+import edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter;
 import edu.ur.util.FileUtil;
 
 /**
@@ -59,6 +58,8 @@ public class DefaultPowerPointTextExtractorTest {
 	
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
+	
+	InMemoryChecksumService checksumService = new InMemoryChecksumService();
 
 	/**
 	 * Setup for testing
@@ -107,9 +108,17 @@ public class DefaultPowerPointTextExtractorTest {
 		assert f1.canRead(): "Should be able to read the file " 
 			+ f1.getAbsolutePath();
 
+		ChecksumCalculator calc = checksumService.getChecksumCalculator("MD5");
+		String checksum1  = calc.calculate(f1);
+		
+		
 		FileInfo info = repo.getFileDatabase().addFile(f1, "indexed_power_point_file");
 		info.setExtension("ppt");
 
+		String checksum2  = calc.calculate(new File(info.getFullPath()));
+		assert checksum1.equals(checksum2) : "Checksum 1 : " + checksum1 + " should equal checksum2 : " + checksum2;
+
+		
 		FileTextExtractor documentCreator = new DefaultPowerPointTextExtractor();
 		assert documentCreator.canExtractText(info.getExtension()) : "Cannot create document for extension "
 				+ info.getExtension();
@@ -117,6 +126,10 @@ public class DefaultPowerPointTextExtractorTest {
 		String text = documentCreator
 				.getText(new File(info.getFullPath()));
 
+        String checksum3  = calc.calculate(new File(info.getFullPath()));
+		assert  checksum2.equals(checksum3) : "Checkusm 2 " + checksum2 + " does not eqaual 3: " + checksum3;
+
+		
 		Document doc = new Document();
 		doc.add(new Field("body", text, Field.Store.NO, Field.Index.ANALYZED));
 		assert doc != null : "Document should be created";
@@ -132,10 +145,12 @@ public class DefaultPowerPointTextExtractorTest {
 		// store the document
 		IndexWriter writer = null;
 		try {
-			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35,  new StandardWithACIIFoldingFilter());
-			indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
-			writer = new IndexWriter(dir, indexWriterConfig);
+			writer = new IndexWriter(dir, 
+					new StandardWithISOLatin1AccentFilter(), 
+					true,
+					IndexWriter.MaxFieldLength.LIMITED);
 			writer.addDocument(doc);
+			writer.optimize();
 			writer.close();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -181,10 +196,8 @@ public class DefaultPowerPointTextExtractorTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		
-		IndexReader reader = IndexReader.open(dir, true);
-		IndexSearcher searcher = new IndexSearcher(reader);
-		QueryParser parser = new QueryParser(Version.LUCENE_35, field, new StandardWithACIIFoldingFilter());
+		IndexSearcher searcher = new IndexSearcher(dir);
+		QueryParser parser = new QueryParser(field, new StandardWithISOLatin1AccentFilter());
 		Query q1 = parser.parse(queryString);
 
 		TopDocs hits = searcher.search(q1, 1000);

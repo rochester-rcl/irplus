@@ -63,26 +63,26 @@
                     
                    <div class="contentContainer">
                        <div class="contentBoxTitle">
-                           <p>Welcome </p>
+                           <p>Welcome! </p>
                        </div>
                    
                        <div class="contentBoxContent">
-                       	  <br/>
+                       	  </br>
                        	  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="tokenDoesnotExist"/></p>
                        	  
                        	  <p> Already Registered?
             	          <ur:basicForm id="login" name="alreadyUserLoginForm" method="POST" 
 				              action="user/workspace.action?token=${token}">
-	        					<br/>
+	        					</br>
 	        	               <input type="submit" value="Login"/> 
 				          </ur:basicForm>
 				          </p>
-				          <br/>
+				          </br>
                           <p>		    New Users
 						  <ur:basicForm name="newUserLoginForm" method="POST" 
 					              action="viewAddUser.action?token=${token}">
-					       		<br/>
+					       		</br>
 		                  		<input type="submit" value="Create account"/> 
 				          </ur:basicForm>				                                      
 				          </p>
@@ -93,32 +93,18 @@
                  
                  <div class="yui-u">
                     
-                    <c:if test="${inviteInfo != null }">
                     <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>You have been invited to collaborate on the following file(s)</p>
                         </div>
                    
                         <div class="contentBoxContent">
-                        	<br/>
+                        	</br>
                         	  <c:forEach var="file" items="${inviteInfo.files}">
-					     		 <p>  <ir:fileTypeImg cssClass="tableImg" versionedFile="${file}"/> ${file.name} </p> <br/>
+					     		 <p>  <ir:fileTypeImg cssClass="tableImg" versionedFile="${file}"/> ${file.name} </p> </br>
 				     		  </c:forEach>
 	                    </div>
 	                </div>
-	                </c:if>
-	                <c:if test="${groupWorkspaceEmailInvite != null }">
-                    <div class="contentContainer">
-                        <div class="contentBoxTitle">
-                            <p>You have been invited to collaborate in the following group</p>
-                        </div>
-                   
-                        <div class="contentBoxContent">
-                        	<p> ${groupWorkspaceEmailInvite.groupWorkspace.name}</p> <br/>
-				     		
-	                    </div>
-	                </div>
-	                </c:if>
                 </div>
                 <!--  end the second column -->
             

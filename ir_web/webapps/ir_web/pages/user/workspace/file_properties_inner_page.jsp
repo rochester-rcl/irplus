@@ -277,7 +277,7 @@
                           <urstb:td>
                               <c:forEach var="fileInfoChecksum"
                                   items="${version.irFile.fileInfo.fileInfoChecksums}">
-                                      ${fileInfoChecksum.checksum} - ${fileInfoChecksum.algorithmType}
+                                      ${fileInfoChecksum.id} - ${fileInfoChecksum.checksum} - ${fileInfoChecksum.algorithmType}
                               </c:forEach>
                           </urstb:td>                        
 

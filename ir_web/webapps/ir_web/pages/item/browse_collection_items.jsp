@@ -47,7 +47,7 @@
  	    <ur:js src="page-resources/yui/menu/menu-min.js"/>
         <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
-	    <ur:js src="page-resources/js/util/base_path.jsp"/>
+	    <ur:js src="pages/js/base_path.js"/>
 	    <ur:js src="page-resources/js/util/ur_util.js"/>
 	    <ur:js src="page-resources/js/menu/main_menu.js"/>
          
@@ -205,7 +205,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_collection_items_pager.jsp"/>
-						 <br/>
+						
 						
 						<div class="dataTable">
 							                 
@@ -566,7 +566,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                  <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                           <c:if test="${url != null}">
-                                                             <img  src="${url}"/></a>
+                                                             <img src="${url}"/>
                                                          </c:if>
 			                                         </c:if>	
 						                        </urstb:td>
@@ -621,7 +621,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_collection_person_names_pager.jsp"/>
-						 <br/>
+						
 						
 						<div class="dataTable">
 							             
@@ -716,7 +716,7 @@
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
 				         <c:import url="browse_collection_sponsor_names_pager.jsp"/>
-						 <br/>
+						
 						
 						<div class="dataTable">
 							             

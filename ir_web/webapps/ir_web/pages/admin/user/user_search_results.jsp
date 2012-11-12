@@ -29,7 +29,6 @@
 </c:if>
   
 <c:import url="search_all_users_pager.jsp"/>
-<br/>
 
 <div class="dataTable">
 	<form method="post" id="user_search_results" name="userSearchResults" >
@@ -42,7 +41,6 @@
 	                <urstb:td>Last Name</urstb:td>                                            
 	                <urstb:td>First Name</urstb:td>
 					<urstb:td>Email</urstb:td>	
-					<urstb:td>Login Date</urstb:td>
 					<urstb:td>Change password</urstb:td>
 	                <urstb:td>Login as user</urstb:td>
 	                <urstb:td>Delete</urstb:td>
@@ -76,10 +74,7 @@
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${user.defaultEmail.email}
-	                        </urstb:td>	
-	                         <urstb:td>
-	                             ${user.lastLoginDate}
-	                        </urstb:td>	                         
+	                        </urstb:td>	                        
 	                        <urstb:td>
 		                   		<a href="javascript:YAHOO.ur.user.changePassword('${user.id}');">Change password</a> 
 	                        </urstb:td>

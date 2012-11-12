@@ -52,7 +52,7 @@
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
  	<ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="page-resources/js/user/invite_user.js"/>
@@ -125,13 +125,13 @@
 									          </tr>
 									          <tr> 
 									          <td> <label class="label" for="newUserForm_middle_name">Email(s) </label>  </td>
-									          <td> <textarea name="email" id="newInviteForm_inviteEmail" cols="52" rows="5"></textarea></td>
+									          <td> <textarea name="email" id="newInviteForm_inviteEmail" cols="45" rows="5"></textarea></td>
 									          </tr>
 		
 											  <tr>
 											  <td>Message</td>
 											  <td>
-								              <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="52" rows="8"></textarea>
+								              <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="45" rows="8"></textarea>
 								              </td>
 											  </tr>
 											  

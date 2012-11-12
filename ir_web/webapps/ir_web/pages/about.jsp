@@ -49,7 +49,7 @@
         <ur:js src="page-resources/js/menu/main_menu.js"/>
         
         <!--  base path information -->
- 	    <ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	    <ur:js src="pages/js/base_path.js"/>
  	    <ur:js src="page-resources/js/util/ur_util.js"/>
    
     </head>
@@ -65,7 +65,7 @@
             <div id="bd">
                <h3>Version</h3>
                
-               <p>IR+ version 2.1</p>
+               <p>IR+ version 2.2</p>
                 
                <h3>About</h3> 
                

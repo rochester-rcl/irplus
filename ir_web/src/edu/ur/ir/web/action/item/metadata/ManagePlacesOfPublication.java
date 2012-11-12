@@ -281,7 +281,7 @@ public class ManagePlacesOfPublication  extends Pager implements Preparable, Use
 	 * 
 	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	

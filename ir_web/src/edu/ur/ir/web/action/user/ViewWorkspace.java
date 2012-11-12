@@ -28,9 +28,13 @@ import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.PersonalFolder;
+import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
+import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
+import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
@@ -42,56 +46,52 @@ import edu.ur.ir.web.action.UserIdAware;
 public class ViewWorkspace extends ActionSupport implements Preparable, 
 UserIdAware {
 
-	public static final String FOLDER_TAB = "FOLDER";
-	public static final String SEARCH_TAB = "SEARCH";
-	public static final String COLLECTION_TAB = "COLLECTION";
-	public static final String GROUP_WORKSPACE_TAB = "GROUP_WORKSPACE";
-	public static final String INBOX_TAB = "FILE_INBOX";
-	
-	/*  Collection data access  */
+	/**  Collection data access  */
 	private UserService userService;
 	
-	/*  Collection invite user data access  */
+	/**  Collection invite user data access  */
 	private InviteUserService inviteUserService;	
 	
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 2267179706676467266L;
 	
-	/*  Logger for vierw workspace action */
+	/**  Logger for vierw workspace action */
 	private static final Logger log = Logger.getLogger(ViewWorkspace.class);
 	
-	/*  User object */
+	/**  User object */
 	private Long userId;
 
-	/*  Token given to an invited user */
+	/**  Token given to an invited user */
 	private String token;
 	
-	/* the id of the parent folder  */
+	/** the id of the parent folder  */
 	private Long parentFolderId = 0L;
 	
-	/* tab name to be shown */
-	private String tabName = FOLDER_TAB;
+	/**  Folders for the person. */
+	Set<PersonalFolder> personalFolders;
 	
-	/* The collection that owns the item*/
+	/**  Indicates whether to show the collection tab active. */
+	private boolean showCollectionTab;
+	
+	/** The collection that owns the item*/
 	private Long parentCollectionId;
 	
-	/* process for setting up personal files to be indexed */
+	/** User index service for indexing files */
+	private UserWorkspaceIndexService userWorkspaceIndexService;
+	
+	/** Service for dealing with user file systems */
+	private UserFileSystemService userFileSystemService;
+
+	/** Service for dealing with roles */
+	private RoleService roleService;
+	
+	/** process for setting up personal files to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
-	/* service for accessing index processing types */
+	/** service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
-	
 
 	
-
-	/* group workspace id */
-	private Long groupWorkspaceId;
-
-    /* id of the group workspace folder id*/
-    private Long groupWorkspaceFolderId;
-
-
-
 	/**
 	 * Prepare the repository.
 	 * 
@@ -169,7 +169,7 @@ UserIdAware {
 	/* (non-Javadoc)
 	 * @see edu.ur.ir.web.action.UserAware#setUser(edu.ur.ir.user.IrUser)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -226,6 +226,23 @@ UserIdAware {
 		this.inviteUserService = inviteUserService;
 	}
 
+	/**
+	 * Returns true to show the collection tab as active else returns false
+	 *  
+	 * @return
+	 */
+	public boolean isShowCollectionTab() {
+		return showCollectionTab;
+	}
+
+	/**
+	 * Indicates whether to show the collection tab as active
+	 * 
+	 * @param showCollectionTab
+	 */
+	public void setShowCollectionTab(boolean showCollectionTab) {
+		this.showCollectionTab = showCollectionTab;
+	}
 
 	/**
 	 * Get the collection id of the item
@@ -245,82 +262,47 @@ UserIdAware {
 		this.parentCollectionId = parentCollectionId;
 	}
 
+	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
+		return userWorkspaceIndexService;
+	}
 
-	/**
-	 * Set the user workspace index processing record service.
-	 * 
-	 * @param userWorkspaceIndexProcessingRecordService
-	 */
+	public void setUserWorkspaceIndexService(
+			UserWorkspaceIndexService userWorkspaceIndexService) {
+		this.userWorkspaceIndexService = userWorkspaceIndexService;
+	}
+
+	public UserFileSystemService getUserFileSystemService() {
+		return userFileSystemService;
+	}
+
+	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
+		this.userFileSystemService = userFileSystemService;
+	}
+
+	public RoleService getRoleService() {
+		return roleService;
+	}
+
+	public void setRoleService(RoleService roleService) {
+		this.roleService = roleService;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
 
-	/**
-	 * Set the index processing type service.
-	 * 
-	 * @param indexProcessingTypeService
-	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
-	
-	
-	/**
-	 * Get the tab name that should be shown in the interface.
-	 * 
-	 * @return tab name that should be shown
-	 */
-	public String getTabName() {
-		return tabName;
-	}
 
-	/**
-	 * Set the tab name to be shown in the interface.
-	 * 
-	 * @param tabName
-	 */
-	public void setTabName(String tabName) {
-		this.tabName = tabName;
-	}
-	
-	
-
-	/**
-	 * Get the group workspace id.
-	 * 
-	 * @return
-	 */
-	public Long getGroupWorkspaceId() {
-		return groupWorkspaceId;
-	}
-
-	/**
-	 * Set the group workspace id.
-	 * 
-	 * @param groupWorkspaceId
-	 */
-	public void setGroupWorkspaceId(Long groupWorkspaceId) {
-		this.groupWorkspaceId = groupWorkspaceId;
-	}
-	
-	/**
-	 * Id of the group workspace folder.
-	 * 
-	 * @return
-	 */
-	public Long getGroupWorkspaceFolderId() {
-		return groupWorkspaceFolderId;
-	}
-
-	/**
-	 * Id of the group workspace folder.
-	 * 
-	 * @param groupWorkspaceFolderId
-	 */
-	public void setGroupWorkspaceFolderId(Long groupWorkspaceFolderId) {
-		this.groupWorkspaceFolderId = groupWorkspaceFolderId;
-	}
 }

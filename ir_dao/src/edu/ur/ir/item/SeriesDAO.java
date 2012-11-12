@@ -21,7 +21,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 
@@ -33,7 +32,7 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface SeriesDAO extends CountableDAO, 
-CrudDAO<Series>, NameListDAO, UniqueNameDAO<Series>, ListAllDAO
+CrudDAO<Series>, NameListDAO, UniqueNameDAO<Series>
 {
 
 	/**

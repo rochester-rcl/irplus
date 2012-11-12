@@ -60,8 +60,8 @@ public class HbIrFileDAO implements IrFileDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileCount"));
 	}
 
 	/**
@@ -95,6 +95,14 @@ public class HbIrFileDAO implements IrFileDAO{
 	  	return (List<IrFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIrFileByName", name);
 	}
 
+
+	/**
+	 * Return all IrFile
+	 */
+	public List<IrFile> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	/**
 	 * Return IrFile by id
 	 */
@@ -118,6 +126,18 @@ public class HbIrFileDAO implements IrFileDAO{
 	 */
 	public void makeTransient(IrFile entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	
+	/**
+	 * Get the IrFile by the specified file info id.
+	 * 
+	 * @see edu.ur.ir.file.IrFileDAO#getByFileInfoId(java.lang.Long)
+	 */
+	public IrFile getByFileInfoId(Long fileInfoId) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIrFileByFileInfoId");
+		q.setParameter("fileInfoId", fileInfoId);
+		return (IrFile)q.uniqueResult();
 	}
 
 }

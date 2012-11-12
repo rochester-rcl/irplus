@@ -160,7 +160,16 @@ public class DefaultInviteUserServiceTest {
 
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
 		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
-		// save the repository
+		
+		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
 		tm.commit(ts);
 		
         // Start the transaction 
@@ -295,6 +304,15 @@ public class DefaultInviteUserServiceTest {
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 		inviteInfoDAO.makeTransient(inviteInfoDAO.getById(otherInfo.getId(), false));
+		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 
 		tm.commit(ts);
 
@@ -355,7 +373,14 @@ public class DefaultInviteUserServiceTest {
 		PersonalFile pf = userFileSystemService.addFileToUser(repo, f, user, 
 				    "test file", "description");
 		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
 		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
         tm.commit(ts);
 
         
@@ -374,7 +399,7 @@ public class DefaultInviteUserServiceTest {
 		
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		permissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION));
+		permissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION));
 		
 		
 		String userEmail3 = properties.getProperty("user_3_email");
@@ -414,7 +439,7 @@ public class DefaultInviteUserServiceTest {
 		VersionedFile otherVf = versionedFileDAO.getById(vf.getId(), false);
 		IrUser u = userService.getUser(user1.getUsername());
 		assert u.getSharedInboxFile(otherVf) != null : "Versioned file should exist in shared inbox";
-		
+				
 		tm.commit(ts);
 
 		// Start a transaction 
@@ -429,6 +454,16 @@ public class DefaultInviteUserServiceTest {
 		
 	    // Start new transaction
 		ts = tm.getTransaction(td);
+		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		
 		assert userService.getUser(user1.getId(), false) == null : "User1 should be null"; 
 		assert userService.getUser(user.getId(), false) == null : "User should be null";
 		assert roleService.getRole(role.getId(), false) == null : "Role should be null";
@@ -513,7 +548,7 @@ public class DefaultInviteUserServiceTest {
 		// create permissions to give user
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION);
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
 		permissions.add(view);
 
 		// create the role
@@ -536,14 +571,7 @@ public class DefaultInviteUserServiceTest {
 		inviteUserService.inviteUsers(user, emails, permissions, personalFiles, "test message");
         VersionedFile vf = pf.getVersionedFile();
         
-		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
-		for( UserWorkspaceIndexProcessingRecord record : records )
-		{
-			recordProcessingService.delete(record);
-		}
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
@@ -562,6 +590,17 @@ public class DefaultInviteUserServiceTest {
 		ts = tm.getTransaction(td);
 		IrUser deleteUser = userService.getUser(user.getId(), false); 
 		userService.deleteUser(deleteUser,deleteUser);
+		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		
+		
 		
 		IrUser deleteUser3 = userService.getUser(user3.getId(), false); 
 		userService.deleteUser(deleteUser3,deleteUser3);
@@ -661,11 +700,15 @@ public class DefaultInviteUserServiceTest {
         
 		//Start a transaction 
 		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+        List<PersonalFile> files = inviteUserService.getOnlyShareableFiles(rootFolder.getOwner(), userFileSystemService.getAllFilesForFolder(rootFolder));
+        assert files.size() == 1 : "Should find one file but found " + files.size();
+        assert files.contains(pf) : "Files should contain pf " + pf;
 		
 		// create permissions to give user
 		// Create the list of permissions
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION);
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
 		permissions.add(view);
 
 		// create the role
@@ -678,34 +721,31 @@ public class DefaultInviteUserServiceTest {
 		emails.add(userEmail2);
 		emails.add(userEmail3);
 		
+		
+		
 		/* User shares the file with email address "new_email@yahoo.com".
 		 * That email Id does not exist in the system. 
 		 * So a token is created and email sent to the address with the link to login/register.
 		 */
 		
-		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		
 		inviteUserService.autoShareFolder(emails, rootFolder, permissions, true);
         VersionedFile vf = pf.getVersionedFile();
   
-		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
-		for( UserWorkspaceIndexProcessingRecord record : records )
-		{
-			recordProcessingService.delete(record);
-		}
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		
+
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
 		List<FileInviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
-		assert infos.size() == 1 : "Should have one invite info";
+		assert infos.size() == 1 : "Should have one invite info but found " + infos.size();
 		FileInviteInfo info = infos.get(0);
 		assert info.getPermissions().contains(view);
 		
 		user3 = userService.getUser(user3.getId(), false);
 		assert user3.getSharedInboxFile(vf) != null : "User should have shared inbox file";
 		assert user3.getRole(IrRole.COLLABORATOR_ROLE) != null : "User should have collaborator role";
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
 		
 		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
 		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
@@ -723,9 +763,96 @@ public class DefaultInviteUserServiceTest {
 		Set<FolderInviteInfo> subInvites = subFolder.getFolderInviteInfos();
 		assert subInvites.size() == 1 : "Should have one invite but has " + subInvites.size();
 		assert subFolder.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert pf.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should no longer contain user2's email";
+
 		tm.commit(ts);
 		
 
+		// update the auto share permissions give user 3 edit permissions
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		
+		// recreate permissions
+		permissions = new HashSet<IrClassTypePermission>();
+		view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
+		IrClassTypePermission edit = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.EDIT_PERMISSION);
+		permissions.add(edit);
+		permissions.add(view);
+
+		FolderAutoShareInfo folderAutoShareInfo = rootFolder.getAutoShareInfo(user3);
+		inviteUserService.updateAutoSharePermissions(folderAutoShareInfo, permissions, true, true);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert securityService.hasPermission(pf.getVersionedFile(), user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		assert securityService.hasPermission(pf.getVersionedFile(), user3, VersionedFile.EDIT_PERMISSION) > 0 : "User should have edit permission";
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		FolderAutoShareInfo subFolderAutoShare = subFolder.getAutoShareInfo(user3);
+		assert subFolderAutoShare.getPermissions().contains(edit) : "Sub forlder should contain the edit permission but doesn't";
+		tm.commit(ts);
+		
+		// update the auto share permissions give user 3 edit permissions
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		
+		// recreate permissions with view only
+		permissions = new HashSet<IrClassTypePermission>();
+		view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
+		permissions.add(view);
+		assert !permissions.contains(edit) : "Should not have edit permission";
+
+		
+		folderAutoShareInfo = rootFolder.getAutoShareInfo(user3);
+		inviteUserService.updateAutoSharePermissions(folderAutoShareInfo, permissions, true, true);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert !folderAutoShareInfo.getPermissions().contains(edit) : "Should NOT contain edit permission but does";
+		assert securityService.hasPermission(pf.getVersionedFile(), user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		assert securityService.hasPermission(pf.getVersionedFile(), user3, VersionedFile.EDIT_PERMISSION) == 0 : "User should NOT have edit permission " + securityService.hasPermission(vf, user3, VersionedFile.EDIT_PERMISSION);
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		subFolderAutoShare = subFolder.getAutoShareInfo(user3);
+		assert !subFolderAutoShare.getPermissions().contains(edit) : "Sub forlder should NOT contain the edit permission but doesn't";
+		tm.commit(ts);
+		
+		// delete the auto share on the root folder with cascade
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		folderAutoShareInfo = rootFolder.getAutoShareInfo(user3);
+		IrUser owner = userService.getUser(user.getId(), false);
+		inviteUserService.delete(owner, folderAutoShareInfo, true, true);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) == 0 : "User should NOT have view permission";
+		assert securityService.hasPermission(vf, user3, VersionedFile.EDIT_PERMISSION) == 0 : "User should NOT have edit permission";
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		subFolderAutoShare = subFolder.getAutoShareInfo(user3);
+        assert subFolderAutoShare == null : "Sub folder auto share should be deleted";
+		tm.commit(ts);
+		
+		
+		// delete the auto share invite on the root folder with cascade
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		FolderInviteInfo folderInviteInfo = rootFolder.getFolderInviteInfo(userEmail2);
+		inviteUserService.delete( folderInviteInfo, true, true);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		assert !pf.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should no longer contain user2's email";
+
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		FolderInviteInfo subFolderInviteInfo = subFolder.getFolderInviteInfo(userEmail2);
+        assert subFolderInviteInfo == null : "Sub folder invite info should be deleted";
+		tm.commit(ts);
+
+		
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 		IrUser deleteUser = userService.getUser(user.getId(), false); 
@@ -736,6 +863,15 @@ public class DefaultInviteUserServiceTest {
 		
 		roleService.deleteRole(roleService.getRole(role.getId(), false));
 		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 		tm.commit(ts);
 		
 	    // Start new transaction
@@ -745,6 +881,264 @@ public class DefaultInviteUserServiceTest {
 		assert roleService.getRole(role.getId(), false) == null : "Role should be null";
 		helper.cleanUpRepository();
 		tm.commit(ts);
+		
+		
 	}
+	
+	
+	/**
+	 * Test moving new files and folders into a folder set up for auto sharing
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
+	 * @throws DuplicateNameException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 * @throws FileSharingException 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void addNewFilesFoldersToFolderWithAutoShareTest() throws LocationAlreadyExistsException, 
+	  DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, 
+	  FileSharingException, PermissionNotGrantedException{
+		// determine if we should be sending emails 
+		// if not do not try this test
+		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
+		if( !sendEmail )
+		{
+			return;
+		}
+		
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
 
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+
+
+		// create the sharing user
+		String userEmail1 = properties.getProperty("user_1_email");
+		UserEmail email = new UserEmail(userEmail1);
+		IrUser user = userService.createUser("password", "username", email);
+		
+		// create the non-existing user
+		String userEmail2 = properties.getProperty("user_2_email");
+		
+		// create the existing user
+		String userEmail3 = properties.getProperty("user_3_email");
+		UserEmail email3 = new UserEmail(userEmail3);
+		email3.setVerifiedTrue();
+		IrUser user3 = userService.createUser("password3", "username3", email3);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - InviteUserFile test");
+		
+		File f2 = testUtil.creatFile(directory, "testFile2", 
+		"Hello  - irFile This is text in a file2 -  InviteUserFile test");
+		
+		File f3 = testUtil.creatFile(directory, "testFile2", 
+		"Hello  - irFile This is text in a file2 -  InviteUserFile test");
+		
+		// create a root folder and sub folder
+		PersonalFolder rootFolder = user.createRootFolder("root folder");
+		PersonalFolder subFolder = rootFolder.createChild("sub folder");
+		
+		PersonalFolder rootFolder2 = user.createRootFolder("root folder 2");
+		PersonalFolder subFolder2 = rootFolder2.createChild("sub folder 2");
+		
+		userService.makeUserPersistent(user);
+		
+		
+		// add file to sub folder
+		PersonalFile pf = userFileSystemService.addFileToUser(repo, f, subFolder, "test file", "description");
+		
+		// add file to folder 2
+		PersonalFile pf2 = userFileSystemService.addFileToUser(repo, f2, subFolder2, "test file2", "description");
+		
+		// add file to root (the user)
+		PersonalFile rootFile = userFileSystemService.addFileToUser(repo, f3, user, "test file3", "description");
+		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
+        tm.commit(ts);
+
+        
+		//Start a transaction - share only the first root folder
+		ts = tm.getTransaction(td);
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+        List<PersonalFile> files = inviteUserService.getOnlyShareableFiles(rootFolder.getOwner(), userFileSystemService.getAllFilesForFolder(rootFolder));
+        assert files.size() == 1 : "Should find one file but found " + files.size();
+        assert files.contains(pf) : "Files should contain pf " + pf;
+		
+		// create permissions to give user
+		// Create the list of permissions
+		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),VersionedFile.VIEW_PERMISSION);
+		permissions.add(view);
+
+		// create the role
+		IrRole role = new IrRole();
+		role.setName(IrRole.COLLABORATOR_ROLE);
+		roleService.makeRolePersistent(role);
+		
+		// create list of emails to give user
+		LinkedList<String> emails = new LinkedList<String>();
+		emails.add(userEmail2);
+		emails.add(userEmail3);
+		
+		
+		
+		/* User shares the file with email address "new_email@yahoo.com".
+		 * That email Id does not exist in the system. 
+		 * So a token is created and email sent to the address with the link to login/register.
+		 */
+		
+		
+		inviteUserService.autoShareFolder(emails, rootFolder, permissions, true);
+        VersionedFile vf = pf.getVersionedFile();
+ 
+		tm.commit(ts);
+		
+		
+		// move the new files and folders in
+		ts = tm.getTransaction(td);
+		
+		List<PersonalFolder> foldersToMove = new LinkedList<PersonalFolder>();
+		rootFolder2 = userFileSystemService.getPersonalFolder(rootFolder2.getId(), false);
+		foldersToMove.add(rootFolder2);
+		
+		rootFile = userFileSystemService.getPersonalFile(rootFile.getId(), false);
+		List<PersonalFile> filesToMove = new LinkedList<PersonalFile>();
+		filesToMove.add(rootFile);
+		
+		// folder to move to
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		
+		inviteUserService.addNewFilesFoldersToFolderWithAutoShare(rootFolder, foldersToMove, filesToMove);
+		
+		tm.commit(ts);
+		
+		
+
+		ts = tm.getTransaction(td);
+		
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+		pf2 = userFileSystemService.getPersonalFile(pf2.getId(), false);
+		rootFile = userFileSystemService.getPersonalFile(rootFile.getId(), false);
+		
+		vf = pf.getVersionedFile();
+		VersionedFile vf2 = pf2.getVersionedFile();
+		VersionedFile rootFileVf = rootFile.getVersionedFile();
+		
+		List<FileInviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
+		assert infos.size() == 2 : "Should have three invites info but found " + infos.size();
+		FileInviteInfo info1 = infos.get(0);
+		assert info1.getPermissions().contains(view);
+		FileInviteInfo info2 = infos.get(1);
+		assert info2.getPermissions().contains(view);
+		
+		
+		user3 = userService.getUser(user3.getId(), false);
+		assert user3.getSharedInboxFile(vf) != null : "User should have shared inbox file";
+		assert user3.getRole(IrRole.COLLABORATOR_ROLE) != null : "User should have collaborator role " + vf;
+		assert securityService.hasPermission(vf, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		
+		assert user3.getSharedInboxFile(vf2) != null : "User should have shared inbox file " + vf2;
+		assert securityService.hasPermission(vf2, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		
+		assert user3.getSharedInboxFile(rootFileVf) != null : "User should have shared inbox file " + rootFileVf;
+		assert securityService.hasPermission(rootFileVf, user3, VersionedFile.VIEW_PERMISSION) > 0 : "User should have view permission";
+		
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		
+		rootFolder2 = userFileSystemService.getPersonalFolder(rootFolder2.getId(), false);
+		subFolder2 = userFileSystemService.getPersonalFolder(subFolder2.getId(), false);
+		
+		Set<FolderAutoShareInfo> rootShares = rootFolder.getAutoShareInfos();
+		assert rootShares.size() == 1 : "Should have one share but has " + rootShares.size();
+		assert rootFolder.getAutoShareInfo(user3) != null : "Should have share for user " + user3;
+		Set<FolderAutoShareInfo> subShares = subFolder.getAutoShareInfos();
+		assert subShares.size() == 1 : "Should have one share but has " + subShares.size();
+		assert subFolder.getAutoShareInfo(user3) != null : "Should have share for user " + user3;
+		
+		
+		Set<FolderAutoShareInfo> rootShares2 = rootFolder2.getAutoShareInfos();
+		assert rootShares2.size() == 1 : "Should have one share but has " + rootShares2.size();
+		assert rootFolder2.getAutoShareInfo(user3) != null : "Should have share for user " + user3;
+		Set<FolderAutoShareInfo> subShares2 = subFolder2.getAutoShareInfos();
+		assert subShares2.size() == 1 : "Should have one share but has " + subShares2.size();
+		assert subFolder2.getAutoShareInfo(user3) != null : "Should have share for user " + user3;
+		
+		
+		
+		Set<FolderInviteInfo> rootInvites = rootFolder.getFolderInviteInfos();
+		assert rootInvites.size() == 1 : "Should have one invite but has " + rootInvites.size();
+		assert rootFolder.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		Set<FolderInviteInfo> subInvites = subFolder.getFolderInviteInfos();
+		assert subInvites.size() == 1 : "Should have one invite but has " + subInvites.size();
+		assert subFolder.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		assert pf.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should contain user2's email";
+
+		
+		Set<FolderInviteInfo> rootInvites2 = rootFolder2.getFolderInviteInfos();
+		assert rootInvites2.size() == 1 : "Should have one invite but has " + rootInvites2.size();
+		assert rootFolder2.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		Set<FolderInviteInfo> subInvites2 = subFolder2.getFolderInviteInfos();
+		assert subInvites2.size() == 1 : "Should have one invite but has " + subInvites2.size();
+		assert subFolder2.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+	
+		assert pf.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should  contain user2's email";
+		assert pf2.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should contain user2's email";
+		assert rootFile.getVersionedFile().getInviteeEmails().contains(userEmail2) : "Invites should contain user2's email";
+		
+		tm.commit(ts);
+		
+		
+		
+		
+		// Start a transaction 
+		ts = tm.getTransaction(td);
+		IrUser deleteUser = userService.getUser(user.getId(), false); 
+		userService.deleteUser(deleteUser,deleteUser);
+		
+		IrUser deleteUser3 = userService.getUser(user3.getId(), false); 
+		userService.deleteUser(deleteUser3,deleteUser3);
+		
+		roleService.deleteRole(roleService.getRole(role.getId(), false));
+		
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		tm.commit(ts);
+		
+	    // Start new transaction
+		ts = tm.getTransaction(td);
+		assert userService.getUser(user.getId(), false) == null : "User should be null";
+		assert userService.getUser(user3.getId(), false) == null : "User 3 should be null";
+		assert roleService.getRole(role.getId(), false) == null : "Role should be null";
+		helper.cleanUpRepository();
+		tm.commit(ts);
+
+	}
 }

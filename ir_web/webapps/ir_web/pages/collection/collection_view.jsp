@@ -55,7 +55,7 @@
         
         <!-- Source File -->
         <ur:js src="page-resources/js/menu/main_menu.js"/>
-        <ur:js src="page-resources/js/util/base_path.jsp"/>
+        <ur:js src="pages/js/base_path.js"/>
         <ur:js src="page-resources/js/util/ur_util.js"/>
  	    <ur:js src="page-resources/js/public/collection_view.js"/>
       
@@ -187,7 +187,7 @@
                                        </c:if>
                                    </td>
                                    <td>
-                                       <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a> </strong><ur:maxText numChars="100" text="${child.description}"></ur:maxText></p>
+                                       <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a></strong></p>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -240,7 +240,7 @@
                            <p>
                            <br/>
                            <c:forEach var="link" items="${institutionalCollection.links}">
-                           <a target="_blank" href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if> <br/><br/>
+                           <a href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if> <br/><br/>
                            </c:forEach>
                            </p>
                        </div>

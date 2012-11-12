@@ -79,7 +79,7 @@
               id="newUserForm_password_check" name="passwordCheck" value="${irUser.password}" size="45"/></td>
          </tr>
          
-        <c:if test="${repositoryService.externalAuthenticationEnabled }">
+        <c:if test="${externalAuthenticationEnabled}">
              <tr>
                  <td align="left" class="label">External Account Username:</td>
                  <td align="left" class="input"><input type="text" 

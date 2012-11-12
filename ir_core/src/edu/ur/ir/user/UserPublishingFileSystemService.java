@@ -277,4 +277,12 @@ public interface UserPublishingFileSystemService  extends Serializable{
 	 * @return
 	 */
 	public PersonalItem getPersonalItem(GenericItem item);
+	
+	/**
+	 * Get all personal items which have the specified generic item 
+	 * 
+	 * @param itemIds - list of generic item ids
+	 * @return - all personal items that contain the generic item id.
+	 */
+	public List<PersonalItem> getAllPersonalItemsByGenericItemIds(List<Long> itemIds);
 }

@@ -51,6 +51,9 @@ public class ViewSponsor extends Pager
 	
 	/** Service class for institutional Item */
 	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
+
 
 	/** Statistics service*/
 	private DownloadStatisticsService downloadStatisticsService;

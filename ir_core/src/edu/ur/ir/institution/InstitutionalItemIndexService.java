@@ -49,12 +49,9 @@ public interface InstitutionalItemIndexService extends Serializable{
 	/**
 	 * Index the specified institutional item.
 	 * 
- 	 * @param institutionalItem - institutional item to index
-	 * @param insitutionalItemIndex - index to write the item to
-	 * @param create - if true existing index is overwritten
-	 * @throws NoIndexFoundException
+	 * @param institutionalItem
 	 */
-	public void addItem(InstitutionalItem institutionalItem, File insitutionalItemIndex, boolean create) throws NoIndexFoundException;
+	public void addItem(InstitutionalItem institutionalItem, File insitutionalItemIndex) throws NoIndexFoundException;
 	
 
 	/**
@@ -62,11 +59,12 @@ public interface InstitutionalItemIndexService extends Serializable{
 	 *  
 	 * @param institutionalItem - item to update
 	 * @param insitutionalItemIndex - index to update
+	 * @param fileChage - true indicates that there has been a file change - and the files need to be re-indexed 
 	 * fields holding the file text will be reused rather than re-extracting the file text.
 	 *  
 	 * @throws NoIndexFoundException
 	 */
-	public void updateItem(InstitutionalItem institutionalItem, File insitutionalItemIndex, boolean create) throws NoIndexFoundException;
+	public void updateItem(InstitutionalItem institutionalItem, File insitutionalItemIndex, boolean fileChage) throws NoIndexFoundException;
 	
 	/**
 	 * Delete the institutional Item from the index.
@@ -74,5 +72,12 @@ public interface InstitutionalItemIndexService extends Serializable{
 	 * @param institutionalItem
 	 */
 	public void deleteItem(Long id, File insitutionalItemIndex);
+	
+	/**
+	 * Optimize the index.
+	 * 
+	 * @param institutionalItemIndex
+	 */
+	public void optimize(File institutionalItemIndex);
 
 }

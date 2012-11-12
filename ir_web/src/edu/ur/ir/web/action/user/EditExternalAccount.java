@@ -83,16 +83,14 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 			    {
 			    	Authentication auth = externalAuthenticationProvider.authenticate(new LdapAuthenticationToken(userName, this.password));
 			        ExternalAuthenticationDetails externalDetails = null;
-			        ExternalUserAccount externalUserAccount = null;
-			        
+			    	
 			    	if( auth.getDetails() instanceof ExternalAuthenticationDetails)
 			        {
 			    		externalDetails  = (ExternalAuthenticationDetails)auth.getDetails();
-			    		if( externalDetails != null )
-			    		{
-			    			externalUserAccount = userService.getByExternalUserNameAccountType( userName, externalDetails.getType());
-			    		}
 			        }
+			    	
+			        ExternalUserAccount externalUserAccount = userService.getByExternalUserNameAccountType( userName, externalDetails.getType());
+			        
 					
 			        if( externalUserAccount != null )
 			        {
@@ -179,7 +177,7 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 		this.userService = userService;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

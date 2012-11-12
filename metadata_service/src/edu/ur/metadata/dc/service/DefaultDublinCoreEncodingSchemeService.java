@@ -29,9 +29,6 @@ import edu.ur.metadata.dc.DublinCoreEncodingSchemeService;
  */
 public class DefaultDublinCoreEncodingSchemeService implements DublinCoreEncodingSchemeService{
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = 9110130304125058877L;
-	
 	/** Data access for dublin core encoding schemes */
 	private DublinCoreEncodingSchemeDAO dublinCoreEncodingSchemeDAO;
 	

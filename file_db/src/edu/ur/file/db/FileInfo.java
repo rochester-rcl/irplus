@@ -108,7 +108,7 @@ LongPersistentId, PersistentVersioned{
 	 * 
 	 * @param fileInfoChecksum
 	 */
-	public void addFileInfoChecksum(ChecksumCalculator checksumCalculator);
+	public FileInfoChecksum addFileInfoChecksum(ChecksumCalculator checksumCalculator);
 	
 	/**
 	 * Return the checksum for the algorithm type or null if none found.
