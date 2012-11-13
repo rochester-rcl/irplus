@@ -119,7 +119,7 @@ public class FileDownloadInfoDAOTest {
  	    ts = tm.getTransaction(td);
  	    
  	    assert fileDownloadInfoDAO.getDownloadInfoIgnoredCount() == 0l : "Should be zero but is " + fileDownloadInfoDAO.getDownloadInfoIgnoredCount();
-	    IgnoreIpAddress ip2 = new IgnoreIpAddress(123,0,0,5, 5);
+	    IgnoreIpAddress ip2 = new IgnoreIpAddress("123.0.0.5");
 	    ignoreIpAddressDAO.makePersistent(ip2);
  	    
  	    tm.commit(ts);
@@ -150,9 +150,12 @@ public class FileDownloadInfoDAOTest {
 		 TransactionStatus ts = tm.getTransaction(td);
 
 		 
-		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,9, 10);
+		 IgnoreIpAddress ip1 = new IgnoreIpAddress("123.0.0.9");
 		 ip1.setStoreCounts(false);
 	     ignoreIpAddressDAO.makePersistent(ip1);
+	     IgnoreIpAddress ip2 = new IgnoreIpAddress("123.0.0.10");
+		 ip2.setStoreCounts(false);
+	     ignoreIpAddressDAO.makePersistent(ip2);
 
 	     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
 		 Date d = simpleDateFormat.parse("1/1/2008");
@@ -181,6 +184,7 @@ public class FileDownloadInfoDAOTest {
 	 	 
 	 	 ts = tm.getTransaction(td);
 	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip2.getId(), false));
 	     fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
 		 tm.commit(ts);
 	}

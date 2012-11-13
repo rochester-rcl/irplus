@@ -378,12 +378,12 @@ public class DefaultStatisticsServiceTest {
         // Start the transaction - create collections
 		ts = tm.getTransaction(td);
 		
-		IgnoreIpAddress ignoreIpAddress1 = new IgnoreIpAddress(123, 0, 0, 1, 1);
+		IgnoreIpAddress ignoreIpAddress1 = new IgnoreIpAddress("123.0.0.1");
 		ignoreIpAddress1.setStoreCounts(true);
 		ignoreStatisticsService.saveIgnoreIpAddress(ignoreIpAddress1);
 		
 
-		IgnoreIpAddress ignoreIpAddress2 = new IgnoreIpAddress(199, 0, 0, 1, 1);
+		IgnoreIpAddress ignoreIpAddress2 = new IgnoreIpAddress("199.0.0.1");
 		ignoreIpAddress2.setStoreCounts(true);
 		ignoreStatisticsService.saveIgnoreIpAddress(ignoreIpAddress2);
 

@@ -34,15 +34,12 @@ public class IgnoreIpAddressTest {
 	 */
 	public void testBasicSets() 
 	{
-		IgnoreIpAddress ip = new IgnoreIpAddress(123,1,1,5,10);
+		IgnoreIpAddress ip = new IgnoreIpAddress("123.1.1.5");
 		ip.setId(55l);
 		ip.setVersion(33);
 		
-		assert ip.getFromAddress1() == 123 : " From IpAddressPart1 Should equal 123";
-		assert ip.getFromAddress2() ==1 : " From IpAddressPart2 Shoud equal 1";
-		assert ip.getFromAddress3() == 1 : " From IpAddressPart3 Shoud equal 1";
-		assert ip.getFromAddress4() == 5 : " From IpAddressPart4 Shoud equal 5";
-		assert ip.getToAddress4() == 10 : " To IpAddressPart4 Shoud equal 10";
+		assert ip.getAddress() == "123.1.1.5" : " From IpAddressPart1 Should equal 123.1.1.5";
+		
 		assert ip.getId().equals(55l) : "Should equal 55l";
 		assert ip.getVersion() == 33 : "Should equal 33";
 	}
@@ -54,15 +51,15 @@ public class IgnoreIpAddressTest {
 	public void testEquals()
 	{
 	
-		IgnoreIpAddress ip = new IgnoreIpAddress(123,1,1,5,10);
+		IgnoreIpAddress ip =  new IgnoreIpAddress("123.1.1.5");
 		ip.setId(55l);
 		ip.setVersion(33);
 		
-		IgnoreIpAddress ip1 = new IgnoreIpAddress(123,1,1,5,15);
+		IgnoreIpAddress ip1 = new IgnoreIpAddress("123.1.1.6");
 		ip1.setId(56l);
 		ip1.setVersion(34);
 		
-		IgnoreIpAddress ip2 = new IgnoreIpAddress(123,1,1,5,10);
+		IgnoreIpAddress ip2 = new IgnoreIpAddress("123.1.1.5");
 		ip2.setId(55l);
 		ip2.setVersion(33);
 		

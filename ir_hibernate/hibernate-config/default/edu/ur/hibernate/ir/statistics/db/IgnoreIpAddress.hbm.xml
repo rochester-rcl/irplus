@@ -49,53 +49,26 @@
 		<property name="description" column="description" type="string"
 			access="field" />
 			
-		<property name="fromAddress1" column="from_ip_address_part1" type="int"
+		<property name="address" column="ip_address" type="string"
 			access="field" />
-			
-		<property name="fromAddress2" column="from_ip_address_part2" type="int"
-			access="field" />
-
-		<property name="fromAddress3" column="from_ip_address_part3" type="int"
-			access="field" />			
-		
-		<property name="fromAddress4" column="from_ip_address_part4" type="int"
-			access="field" />
-			
-		<property name="toAddress4" column="to_ip_address_part4" type="int"
-			access="field" />			
-
 	</class>
 	
 	<!-- named query for getting ip address -->
 	<query name="getIgnoreIpAddress">
 		from IgnoreIpAddress as ignoreIpAddress where
-		ignoreIpAddress.fromAddress1 = ?
-		and ignoreIpAddress.fromAddress2 = ?
-		and ignoreIpAddress.fromAddress3 = ?
-		and ignoreIpAddress.fromAddress4 = ?
-		and ignoreIpAddress.toAddress4 = ?
+		ignoreIpAddress.address = :address
 	</query>
 	
 	<!-- named query for getting ip address name asc -->
 	<query name="getIgnoreIPOrderByNameAsc">
 		from IgnoreIpAddress as ignoreIpAddress order by 
-		ignoreIpAddress.name asc
+		ignoreIpAddress.address asc, ignoreIpAddress.name desc
 	</query>
 
 	<!-- named query for getting ip address name desc -->
 	<query name="getIgnoreIPOrderByNameDesc">
 		from IgnoreIpAddress as ignoreIpAddress order by 
-		ignoreIpAddress.name desc
-	</query>
-	
-	<!-- named query to determine if the ip address should be ignored -->
-	<query name="getIgnoreCountForIp">
-		select count(*) from IgnoreIpAddress as ignore 
-		where ignore.fromAddress1 = :part1
-		and ignore.fromAddress2 = :part2
-		and ignore.fromAddress3 = :part3
-		and :part4 between ignore.fromAddress4 and ignore.toAddress4
-		and storeCounts = :storeCount
+		ignoreIpAddress.address desc, ignoreIpAddress.name desc
 	</query>
 	
 	<!-- named query for getting ip address count -->

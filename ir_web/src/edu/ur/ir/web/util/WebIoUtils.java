@@ -158,7 +158,7 @@ public class WebIoUtils {
         File f = new File(fileInfo.getFullPath());
 
         // Response length
-        response.setHeader("Content-Length", String.valueOf(f.length()));
+        response.setHeader("Content-Length", String.valueOf(fileInfo.getSize()));
         
 
         writeStream(f, response, bufferSize);

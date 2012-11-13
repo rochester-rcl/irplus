@@ -213,10 +213,10 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			    {
 				    totalProcessed = totalProcessed + 1;
 				    log.debug("Processing info record " + info);
-				    IpIgnoreFileDownloadInfo ignoreRecord = downloadStatisticsService.getIpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
+				    IpIgnoreFileDownloadInfo ignoreRecord = downloadStatisticsService.getIpIgnoreFileDownloadInfo(info.getAddress(), info.getIrFileId(), info.getDownloadDate());
 				    if( ignoreRecord == null )
 				    {
-					    ignoreRecord = new IpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
+					    ignoreRecord = new IpIgnoreFileDownloadInfo(info.getAddress(), info.getIrFileId(), info.getDownloadDate());
 					    ignoreRecord.setDownloadCount(info.getDownloadCount());
 				    }
 				    else
@@ -289,10 +289,10 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			    {
 			    	totalProcessed = totalProcessed + 1;
 			    	log.debug("processing ignore info record " + okInfo);
-			    	FileDownloadInfo downloadRecord = downloadStatisticsService.getFileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
+			    	FileDownloadInfo downloadRecord = downloadStatisticsService.getFileDownloadInfo(okInfo.getAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
 			    	if( downloadRecord == null )
 			    	{
-			    		downloadRecord = new FileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
+			    		downloadRecord = new FileDownloadInfo(okInfo.getAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
 			    		downloadRecord.setDownloadCount(okInfo.getDownloadCount());
 			    	}
 			    	else

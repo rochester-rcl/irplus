@@ -60,7 +60,7 @@ public class IgnoreIpAddressDAOTest {
 
 	    TransactionStatus ts = tm.getTransaction(td);
 
-	    IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,1, 10);
+	    IgnoreIpAddress ip1 = new IgnoreIpAddress("123.0.0.1");
         
         ignoreIpAddressDAO.makePersistent(ip1);
  	    tm.commit(ts);
@@ -82,11 +82,11 @@ public class IgnoreIpAddressDAOTest {
 	{
 		 TransactionStatus ts = tm.getTransaction(td);
 
-		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,1, 10);
+		 IgnoreIpAddress ip1 = new IgnoreIpAddress("123.0.0.1");
 		 ip1.setStoreCounts(true);
 	     ignoreIpAddressDAO.makePersistent(ip1);
 
-	     IgnoreIpAddress ip2 = new IgnoreIpAddress(123,0,0,5, 5);
+	     IgnoreIpAddress ip2 = new IgnoreIpAddress("123.0.0.5");
 	     ip2.setStoreCounts(true);
 	     ignoreIpAddressDAO.makePersistent(ip2);
 	     tm.commit(ts);
@@ -94,14 +94,14 @@ public class IgnoreIpAddressDAOTest {
 	 	 // check to make sure the ip address counts are correct
 	 	 ts = tm.getTransaction(td);
 	 	 
-	 	 long count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 5, true);  
-	 	 assert count == 2l : "count equals " + count;
+	 	 IgnoreIpAddress other1 = ignoreIpAddressDAO.getByAddress("123.0.0.5");  
+	 	 assert other1 != null : "should find ignore ip address";
 	 	 
-	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 7, true);  
-	 	 assert count == 1l : "count equals " + count;
+	 	 other1 = ignoreIpAddressDAO.getByAddress("123.0.0.7");  
+	 	 assert other1 == null : "should NOT find ignore ip address";
 	 	 
-	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 11, true);  
-	 	 assert count == 0l : "count equals " + count;
+	 	 other1 =ignoreIpAddressDAO.getByAddress("123.0.0.11");  
+	 	 assert other1 == null  :  "should NOT find ignore ip address";
 	 	 
 	 	 
 	 	 tm.commit(ts);

@@ -47,11 +47,7 @@ public class FileDownloadInfoTest {
 		downloadInfo.setId(55l);
 		downloadInfo.setVersion(33);
 		
-		assert downloadInfo.getIpAddress().equals("123.1.1.5") : "Should equal 123.1.1.5";
-		assert downloadInfo.getIpAddressPart1() ==123 : "IpAddressPart1 Shoud equal 123";
-		assert downloadInfo.getIpAddressPart2() == 1 : "IpAddressPart2 Shoud equal 1";
-		assert downloadInfo.getIpAddressPart3() == 1 : "IpAddressPart3 Shoud equal 1";
-		assert downloadInfo.getIpAddressPart4()== 5 : " IpAddressPart4 Shoud equal 5";
+		assert downloadInfo.getAddress().equals("123.1.1.5") : "Should equal 123.1.1.5";
 		assert downloadInfo.getDownloadCount() == 1 : "Count Shoud equal 1";
 		assert downloadInfo.getDownloadDate().equals(d): "Shoud equal download date";
 		assert downloadInfo.getId().equals(55l) : "Should equal 55l";

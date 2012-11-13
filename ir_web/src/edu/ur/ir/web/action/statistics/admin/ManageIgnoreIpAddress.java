@@ -18,6 +18,7 @@
 package edu.ur.ir.web.action.statistics.admin;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.quartz.JobDetail;
@@ -31,6 +32,8 @@ import com.opensymphony.xwork2.Preparable;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.statistics.IgnoreIpAddress;
 import edu.ur.ir.statistics.IgnoreIpAddressService;
+import edu.ur.ir.statistics.service.OldIpIgnoreAddress;
+import edu.ur.ir.statistics.service.OldIpIgnoreConverterService;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -61,6 +64,27 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	
 	/**  Ip address for loading  */
 	private IgnoreIpAddress ignoreIpAddress;
+	
+	/** From Ip address part 1 */
+	private int fromAddress1;
+
+	/** From Ip address part 2 */
+	private int fromAddress2;
+
+	/** From Ip address part 3 */
+	private int fromAddress3;
+
+	/** From Ip address part 4 */
+	private int fromAddress4;
+	
+	/** TO Ip address part 4 */
+	private int toAddress4;
+	
+	/** Name for the addresses to add */
+	private String name;
+
+	/** Description of the addresses to add */
+	private String description;
 
 	/** Message that can be displayed to the user. */
 	private String message;
@@ -92,13 +116,17 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	
 	private boolean storeCounts = false;
 	
+	/** converter service for dealing with old ip addresses*/
+	private OldIpIgnoreConverterService oldIpIgnoreConverterService;
+
+	private List<OldIpIgnoreAddress> oldIpAddresses;
+	
 	/** Default constructor */
 	public  ManageIgnoreIpAddress()
 	{
 		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
-
 
 	/**
 	 * Method to create a new ignore ip address.
@@ -109,7 +137,8 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	{
 		log.debug("creating a ignore ip address = " + ignoreIpAddress.getName());
 		added = false;
-		IgnoreIpAddress other = ignoreIpAddressService.getIgnoreIpAddress(ignoreIpAddress);
+		log.debug("ip address  = " + ignoreIpAddress.getAddress());
+		IgnoreIpAddress other = ignoreIpAddressService.getIgnoreIpAddress(ignoreIpAddress.getAddress());
 		if( other == null)
 		{
 			ignoreIpAddress.setStoreCounts(storeCounts);
@@ -126,6 +155,31 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	}
 	
 	/**
+	 * Allow a range of ip addresses to be added.
+	 * 
+	 * @return SUCCESS
+	 */
+	public String addIgnoreIpRange()
+	{
+		for( int x = fromAddress4; x <= toAddress4; x++)
+		 {
+			 IgnoreIpAddress address = new IgnoreIpAddress(fromAddress1 + "." + 
+					 fromAddress2 + "."  + 
+					 fromAddress3 + "." +
+					 x);
+			 address.setDescription(description);
+			 address.setStoreCounts(storeCounts);
+			 address.setName(name);
+			 
+			 // only add the address if it does not yet exist
+			 if( ignoreIpAddressService.getIgnoreIpAddress(address.getAddress()) == null ){
+			   ignoreIpAddressService.saveIgnoreIpAddress(address);
+			 }
+		 }
+		return SUCCESS;
+	}
+	
+	/**
 	 * Method to update an existing ignore ip address.
 	 * 
 	 * @return
@@ -136,7 +190,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		log.debug("updating ignore ip address id = " + ignoreIpAddress.getId());
 		added = false;
 
-		IgnoreIpAddress other = ignoreIpAddressService.getIgnoreIpAddress(ignoreIpAddress);
+		IgnoreIpAddress other = ignoreIpAddressService.getIgnoreIpAddress(ignoreIpAddress.getAddress());
 		
 		if( other == null || other.getId().equals(ignoreIpAddress.getId()))
 		{
@@ -182,10 +236,12 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	public String get()
 	{
 		ignoreIpAddress = ignoreIpAddressService.getIgnoreIpAddress(id, false);
+		if( ignoreIpAddress != null )
+		{
+		    storeCounts = ignoreIpAddress.getStoreCounts();
+		}
 		return "get";
 	}
- 
-
 	
 	/**
 	 * Get the ip addresses table data.
@@ -194,9 +250,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	 */
 	public String viewIgnoreIpAddresses()
 	{
-
 		rowEnd = rowStart + numberOfResultsToShow;
-	    
 		ignoreIpAddresses = ignoreIpAddressService.getIgnoreIpAddressesOrderByName(rowStart, 
 	    		numberOfResultsToShow, sortType);
 	    totalHits = ignoreIpAddressService.getIgnoreIpAddressesCount().intValue();
@@ -228,6 +282,21 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		trigger.setName("singleReCountDownlodsJobFireNow");
 		quartzScheduler.scheduleJob(jobDetail, trigger);
 		return SUCCESS;
+	}
+	
+	
+	public String viewConvertToNew()
+	{
+		oldIpAddresses = oldIpIgnoreConverterService.convertToNew();
+		return SUCCESS;
+	}
+	
+	
+	public List<OldIpIgnoreAddress> getOldIpAddresses()
+	{
+		oldIpAddresses = oldIpIgnoreConverterService.convertToNew();
+		
+		return oldIpAddresses;
 	}
 	
 	/**
@@ -386,5 +455,72 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	public void setStoreCounts(boolean storeCounts) {
 		this.storeCounts = storeCounts;
 	}
+
+	/**
+	 * Set the converter service.
+	 * 
+	 * @param oldIpIngoreConverterService
+	 */
+	public void setOldIpIgnoreConverterService(
+			OldIpIgnoreConverterService oldIpIgnoreConverterService) {
+		this.oldIpIgnoreConverterService = oldIpIgnoreConverterService;
+	}
+	
+	public int getFromAddress1() {
+		return fromAddress1;
+	}
+
+	public void setFromAddress1(int fromAddress1) {
+		this.fromAddress1 = fromAddress1;
+	}
+
+	public int getFromAddress2() {
+		return fromAddress2;
+	}
+
+	public void setFromAddress2(int fromAddress2) {
+		this.fromAddress2 = fromAddress2;
+	}
+
+	public int getFromAddress3() {
+		return fromAddress3;
+	}
+
+	public void setFromAddress3(int fromAddress3) {
+		this.fromAddress3 = fromAddress3;
+	}
+
+	public int getFromAddress4() {
+		return fromAddress4;
+	}
+
+	public void setFromAddress4(int fromAddress4) {
+		this.fromAddress4 = fromAddress4;
+	}
+	
+	public int getToAddress4() {
+		return toAddress4;
+	}
+
+	public void setToAddress4(int toAddress4) {
+		this.toAddress4 = toAddress4;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 
 }

@@ -117,7 +117,7 @@ public class DefaultIgnoreIpAddressService implements IgnoreIpAddressService{
 	 * 
 	 * @see edu.ur.ir.statistics.IgnoreIpAddressService#getIgnoreIpAddress(IgnoreIpAddress)
 	 */
-	public IgnoreIpAddress getIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress) {
-		return ignoreIpAddressDAO.getIgnoreIpAddress(ignoreIpAddress);
+	public IgnoreIpAddress getIgnoreIpAddress(String ignoreIpAddress) {
+		return ignoreIpAddressDAO.getByAddress(ignoreIpAddress);
 	}
 }

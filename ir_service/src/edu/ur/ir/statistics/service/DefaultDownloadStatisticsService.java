@@ -17,10 +17,6 @@
 
 package edu.ur.ir.statistics.service;
 
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +37,7 @@ import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadInfoDAO;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecordDAO;
+import edu.ur.ir.statistics.IgnoreIpAddress;
 import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 import edu.ur.ir.statistics.IpDownloadCount;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
@@ -190,53 +187,30 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile)
 	{
-		try {
-			InetAddress address = InetAddress.getByName(ipAddress);
-			if( address instanceof Inet4Address)
-			{
-				long ignoreKeepCount = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress, true);		
-				long ignoreDoNotKeepCount = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress, false);	
+		IgnoreIpAddress ignoreAddress = ignoreIpAddressDAO.getByAddress(ipAddress);		
+		boolean isIgnoreAddress = (ignoreAddress != null) ;
 				
-				boolean isIgnoreAddress = (ignoreKeepCount > 0) || (ignoreDoNotKeepCount > 0) ;
-				
-				if(log.isDebugEnabled())
-				{
-					log.debug("ipAddress = " + ipAddress);
-				    log.debug("ignoreKeepCount = " + ignoreKeepCount);	
-				    log.debug("ignoreDoNotKeepCount = " + ignoreDoNotKeepCount);	
-				    log.debug("isIgnoreAddress = " + isIgnoreAddress);
-				}
-				
-				if( isIgnoreAddress )
-				{
-					if( ignoreDoNotKeepCount > 0 )
-					{
-					    // always check ignore and do not store first
-					}
-					else
-					{
-						addIgnoreFileDownloadInfo(ipAddress, irFile);
-					}
-				}
-				else
-				{
-					addFileDownloadInfo(ipAddress, irFile);
-					long downloadCount = irFile.getDownloadCount();
-					downloadCount = downloadCount + 1l;
-					irFile.setDownloadCount(downloadCount);
-					irFileDAO.makePersistent(irFile);
-				}
-			}
-			else if( address instanceof Inet6Address)
-			{
-				log.debug("ignoring ipv6 address");
-				//ignore IPv6 addresses on download counts
-			}
-		} catch (UnknownHostException e) {
-			log.error("could not determine address", e);
+		if(log.isDebugEnabled())
+		{
+		    log.debug("ipAddress = " + ipAddress);
+			log.debug("isIgnoreAddress = " + isIgnoreAddress);
 		}
-		
-		
+				
+		if( ignoreAddress != null )
+		{
+		    if( ignoreAddress.getStoreCounts() )
+			{
+			    addIgnoreFileDownloadInfo(ipAddress, irFile);
+			}
+		}
+		else
+		{
+		    addFileDownloadInfo(ipAddress, irFile);
+			long downloadCount = irFile.getDownloadCount();
+			downloadCount = downloadCount + 1l;
+			irFile.setDownloadCount(downloadCount);
+			irFileDAO.makePersistent(irFile);
+		}
 	}
 	
 	/**
