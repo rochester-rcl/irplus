@@ -44,13 +44,12 @@
 	                    currentSortAction="${sortType}"
 	                    ascendingSortAction="javascript:YAHOO.ur.ignore.ipaddress.getIgnoreIpAddresses(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'asc');"
 	                    descendingSortAction="javascript:YAHOO.ur.ignore.ipaddress.getIgnoreIpAddresses(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'desc');">
-	                    <u>Name</u>                                              
+	                    <u>Address</u>                                              
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
+					 <urstb:td>Name</urstb:td>
 					 <urstb:td>Store Counts</urstb:td>
-					<urstb:td>From</urstb:td>
-					<urstb:td>To</urstb:td>
 					<urstb:td>Description</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -71,16 +70,13 @@
 		                        ${ignoreIpAddress.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.ignore.ipaddress.editIgnoreIpAddress(${ignoreIpAddress.id});">${ignoreIpAddress.name}</a>
+			                    <a href="javascript:YAHOO.ur.ignore.ipaddress.editIgnoreIpAddress(${ignoreIpAddress.id});">${ignoreIpAddress.address}</a>
+	                        </urstb:td>
+	                        <urstb:td>
+	                             ${ignoreIpAddress.name}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${ignoreIpAddress.storeCounts}
-	                        </urstb:td>
-	                        <urstb:td>
-	                             ${ignoreIpAddress.fromAddress1}.${ignoreIpAddress.fromAddress2}.${ignoreIpAddress.fromAddress3}.${ignoreIpAddress.fromAddress4}
-	                        </urstb:td>
-	                        <urstb:td>
-	                            ${ignoreIpAddress.toAddress4}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${ignoreIpAddress.description}

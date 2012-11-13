@@ -28,6 +28,9 @@ var updateIgnoreIpAddressAction = basePath + 'admin/updateIgnoreIpAddress.action
 var newIgnoreIpAddressAction = basePath + 'admin/createIgnoreIpAddress.action';
 var deleteIgnoreIpAddressAction = basePath + 'admin/deleteIgnoreIpAddress.action';
 var getIgnoreIpAddressAction = basePath + 'admin/getIgnoreIpAddress.action';
+var newIgnoreIpAddressRangeAction = basePath + 'admin/createIgnoreIpAddressRange.action';
+var deleteIgnoreIpAddressRangeAction = basePath + 'admin/deleteIgnoreIpAddressRange.action';
+
 
 // object to hold the specified ignore ipaddress data.
 var myIgnoreIpAddressTable = new YAHOO.ur.table.Table('myIgnoreIpAddresses', 'newIgnoreIpAddresses');
@@ -92,9 +95,26 @@ YAHOO.ur.ignore.ipaddress = {
 		document.getElementById('newIgnoreIpAddressForm_fromAddress3').value = "";
 		document.getElementById('newIgnoreIpAddressForm_fromAddress4').value = "";
 		document.getElementById('newIgnoreIpAddressForm_toAddress4').value = "";
-		document.getElementById('newIgnoreIpAddressForm_id').value = "";
-		document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = true;
-		document.newIgnoreIpAddressForm.newIgnoreIpAddress.value = "true";
+		document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = false;
+	},
+	
+	 /** 
+	  * clear out any form data messages or input
+	  * in the new ignore ipaddress form
+	  */
+	clearSingleIgnoreIpAddressForm : function()
+	{
+	    
+	    // clear out any errors
+       var div = document.getElementById('ignoreSingleIpAddressError');
+       div.innerHTML = "";
+	    
+	    document.getElementById('newSingleIgnoreIpAddressForm_name').value = "";
+		document.getElementById('newSingleIgnoreIpAddressForm_description').value = "";
+		document.getElementById('newSingleIgnoreIpAddressForm_address').value = "";
+		document.getElementById('newSingleIgnoreIpAddressForm_id').value = "";
+		document.getElementById("newSingleIgnoreIpAddressForm_storeCounts").checked = false;
+		document.newSingleIgnoreIpAddressForm.newSingleIgnoreIpAddress.value = "true";
 	},
 	
     /**
@@ -132,8 +152,8 @@ YAHOO.ur.ignore.ipaddress = {
 		
 		var handleSuccess = function(o) 
 		{
-		    // check for the timeout - forward user to login page if timout
-	        // occured
+		    // check for the timeout - forward user to login page if timeout
+	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
 		        //get the response from adding a ip address
@@ -188,16 +208,8 @@ YAHOO.ur.ignore.ipaddress = {
 		    	    
 		    if( YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.validate() )
 		    {
-		        //based on what we need to do (update or create a 
-		        // new ip address) based on the action.
-	            var action = newIgnoreIpAddressAction;
-		        if( document.newIgnoreIpAddressForm.newIgnoreIpAddress.value != 'true')
-		        {
-		           action = updateIgnoreIpAddressAction;
-		        }
-	
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
-	            action, callback);
+	            		newIgnoreIpAddressRangeAction, callback);
 	        }
 	     }		
 
@@ -245,6 +257,139 @@ YAHOO.ur.ignore.ipaddress = {
 		    
 	},
 	
+	
+	/**
+	 * Creates a YUI new ip address modal dialog for when a user wants to create 
+	 * a new single ignore ip address
+	 *
+	 */
+	createNewSingleIgnoreIpAddressDialog : function()
+	{
+	    
+		// Define various event handlers for Dialog
+		var handleSubmit = function() 
+		{
+			this.submit();
+		};
+		
+			
+		// handle a cancel of the adding ip address dialog
+		var handleCancel = function() 
+		{
+			YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.hide();
+		    YAHOO.ur.ignore.ipaddress.clearSingleIgnoreIpAddressForm();
+		};
+		
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a ip address
+		        var response = o.responseText;
+		        var ignoreIpAddressForm = document.getElementById('newSingleIgnoreIpAddressDialogFields');
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        ignoreIpAddressForm.innerHTML = o.responseText;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newSingleIgnoreIpAddressForm_success").value;
+		        //if the ip address was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+		        	YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the ip address was added
+		            YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.hide();
+		            YAHOO.ur.ignore.ipaddress.clearSingleIgnoreIpAddressForm();
+		        }
+		        myIgnoreIpAddressTable.submitForm(myIgnoreIpAddressAction);
+		    }
+		};
+		
+		// handle form sbumission failure
+		var handleFailure = function(o) {
+		    alert('ip address single submission failed ' + o.status + ' status text ' + o.statusText);
+		};
+	
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// new ip address button is clicked.
+		YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog = new YAHOO.widget.Dialog('newSingleIgnoreIpAddressDialog', 
+	        { width : "600px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Submit', handler:handleSubmit, isDefault:true },
+						  { text:'Cancel', handler:handleCancel } ]
+			} );
+			
+		//submit form
+		YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.submit = function() 
+		{
+			YAHOO.util.Connect.setForm('newSingleIgnoreIpAddressForm');
+    	    
+		    if( YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.validate() )
+		    {
+		        //based on what we need to do (update or create a 
+		        // new ip address) based on the action.
+		    	
+	            var action = newIgnoreIpAddressAction;
+		        if( document.newSingleIgnoreIpAddressForm.newSingleIgnoreIpAddress.value != 'true')
+		        {
+		           action = updateIgnoreIpAddressAction;
+		        }
+	            var cObj = YAHOO.util.Connect.asyncRequest('post',
+	            action, callback);
+	            
+	        }
+	     }		
+
+	    
+	 	// Validate the entries in the form to require that both first and last name are entered
+		YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.validate = function() 
+		{
+			var name = document.getElementById('newSingleIgnoreIpAddressForm_name').value;
+			if (name == "" || name == null) {
+			    alert('Name must be entered.');
+				return false;
+			}
+			
+			if (document.getElementById('newSingleIgnoreIpAddressForm_address').value == "") {
+				alert('Please enter IP address.');
+				return false;
+			}
+			
+			return true;
+			
+		};			
+	
+		// Wire up the success and failure handlers
+		var callback = { success: handleSuccess,   failure: handleFailure };
+				
+				
+		// Render the Dialog
+		YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.render();			
+			
+	    // show and center the dialog box
+	    YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.showDialog = function()
+	    {
+	        YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.center();
+	        YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.show()
+	    }
+
+	
+	    // listener for showing the dialog when clicked.
+		YAHOO.util.Event.addListener("showSingleIgnoreIpAddress", "click", 
+		    YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.showDialog, 
+		    YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog, true);
+		    
+	},
+	
      /**
      * function to edit ip address information
      */
@@ -261,10 +406,10 @@ YAHOO.ur.ignore.ipaddress = {
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {     
-                    var divToUpdate = document.getElementById('newIgnoreIpAddressDialogFields');
+                    var divToUpdate = document.getElementById('newSingleIgnoreIpAddressDialogFields');
                     divToUpdate.innerHTML = o.responseText; 
-                   	document.newIgnoreIpAddressForm.newIgnoreIpAddress.value = "false";
-	                YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.showDialog();
+                   	document.newSingleIgnoreIpAddressForm.newSingleIgnoreIpAddress.value = "false";
+	                YAHOO.ur.ignore.ipaddress.newSingleIgnoreIpAddressDialog.showDialog();
 
                 }
             },
@@ -305,7 +450,7 @@ YAHOO.ur.ignore.ipaddress = {
 	 * a new ip address
 	 *
 	 */
-	createDeleteIgnoreIpAddressDialog :function()
+	createDeleteIgnoreIpAddressDialog : function()
 	{
 	    
 		// Define various event handlers for Dialog
@@ -390,14 +535,101 @@ YAHOO.ur.ignore.ipaddress = {
 		    YAHOO.ur.ignore.ipaddress.deleteIgnoreIpAddressDialog, true);
 	},
 	
+	
+	/**
+	 * Creates a YUI new ip address modal dialog for when a user wants to create 
+	 * a new ignore ip address range
+	 *
+	 */
+	createNewDeleteRangeDialog : function()
+	{
+		// Define various event handlers for Dialog
+		var handleSubmit = function() 
+		{
+			this.submit();
+		};
+		
+		// handle a cancel of the adding ip address dialog
+		var handleCancel = function() 
+		{
+			YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.hide();
+		};
+		
+		var handleSuccess = function(o) 
+		{
+			alert("success");
+		};
+		
+		// handle form sbumission failure
+		var handleFailure = function(o) {
+		    alert('ip delete range submission failed ' + o.status + ' status text ' + o.statusText);
+		};
+	
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// new ip address button is clicked.
+		YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog = new YAHOO.widget.Dialog('deleteIgnoreIpAddressRangeDialog', 
+	        { width : "600px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Submit', handler:handleSubmit, isDefault:true },
+						  { text:'Cancel', handler:handleCancel } ]
+			} );
+		//submit form
+		YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.submit = function() 
+		{
+			YAHOO.util.Connect.setForm('deleteIgnoreIpAddressRange');
+    	    
+		    if( YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.validate() )
+		    {
+	            var cObj = YAHOO.util.Connect.asyncRequest('post',
+	            		deleteIgnoreIpAddressRangeAction, callback);
+	        }
+	     };		
+
+	 	// Validate the entries in the form to require that both first and last name are entered
+		YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.validate = function() 
+		{
+			if (document.getElementById('deleteIgnoreIpAddressForm_fromAddress1').value == ""
+				|| document.getElementById('deleteIgnoreIpAddressForm_fromAddress2').value == ""
+				|| document.getElementById('deleteIgnoreIpAddressForm_fromAddress3').value == ""
+				|| document.getElementById('deleteIgnoreIpAddressForm_fromAddress4').value == ""
+				|| document.getElementById('deleteIgnoreIpAddressForm_toAddress4').value == "") {
+				alert('Please enter complete IP address.');
+				return false;
+			}
+			return true;
+		};			
+	
+		// Wire up the success and failure handlers
+		var callback = { success: handleSuccess,   failure: handleFailure };
+				
+		// Render the Dialog
+		YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.render();			
+			
+	    // show and center the dialog box
+	    YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.showDialog = function()
+	    {
+	        YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.center();
+	        YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.show()
+	    }
+
+	    // listener for showing the dialog when clicked.
+		YAHOO.util.Event.addListener("deleteAddressRange", "click", 
+		    YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.showDialog, 
+		    YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog, true);
+	},
+	
 	// initialize the page
 	// this is called once the dom has
 	// been created
 	init : function() {
 	    YAHOO.ur.ignore.ipaddress.getIgnoreIpAddresses(0,1,1,'asc');
 	    YAHOO.ur.ignore.ipaddress.createNewIgnoreIpAddressDialog();
+	    YAHOO.ur.ignore.ipaddress.createNewSingleIgnoreIpAddressDialog();
 	    YAHOO.ur.ignore.ipaddress.createDeleteIgnoreIpAddressDialog();
-	    document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = true;
+	    YAHOO.ur.ignore.ipaddress.createNewDeleteRangeDialog();
 	}
 	
 }	
