@@ -213,9 +213,15 @@
             class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress">
             <interceptor-ref name="crudStack" />
             <result name="input">/pages/admin/statistics/ignore_ipaddress.jsp</result>
-            <result name="added">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
+            <result name="added">/pages/admin/statistics/single_ignore_ipaddress_form.jsp</result>
             <result name="deleted">/pages/admin/statistics/ignore_ipaddress_deleted.jsp</result>
-            <result name="get">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
+            <result name="get">/pages/admin/statistics/single_ignore_ipaddress_form.jsp</result>
+        </action>
+        
+        <action name="createIgnoreIpAddressRange"
+                method = "addIgnoreIpRange"
+                class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress">
+                <result name="success">/pages/admin/statistics/ip_download_counts/ip_download_counts.jsp</result>
         </action>   
         
         <action name="viewDownloadCountsByIp"
@@ -226,6 +232,15 @@
          <action name="viewIgnoreDownloadCountsByIp"
                 class="edu.ur.ir.web.action.statistics.admin.ViewIgnoreDownloadCountsByIp">
                 <result name="success">/pages/admin/statistics/ip_download_counts/ip_ignore_download_counts.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  DELETE after testing           -->
+        <!--  ************************************ -->
+        <action name="convertOldIpAddresses"
+                method="viewConvertToNew"
+                class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress">
+                <result name="success">/pages/admin/statistics/view_old_ips.jsp</result>
         </action>
         
         

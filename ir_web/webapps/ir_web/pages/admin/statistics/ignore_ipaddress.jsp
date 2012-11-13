@@ -29,7 +29,7 @@
 <html>
 
 <head>
-    <title>Ignore Ipaddress range</title>
+    <title>Ignore IP addresses </title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -70,11 +70,19 @@
        
 		<button id="showIgnoreIpAddress" class="ur_button" 
  		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';">New Ignore IpAddress</button> 
+ 		        onmouseout="this.className='ur_button';">New Ignore IP 4 Address Range</button> 
+ 		
+ 		<button id="showSingleIgnoreIpAddress" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Ignore Single Address Range</button>
 	      
 	    <button id="showDeleteIgnoreIpAddress" class="ur_button" 
  		          onmouseover="this.className='ur_buttonover';"
  		          onmouseout="this.className='ur_button';">Delete</button>
+ 		          
+ 		 <button id="deleteAddressRange" class="ur_button" 
+ 		          onmouseover="this.className='ur_buttonover';"
+ 		          onmouseout="this.className='ur_button';">Delete IP 4 Range</button>
 	    <br/>
         <br/>
 	    
@@ -84,6 +92,8 @@
         <br/>
         <c:url var="processingUrl" value="/admin/runFileDownloadUpdateProcessing"/>
         <a href="${processingUrl}">Run Update File Download Counts Job</a>
+        <c:url var="oldIpsUrl" value="/admin/convertOldIpAddresses"/>
+        <a href="${oldIpsUrl}">View old IP's</a>
 	    
       </div>
       <!--  end body div -->
@@ -95,7 +105,7 @@
   <!--  End doc div-->
   
   <div id="newIgnoreIpAddressDialog" class="hidden">
-    <div class="hd">Ignore Ipaddress Information</div>
+    <div class="hd">Ignore IP Address 4 Range Information</div>
     <div class="bd">
       <form id="addIgnoreIpAddress" name="newIgnoreIpAddressForm" 
 		                    method="post" 
@@ -106,6 +116,30 @@
 	  </form>
     </div>
   </div>
+  
+  <div id="newSingleIgnoreIpAddressDialog" class="hidden">
+    <div class="hd">Ignore IP 4 Address Range Information</div>
+    <div class="bd">
+      <form id="addSingleIgnoreIpAddress" name="newSingleIgnoreIpAddressForm" 
+		                    method="post" 
+		                    action="<c:url value="/admin/createIgnoreIpAddress.action"/>">
+	    <div id="newSingleIgnoreIpAddressDialogFields">
+	        <c:import url="single_ignore_ipaddress_form.jsp"/>
+	    </div>
+	  </form>
+    </div>
+  </div>
+  
+  <div id="deleteIgnoreIpAddressRangeDialog" class="hidden">
+    <div class="hd">Delete Ipaddress</div>
+	  <div class="bd">
+	    <form id="deleteIgnoreIpAddressRange" name="deleteIgnoreIpAddressRange" method="post" 
+		                action="<c:url value="user/deleteIgnoreIpAddressRange.action"/>">
+	        <c:import url="ignore_ipaddress_range_delete_form.jsp"/>
+        </form>
+      </div>
+  </div>
+  
 	         
   <div id="deleteIgnoreIpAddressDialog" class="hidden">
     <div class="hd">Delete Ipaddress</div>
