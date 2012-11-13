@@ -40,19 +40,7 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 			
-		<property name="ipAddress" column="ip_address" type="text"
-			access="field" />
-
-		<property name="ipAddressPart1" column="ip_address_part1" type="int"
-			access="field" />
-
-		<property name="ipAddressPart2" column="ip_address_part2" type="int"
-			access="field" />
-			
-		<property name="ipAddressPart3" column="ip_address_part3" type="int"
-			access="field" />
-
-		<property name="ipAddressPart4" column="ip_address_part4" type="int"
+		<property name="address" column="ip_address" type="text"
 			access="field" />
 						
 		<property name="irFileId" column="ir_file_id" type="long"
@@ -74,7 +62,7 @@
     <!-- named query for getting a the download info -->
 	<query name="getIpIgnoreFileDownloadInfo">
 		from IpIgnoreFileDownloadInfo as ipIgnoreFileDownloadInfo where
-		ipIgnoreFileDownloadInfo.ipAddress = ? AND
+		ipIgnoreFileDownloadInfo.address = ? AND
 		ipIgnoreFileDownloadInfo.irFileId = ? AND
 		ipIgnoreFileDownloadInfo.downloadDate  = ?
 	</query>
@@ -82,38 +70,32 @@
 	 <!-- named query for getting the ignored file downloads that should be ok to count -->
 	<query name="getAcceptableFileDownloadsIgnored">
 		select ipIgnoreFileDownloadInfo from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
-		where (select count(*) from IgnoreIpAddress as ignore 
-		       where ipIgnoreFileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
-		       and ipIgnoreFileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
-		       and ipIgnoreFileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
-		       and ipIgnoreFileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
-	    order by ipIgnoreFileDownloadInfo.ipAddress, 
+		where NOT exists(select 'x' from IgnoreIpAddress as ignore 
+		       where ipIgnoreFileDownloadInfo.address = ignore.address) 
+	    order by ipIgnoreFileDownloadInfo.address, 
 	             ipIgnoreFileDownloadInfo.downloadDate desc
 	</query>
 	
     <!-- named query for getting the count of ignored file info records in the repository repository  that should be ok to count -->
 	<query name="getAcceptableFileDownloadsIgnoredCount">
 		select count(*) from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
-		where (select count(*) from IgnoreIpAddress as ignore 
-		       where ipIgnoreFileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
-		       and ipIgnoreFileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
-		       and ipIgnoreFileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
-		       and ipIgnoreFileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+		where NOT exists (select 'x' from IgnoreIpAddress as ignore 
+		       where ipIgnoreFileDownloadInfo.address = ignore.address)
 	</query>
 	
 		<!-- named query for getting a count of all the downloads in the repository -->
 	<query name="getDownloadInfoIgnoreCountSumAsc">
-		select new edu.ur.ir.statistics.IpDownloadCount (ipIgnoreFileDownloadInfo.ipAddress, sum(ipIgnoreFileDownloadInfo.downloadCount)) 
+		select new edu.ur.ir.statistics.IpDownloadCount (ipIgnoreFileDownloadInfo.address, sum(ipIgnoreFileDownloadInfo.downloadCount)) 
 		from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
-		group by ipIgnoreFileDownloadInfo.ipAddress
+		group by ipIgnoreFileDownloadInfo.address
 		order by sum(ipIgnoreFileDownloadInfo.downloadCount) asc
 	</query>
 	
 	<!-- named query for getting a count of all the downloads in the repository -->
 	<query name="getDownloadInfoIgnoreCountSumDesc">
-		select new edu.ur.ir.statistics.IpDownloadCount (ipIgnoreFileDownloadInfo.ipAddress, sum(ipIgnoreFileDownloadInfo.downloadCount)) 
+		select new edu.ur.ir.statistics.IpDownloadCount (ipIgnoreFileDownloadInfo.address, sum(ipIgnoreFileDownloadInfo.downloadCount)) 
 		from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo  
-		group by ipIgnoreFileDownloadInfo.ipAddress
+		group by ipIgnoreFileDownloadInfo.address
 		order by sum(ipIgnoreFileDownloadInfo.downloadCount) desc
 	</query>
 	
@@ -121,17 +103,14 @@
 	<!--  named query to delete download counts that should not be kept (store counts = false) -->
 	<query name="deleteNoStoreDownloadCounts">
 	    delete from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo  
-		where (select count(*) from IgnoreIpAddress as ignore 
-		where ipIgnoreFileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
-		and ipIgnoreFileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
-		and ipIgnoreFileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
-		and ignore.storeCounts = false
-		and ipIgnoreFileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) != 0
+		where exists(select 'x' from IgnoreIpAddress as ignore 
+		where ipIgnoreFileDownloadInfo.address = ignore.address
+		and ignore.storeCounts = false) 
 	</query>
 	
 	    <!-- named query for getting a count of the number of results that would be produced for the grouping by filedownload ip address -->
 	<query name="getIgnoreDownloadInfoIpSumCount">
-		select count(distinct ipIgnoreFileDownloadInfo.ipAddress ) 
+		select count(distinct ipIgnoreFileDownloadInfo.address ) 
 		from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo   
 	</query>
 	

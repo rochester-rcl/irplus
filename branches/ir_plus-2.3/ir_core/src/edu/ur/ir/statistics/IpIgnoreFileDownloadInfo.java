@@ -18,7 +18,6 @@ package edu.ur.ir.statistics;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import edu.ur.persistent.BasePersistent;
 
@@ -35,20 +34,8 @@ public class IpIgnoreFileDownloadInfo extends BasePersistent {
 	private static final long serialVersionUID = 511549268746634484L;
 	
 	/** Complete IP address */
-	private String ipAddress;
-	
-	/** Downloading Ip address part 1 */
-	private int ipAddressPart1;
-	
-	/** Downloading Ip address part 2 */
-	private int ipAddressPart2;
-	
-	/** Downloading Ip address part 3 */
-	private int ipAddressPart3;
-	
-	/** Downloading Ip address part 4 */
-	private int ipAddressPart4;
-	
+	private String address;
+
 	/** Id of file that is downloaded */
 	private Long irFileId;
 	
@@ -66,30 +53,22 @@ public class IpIgnoreFileDownloadInfo extends BasePersistent {
 	/**
 	 * Constructor for file download info
 	 * 
-	 * @param ipAddress Downloading ipaddress
+	 * @param address Downloading ipaddress
 	 * @param irFileId Id of file that is downloaded
 	 * @param date Date of download
 	 */
-	public IpIgnoreFileDownloadInfo(String ipAddress, Long fileId, Date downloadDate) {
-		setIpAddress(ipAddress);
+	public IpIgnoreFileDownloadInfo(String address, Long fileId, Date downloadDate) {
+		setAddress(address);
 		this.irFileId = fileId;
 		this.downloadDate = downloadDate;
 	}
 	
-	public String getIpAddress() {
-		return ipAddress;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setIpAddress(String ipAddress) {
-		
-		StringTokenizer token = new StringTokenizer(ipAddress, ".");
-		
-		ipAddressPart1 = Integer.parseInt(token.nextToken());
-		ipAddressPart2 = Integer.parseInt(token.nextToken());
-		ipAddressPart3 = Integer.parseInt(token.nextToken());
-		ipAddressPart4 = Integer.parseInt(token.nextToken());
-		
-		this.ipAddress = ipAddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public Long getIrFileId() {
@@ -116,38 +95,6 @@ public class IpIgnoreFileDownloadInfo extends BasePersistent {
 		this.downloadCount = count;
 	}
 
-	public int getIpAddressPart1() {
-		return ipAddressPart1;
-	}
-
-	public void setIpAddressPart1(int ipAddressPart1) {
-		this.ipAddressPart1 = ipAddressPart1;
-	}
-
-	public int getIpAddressPart2() {
-		return ipAddressPart2;
-	}
-
-	public void setIpAddressPart2(int ipAddressPart2) {
-		this.ipAddressPart2 = ipAddressPart2;
-	}
-
-	public int getIpAddressPart3() {
-		return ipAddressPart3;
-	}
-
-	public void setIpAddressPart3(int ipAddressPart3) {
-		this.ipAddressPart3 = ipAddressPart3;
-	}
-
-	public int getIpAddressPart4() {
-		return ipAddressPart4;
-	}
-
-	public void setIpAddressPart4(int ipAddressPart4) {
-		this.ipAddressPart4 = ipAddressPart4;
-	}
-	
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -161,8 +108,8 @@ public class IpIgnoreFileDownloadInfo extends BasePersistent {
 		if( ( irFileId != null && !irFileId.equals(other.getIrFileId()) ) ||
 			( irFileId == null && other.getIrFileId() != null ) ) return false;
 		
-		if( ( ipAddress != null && !ipAddress.equals(other.getIpAddress()) ) ||
-			( ipAddress == null && other.getIpAddress() != null ) ) return false;
+		if( ( address != null && !address.equals(other.getAddress()) ) ||
+			( address == null && other.getAddress() != null ) ) return false;
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		
@@ -194,7 +141,7 @@ public class IpIgnoreFileDownloadInfo extends BasePersistent {
 	{
 		int value = 0;
 		value += irFileId == null ? 0 : irFileId.hashCode();
-		value += ipAddress == null ? 0 : ipAddress.hashCode();
+		value += address == null ? 0 : address.hashCode();
 		value += downloadDate == null ? 0 : downloadDate.hashCode();
 		return value;
 	}	
@@ -205,15 +152,8 @@ public class IpIgnoreFileDownloadInfo extends BasePersistent {
 		StringBuffer sb = new StringBuffer("[ id = ");
 		sb.append(id);
 		sb.append(" ipAddress = ");
-		sb.append(ipAddress);
-		sb.append(" ipAddressPart1 = ");
-		sb.append(this.ipAddressPart1);
-		sb.append(" ipAddressPart2 = ");
-		sb.append(this.ipAddressPart2);
-		sb.append(" ipAddressPart3 = ");
-		sb.append(this.ipAddressPart3);
-		sb.append(" ipAddressPart4 = ");
-		sb.append(this.ipAddressPart4);
+		sb.append(address);
+		
 		
 		if(this.downloadDate != null )
 		{

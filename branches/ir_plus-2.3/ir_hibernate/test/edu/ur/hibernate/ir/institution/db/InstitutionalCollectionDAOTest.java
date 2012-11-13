@@ -1003,7 +1003,7 @@ public class InstitutionalCollectionDAOTest {
 		// add an ip address to the ignore list
 	    //create a new transaction
 		ts = tm.getTransaction(td);
-	    IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,7, 7);
+	    IgnoreIpAddress ip1 = new IgnoreIpAddress("123.0.0.7");
         ignoreIpAddressDAO.makePersistent(ip1);
         
         // update the counts

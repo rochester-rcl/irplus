@@ -3383,11 +3383,7 @@ CREATE SCHEMA ir_statistics AUTHORIZATION ir_plus;
 CREATE TABLE ir_statistics.file_download_info
 (
     file_download_info_id BIGINT PRIMARY KEY,
-    ip_address text ,
-    ip_address_part1 INTEGER,
-    ip_address_part2 INTEGER,
-    ip_address_part3 INTEGER,
-    ip_address_part4 INTEGER,
+    ip_address text NOT NULL,
     version INTEGER,
     ir_file_id BIGINT NOT NULL,
     download_date DATE NOT NULL,
@@ -3400,9 +3396,6 @@ ALTER TABLE ir_statistics.file_download_info OWNER TO ir_plus;
 CREATE SEQUENCE ir_statistics.file_download_info_seq ;
 ALTER TABLE ir_statistics.file_download_info_seq OWNER TO ir_plus;
 
-CREATE INDEX file_download_info_ip_part_idx
-  ON ir_statistics.file_download_info(ip_address_part1, ip_address_part2, ip_address_part3, ip_address_part4);
-  
 CREATE INDEX ir_file_id_idx
   ON ir_statistics.file_download_info(ir_file_id);
   
@@ -3418,22 +3411,12 @@ CREATE TABLE ir_statistics.ip_address_ignore
     name TEXT,
     store_counts BOOLEAN NOT NULL,
     description TEXT,
-    from_ip_address_part1 INTEGER,
-    from_ip_address_part2 INTEGER,
-    from_ip_address_part3 INTEGER,
-    from_ip_address_part4 INTEGER,
-    to_ip_address_part4 INTEGER,
+    ip_address TEXT NOT NULL UNIQUE,
     version INTEGER
     
 );
 ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
 
-CREATE INDEX ir_address_ignore_ip_part_idx
-  ON ir_statistics.ip_address_ignore(from_ip_address_part1, 
-      from_ip_address_part2, 
-      from_ip_address_part3, 
-      from_ip_address_part4,
-      to_ip_address_part4);
 
 -- The field sequence
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
@@ -3465,11 +3448,7 @@ CREATE INDEX file_roll_up_processing_record_ir_file_idx
 CREATE TABLE ir_statistics.ip_ignore_file_download_info
 (
     ip_ignore_file_download_info_id BIGINT PRIMARY KEY,
-    ip_address text ,
-    ip_address_part1 INTEGER,
-    ip_address_part2 INTEGER,
-    ip_address_part3 INTEGER,
-    ip_address_part4 INTEGER,
+    ip_address text NOT NULL,
     version INTEGER,
     ir_file_id BIGINT NOT NULL,
     download_date DATE NOT NULL,
@@ -3482,8 +3461,8 @@ ALTER TABLE ir_statistics.ip_ignore_file_download_info OWNER TO ir_plus;
 CREATE SEQUENCE ir_statistics.ip_ignore_file_download_info_seq ;
 ALTER TABLE ir_statistics.ip_ignore_file_download_info_seq OWNER TO ir_plus;
 
-CREATE INDEX ip_ignore_file_download_info_ip_part_idx
-  ON ir_statistics.ip_ignore_file_download_info(ip_address_part1, ip_address_part2, ip_address_part3, ip_address_part4);
+CREATE INDEX ip_ignore_file_download_info_ip_address_idx
+  ON ir_statistics.ip_ignore_file_download_info(ip_address);
   
 CREATE INDEX ip_ignore_ir_file_id_idx
   ON ir_statistics.file_download_info(ir_file_id);

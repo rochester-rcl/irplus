@@ -81,5 +81,5 @@ public interface IgnoreIpAddressService extends Serializable{
 	 * @param ignoreIpAddress Ip address range
 	 * @return - the found ip address range or null if the ip address is not found.
 	 */
-	public IgnoreIpAddress getIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress);
+	public IgnoreIpAddress getIgnoreIpAddress(String ignoreIpAddress);
 }

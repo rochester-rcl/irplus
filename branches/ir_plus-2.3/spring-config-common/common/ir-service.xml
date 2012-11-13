@@ -29,6 +29,14 @@
    <bean id="contributorService" class="edu.ur.ir.person.service.DefaultContributorService">
        <property name="contributorDAO" ref="contributorDAO"/>
    </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Old Ip Ignore Converter service (2.2 -> 2.3) service -->
+   <!-- ****************************************** --> 
+   <bean id="oldIpIgnoreConverterService" class="edu.ur.ir.statistics.service.OldIpIgnoreConverterService">
+       <property name="dataSource" ref="dataSource"/>
+        <property name="ignoreIpAddressService" ref="ignoreIpAddressService"/>
+   </bean> 
     
    <!-- ****************************************** --> 
    <!-- User related data service -->

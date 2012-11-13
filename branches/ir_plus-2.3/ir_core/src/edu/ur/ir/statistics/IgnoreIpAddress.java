@@ -30,151 +30,100 @@ public class IgnoreIpAddress extends CommonPersistent {
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 680400303890833403L;
 
-	/** From Ip address part 1 */
-	private int fromAddress1;
+	// ip address
+	private String address;
 
-	/** From Ip address part 2 */
-	private int fromAddress2;
-
-	/** From Ip address part 3 */
-	private int fromAddress3;
-
-	/** From Ip address part 4 */
-	private int fromAddress4;
-	
-	/** TO Ip address part 4 */
-	private int toAddress4;
 	
 	/** determine if the ignore ip address should be stored persistently
 	 *  if this is set to false the ip address should not be stored*/
 	private boolean storeCounts = false;
-
-
+	
 	/**
 	 * Default Constructor
 	 */
-	public IgnoreIpAddress() {}
+	IgnoreIpAddress() {}
 	
 	/**
-	 * Constructor with ip address
+	 * Create an ip ignore address.
+	 * 
+	 * @param address - the string representation of the address
 	 */
-	public IgnoreIpAddress(int fromAddress1, int fromAddress2, int fromAddress3, int fromAddress4, int toAddress4) {
-		setFromAddress1(fromAddress1);
-		setFromAddress2(fromAddress2);
-		setFromAddress3(fromAddress3);
-		setFromAddress4(fromAddress4);
-		setToAddress4(toAddress4);
+	public IgnoreIpAddress(String address)
+	{
+		setAddress(address);
 	}
-
-	public int getFromAddress1() {
-		return fromAddress1;
-	}
-
-	public void setFromAddress1(int fromAddress1) {
-		this.fromAddress1 = fromAddress1;
-	}
-
-	public int getFromAddress2() {
-		return fromAddress2;
-	}
-
-	public void setFromAddress2(int fromAddress2) {
-		this.fromAddress2 = fromAddress2;
-	}
-
-	public int getFromAddress3() {
-		return fromAddress3;
-	}
-
-	public void setFromAddress3(int fromAddress3) {
-		this.fromAddress3 = fromAddress3;
-	}
-
-	public int getFromAddress4() {
-		return fromAddress4;
-	}
-
-	public void setFromAddress4(int fromAddress4) {
-		this.fromAddress4 = fromAddress4;
-	}
-
-	public int getToAddress4() {
-		return toAddress4;
-	}
-
-	public void setToAddress4(int toAddress4) {
-		this.toAddress4 = toAddress4;
-	}
-	
-	public boolean isStoreCounts() {
-		return storeCounts;
-	}
-
-	public void setStoreCounts(boolean store) {
-		this.storeCounts = store;
-	}
-	
-	public boolean getStoreCounts(){
-		return storeCounts;
-	}
-
-
 	
 	/**
+	 * Get the address.
+	 * 
+	 * @return
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * Set the address.
+	 * 
+	 * @param address
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	/**
+	 * Returns true if the counts should be stored even if they are ignored.
+	 * 
+	 * @return - true if the counts should be ignored.
+	 */
+	public boolean getStoreCounts() {
+		return storeCounts;
+	}
+
+	/**
+	 * If set to true the counts will be stored otherwise they will be deleted.
+	 * 
+	 * @param storeCounts
+	 */
+	public void setStoreCounts(boolean storeCounts) {
+		this.storeCounts = storeCounts;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int hashCode = 0;
+		hashCode += address != null ? address.hashCode() : 0;
+		return hashCode;
+	}
+	
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object o)
 	{
-		if (this == o) return true;
+    	if (this == o) return true;
 		if (!(o instanceof IgnoreIpAddress)) return false;
 
 		final IgnoreIpAddress other = (IgnoreIpAddress) o;
 
-		if( ( fromAddress1 != other.getFromAddress1()) )  return false;
-		if( ( fromAddress2 != other.getFromAddress2()) )  return false;
-		if( ( fromAddress3 != other.getFromAddress3()) )  return false;
-		if( ( fromAddress4 != other.getFromAddress4()) )  return false;
-		if( ( toAddress4 != other.getToAddress4()) )  return false;
+		if( ( address != null && !address.equals(other.getAddress()) ) ||
+			( address == null && other.getAddress() != null ) ) return false;
 		
 		return true;
-	}	
+	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer("[ id = ");
 		sb.append(id);
-		sb.append(" fromAddress1 = ");
-		sb.append(fromAddress1);
-		sb.append(" fromAddress2 = ");
-		sb.append(fromAddress2);
-		sb.append(" fromAddress3 = ");
-		sb.append(fromAddress3);
-		sb.append(" fromAddress4 = ");
-		sb.append(fromAddress4);
-		sb.append(" toAddress4 = ");
-		sb.append(toAddress4);
+		sb.append(" address = ");
+		sb.append(address);
 		sb.append(" store = ");
 		sb.append(storeCounts);
 		sb.append("]");
 		return sb.toString();
 	}
-	
-	
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode()
-	{
-		int value = 0;
-		value += fromAddress1;
-		value += fromAddress2;
-		value += fromAddress3;
-		value += fromAddress4;
-		value += toAddress4;
-		
-		return value;
-	}	
 }

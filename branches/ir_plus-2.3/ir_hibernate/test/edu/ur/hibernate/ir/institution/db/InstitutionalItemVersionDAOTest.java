@@ -958,8 +958,18 @@ public class InstitutionalItemVersionDAOTest {
 		// add an ip address to the ignore list
 	    //create a new transaction
 		ts = tm.getTransaction(td);
-	    IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,10, 15);
+	    IgnoreIpAddress ip1 = new IgnoreIpAddress("123.0.0.10");
         ignoreIpAddressDAO.makePersistent(ip1);
+        IgnoreIpAddress ip2 = new IgnoreIpAddress("123.0.0.11");
+        ignoreIpAddressDAO.makePersistent(ip2);
+        IgnoreIpAddress ip3 = new IgnoreIpAddress("123.0.0.12");
+        ignoreIpAddressDAO.makePersistent(ip3);
+        IgnoreIpAddress ip4 = new IgnoreIpAddress("123.0.0.13");
+        ignoreIpAddressDAO.makePersistent(ip4);
+        IgnoreIpAddress ip5 = new IgnoreIpAddress("123.0.0.14");
+        ignoreIpAddressDAO.makePersistent(ip5);
+        IgnoreIpAddress ip6 = new IgnoreIpAddress("123.0.0.15");
+        ignoreIpAddressDAO.makePersistent(ip6);
         tm.commit(ts);
         
 		
@@ -979,6 +989,11 @@ public class InstitutionalItemVersionDAOTest {
 		
 		ts = tm.getTransaction(td);
 		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip2.getId(), false));
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip3.getId(), false));
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip4.getId(), false));
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip5.getId(), false));
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip6.getId(), false));
 		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(collection.getId(), false));
 		
         itemDAO.makeTransient(itemDAO.getById(item1.getId(), false));
