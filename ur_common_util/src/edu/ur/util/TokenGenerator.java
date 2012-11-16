@@ -16,6 +16,11 @@
 
 package edu.ur.util;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import org.apache.commons.codec.binary.Base64;
+
 /**
  * Class for generating tokens
  * 
@@ -32,7 +37,13 @@ public class TokenGenerator
      */
     public static String getToken()
     {
-        String token = Double.toString(Math.random());
+    	 byte[] bytes = new byte[32];
+    	 try {
+			SecureRandom.getInstance("SHA1PRNG").nextBytes(bytes);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+		String token = Base64.encodeBase64URLSafeString(bytes).substring(0, 32);
         return token;
     }
 }
