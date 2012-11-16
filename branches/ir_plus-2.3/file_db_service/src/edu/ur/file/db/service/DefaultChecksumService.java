@@ -22,6 +22,7 @@ import java.util.List;
 
 import edu.ur.file.checksum.ChecksumCalculator;
 import edu.ur.file.checksum.ChecksumService;
+import edu.ur.file.db.FileInfoChecksumService;
 
 /**
  * This is a default checksum service for getting calculators to 
@@ -32,9 +33,13 @@ import edu.ur.file.checksum.ChecksumService;
  */
 public class DefaultChecksumService implements ChecksumService{
 	
+	/** eclipse created id */
+	private static final long serialVersionUID = 1287611944328999221L;
+	
 	/** List of checksum calculators */
 	private List<ChecksumCalculator> checksumCalculators = 
 		new LinkedList<ChecksumCalculator>();
+	
 
 	/**
 	 * Get the checksum calculators
@@ -50,7 +55,7 @@ public class DefaultChecksumService implements ChecksumService{
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Get the checksum calculators.
 	 * 
@@ -69,5 +74,6 @@ public class DefaultChecksumService implements ChecksumService{
 	{
 		this.checksumCalculators = checksumCalculators;
 	}
+
 
 }
