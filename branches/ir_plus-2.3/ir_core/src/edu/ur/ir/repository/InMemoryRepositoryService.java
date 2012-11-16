@@ -350,4 +350,10 @@ public class InMemoryRepositoryService implements RepositoryService{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public IrFile getIrFileByFileInfoId(Long fileInfoId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

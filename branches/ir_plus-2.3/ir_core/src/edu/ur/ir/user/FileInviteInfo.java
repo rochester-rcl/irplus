@@ -63,7 +63,10 @@ public class FileInviteInfo extends BasePersistent {
 	public FileInviteInfo(Set<VersionedFile> versionedFile, Set<IrClassTypePermission> permissions, InviteToken inviteToken) {
 		dateCreated = new Timestamp(new Date().getTime());
 		setFiles(versionedFile);
-		setPermissions(permissions);
+		if( permissions != null )
+		{
+		  this.permissions.addAll(permissions);
+		}
 		this.setInviteToken(inviteToken);
 	}
 

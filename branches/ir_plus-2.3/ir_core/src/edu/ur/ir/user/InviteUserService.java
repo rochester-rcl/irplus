@@ -307,9 +307,10 @@ public interface InviteUserService extends Serializable{
 	 * 
 	 * @param personalFile - personal file that has been updated.
 	 * @param collaboratorIds - list of collaborators to notify
-	 * @return - list of collaborators where the email could not be sent
+	 * @param notifyOwner - if set to true the owner of the file is also notified by email
+	 * @return - list of users where the email could not be sent
 	 */
-	public List<FileCollaborator> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds);
+	public List<IrUser> notifyCollaboratorsOfNewVersion(PersonalFile personalFile, List<Long> collaboratorIds, boolean notifyOwner);
 	
 	/**
 	 * Will set the personal folder to auto share with the given email.  This
@@ -341,4 +342,12 @@ public interface InviteUserService extends Serializable{
 	public void addNewFilesFoldersToFolderWithAutoShare(PersonalFolder parentFolder, 
 			List<PersonalFolder> folders, List<PersonalFile> files) throws FileSharingException, 
 			PermissionNotGrantedException;
+	
+    /**
+     * Get all folder auto shares made to a given user.
+     * 
+     * @param user - user who was auto shared with
+     * @return - list of all folder auto share infos.
+     */
+    public List<FolderAutoShareInfo> getAllAutoSharesForUser(IrUser user);
 }

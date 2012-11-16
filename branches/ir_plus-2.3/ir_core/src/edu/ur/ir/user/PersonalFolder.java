@@ -768,9 +768,10 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 			throw new FileSharingException("Cann't set auto share with yourself");
 		}
 		FolderAutoShareInfo autoShareInfo = getAutoShareInfo(collaborator);
+		
 		if( autoShareInfo != null )
 		{
-			autoShareInfo.setPermissions(permissions);  
+			autoShareInfo.changePermissions(permissions);  
 		}
 		else
 		{
@@ -801,6 +802,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 		{
 		    inviteInfo = new FolderInviteInfo(this, email, permissions);
 		}
+		folderInviteInfos.add(inviteInfo);
 		return inviteInfo;
 	}
 	
@@ -853,7 +855,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	{
 		for(FolderInviteInfo inviteInfo : folderInviteInfos)
 		{
-			if( inviteInfo.getEmail().equalsIgnoreCase(email))
+			if( inviteInfo.getEmail().equalsIgnoreCase(email.trim()))
 			{
 				return inviteInfo;
 			}

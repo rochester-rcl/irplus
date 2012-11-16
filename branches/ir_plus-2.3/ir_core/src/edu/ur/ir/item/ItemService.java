@@ -67,6 +67,15 @@ public interface ItemService extends Serializable{
 	 */
 	public Long getItemFileCount(IrFile irFile);
 	
+	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	public List<ItemFile> getItemFilesWithIrFile(IrFile irFile);
+	
 	/**
 	 * Deletes the IrFiles that are not used by any item and PersonalFiles
 	 * 
