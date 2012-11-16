@@ -61,7 +61,7 @@ public class DefaultChecksumServiceTest {
 	
 	public void testGetChecksumCalculator()
 	{
-		String pdfIndexFile = properties.getProperty("pdf-index-file");
+		String pdfIndexFile = properties.getProperty("file_db_service_location") + properties.getProperty("pdf-index-file");
 		
 		ChecksumCalculator cc = checksumService.getChecksumCalculator("md5");
 		assert cc != null : "Calculator for md5 was not found";
@@ -73,7 +73,7 @@ public class DefaultChecksumServiceTest {
 	    	"checksum equals = " + checksum + " but should equal "
 	    	+ "6839764b09073771141896dc52ee8b41";
 	    
-	    String rtfIndexFile = properties.getProperty("rtf-index-file");
+	    String rtfIndexFile = properties.getProperty("file_db_service_location") + properties.getProperty("rtf-index-file");
 	    
 	    f = new File(rtfIndexFile);
 	    assert f.exists(): "file " + f.getAbsolutePath() + " does not exist";
