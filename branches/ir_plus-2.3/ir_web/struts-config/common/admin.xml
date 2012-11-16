@@ -221,7 +221,12 @@
         <action name="createIgnoreIpAddressRange"
                 method = "addIgnoreIpRange"
                 class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress">
-                <result name="success">/pages/admin/statistics/ip_download_counts/ip_download_counts.jsp</result>
+                <result name="success">/pages/admin/statistics/ignore_ipaddress_range_form.jsp</result>
+        </action>
+        <action name="deleteIgnoreIpAddressRange"
+                method = "deleteIgnoreIpRange"
+                class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress">
+                <result name="success">/pages/admin/statistics/ignore_ipaddress_deleted.jsp</result>
         </action>   
         
         <action name="viewDownloadCountsByIp"
