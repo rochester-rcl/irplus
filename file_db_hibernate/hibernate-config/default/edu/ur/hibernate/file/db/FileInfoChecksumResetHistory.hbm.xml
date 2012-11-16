@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	
+	Mapping for file checksum information
+	
+	@author Nathan Sarr
+	
+-->
+<hibernate-mapping package="edu.ur.file.db">
+	<class name="FileInfoChecksumResetHistory" table="file_system.file_checksum_reset_history"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="file_checksum_reset_history_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">file_system.file_checksum_reset_history_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<!-- checksum information -->
+		<property name="originalChecksum" column="original_checksum" type="string"
+			not-null="true" access="field" />
+		
+		<!-- checksum information -->
+		<property name="newChecksum" column="new_checksum" type="string"
+			not-null="true" access="field" />
+
+		<property name="algorithmType" column="algorithm_type" type="string"
+			not-null="true" access="field" />
+
+		<property name="dateReset" column="date_reset" type="timestamp"
+			not-null="true" access="field" />
+
+		<property name="notes" column="notes" type="string"
+			 access="field" />
+			 
+	    <property name="userId" column="user_id" type="long"
+			 access="field" />
+
+		<!-- File Info Checksum this file reset record -->
+		<many-to-one class="edu.ur.file.db.FileInfoChecksum" access="field" not-null="true" 
+			name="fileInfoChecksum" column="file_checksum_id" unique="true"/>
+	
+	    
+	</class>
+
+	
+</hibernate-mapping>
