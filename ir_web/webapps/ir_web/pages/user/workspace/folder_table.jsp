@@ -22,6 +22,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <fmt:setBundle basename="messages"/>
 
@@ -265,11 +266,11 @@
                	                <!--  users with only invite share permissions can share files -->
                	                <!--  owners always have invite permissions -->
                	                <c:if test="${ir:isOwner(user, fileSystemObject.versionedFile)}">
-               	                    <c:if test="${empty fileSystemObject.versionedFile.collaborators}">
+               	                    <c:if test="${empty fileSystemObject.versionedFile.collaborators && empty fileSystemObject.versionedFile.invitees}">
 	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
 	                      		    </c:if>
-	                      		    <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shared </a>
+	                      		    <c:if test="${!empty fileSystemObject.versionedFile.collaborators || !empty fileSystemObject.versionedFile.invitees}">
+	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Sharing (${fn:length(fileSystemObject.versionedFile.collaborators) + fn:length(fileSystemObject.versionedFile.invitees)}) </a>
 	                      		    </c:if>
                	                </c:if>
                	                <c:if test="${!ir:isOwner(user, fileSystemObject.versionedFile)}">
@@ -278,7 +279,7 @@
 	                      		             <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
 	                      		        </c:if>
 	                      		        <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		            <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shared </a>
+	                      		            <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Sharing (${fn:length(fileSystemObject.versionedFile.collaborators)})</a>
 	                      		        </c:if>
 	                                </ir:acl>
 	                               
@@ -291,7 +292,13 @@
 	                             <c:url var="autoShareUrl" value="/user/autoShareFolder.action">
                                     <c:param name="personalFolderId" value="${fileSystemObject.id}"/>
                                 </c:url>
-                                <span class="groupAddBtnImg">&nbsp;</span><a href="${autoShareUrl}">Auto Share</a>	 
+                                <c:if test="${empty fileSystemObject.autoShareInfos && empty fileSystemObject.folderInviteInfos}">
+                                    <span class="groupAddBtnImg">&nbsp;</span><a href="${autoShareUrl}">Auto Sharable</a>	
+                                </c:if>
+                                <c:if test="${!empty fileSystemObject.autoShareInfos || !empty fileSystemObject.folderInviteInfos}">
+                                    <span class="groupAddBtnImg">&nbsp;</span><a href="${autoShareUrl}">Auto Sharing(${fn:length(fileSystemObject.folderInviteInfos) + fn:length(fileSystemObject.autoShareInfos)})</a>	
+                                </c:if>
+                                 
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>

@@ -114,7 +114,7 @@
 									          </tr>
 									          <tr>
 									              <td><input type="checkbox" name="includeSubFolders" value="true"/> </td>
-									              <td>Apply permissions to existing sub folders and files</td>
+									              <td>Apply permissions to existing sub-folders and files</td>
 									          </tr>
 									          <tr> 
 									              <td></td>
@@ -123,13 +123,13 @@
 									          </tr>
 									          <tr> 
 									          <td>Email(s)</td>
-									          <td> <textarea name="emails" id="newInviteForm_inviteEmail" cols="48" rows="5"></textarea></td>
+									          <td> <textarea name="emails" id="newInviteForm_inviteEmail" cols="45" rows="5"></textarea></td>
 									          </tr>
 		
 											  <tr>
 											  <td>Message</td>
 											  <td>
-								              <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="48" rows="8"></textarea>
+								              <textarea name="inviteMessage" id="newInviteForm_inviteMessage" cols="45" rows="8"></textarea>
 								              </td>
 											  </tr>
 											  
@@ -213,22 +213,23 @@
 			   <p>Do you you want to stop auto sharing with selected user?</p>
 			   
 			   <table class="formTable">
-			       <tr>
-			           <td>
-			               Include sub folders:
-			           </td>
-			           <td>
-			               <input type="checkbox" name="includeSubFolders" value="true"/>
-			           </td>
-			       </tr>
-			       <tr>
-			           <td>
-			               Remove Permissions on Files:
+			    <tr>
+			       <td>
+			               Remove Permissions on current folders files:
 			           </td>
 			           <td>
 			               <input type="checkbox" name="includeSubFiles" checked="checked" value="true"/> 
 			           </td>
 			       </tr>
+			       <tr>
+			           <td>
+			               Include sub folders and files:
+			           </td>
+			           <td>
+			               <input type="checkbox" name="includeSubFolders" checked="checked" value="true"/>
+			           </td>
+			       </tr>
+			      
 			   </table>
 			</form>
 		</div>

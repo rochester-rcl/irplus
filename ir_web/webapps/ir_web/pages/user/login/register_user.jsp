@@ -268,7 +268,7 @@
 	                  </tr>
 	                  
 	                  <!--  only show if external authentication is available -->
-	                  <c:if test="${repositoryService.externalAuthenticationEnabled}">              
+	                  <c:if test="${externalAuthenticationEnabled}">              
                           <tr>
 	                          <td align="left" class="label" colspan="2">	
 	                          If you wish, you may use an external account and password to login. <strong>An external account is NOT required to use this system.</strong>		  

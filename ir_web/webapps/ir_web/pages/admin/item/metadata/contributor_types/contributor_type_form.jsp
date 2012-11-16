@@ -21,6 +21,7 @@
       this form will return with error messages in it if there
       is an issue.
  -->
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <input type="hidden" id="newContributorTypeForm_id" name="id" value="${contributorType.id}"/>
 		               
 <input type="hidden" id="newContributorType_new" name="newContributorType" value="true"/>
@@ -33,10 +34,17 @@
 		id="newContributorTypeForm_name" name="contributorType.name"
 		value="${contributorType.name}" size="45"/> </td>
 	</tr>
+	<tr>       
+	    <td align="left" class="label">Authoring Type</td>
+		<td align="left" class="input"><input type="checkbox" 
+		id="newContributorTypeForm_authorType" name="authoringType" value="true"
+		  <c:if test="${contributorType.authorType}">checked="true"</c:if> />
+		 </td>
+	</tr>
 	<tr>
 	    <td align="left" class="label">Description:</td>
 		<td align="left" colspan="2" class="input"> <textarea id="newContributorTypeForm_description"
-						         name="contributorType.description" cols="42" rows="4">${contributorType.description}</textarea>
+			 name="contributorType.description" cols="42" rows="4">${contributorType.description}</textarea>
 		</td>
 	</tr>
 </table>

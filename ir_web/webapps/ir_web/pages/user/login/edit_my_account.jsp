@@ -91,7 +91,7 @@
 	                               onmouseout="this.className='ur_button';"
 	                               >Change Password</button>
 	                       
-	                      <c:if test="${repositoryService.externalAuthenticationEnabled }">
+	                      <c:if test="${externalAuthenticationEnabled }">
 	                      <button class="ur_button" id="edit_external_account" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
@@ -119,7 +119,7 @@
 						      <td> ${irUser.username}</td>
 					      </tr>
 					      
-					      <c:if test="${repositoryService.externalAuthenticationEnabled }">
+					      <c:if test="${externalAuthenticationEnabled }">
 					          <tr>
 				                  <td>External Account: </td>
 				                  <c:if test="${irUser.externalAccount != null}">

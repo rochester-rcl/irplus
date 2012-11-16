@@ -109,16 +109,16 @@
     <div class="bd">
       <form id="addIgnoreIpAddress" name="newIgnoreIpAddressForm" 
 		                    method="post" 
-		                    action="<c:url value="/admin/createIgnoreIpAddress.action"/>">
+		                    action="<c:url value="/admin/createIgnoreIpAddressRange.action"/>">
 	    <div id="newIgnoreIpAddressDialogFields">
-	        <c:import url="ignore_ipaddress_form.jsp"/>
+	        <c:import url="ignore_ipaddress_range_form.jsp"/>
 	    </div>
 	  </form>
     </div>
   </div>
   
   <div id="newSingleIgnoreIpAddressDialog" class="hidden">
-    <div class="hd">Ignore IP 4 Address Range Information</div>
+    <div class="hd">Ignore IP 4 or IP 6  Address Information</div>
     <div class="bd">
       <form id="addSingleIgnoreIpAddress" name="newSingleIgnoreIpAddressForm" 
 		                    method="post" 

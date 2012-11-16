@@ -60,5 +60,5 @@
   </c:forEach>
  
   </table>
-  <p> <input type="checkbox" name="includeSubFolders" checked="checked" value="true"/> Apply changes to sub-folders</p>
-  <p> <input type="checkbox" name="includeSubFiles" checked="checked" value="true"/> Apply changes to sub-files</p>
+  <p> <input type="checkbox" name="includeSubFiles" checked="checked" value="true"/> Apply permission changes to current folders files</p>
+  <p> <input type="checkbox" name="includeSubFolders" checked="checked" value="true"/> Apply changes to sub-folders and files</p>
