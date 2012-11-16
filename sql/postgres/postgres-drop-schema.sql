@@ -351,13 +351,14 @@ DROP SCHEMA person;
 -- ---------------------------------------------
 -- Drop file system information
 -- ---------------------------------------------
-
+DROP TABLE file_system.file_checksum_reset_history;
 DROP TABLE file_system.file_checksum;
 DROP TABLE file_system.file;
 DROP TABLE file_system.folder;
 DROP TABLE file_system.file_database;
 DROP TABLE file_system.file_server;
 
+DROP SEQUENCE file_system.file_checksum_reset_history_seq;
 DROP SEQUENCE file_system.file_checksum_seq;
 DROP SEQUENCE file_system.file_database_seq;
 DROP SEQUENCE file_system.file_server_seq;

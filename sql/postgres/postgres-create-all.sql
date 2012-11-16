@@ -414,6 +414,11 @@ CREATE TABLE file_system.file_checksum
   checksum TEXT NOT NULL,
   algorithm_type TEXT NOT NULL,
   date_calculated TIMESTAMP WITH TIME ZONE NOT NULL ,
+  date_re_calculated TIMESTAMP WITH TIME ZONE NOT NULL,
+  date_last_check_passed TIMESTAMP WITH TIME ZONE,
+  re_calculated_passed BOOLEAN NOT NULL DEFAULT TRUE,
+  re_calculated_value TEXT NOT NULL,
+  re_calculate_checksum BOOLEAN NOT NULL DEFAULT TRUE,
   version INTEGER,
   FOREIGN KEY (file_id) REFERENCES file_system.file (file_id)
 );
@@ -423,7 +428,25 @@ ALTER TABLE file_system.file_checksum OWNER TO ir_plus;
 CREATE SEQUENCE file_system.file_checksum_seq;
 ALTER TABLE file_system.file_checksum_seq OWNER TO ir_plus;
 
+-- Create a new table to hold file checksum information in the system
+CREATE TABLE file_system.file_checksum_reset_history
+(
+  file_checksum_reset_history_id BIGINT NOT NULL PRIMARY KEY,
+  file_checksum_id BIGINT NOT NULL,
+  original_checksum TEXT NOT NULL,
+  new_checksum TEXT NOT NULL,
+  algorithm_type TEXT NOT NULL,
+  user_id BIGINT NOT NULL,
+  notes TEXT,
+  date_reset TIMESTAMP WITH TIME ZONE NOT NULL ,
+  version INTEGER,
+  FOREIGN KEY (file_checksum_id) REFERENCES file_system.file_checksum (file_checksum_id)
+);
+ALTER TABLE file_system.file_checksum_reset_history OWNER TO ir_plus;
 
+-- The checksum sequence
+CREATE SEQUENCE file_system.file_checksum_reset_history_seq;
+ALTER TABLE file_system.file_checksum_reset_history_seq OWNER TO ir_plus;
 
 
 
@@ -581,6 +604,7 @@ CREATE TABLE person.contributor_type
     version INTEGER,
     name TEXT NOT NULL,
     unique_system_code TEXT,
+    author_type BOOLEAN NOT NULL DEFAULT FALSE,
     description TEXT,
     UNIQUE(name)
 );
