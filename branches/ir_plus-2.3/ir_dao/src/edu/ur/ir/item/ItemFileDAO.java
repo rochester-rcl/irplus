@@ -16,7 +16,10 @@
 
 package edu.ur.ir.item;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.ItemFile;
 
 
@@ -36,5 +39,13 @@ public interface ItemFileDAO extends CrudDAO<ItemFile> {
 	 * @return Count of item files containing this ir file
 	 */
 	public Long getItemFileCount(Long irFileId);
+	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	public List<ItemFile> getItemFilesWithIrFile(IrFile irFile);
 }
 
