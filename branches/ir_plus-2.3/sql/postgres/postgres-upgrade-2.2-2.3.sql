@@ -42,12 +42,13 @@ SELECT nextval('ir_statistics.old_ip_address_ignore_seq'),
     from_ip_address_part4,
     to_ip_address_part4,
     version 
-FROM ir_statistics.ip_address_ignore
+FROM ir_statistics.ip_address_ignore;
 
 -- ---------------------------------------------
 -- DROP and re-create the IP address table
 -- ---------------------------------------------
-DROP TABLE ir_statistics.ip_address_ignore
+DROP TABLE ir_statistics.ip_address_ignore;
+DROP SEQUENCE ir_statistics.ip_address_ignore_seq;
 
 CREATE TABLE ir_statistics.ip_address_ignore
 (

@@ -53,7 +53,7 @@ ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 
 INSERT INTO ir_invite.invite_token(invite_token_id, version, token, email, inviting_user_id, created_date,expiration_date)  SELECT
-nextval('ir_invite.invite_token_seq'),0, token, email, user_id, now(), null
+nextval('ir_invite.invite_token_seq'),0, token, lower(email), user_id, now(), null
 FROM ir_user.invite_info;
 
 -- Add new column
@@ -81,8 +81,6 @@ ALTER TABLE ir_user.invite_info DROP COLUMN user_id;
 UPDATE ir_user.user_email set token = null
 where ir_user.user_email.isverified = true
 and token is not null;
-
-ALTER TABLE ir_user.invite_info ALTER COLUMN created_date SET NOT NULL;
 
 -- -------------------------------------------------------
 -- create an index on the handle info local name
@@ -154,4 +152,5 @@ CREATE TABLE ir_user.folder_auto_share_permissions
 );
 ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
 
-
+-- Authoring type for contributors
+ALTER TABLE person.contributor_type ADD COLUMN author_type BOOLEAN NOT NULL DEFAULT FALSE;
