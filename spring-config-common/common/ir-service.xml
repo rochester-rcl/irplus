@@ -918,4 +918,17 @@
 	    <property name="seriesService" ref="seriesService"/>
 	    <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
+   
+      <!-- ****************************************** --> 
+   <!-- User related data service -->
+   <!-- ****************************************** --> 
+   <bean id="checksumCheckerReportService" 
+       class="edu.ur.ir.repository.service.DefaultChecksumCheckerReportService">
+       <property name="fileInfoChecksumService" ref="fileInfoChecksumService"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="mailSender" ref="mailSender"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
+       <property name="fromAddress" value="${mail.sender.from}"/>
+       <property name="email" value="${email.error.address}"/>
+   </bean>
 </beans>
