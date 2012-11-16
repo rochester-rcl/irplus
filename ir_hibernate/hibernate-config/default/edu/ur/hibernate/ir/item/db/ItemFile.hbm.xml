@@ -57,11 +57,18 @@
 			name="item" column="item_id" access="field"/>			
 	 </class>
 	 
-	  <!-- named query for getting the count of irFile being used in item files -->
+	 <!-- named query for getting the count of irFile being used in item files -->
 	<query name="getItemFileCount">
 		select count(*) 
 		from ItemFile as ItemFile where
 		ItemFile.irFile.id = ?
+	</query>
+	
+	 <!-- named query for all item files by ir file id-->
+	<query name="getItemFileByIrFileId">
+		select itemFile
+		from ItemFile as itemFile where
+		itemFile.irFile.id = :irFileId
 	</query>
 		
 </hibernate-mapping>

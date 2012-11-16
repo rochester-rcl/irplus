@@ -94,6 +94,15 @@
 		where item.id = ?
 	</query>
 	
+	  <!-- named query for getting all item by generic item id -->
+	<query name="getAllPersonalItemByGenericId">
+		select personalItem from PersonalItem as personalItem 
+		join personalItem.versionedItem versionedItem
+		join versionedItem.versions itemVersion
+		join itemVersion.item item
+		where item.id in(:itemIds)
+	</query>
+	
 	<!-- Get specified personal items for user -->
 	<query name="getAllPersonalItemsInList">
 	    from PersonalItem as personalItem 
