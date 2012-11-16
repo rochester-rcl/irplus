@@ -226,6 +226,16 @@ public class DefaultItemService implements ItemService {
 	public Long getItemFileCount(IrFile irFile) {
 		return itemFileDAO.getItemFileCount(irFile.getId());
 	}
+	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	public List<ItemFile> getItemFilesWithIrFile(IrFile irFile){
+		return itemFileDAO.getItemFilesWithIrFile(irFile);
+	}
 
 	/**
 	 * Deletes the IrFiles that are not used by any item and PersonalFiles

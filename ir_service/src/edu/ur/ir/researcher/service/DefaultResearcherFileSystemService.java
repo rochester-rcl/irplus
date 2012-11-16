@@ -25,8 +25,6 @@ import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherLinkDAO;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherPublicationDAO;
-import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.UserFileSystemService;
 
 /**
@@ -135,6 +133,8 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		researcherFolderDAO.makePersistent(parentFolder);
 		return rp;
 	}
+	
+	
 
 	/**
 	 * Allows a researcher to create a new Institutional Item.
@@ -536,6 +536,16 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	 */
 	public Long getResearcherFileCount(IrFile irFile) {
 		return researcherFileDAO.getResearcherFileCount(irFile.getId());
+	}
+	
+	/**
+	 * Get all researcher files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of researcher files being used.
+	 */
+	public List<ResearcherFile> getResearcherFilesWithIrFile(IrFile irFile){
+		return researcherFileDAO.getResearcherFilesWithIrFile(irFile);
 	}
 	
 	/**
