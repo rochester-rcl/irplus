@@ -1436,6 +1436,15 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	public void setExternalAccountUserName(String externalAccountUserName) {
 		this.externalAccountUserName = externalAccountUserName;
 	}
+	
+	/**
+	 * Determine if external authentication enabled.
+	 * 
+	 * @return - true if external authentication enabled
+	 */
+	public boolean getExternalAuthenticationEnabled(){
+		return repositoryService.isExternalAuthenticationEnabled();
+	}
 
 
 

@@ -27,7 +27,6 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.FolderAutoShareInfo;
@@ -83,6 +82,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	
 	private boolean useParentAutoShareProperties = false;
 	
+
+
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
@@ -154,6 +155,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			    personalFolder.setDescription(folderDescription);
 			    userFileSystemService.makePersonalFolderPersistent(parentFolder);
 			    
+			    log.debug("use parent auto share properties = " + useParentAutoShareProperties);
 			    if(useParentAutoShareProperties)
 			    {
 			    	Set<FolderAutoShareInfo> shareInfos = parentFolder.getAutoShareInfos();
@@ -431,6 +433,10 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 
 	public PersonalFolder getParentFolder() {
 		return parentFolder;
+	}
+	
+	public void setUseParentAutoShareProperties(boolean useParentAutoShareProperties) {
+		this.useParentAutoShareProperties = useParentAutoShareProperties;
 	}
 
 }

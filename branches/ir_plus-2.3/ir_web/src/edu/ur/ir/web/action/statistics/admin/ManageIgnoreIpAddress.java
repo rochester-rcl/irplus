@@ -176,7 +176,31 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 			   ignoreIpAddressService.saveIgnoreIpAddress(address);
 			 }
 		 }
-		return SUCCESS;
+		 added = true;
+		 return SUCCESS;
+	}
+	
+	/**
+	 * Allow a range of ip addresses to be deleted
+	 * 
+	 * @return SUCCESS
+	 */
+	public String deleteIgnoreIpRange()
+	{
+		for( int x = fromAddress4; x <= toAddress4; x++)
+		 {
+			 IgnoreIpAddress address = new IgnoreIpAddress(fromAddress1 + "." + 
+					 fromAddress2 + "."  + 
+					 fromAddress3 + "." +
+					 x);
+			 address = ignoreIpAddressService.getIgnoreIpAddress(address.getAddress());
+			 if( address != null ){
+				   ignoreIpAddressService.deleteIgnoreIpAddress(address);
+		     }
+			
+		 }
+		 deleted = true;
+		 return SUCCESS;
 	}
 	
 	/**
