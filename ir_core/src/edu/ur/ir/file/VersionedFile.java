@@ -491,6 +491,23 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 		return null;
 		
 	}
+	
+	/**
+	 * Get the file invite info for the given email otherwise return null
+	 * @param email
+	 * @return
+	 */
+	public FileInviteInfo getInvitee(String email)
+	{
+		for(FileInviteInfo invitee:invitees)
+		{
+			if( invitee.getInviteToken().getEmail().equals(email.trim().toLowerCase()))
+			{
+				return invitee;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Get the collaborator for specified  id

@@ -382,6 +382,14 @@ public interface UserFileSystemService extends Serializable{
 	public Long getPersonalFileCount(IrFile irFile);
 	
 	/**
+	 * Get all personal files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of personal files being used.
+	 */
+	public List<PersonalFile> getPersonalFilesWithIrFile(IrFile irFile);
+	
+	/**
 	 * Get a count of the shared files in this user's In-box
 	 * 
 	 * @param user - user to get the shared file in-box count
