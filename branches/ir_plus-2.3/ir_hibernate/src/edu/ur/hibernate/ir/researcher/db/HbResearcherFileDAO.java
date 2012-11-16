@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -29,6 +30,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.researcher.ResearcherFile;
 import edu.ur.ir.researcher.ResearcherFileDAO;
 
@@ -121,20 +123,7 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 		
 	}
 
-	/**
-	 * Get the files with specified ir file id .
-	 * 
-	 * @param irFileId
-	 * 
-	 * @return the found files
-	 */
-	public Long getFileWithSpecifiedIrFile(Long irFileId) {
-		
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate()
-			.findByNamedQuery("getResearcherFilesWithIrFileId", irFileId));
-		
-	}
+
 	
 	/**
 	 * Get the files for researcher id and folder id .
@@ -197,6 +186,19 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 	public Long getResearcherFileCount(Long irFileId) {
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFileCount", irFileId));
+	}
+	
+	/**
+	 * Get all researcher files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of researcher files being used.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ResearcherFile> getResearcherFilesWithIrFile(IrFile irFile){
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherFilesWithIrFileId");
+		q.setParameter("irFileId", irFile.getId());
+		return q.list();
 	}
 
 }

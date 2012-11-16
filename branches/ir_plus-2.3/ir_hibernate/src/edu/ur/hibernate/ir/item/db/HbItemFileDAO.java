@@ -18,10 +18,12 @@ package edu.ur.hibernate.ir.item.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemFileDAO;
 
@@ -113,5 +115,17 @@ public class HbItemFileDAO implements ItemFileDAO {
 	public Long getItemFileCount(Long irFileId) {
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getItemFileCount", irFileId));
+	}
+	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	public List<ItemFile> getItemFilesWithIrFile(IrFile irFile){
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getItemFileByIrFileId");
+		q.setParameter("irFileId", irFile.getId());
+		return q.list();
 	}
 }
