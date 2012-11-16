@@ -742,5 +742,14 @@
 		</function-signature>
 	</function>
 	
-  
+  	<function>
+		<name>getGoogleScholarDate</name>
+		<function-class>
+			edu.ur.tag.repository.InstitutionalItemVersionUtils
+		</function-class>
+		<function-signature>
+			String getGoogleScholarDate(edu.ur.ir.institution.InstitutionalItemVersion)
+		</function-signature>
+	</function>
+	
 </taglib>
