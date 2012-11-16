@@ -16,6 +16,8 @@
 
 package edu.ur.ir.user;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -24,4 +26,13 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-public interface FolderAutoShareInfoDAO extends CrudDAO<FolderAutoShareInfo> {}
+public interface FolderAutoShareInfoDAO extends CrudDAO<FolderAutoShareInfo> 
+{
+    /**
+     * Get all folder auto shares made to a given user.
+     * 
+     * @param user - user who was auto shared with
+     * @return - list of all folder auto share infos.
+     */
+    public List<FolderAutoShareInfo> getAllAutoSharesForUser(IrUser user);	
+}

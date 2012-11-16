@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.file.IrFile;
 
 
 /**
@@ -91,7 +92,15 @@ CrudDAO<PersonalFile>
 	 * 
 	 * @return the found files
 	 */
-	public Long getFileWithSpecifiedIrFile(Long irFileId);
+	public Long getPersonalFileCount(Long irFileId);
+	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	public List<PersonalFile> getPersonalFilesWithIrFile(IrFile irFile);
 	
 	/**
 	 * Delete the personal file record from persistent storage.
