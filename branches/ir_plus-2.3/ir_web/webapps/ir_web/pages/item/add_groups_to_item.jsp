@@ -82,13 +82,13 @@
                 <c:param name="itemId" value="${item.id}"/>
                 <c:param name="institutionalItemId" value="${institutionalItemId}"/> 
             </c:url>
-            <a href="${viewItem}">Done</a>
+            <a class="link-button" href="${viewItem}">Done</a>
             <br/>
             <br/>
             <div id="all_user_groups">
                 <c:import url="all_item_user_groups_frag.jsp"></c:import>
             </div>
-
+            <a class="link-button" href="${viewItem}">Done</a>
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
         

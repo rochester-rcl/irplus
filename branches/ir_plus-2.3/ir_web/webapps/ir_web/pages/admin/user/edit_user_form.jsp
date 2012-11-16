@@ -63,7 +63,7 @@
               id="editUserForm_name" name="irUser.username" value="${irUser.username}" size="45"/> </td> 
 	</tr>  
 	
-	<c:if test="${repositoryService.externalAuthenticationEnabled }">
+	<c:if test="${externalAuthenticationEnabled }">
 	    <tr>
               <td align="left" class="label">External User Account Name:</td>
               <td align="left" class="input"><input type="text" 
