@@ -163,6 +163,12 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 				{
 					institutionalItemVersion =  institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber);
 				}
+				
+				if(institutionalItemVersion == null )
+				{
+					message = "The publication does not exist";
+		        	return "not_found";
+				}
 			} 
 			else 
 			{
@@ -200,6 +206,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
         {
          	user = userService.getUser(userId, false);
         }
+		
+		
 		
 		if (!institutionalItemVersion.getItem().isEmbargoed()) 
 		{

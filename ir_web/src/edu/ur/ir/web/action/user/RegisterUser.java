@@ -153,6 +153,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	private InviteTokenService inviteTokenService;
 	
 
+
 	/**
 	 * Execute method to initialize invite information
 	 */
@@ -875,6 +876,24 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 */
 	public boolean getExternalAccountAlreadyExists() {
 		return externalAccountAlreadyExists;
+	}
+
+	/**
+	 * Set the invite token service.
+	 * 
+	 * @param inviteTokenService
+	 */
+	public void setInviteTokenService(InviteTokenService inviteTokenService) {
+		this.inviteTokenService = inviteTokenService;
+	}
+	
+	/**
+	 * Determine if external authentication enabled.
+	 * 
+	 * @return - true if external authentication enabled
+	 */
+	public boolean getExternalAuthenticationEnabled(){
+		return repositoryService.isExternalAuthenticationEnabled();
 	}
 
 }

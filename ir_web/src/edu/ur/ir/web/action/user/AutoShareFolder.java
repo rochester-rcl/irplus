@@ -258,9 +258,6 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 			}
 		}
 		
-		// reload the personal folder
-		personalFolder = userFileSystemService.getPersonalFolder(personalFolderId, false);
-		
 		log.debug("Personal Folder  auto share info = " + personalFolder.getAutoShareInfos().size() + " invite infos =  "
 				+ personalFolder.getFolderInviteInfos().size());
 		return SUCCESS;
