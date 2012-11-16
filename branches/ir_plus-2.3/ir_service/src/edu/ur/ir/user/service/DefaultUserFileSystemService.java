@@ -221,11 +221,18 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 * @see edu.ur.ir.user.UserFileSystemService#getPersonalFileCount(IrFile)
 	 */
 	public Long getPersonalFileCount(IrFile irFile) {
-		
-		return personalFileDAO.getFileWithSpecifiedIrFile(irFile.getId());
-		
+		return personalFileDAO.getPersonalFileCount(irFile.getId());
 	}
 	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	public List<PersonalFile> getPersonalFilesWithIrFile(IrFile irFile){
+		return personalFileDAO.getPersonalFilesWithIrFile(irFile);
+	}
 	
 	/**
 	 * Add a file to a user.

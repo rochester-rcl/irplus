@@ -44,6 +44,7 @@ import edu.ur.ir.user.ExternalAccountType;
 import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.ExternalUserAccountDAO;
 import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.FolderAutoShareInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -322,8 +323,8 @@ public class DefaultUserService implements UserService {
         this.deletePersonalCollections(user, deletingUser);
 		this.deleteRootFiles(user, deletingUser);
 		this.deleteRootFolders(user, deletingUser);
-		this. deleteUserInvites(user);
-
+		this.deleteUserInvites(user);
+		this.deleteFolderAutoShares(user, deletingUser);
 		
 		try {
 			userFileSystemService.deleteIndexFolder(user);
@@ -363,6 +364,22 @@ public class DefaultUserService implements UserService {
 			inviteUserService.delete(invite);
 		}
 	}
+	
+	/**
+	 * Delete all of the auto shares for the user.
+	 * 
+	 * @param user
+	 */
+	private void deleteFolderAutoShares(IrUser user, IrUser deletingUser)
+	{
+		List<FolderAutoShareInfo> autoShares = inviteUserService.getAllAutoSharesForUser(user);
+		for(FolderAutoShareInfo info : autoShares)
+		{
+			inviteUserService.delete(deletingUser, info, false, false);
+		}
+	}
+	
+
 	
 	/**
 	 * Delete the user groups for the user.
