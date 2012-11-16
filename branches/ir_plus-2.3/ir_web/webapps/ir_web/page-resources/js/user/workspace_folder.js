@@ -168,6 +168,7 @@ YAHOO.ur.folder =
 	    //destroy the folder menus
         YAHOO.ur.folder.destroyFolderMenus();
     
+        YAHOO.ur.util.wait.waitDialog.showDialog();
         // set the state for the folder id
         personalFolderState = folderId;
  
@@ -308,6 +309,7 @@ YAHOO.ur.folder =
 	    {
 	        YAHOO.ur.folder.newFolderDialog.center();
 	        YAHOO.ur.folder.newFolderDialog.show();
+	        document.getElementById("folder").focus();
 	        YAHOO.ur.shared.file.inbox.getSharedFilesCount();
 	    };
    

@@ -536,6 +536,30 @@ YAHOO.ur.ignore.ipaddress = {
 	},
 	
 	
+	 /** 
+	  * clear out any form data messages or input
+	  * in the new ip address form
+	  */
+	clearDeleteIgnoreIpAddressRangeForm : function()
+	{
+	    var ignoreIpAddressError = document.getElementById('newIgnoreIpAddressRangeForm_nameError');
+	    var div = document.getElementById('ignoreIpAddressRangeError');
+		//clear out any error information
+		if( ignoreIpAddressError != null )
+		{
+		    if( ignoreIpAddressError.innerHTML != null 
+		        || ignoreIpAddressError.innerHTML != "")
+		    { 
+		        div.removeChild(ignoreIpAddressError);
+		    }
+		}
+		document.getElementById('deleteIgnoreIpAddressForm_fromAddress1').value = '';
+		document.getElementById('deleteIgnoreIpAddressForm_fromAddress2').value = '';
+		document.getElementById('deleteIgnoreIpAddressForm_fromAddress3').value = '';
+		document.getElementById('deleteIgnoreIpAddressForm_fromAddress4').value = '';
+		document.getElementById('deleteIgnoreIpAddressForm_toAddress4').value = '';
+	},
+	
 	/**
 	 * Creates a YUI new ip address modal dialog for when a user wants to create 
 	 * a new ignore ip address range
@@ -557,7 +581,31 @@ YAHOO.ur.ignore.ipaddress = {
 		
 		var handleSuccess = function(o) 
 		{
-			alert("success");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a ip address
+		        var response = eval("("+o.responseText+")");
+		    
+		        //if the ip address was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.ignoreIpAddressDeleted == "false" )
+		        {
+		            var deleteRangeAddressDialogError = document.getElementById('form_deleteRangeAddressDialogError');
+		            deleteRangeAddressDialogError.innerHTML = '<p id="newDeleteIgnoreIpAddressError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the ip addresses were deleted
+		            YAHOO.ur.ignore.ipaddress.clearDeleteIgnoreIpAddressRangeForm();
+		            YAHOO.ur.ignore.ipaddress.deleteRangeAddressDialog.hide();
+		        }
+		        // reload the table
+		        myIgnoreIpAddressTable.submitForm(myIgnoreIpAddressAction);
+		    }
 		};
 		
 		// handle form sbumission failure
