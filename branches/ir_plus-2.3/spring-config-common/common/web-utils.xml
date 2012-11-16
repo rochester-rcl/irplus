@@ -58,7 +58,6 @@
                 <value>png</value>
                 <value>gif</value>
                 <value>bmp</value>
-                <value>pdf</value>
            </list>
       </property>
    </bean>
