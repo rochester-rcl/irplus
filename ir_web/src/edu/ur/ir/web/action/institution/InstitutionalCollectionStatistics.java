@@ -8,12 +8,10 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalCollectionStatsCacheService;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeCount;
-import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.SponsorService;
-import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**
@@ -48,9 +46,6 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	/** Count of the subcollection and its children */
 	private Long allSubcollectionCount;
 	
-	/** Download Statistics service */
-	private DownloadStatisticsService downloadStatisticsService;
-	
 	/** File download count for this collection */
 	private Long fileDownloadCountForCollection; 
 
@@ -59,9 +54,6 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	
 	/** get a count of content types */
 	private List<ContentTypeCount> contentTypeCounts = new LinkedList<ContentTypeCount>();
-	
-	/** service to get content type information */
-	private ContentTypeService contentTypeService;
 	
 	/** Service for sponsor information */
 	private SponsorService sponsorService;
@@ -74,8 +66,11 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	
 	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
-
 	
+	/* service which caches stats information */
+	private InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService;
+
+
 	/**
      * Get the statistics information
      *
@@ -91,12 +86,12 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		
 		if( institutionalCollection != null )
 		{
-		    institutionalItemCount = institutionalCollectionService.getInstitutionalItemCountForCollectionAndChildren(institutionalCollection);
-		    institutionalItemsCountForACollection = institutionalCollectionService.getInstitutionalItemCountForCollection(institutionalCollection); 
+		    institutionalItemCount = institutionalCollectionStatsCacheService.getItemCountWithChildren(institutionalCollection, true);
+		    institutionalItemsCountForACollection =  institutionalCollectionStatsCacheService.getItemCount(institutionalCollection, true); 
 		    subcollectionCount = institutionalCollection.getChildCount();
 		    allSubcollectionCount =institutionalCollectionService.getTotalSubcollectionCount(institutionalCollection); 
-		    fileDownloadCountForCollection = downloadStatisticsService.getNumberOfDownloadsForCollection(institutionalCollection);
-		    fileDownloadCountForCollectionAndItsChildren = downloadStatisticsService.getNumberOfDownloadsForCollectionAndItsChildren(institutionalCollection);
+		    fileDownloadCountForCollection = institutionalCollectionStatsCacheService.getCollectionCount(institutionalCollection, true);
+		    fileDownloadCountForCollectionAndItsChildren = institutionalCollectionStatsCacheService.getDownloadCountWithChildren(institutionalCollection, true);
 
 		    contentTypeCounts = institutionalItemService.getCollectionContentTypeCount(institutionalCollection);
 		   
@@ -157,12 +152,6 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		return fileDownloadCountForCollectionAndItsChildren;
 	}
 
-
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		this.downloadStatisticsService = downloadStatisticsService;
-	}
-
 	public List<ContentTypeCount> getContentTypeCounts() {
 		return contentTypeCounts;
 	}
@@ -171,9 +160,6 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		return sponsorCount;
 	}
 
-	public void setContentTypeService(ContentTypeService contentTypeService) {
-		this.contentTypeService = contentTypeService;
-	}
 
 	public void setSponsorService(SponsorService sponsorService) {
 		this.sponsorService = sponsorService;
@@ -184,4 +170,9 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		this.institutionalItemService = institutionalItemService;
 	}
 	
+	public void setInstitutionalCollectionStatsCacheService(
+			InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService) {
+		this.institutionalCollectionStatsCacheService = institutionalCollectionStatsCacheService;
+	}
+
 }

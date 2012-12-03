@@ -6,17 +6,12 @@ import java.util.List;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeCount;
-import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.researcher.ResearcherService;
-import edu.ur.ir.statistics.DownloadStatisticsService;
-import edu.ur.ir.user.UserService;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**
@@ -51,23 +46,12 @@ public class RepositoryStatistics extends ActionSupport{
 	/** Institutional Item data access */
 	private InstitutionalItemService institutionalItemService;
 	
-	/** File Download Statistics data access */
-	private DownloadStatisticsService downloadStatisticsService;
-	
-	/** Institutional Collection data access */
-	private InstitutionalCollectionService institutionalCollectionService;
-	
-	/** Service to get user information */
-	private UserService userService;
-	
+
 	/** Service for dealing with researcher information*/
 	private ResearcherService researcherService;
 	
 	/** get a count of content types */
 	private List<ContentTypeCount> contentTypeCounts = new LinkedList<ContentTypeCount>();
-	
-	/** service to get content type information */
-	private ContentTypeService contentTypeService;
 	
 	/** Service for sponsor information */
 	private SponsorService sponsorService;
@@ -75,14 +59,12 @@ public class RepositoryStatistics extends ActionSupport{
 	/** count for the name of the sponsors */
 	private Long sponsorCount;
 	
-	/** repository for the system  */
-	private Repository repository;
-	
-	/** service for dealing with repository information */
-	private RepositoryService repositoryService;
-	
 	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+	
+	// service which caches counts.
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+
 
 	/**
      * Get the statistics information
@@ -91,12 +73,12 @@ public class RepositoryStatistics extends ActionSupport{
      */
     public String execute() throws Exception 
     {
-	
+    	repositoryStatsCacheService.forceCacheUpdate();
 	    // get the statistics
-	    numberOfCollections = institutionalCollectionService.getCount();
-	    numberOfPublications = institutionalItemService.getDistinctInstitutionalItemCount();
-	    numberOfFileDownloads = downloadStatisticsService.getNumberOfDownloadsForAllCollections();
-	    numberOfUsers = userService.getUserCount();
+	    numberOfCollections = repositoryStatsCacheService.getCollectionCount(false);;
+	    numberOfPublications = repositoryStatsCacheService.getItemCount(false);
+	    numberOfFileDownloads = repositoryStatsCacheService.getDownloadCount(false);;
+	    numberOfUsers = repositoryStatsCacheService.getUserCount(false);
 	    numberOfResearchers = researcherService.getResearcherCount();
 	    numberOfPublicResearchers = researcherService.getPublicResearcherCount();
 	    
@@ -142,33 +124,9 @@ public class RepositoryStatistics extends ActionSupport{
 		this.institutionalItemService = institutionalItemService;
 	}
 
-
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		this.downloadStatisticsService = downloadStatisticsService;
-	}
-
-
-	public void setInstitutionalCollectionService(
-			InstitutionalCollectionService institutionalCollectionService) {
-		this.institutionalCollectionService = institutionalCollectionService;
-	}
-
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-
 	public void setResearcherService(ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
-
-
-	public void setContentTypeService(ContentTypeService contentTypeService) {
-		this.contentTypeService = contentTypeService;
-	}
-	
 
 	public Long getSponsorCount() {
 		return sponsorCount;
@@ -178,16 +136,15 @@ public class RepositoryStatistics extends ActionSupport{
 		this.sponsorService = sponsorService;
 	}
 
-	public Repository getRepository() {
-		return repository;
-	}
-	
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
 	
 	public Long getNumberOfPublicResearchers() {
 		return numberOfPublicResearchers;
 	}
+	
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
+
 
 }

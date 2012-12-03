@@ -956,7 +956,7 @@ public interface InstitutionalItemService extends Serializable{
 	 * 
 	 * @return Items within the specified collection and its sub collection
 	 */
-	public Long getCountForCollectionAndChildren(InstitutionalCollection collection);
+	//public Long getCountForCollectionAndChildren(InstitutionalCollection collection);
 
 	/**
 	 * Get a count of institutional items in a collection and its children with

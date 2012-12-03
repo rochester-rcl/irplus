@@ -36,6 +36,7 @@ import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.security.SecurityService;
@@ -160,6 +161,11 @@ public class DefaultUserService implements UserService {
 	/** service to deal with deleted institutional item information */
 	private DeletedInstitutionalItemService deletedInstitutionalItemService;
 	
+	// service for caching repository information
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+	
+
+
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -332,6 +338,9 @@ public class DefaultUserService implements UserService {
 		    log.error(e);
 		}
 		irUserDAO.makeTransient(user);
+		
+		// force update of user information
+		repositoryStatsCacheService.getUserCount(true);
 		return true;
 	}
 	
@@ -593,6 +602,7 @@ public class DefaultUserService implements UserService {
 		user.setAccountLocked(false);
 		user.setCredentialsExpired(false);
 		makeUserPersistent(user);
+		repositoryStatsCacheService.getUserCount(true);
 		return user;
 	}
 
@@ -1278,6 +1288,14 @@ public class DefaultUserService implements UserService {
 		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
 	}
 
-
+	/**
+	 * Set the repository stats caching service.
+	 * 
+	 * @param repositoryStatsCacheService
+	 */
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
 }
 

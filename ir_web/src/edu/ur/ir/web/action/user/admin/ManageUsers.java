@@ -33,6 +33,7 @@ import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.researcher.ResearcherIndexService;
 import edu.ur.ir.security.AuthenticateUserOverrideService;
 import edu.ur.ir.user.Affiliation;
@@ -212,6 +213,10 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** the external account user name */
 	private String externalAccountUserName;
+
+	// service which caches counts.
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+	
 
 
 	/** Default constructor */
@@ -561,7 +566,8 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		OrderType orderType = OrderType.getOrderType(sortType);
 	    users = userService.getUsers(rowStart, 
 	    		numberOfResultsToShow, sortElement, orderType);
-	    totalHits = userService.getUserCount().intValue();
+
+	    totalHits = repositoryStatsCacheService.getUserCount(false).intValue();
 		
 		if(rowEnd > totalHits)
 		{
@@ -1446,6 +1452,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return repositoryService.isExternalAuthenticationEnabled();
 	}
 
-
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
 
 }

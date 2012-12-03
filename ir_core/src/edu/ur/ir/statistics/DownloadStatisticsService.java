@@ -175,7 +175,7 @@ public interface DownloadStatisticsService extends Serializable{
 	 * 
 	 * @return Number of downloads
 	 */
-	public Long getNumberOfDownloadsForCollectionAndItsChildren(InstitutionalCollection institutionalCollection);
+	public Long getDownloadCountWithChildren(InstitutionalCollection institutionalCollection);
 
 	
 	/**

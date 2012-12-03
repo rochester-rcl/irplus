@@ -27,6 +27,7 @@ import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
@@ -90,7 +91,10 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 	/** service for dealing with content types */
 	private ContentTypeService contentTypeService;
 	
-	
+	// service which caches counts.
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+
+
 
 	/** Default constructor */
 	public RepositoryInstitutionalItemBrowse()
@@ -137,7 +141,7 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		    		institutionalItems = institutionalItemService.getRepositoryItemsByFirstAvailableOrder(rowStart, 
 		    				numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, OrderType.getOrderType(sortType));
 		    	}
-		        totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID).intValue();
+		        totalHits = repositoryStatsCacheService.getItemCount(false).intValue();
 		    }
 		    else if (selectedAlpha.equals("0-9"))
 		    {
@@ -356,4 +360,8 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		this.contentTypeService = contentTypeService;
 	}
 
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
 }

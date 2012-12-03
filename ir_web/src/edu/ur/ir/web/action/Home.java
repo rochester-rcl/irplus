@@ -29,15 +29,13 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalCollectionService;
-import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.news.NewsItem;
 import edu.ur.ir.news.NewsService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
-import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.UserService;
 import edu.ur.simple.type.AscendingNameComparator;
 
@@ -52,15 +50,6 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 
 	/**  Repository data access */
 	private RepositoryService repositoryService;
-	
-	/** Institutional Collection data access */
-	private InstitutionalCollectionService institutionalCollectionService;
-	
-	/** Institutional Item data access */
-	private InstitutionalItemService institutionalItemService;
-	
-	/** File Download Statistics data access */
-	private DownloadStatisticsService downloadStatisticsService;
 	
 	/** Service to get user information */
 	private UserService userService;
@@ -137,6 +126,9 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	/** count of news items */
 	private int newsItemCount;
 	
+	// service which caches counts.
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+
 
 
 	/**
@@ -158,10 +150,10 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
     {
     	log.debug("execute called");
     	// get the statistics
-    	numberOfCollections = institutionalCollectionService.getCount();
-		numberOfPublications = institutionalItemService.getDistinctInstitutionalItemCount();
-		numberOfFileDownloads = downloadStatisticsService.getNumberOfDownloadsForAllCollections();
-		numberOfUsers = userService.getUserCount();
+    	numberOfCollections = repositoryStatsCacheService.getCollectionCount(false);
+		numberOfPublications = repositoryStatsCacheService.getItemCount(false);
+		numberOfFileDownloads = repositoryStatsCacheService.getDownloadCount(false);
+		numberOfUsers = repositoryStatsCacheService.getUserCount(false);
 		
 		// get and sort the institutional collections
 		if( repository != null )
@@ -219,21 +211,6 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 
 	public Long getNumberOfPublications() {
 		return numberOfPublications;
-	}
-
-	public void setInstitutionalCollectionService(
-			InstitutionalCollectionService institutionalCollectionService) {
-		this.institutionalCollectionService = institutionalCollectionService;
-	}
-
-	public void setInstitutionalItemService(
-			InstitutionalItemService institutionalItemService) {
-		this.institutionalItemService = institutionalItemService;
-	}
-
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		this.downloadStatisticsService = downloadStatisticsService;
 	}
 
 	public Long getNumberOfFileDownloads() {
@@ -310,6 +287,16 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	
 	public int getNewsItemCount() {
 		return newsItemCount;
+	}
+	
+    /**
+     * Set the repository cache service.
+     * 
+     * @param repositoryStatsCacheService
+     */
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
 	}
 
 }

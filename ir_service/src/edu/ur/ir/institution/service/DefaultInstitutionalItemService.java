@@ -33,6 +33,7 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionStatsCacheService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
@@ -50,6 +51,7 @@ import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
@@ -104,8 +106,12 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	
 	/** url generator for institutional items. */
 	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
-	
 
+	/* the repository stats cache service */
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+	
+	/* service to deal with institutional collection stats */
+	private InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService;
 
 
 
@@ -130,7 +136,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
 		deletedInstitutionalItemService.addDeleteHistory(institutionalItem, deletingUser);
 		institutionalItemDAO.makeTransient(institutionalItem);
-
+		
 		// Check to see if generic item can be deleted
 		for(GenericItem genericItem : genericItemsToDelete)
 		{
@@ -157,7 +163,10 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			     }
 			 }
 		}
-
+		// update cache count
+		institutionalCollectionStatsCacheService.updateChildToParentCollectionStats(institutionalItem.getInstitutionalCollection());
+		repositoryStatsCacheService.getItemCount(true);
+		
 	}
 	
 	/**
@@ -1188,5 +1197,20 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			int rowStart, int maxResults, Long repositoryId,
 			Long contentTypeId, OrderType orderType) {
 		return institutionalItemDAO.getRepositoryItemsFirstAvailableOrder(rowStart, maxResults, repositoryId,  contentTypeId, orderType);
+	}
+	
+	/**
+	 * Set the repository stats cache service.
+	 * 
+	 * @param repositoryStatsCacheService
+	 */
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
+	
+	public void setInstitutionalCollectionStatsCacheService(
+			InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService) {
+		this.institutionalCollectionStatsCacheService = institutionalCollectionStatsCacheService;
 	}
 }

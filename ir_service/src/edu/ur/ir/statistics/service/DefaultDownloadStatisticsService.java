@@ -124,13 +124,16 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		Date noTimeDate = null;
 		try {
 			noTimeDate = simpleDateFormat.parse(dateStr);
-			fileDownloadInfo = fileDownloadInfoDAO.getFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
-			if (fileDownloadInfo == null) {
-				fileDownloadInfo = new FileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
-			} else {
-				fileDownloadInfo.setDownloadCount(fileDownloadInfo.getDownloadCount() + 1);
+			// block for updating download counts
+			synchronized(this) {
+			    fileDownloadInfo = fileDownloadInfoDAO.getFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
+			    if (fileDownloadInfo == null) {
+				    fileDownloadInfo = new FileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
+			    } else {
+				    fileDownloadInfo.setDownloadCount(fileDownloadInfo.getDownloadCount() + 1);
+			    }
+			    save(fileDownloadInfo);
 			}
-			save(fileDownloadInfo);
 		} catch (ParseException e) {
 			log.error("A parse problem should never occur ", e);
 		}
@@ -163,13 +166,15 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		Date noTimeDate = null;
 		try {
 			noTimeDate = simpleDateFormat.parse(dateStr);
-			ipIgnoreFileDownloadInfo = ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
-			if (ipIgnoreFileDownloadInfo == null) {
-				ipIgnoreFileDownloadInfo = new IpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
-			} else {
-				ipIgnoreFileDownloadInfo.setDownloadCount(ipIgnoreFileDownloadInfo.getDownloadCount() + 1);
+			synchronized(this){
+			    ipIgnoreFileDownloadInfo = ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
+			    if (ipIgnoreFileDownloadInfo == null) {
+				    ipIgnoreFileDownloadInfo = new IpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
+			    } else {
+				    ipIgnoreFileDownloadInfo.setDownloadCount(ipIgnoreFileDownloadInfo.getDownloadCount() + 1);
+			    }
+			    save(ipIgnoreFileDownloadInfo);
 			}
-			save(ipIgnoreFileDownloadInfo);
 		} catch (ParseException e) {
 			log.error("A parse problem should never occur ", e);
 		}
@@ -221,8 +226,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * @return Number of downloads
 	 */
 	public Long getNumberOfDownloadsForCollection(InstitutionalCollection institutionalCollection) {
-		
-		log.debug("No. of downloads for insittuional colleciton: " + institutionalCollection );
 		return institutionalCollectionDAO.getFileDownloads(institutionalCollection);
 	}
 
@@ -234,8 +237,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * @return Number of downloads
 	 */
 	public Long getNumberOfDownloadsForItem(GenericItem item) {
-		
-		log.debug("No. of downloads for item: " + item);
 		return genericItemDAO.getDownloadCount(item.getId());
 	}
 
@@ -247,9 +248,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * 
 	 * @return Number of downloads
 	 */
-	public Long getNumberOfDownloadsForCollectionAndItsChildren(InstitutionalCollection institutionalCollection) {
-		
-		log.debug("No. of downloads for insitutional collection Id: " + institutionalCollection );
+	public Long getDownloadCountWithChildren(InstitutionalCollection institutionalCollection) {
 		return institutionalCollectionDAO.getFileDownloadsWithChildren(institutionalCollection); 
 	}
 

@@ -27,13 +27,13 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionStatsCacheService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
-import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -74,9 +74,6 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	
 	/** Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
-	
-	/** Download Statistics service */
-	private DownloadStatisticsService downloadStatisticsService;
 	
 	/** Number of items within a collection and its sub-collection */
 	private Long institutionalItemCount;
@@ -129,6 +126,9 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	/** number of collection pictures */
 	private int numCollectionPictures = 0;
 	
+	/* service which caches stats information */
+	private InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService;
+
 
 	/**
 	 * Get the rss feed.
@@ -191,12 +191,12 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 		    mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 5, institutionalCollection, OrderType.DESCENDING_ORDER);
 		    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		    
-			institutionalItemCount = institutionalCollectionService.getInstitutionalItemCountForCollectionAndChildren(institutionalCollection);
-			institutionalItemsCountForACollection = institutionalCollectionService.getInstitutionalItemCountForCollection(institutionalCollection); 
+			institutionalItemCount = institutionalCollectionStatsCacheService.getItemCountWithChildren(institutionalCollection, false);
+			institutionalItemsCountForACollection = institutionalCollectionStatsCacheService.getItemCount(institutionalCollection, false); 
 			subcollectionCount = institutionalCollection.getChildCount();
-			allSubcollectionCount =institutionalCollectionService.getTotalSubcollectionCount(institutionalCollection); 
-			fileDownloadCountForCollection = downloadStatisticsService.getNumberOfDownloadsForCollection(institutionalCollection);
-			fileDownloadCountForCollectionAndItsChildren = downloadStatisticsService.getNumberOfDownloadsForCollectionAndItsChildren(institutionalCollection);
+			allSubcollectionCount = institutionalCollectionStatsCacheService.getCollectionCount(institutionalCollection, false);
+			fileDownloadCountForCollection = institutionalCollectionStatsCacheService.getDownloadCount(institutionalCollection, false);
+			fileDownloadCountForCollectionAndItsChildren = institutionalCollectionStatsCacheService.getDownloadCountWithChildren(institutionalCollection, false);
 		    
 	        InstitutionalCollectionPictureHelper institutionalCollectionPictureHelper = new InstitutionalCollectionPictureHelper();
 	        PictureFileLocation locationInfo = institutionalCollectionPictureHelper.nextPicture(institutionalCollection, 0, InstitutionalCollectionPictureHelper.INIT);
@@ -339,11 +339,6 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 		return fileDownloadCountForCollectionAndItsChildren;
 	}
 
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		this.downloadStatisticsService = downloadStatisticsService;
-	}
-
 	public List<InstitutionalItem> getMostRecentSubmissions() {
 		return mostRecentSubmissions;
 	}
@@ -425,5 +420,15 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 		fileDownloadCountForCollection != 0 ||
 		fileDownloadCountForCollectionAndItsChildren != 0;
 	}
+	
+	/**
+	 * Cache Service to deal with collection stats
+	 * @param institutionalCollectionStatsService
+	 */
+	public void setInstitutionalCollectionStatsCacheService(
+			InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService) {
+		this.institutionalCollectionStatsCacheService = institutionalCollectionStatsCacheService;
+	}
+
 
 }
