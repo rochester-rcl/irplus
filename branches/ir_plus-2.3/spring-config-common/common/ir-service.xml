@@ -69,6 +69,7 @@
        <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
        <property name="personalItemDeleteRecordDAO" ref="personalItemDeleteRecordDAO"/>
        <property name="externalUserAccountDAO" ref="externalUserAccountDAO"/>
+       <property name="repositoryStatsCacheService" ref="repositoryStatsCacheService"/>
    </bean>
    
 
@@ -213,6 +214,8 @@
        <property name="uniqueHandleNameGenerator" ref="uniqueHandleNameGenerator"/>
        <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="repositoryStatsCacheService" ref="repositoryStatsCacheService"/>
+       <property name="institutionalCollectionStatsCacheService" ref="institutionalCollectionStatsCacheService"/>
    </bean>
    
    <!--  Service for helping with deleted institutional items --> 
@@ -240,6 +243,8 @@
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="repositoryStatsCacheService" ref="repositoryStatsCacheService"/>
+       <property name="institutionalCollectionStatsCacheService" ref="institutionalCollectionStatsCacheService"/>
    </bean>
    
    <bean id="institutionalCollectionSecurityService" 
@@ -919,8 +924,8 @@
 	    <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
-      <!-- ****************************************** --> 
-   <!-- User related data service -->
+   <!-- ****************************************** --> 
+   <!-- Checksum report service -->
    <!-- ****************************************** --> 
    <bean id="checksumCheckerReportService" 
        class="edu.ur.ir.repository.service.DefaultChecksumCheckerReportService">
@@ -931,4 +936,22 @@
        <property name="fromAddress" value="${mail.sender.from}"/>
        <property name="email" value="${email.error.address}"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Statistics caching service -->
+   <!-- ****************************************** --> 
+   <bean id="repositoryStatsCacheService" 
+       class="edu.ur.ir.repository.service.DefaultRepositoryStatsCacheService">
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="downloadStatisticsService" ref="downloadStatisticsService"/>
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+       <property name="userService" ref="userService"/>
+   </bean>
+   
+   <bean id="institutionalCollectionStatsCacheService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionStatsCacheService">
+       <property name="downloadStatisticsService" ref="downloadStatisticsService"/>
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+   </bean>
+   
 </beans>

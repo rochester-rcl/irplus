@@ -19,6 +19,7 @@ import edu.ur.ir.ErrorEmailService;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
@@ -77,7 +78,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		DownloadStatisticsService downloadStatisticsService = null;
 		ErrorEmailService errorEmailService;
 		RepositoryService repositoryService = null;
-		
+		RepositoryStatsCacheService repositoryStatsCacheService = null;
 
 		PlatformTransactionManager tm = null;
 		TransactionDefinition td = null;
@@ -87,6 +88,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			    applicationContext.getBean("downloadStatisticsService");
 			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
 			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
+			repositoryStatsCacheService = (RepositoryStatsCacheService) applicationContext.getBean("repositoryStatsCacheService");
 			
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
@@ -153,6 +155,8 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			    }
 			}
 			while(records.size() > 0);
+			// force the stats to update on all repository caches
+			repositoryStatsCacheService.getDownloadCount(true);
 		}
 		catch(Exception e)
 		{

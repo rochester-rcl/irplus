@@ -67,5 +67,3 @@ ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq;
 ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
 
-
-

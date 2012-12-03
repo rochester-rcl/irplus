@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalCollectionStatsCacheService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
@@ -44,6 +45,12 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(CollectionInstitutionalItemBrowse.class);
 	
+	
+	/* service which caches stats information */
+	private InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService;
+	
+
+
 	/** List of characters/options that can be selected */
 	private String[] alphaList = new String[]{
 			"All", "0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", 
@@ -149,7 +156,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    		institutionalItems = institutionalItemService.getCollectionItemsFirstAvailableOrder(rowStart, 
 		    		    numberOfResultsToShow, institutionalCollection, OrderType.getOrderType(sortType));
 		        }
-		        totalHits = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
+		        totalHits = institutionalCollectionStatsCacheService.getItemCountWithChildren(institutionalCollection, false).intValue();
 		    }
 		    else if (selectedAlpha.equals("0-9"))
 		    {
@@ -395,4 +402,8 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		this.contentTypeId = contentTypeId;
 	}
 
+	public void setInstitutionalCollectionStatsCacheService(
+			InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService) {
+		this.institutionalCollectionStatsCacheService = institutionalCollectionStatsCacheService;
+	}
 }

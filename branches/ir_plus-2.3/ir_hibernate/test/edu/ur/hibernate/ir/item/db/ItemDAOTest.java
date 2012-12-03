@@ -393,6 +393,7 @@ public class ItemDAOTest {
 		
 		// create the first file to store in the temporary folder
 		String tempDirectory = properties.getProperty("ir_hibernate_temp_directory");
+		
 		File directory = new File(tempDirectory);
 		
         // helper to create the file

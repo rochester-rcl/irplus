@@ -169,7 +169,7 @@ public interface InstitutionalCollectionService extends Serializable{
 	 *  
 	 * @return Number of items
 	 */
-	public Long getInstitutionalItemCountForCollectionAndChildren(InstitutionalCollection collection);
+	public Long getItemCountWithChildren(InstitutionalCollection collection);
 	
 	/**
 	 * Get the count of number of items in a collection
@@ -178,7 +178,7 @@ public interface InstitutionalCollectionService extends Serializable{
 	 *  
 	 * @return Number of items
 	 */
-	public Long getInstitutionalItemCountForCollection(InstitutionalCollection collection);
+	public Long getItemCount(InstitutionalCollection collection);
 
 	/**
 	 * Get the count of institutional collections

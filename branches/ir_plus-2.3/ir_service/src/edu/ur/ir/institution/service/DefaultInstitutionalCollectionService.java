@@ -37,6 +37,7 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalCollectionStatsCacheService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
@@ -47,6 +48,7 @@ import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.Sid;
 import edu.ur.ir.user.IrUser;
@@ -97,6 +99,12 @@ public class DefaultInstitutionalCollectionService implements
 	
 	/** Base path for the web app  */
 	private String baseWebAppPath;
+	
+	/* the repository stats cache service */
+	private RepositoryStatsCacheService repositoryStatsCacheService;
+	
+	/* the repository stats cache service */
+	private InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService;
 
 
 	/**
@@ -174,6 +182,8 @@ public class DefaultInstitutionalCollectionService implements
 		}
 	    
 	    institutionalCollectionDAO.makeTransient(collection);
+	    // force an update of the collection count
+	    repositoryStatsCacheService.getCollectionCount(true);
 	    
 	}
 	
@@ -271,6 +281,8 @@ public class DefaultInstitutionalCollectionService implements
 	public void saveCollection(
 			InstitutionalCollection institutionalCollection) {
 	    institutionalCollectionDAO.makePersistent(institutionalCollection);
+	    // force an update of the collection count
+	    repositoryStatsCacheService.getCollectionCount(true);
 	}
 	
 
@@ -480,7 +492,7 @@ public class DefaultInstitutionalCollectionService implements
 	 *  
 	 * @return Number of items
 	 */
-	public Long getInstitutionalItemCountForCollectionAndChildren(InstitutionalCollection collection) {
+	public Long getItemCountWithChildren(InstitutionalCollection collection) {
 		return institutionalItemDAO.getCountForCollectionAndChildren(collection);
 	}
 
@@ -491,7 +503,7 @@ public class DefaultInstitutionalCollectionService implements
 	 *  
 	 * @return Number of items
 	 */
-	public Long getInstitutionalItemCountForCollection(InstitutionalCollection collection) {
+	public Long getItemCount(InstitutionalCollection collection) {
 		return institutionalItemDAO.getCount(collection);
 	}
 
@@ -727,7 +739,11 @@ public class DefaultInstitutionalCollectionService implements
 		    	throw new PermissionNotGrantedException(InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission());
 		    }
 	    }
+		// update cache count
+		repositoryStatsCacheService.getItemCount(true);
+		institutionalCollectionStatsCacheService.updateChildToParentCollectionStats(institutionalCollection);
 		return institutionalItem;
+		
 	}
 
 	/**
@@ -794,4 +810,26 @@ public class DefaultInstitutionalCollectionService implements
 	public void setBaseWebAppPath(String baseWebAppPath) {
 		this.baseWebAppPath = baseWebAppPath;
 	}
+	
+	/**
+	 * Set the repository stats cache service.
+	 * 
+	 * @param repositoryStatsCacheService
+	 */
+	public void setRepositoryStatsCacheService(
+			RepositoryStatsCacheService repositoryStatsCacheService) {
+		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
+
+	/**
+	 * Set the institutional collection stats service.
+	 * 
+	 * @param institutionalCollectionStatsCacheService
+	 */
+	public void setInstitutionalCollectionStatsCacheService(
+			InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService) {
+		this.institutionalCollectionStatsCacheService = institutionalCollectionStatsCacheService;
+	}
+
+
 }

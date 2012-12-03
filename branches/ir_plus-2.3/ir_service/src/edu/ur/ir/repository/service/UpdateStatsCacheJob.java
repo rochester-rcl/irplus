@@ -25,20 +25,24 @@ import org.quartz.SchedulerException;
 import org.quartz.StatefulJob;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import java.util.Date;
 
 import edu.ur.ir.ErrorEmailService;
-import edu.ur.ir.repository.ChecksumCheckerReportService;
+import edu.ur.ir.institution.InstitutionalCollectionStatsCacheService;
+import edu.ur.ir.repository.RepositoryStatsCacheService;
 
-public class DefaultChecksumCheckerEmailJob implements StatefulJob{
+/**
+ * @author Nathan Sarr
+ *
+ */
+public class UpdateStatsCacheJob  implements StatefulJob{
+
 	/** Application context from spring  */
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultChecksumCheckerEmailJob.class);
+	private static final Logger log = Logger.getLogger(UpdateStatsCacheJob .class);
 	
 	/**
 	 * Exceuction of the job
@@ -66,48 +70,32 @@ public class DefaultChecksumCheckerEmailJob implements StatefulJob{
 		    throw new JobExecutionException("problem with the Scheduler", e2);
 		}
 		  
-		ChecksumCheckerReportService checksumCheckerReportService = null;
+		RepositoryStatsCacheService repositoryStatsCacheService = null;
+		InstitutionalCollectionStatsCacheService institutionalCollectionStatsCacheService = null;
 		ErrorEmailService errorEmailService;
-		PlatformTransactionManager tm = null;
-		TransactionDefinition td = null;
+		
 		try
 		{
-			checksumCheckerReportService = (ChecksumCheckerReportService) applicationContext.getBean("checksumCheckerReportService");
-			
+			repositoryStatsCacheService = (RepositoryStatsCacheService) applicationContext.getBean("repositoryStatsCacheService");
+			institutionalCollectionStatsCacheService = (InstitutionalCollectionStatsCacheService) applicationContext.getBean("institutionalCollectionStatsCacheService");
+			log.debug("stats cache service run at " + new Date());
 			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
-
-			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
-			
-			td = new DefaultTransactionDefinition(
-					TransactionDefinition.PROPAGATION_REQUIRED);
 		}
 		catch(BeansException e1)
 		{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
 		
-		// start a new transaction
-		TransactionStatus ts = null;
+		
 		try
 		{
-		    ts = tm.getTransaction(td);
-		    checksumCheckerReportService.sendChecksumReportEmail();
-			tm.commit(ts);
+		   repositoryStatsCacheService.forceCacheUpdate();
+		   institutionalCollectionStatsCacheService.updateAllCollectionStats();
 		}
 		catch(Exception e)
 		{
 			errorEmailService.sendError(e);
 		}
-		finally
-		{
-			if( ts != null && !ts.isCompleted() )
-			{
-				if( tm != null )
-				{
-		            tm.commit(ts);
-				}
-			}
-		}
+		
 	}
-
 }
