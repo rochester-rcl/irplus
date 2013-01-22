@@ -67,8 +67,6 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
     
     /* notes for the reset */
     private String notes;
-    
-
 
 	private ChecksumCheckerService checksumCheckerService;
 
@@ -88,8 +86,6 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
     private List<InstitutionalItem> institutionalItems = new LinkedList<InstitutionalItem>();
     
     private UserPublishingFileSystemService userPublishingFileSystemService;
-    
-
 
 	// actually only one but using list for display in table
     private List<IrFile> irFiles = new LinkedList<IrFile>();
@@ -130,6 +126,13 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
 			}
 			getIrFileInfo();
 		}
+		return SUCCESS;
+	}
+	
+	/*
+	 * Send user to form to reset all failing checksums
+	 */
+	public String viewResetAllFailingChecksums(){
 		return SUCCESS;
 	}
 	
@@ -183,6 +186,25 @@ public class ManageFileInfoChecksums extends Pager implements UserIdAware {
 			    checksumCheckerService.checkChecksum(fileInfoChecksum);
 			}
 			getIrFileInfo();
+		}
+		return SUCCESS;
+	}
+	
+	/**
+	 * Allow all failing file info checksums to be updated in bulk
+	 * 
+	 * @return success.
+	 */
+	public String resetAllFileInfoChecksums(){
+		List<FileInfoChecksum> failures = fileInfoChecksumService.getAllFailingChecksums();
+		for(FileInfoChecksum failure : failures){
+			if( !failure.getReCalculatedPassed()){
+			    ChecksumCalculator calc = checksumService.getChecksumCalculator(failure.getAlgorithmType());
+			    String checksum = calc.calculate(new File(failure.getFileInfo().getFullPath()));
+			    failure.reset(checksum, userId, notes);
+			    failure.setReCalculateChecksum(true);
+			    checksumCheckerService.checkChecksum(failure);
+			}
 		}
 		return SUCCESS;
 	}

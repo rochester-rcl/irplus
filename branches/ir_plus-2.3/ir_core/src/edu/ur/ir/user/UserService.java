@@ -315,7 +315,6 @@ public interface UserService extends UserDetailsService, Serializable {
 	 */
 	public void sendPendingAffiliationEmailForUser(IrUser user);
 
-
 	/**
 	 * Get user having the specified person name authority
 	 * 
@@ -388,6 +387,13 @@ public interface UserService extends UserDetailsService, Serializable {
 	 * @return - the found external user account or null if the external user account is not found.
 	 */
 	public ExternalUserAccount getByExternalUserNameAccountType(String externalUserName, ExternalAccountType externalAccountType);
+
+	/**
+	 * Gets all users who have a non-null index location
+	 * 
+	 * @return all users who have a non null index location
+	 */
+	public List<IrUser> getUsersWithWorkspaceIndex();
 
 }
 

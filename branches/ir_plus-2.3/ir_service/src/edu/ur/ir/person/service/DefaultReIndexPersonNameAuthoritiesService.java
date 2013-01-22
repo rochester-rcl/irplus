@@ -66,8 +66,6 @@ public class DefaultReIndexPersonNameAuthoritiesService implements ReIndexPerson
 		    overwriteExistingIndex = false;
 		    rowStart = rowStart + batchSize;
 		}
-		//optimize the index.
-		nameAuthorityIndexService.optimize(personNameAuthorityIndexFolder);
 		return numProcessed;
 	}
 

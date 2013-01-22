@@ -143,6 +143,17 @@ public class HbDefaultFileInfoChecksumDAO implements FileInfoChecksumDAO{
 			}
 		}
 	}
+	
+	/**
+	 * Get all file info checksums where it failed the check
+	 * 
+	 * @return - where it is currently failing the check
+	 */
+	@SuppressWarnings("unchecked")
+	public List<FileInfoChecksum> getAllFailingChecksums(){
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getChecksumInfoFailsDateOrderAsc");
+        return q.list();
+	}
 
 	/**
 	 * Get a count of fails for checksum infos.

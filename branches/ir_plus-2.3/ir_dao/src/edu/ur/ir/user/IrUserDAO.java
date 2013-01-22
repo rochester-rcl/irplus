@@ -68,14 +68,14 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 * Get users whose affiliation approval is pending 
 	 * 
 	 * @param rowStart - start position
-	 * @param numberOfResultsToShow - number of rows to grab.
+	 * @param maxResults - number of rows to grab.
 	 * @param sortType - sort order(Asc/desc)
 	 * 
 	 * @return the list of users found.
 	 */
 
 	public List<IrUser> getUsersPendingAffiliationApprovals(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortType) ;
+    		final int maxResults, final String sortType) ;
 	
 	/**
 	 * Get the user having the specified role Id
@@ -106,4 +106,11 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 */
 	public List<IrUser> getUsers(final int rowStart, 
     		final int numberOfResultsToShow, final String sortElement, final OrderType orderType);
+    		
+   	/**
+	 * Gets all users who have a non-null index location
+	 * 
+	 * @return all users who have a non null index location
+	 */
+	public List<IrUser> getUsersWithWorkspaceIndex(); 		
 }

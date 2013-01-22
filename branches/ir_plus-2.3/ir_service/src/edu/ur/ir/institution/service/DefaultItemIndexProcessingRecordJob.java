@@ -1,3 +1,20 @@
+/**  
+   Copyright 2008 - 2010 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+
 package edu.ur.ir.institution.service;
 
 import java.io.File;
@@ -17,6 +34,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -41,6 +59,8 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 	 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultItemIndexProcessingRecordJob.class);
+	
+	private int batchSize = 1000;
 
 	
 	/**
@@ -72,9 +92,11 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 		InstitutionalItemIndexProcessingRecordService processingRecordService = null;
 		InstitutionalItemIndexService institutionalItemIndexService = null;
 		InstitutionalItemService institutionalItemService = null;
+		IndexProcessingTypeService indexProcessingTypeService = null;
 		RepositoryService repositoryService = null;
 		PlatformTransactionManager tm = null;
 		TransactionDefinition td = null;
+		ErrorEmailService errorEmailService = null;
 		try
 		{
 			processingRecordService = (InstitutionalItemIndexProcessingRecordService)
@@ -82,7 +104,8 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 			institutionalItemService = (InstitutionalItemService)applicationContext.getBean("institutionalItemService");
 			institutionalItemIndexService = (InstitutionalItemIndexService)applicationContext.getBean("institutionalItemIndexService");
 			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
-
+			indexProcessingTypeService = (IndexProcessingTypeService)applicationContext.getBean("indexProcessingTypeService");
+            errorEmailService = (ErrorEmailService) applicationContext.getBean("errorEmailService");
 			
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
@@ -99,76 +122,46 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 		{
 		    ts = tm.getTransaction(td);
 		    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		
+		    Long deleteIndexRecordId = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE_INDEX).getId();
 		    File f = null;
 		    List <InstitutionalItemIndexProcessingRecord> records = new LinkedList<InstitutionalItemIndexProcessingRecord>();
+		    boolean deleteIndex = false;
 		    if( repository != null )
 		    {
 		        String indexFolder = repository.getInstitutionalItemIndexFolder();
 		        f = new File(indexFolder);
-		        records = processingRecordService.getAllOrderByItemIdUpdatedDate();
+		        records = processingRecordService.getAllOrderByItemIdUpdatedDate(0, batchSize);
+		        deleteIndex = processingRecordService.getAllByProcessingTypeUpdatedDate(deleteIndexRecordId).size() > 0;
 		    }
-		    log.debug("processing " + records.size() + " records ");
+		    if( log.isDebugEnabled())
+		    {
+		        log.debug("processing " + records.size() + " records delete index = " + deleteIndex );
+		    }
 		    tm.commit(ts);
-	
-		    for( InstitutionalItemIndexProcessingRecord record : records )
+		    
+		    while(records.size() > 0 )
 		    {
-			    ts = tm.getTransaction(td);
-			    if( record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE))
-	            {
-	                log.debug("deleting item  " + record.getInstitutionalItemId());
-	        	    institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
-	        	    processingRecordService.delete(record);
-	            }
-			    else
+		    	
+		    	processRecords(records, tm, td, institutionalItemIndexService, 
+		    			processingRecordService, f, institutionalItemService, 
+		    			errorEmailService, deleteIndex);
+		    	
+		    	// get the next set of records
+		    	ts = tm.getTransaction(td);
+		        deleteIndex = processingRecordService.getAllByProcessingTypeUpdatedDate(deleteIndexRecordId).size() > 0;
+		    	records = processingRecordService.getAllOrderByItemIdUpdatedDate(0, batchSize);
+			    if( log.isDebugEnabled() )
 			    {
-		           InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
-			
-		            if( i != null)
-		            {
-		       
-		                if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.UPDATE))
-		                {
-		                    log.debug("updating item  " + i);
-		                    try {
-						        institutionalItemIndexService.updateItem(i, f, true);
-						        processingRecordService.delete(record);
-					        } 
-		                    catch (NoIndexFoundException e) 
-					        {
-						        log.error(e);
-					        }
-		                }
-		                else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.INSERT))
-				        {
-		        	        try
-		        	        {
-						        institutionalItemIndexService.addItem(i, f);
-						        processingRecordService.delete(record);
-					        } 
-		        	        catch (NoIndexFoundException e)
-		        	        {
-						        log.error(e);
-				            }     	
-				         }
-		                 else
-		                 {
-		        	        log.error("Can't process record type " + record.getIndexProcessingType() + " for item " + i);
-		                 }
-		            }
-		            else
-		            {
-		            	// item does not exist - delete the record
-		            	institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
-		            	processingRecordService.delete(record);
-		            }
+		    	    log.debug("processing " + records.size() + " records delete index = " + deleteIndex );
 			    }
-		        tm.commit(ts);
+		    	tm.commit(ts);
 		    }
-		    if( repository != null )
-		    {
-		        institutionalItemIndexService.optimize(f);
-		    }
+		   
+		}
+		catch(Exception e)
+		{
+			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
@@ -184,7 +177,101 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 		
 		
 	}
+	
+	
+	/**
+	 * Process all of the records in this batch.
+	 * 
+	 * @param records - records to process
+	 * @param tm - transaction manager
+	 * @param td - transaction definition
+	 * @param institutionalItemIndexService - service to index the items
+	 * @param processingRecordService - service to manage processing records
+	 * @param f - location of index
+	 * @param institutionalItemService - service to manage institutional tiems
+	 * @throws NoIndexFoundException - exception thrown if no index is found
+	 */
+	private void processRecords(List<InstitutionalItemIndexProcessingRecord> records, 
+			PlatformTransactionManager tm, 
+			TransactionDefinition td,
+			InstitutionalItemIndexService institutionalItemIndexService,
+			InstitutionalItemIndexProcessingRecordService processingRecordService,
+			File f,
+			InstitutionalItemService institutionalItemService,
+			ErrorEmailService errorEmailService,
+			boolean create) throws NoIndexFoundException
+	{
+		TransactionStatus ts = null;
+		try
+		{
+	        for( InstitutionalItemIndexProcessingRecord record : records )
+	        {
+		        ts = tm.getTransaction(td);
+		        if( record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE))
+                {
+                    log.debug("deleting item  " + record.getInstitutionalItemId());
+        	        institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
+        	        processingRecordService.delete(record);
+                }
+		        else
+		        {
+	                InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
 		
-
-
+	                if( i != null)
+	                {
+	                    if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.UPDATE))
+	                    {
+	                    	if(log.isDebugEnabled())
+	                    	{
+	                            log.debug("updating item  " + i);
+	                    	}
+					        institutionalItemIndexService.updateItem(i, f, create);
+					        create = false;
+					        processingRecordService.delete(record);
+	                    }
+	                    else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.INSERT))
+			            {
+	                    	if( log.isDebugEnabled() )
+	                    	{
+	                    	    log.debug("adding item  " + i);
+	                    	}
+	                    	institutionalItemIndexService.addItem(i, f, create);
+					        create = false;
+					        processingRecordService.delete(record);
+			            }
+	                    else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE_INDEX))
+			            {
+	                    	if( log.isDebugEnabled() )
+	                    	{
+	                    	    log.debug("deleting delete index record");
+	                    	}
+	                    	processingRecordService.delete(record);
+			            }
+	                    else
+	                    {
+	        	            log.error("Can't process record type " + record.getIndexProcessingType() + " for item " + i);
+	                    }
+	                }
+	                else
+	                {
+	            	    // item does not exist - delete the record
+	            	    institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
+	            	    processingRecordService.delete(record);
+	                }
+		       }
+	           tm.commit(ts);
+	        }
+		}
+	    finally
+		{
+			if( ts != null  && !ts.isCompleted())
+			{
+				if( tm != null )
+				{
+				    tm.commit(ts);
+				}
+				
+			}
+		}
+	}
 }

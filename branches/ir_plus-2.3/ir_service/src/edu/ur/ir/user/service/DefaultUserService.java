@@ -81,7 +81,7 @@ public class DefaultUserService implements UserService {
 	private static final long serialVersionUID = 8453376073372213621L;
 
 	/**  Encoder for passwords.  */
-	private MessageDigestPasswordEncoder passwordEncoder;
+	private transient MessageDigestPasswordEncoder passwordEncoder;
 	
 	/**  User data access  */
 	private IrUserDAO irUserDAO;
@@ -108,7 +108,7 @@ public class DefaultUserService implements UserService {
 	private ResearcherService researcherService;
 		
 	/** Mail sender */
-	private MailSender mailSender;
+	private transient MailSender mailSender;
 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserService.class);
@@ -164,7 +164,6 @@ public class DefaultUserService implements UserService {
 	// service for caching repository information
 	private RepositoryStatsCacheService repositoryStatsCacheService;
 	
-
 
 
 	/**
@@ -1296,6 +1295,14 @@ public class DefaultUserService implements UserService {
 	public void setRepositoryStatsCacheService(
 			RepositoryStatsCacheService repositoryStatsCacheService) {
 		this.repositoryStatsCacheService = repositoryStatsCacheService;
+	}
+		/**
+	 * Gets all users who have a non-null index location
+	 * 
+	 * @return all users who have a non null index location
+	 */
+	public List<IrUser> getUsersWithWorkspaceIndex() {
+		return irUserDAO.getUsersWithWorkspaceIndex();
 	}
 }
 

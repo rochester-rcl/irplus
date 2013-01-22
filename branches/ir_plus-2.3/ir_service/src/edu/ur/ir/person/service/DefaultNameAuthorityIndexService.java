@@ -29,10 +29,12 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -52,7 +54,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	private static final long serialVersionUID = -2917625239480866680L;
 
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultNameAuthorityIndexService.class);
@@ -103,7 +105,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(nameAuthorityIndexFolder);
 			
 			if(overwriteExistingIndex)
 			{
@@ -164,12 +166,12 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File directoryPath, Document document)
 	{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(directoryPath);
+			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
@@ -225,7 +227,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 			throw new NoIndexFoundException("Name index folder not found ");
 		} 
 
-		writeDocument(nameAuthorityFolder.getAbsolutePath(), getDocument(personNameAuthority));
+		writeDocument(nameAuthorityFolder, getDocument(personNameAuthority));
 	}
 
 	/**
@@ -245,7 +247,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		IndexWriter writer = null;
 		
 		try {
-			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder);
+			directory = FSDirectory.open(nameAuthorityIndexFolder);
 			writer = getWriter(directory);
 			Term term = new Term(PERSON_NAME_AUTHORITY_ID, personNameAuthority.getId().toString());
 			writer.deleteDocuments(term);
@@ -308,7 +310,8 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 	
@@ -326,62 +329,12 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		IndexWriter  writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 
-	
-	/**
-	 * Optimize the index.
-	 * 
-	 * @see edu.ur.ir.person.NameAuthorityIndexService#optimize(java.io.File)
-	 */
-	public void optimize(File nameAuthorityIndex) {
-		IndexWriter writer = null;
-		Directory directory = null;
-		try 
-		{
-		    directory = FSDirectory.getDirectory(nameAuthorityIndex.getAbsolutePath());
-			writer = getWriter(directory);
-			writer.optimize();
-		} 
-		catch (Exception e) 
-		{
-			log.error(e);
-			errorEmailService.sendError(e);
-		}
-		finally 
-        {
-		    if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    writer = null;
-		    try 
-		    {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-		    
-	    }
-	}
 	
 	private Document getDocument(PersonNameAuthority personNameAuthority)
 	{

@@ -390,7 +390,7 @@
    </bean>
    
    <bean id="defaultTextAnalyzer" 
-       class="edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter" 
+       class="edu.ur.lucene.analysis.StandardWithICUFoldingFilter" 
        singleton="false" />
    
    <bean id="userWorkspaceIndexService" 

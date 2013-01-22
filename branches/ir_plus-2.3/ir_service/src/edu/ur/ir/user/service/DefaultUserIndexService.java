@@ -28,10 +28,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.NumericUtils;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -64,7 +67,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	public static final String SEPERATOR = "|";
 	
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserIndexService.class);
@@ -111,7 +114,7 @@ public class DefaultUserIndexService implements UserIndexService{
 			throw new NoIndexFoundException("the folder " + userIndexFolder.getAbsolutePath() + " could not be found");
 		}
 		
-	    writeDocument(userIndexFolder.getAbsolutePath(), getDocument(user));
+	    writeDocument(userIndexFolder, getDocument(user));
 	}
 
 	
@@ -136,9 +139,9 @@ public class DefaultUserIndexService implements UserIndexService{
 		Directory directory = null;
 		IndexWriter writer = null;
 		try {
-			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(userIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(USER_ID, userId.toString());
+			Term term = new Term(USER_ID, NumericUtils.longToPrefixCoded(userId));
 			writer.deleteDocuments(term);
 			
 		} catch (IOException e) {
@@ -200,17 +203,16 @@ public class DefaultUserIndexService implements UserIndexService{
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File directoryPath, Document document)
 	{
 		log.debug("write document to directory " + directoryPath );
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(directoryPath);
+			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
-			writer.optimize();
 			
 		} catch (IOException e) {
 			log.error(e);
@@ -265,7 +267,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(userIndexFolder);
 			
 			if(overwriteExistingIndex)
 			{
@@ -281,7 +283,6 @@ public class DefaultUserIndexService implements UserIndexService{
 			    writer.addDocument(d);
 			}
 			writer.commit();
-			writer.optimize();
 			
 		}
 		catch (IOException e) 
@@ -333,7 +334,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		Document doc = new Document();
         
 	    doc.add(new Field(USER_ID, 
-	    		user.getId().toString(), 
+	    		 NumericUtils.longToPrefixCoded(user.getId()), 
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
 	    
@@ -358,17 +359,18 @@ public class DefaultUserIndexService implements UserIndexService{
 				Field.Index.ANALYZED));
 	    }
 	    
-	    String emails = "";
+	    StringBuffer emails = new StringBuffer("");
 	    for( UserEmail email : user.getUserEmails())
 	    {
 	    	if( email != null )
 	    	{
-	    		emails += email.getEmail() + " ";
+	    		emails.append(email.getEmail());
+	    		emails.append(" ");
 	    	}
 	    }
 	    
 	    doc.add(new Field(USER_EMAILS, 
-				emails, 
+				emails.toString(), 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 	    
@@ -442,7 +444,8 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		IndexWriter writer = new IndexWriter(directory,indexWriterConfig);
 		return writer;
 	}
 	
@@ -460,7 +463,9 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+		indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+		IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 		return writer;
 	}
 	

@@ -24,7 +24,7 @@ import edu.ur.ir.repository.Repository;
 
 
 /**
- * Interface for indexing user information.
+ * Interface for indexing user workspace information.
  * 
  * @author Nathan Sarr
  *
@@ -148,7 +148,7 @@ public interface UserWorkspaceIndexService extends Serializable{
 	public void deleteItemFromIndex(IrUser user, Long personalItemId);
 	
 	/**
-	 * Add a personal item to the index.  Creates an index floder if one does not already exist
+	 * Add a personal item to the index.  Creates an index folder if one does not already exist
 	 * 
 	 * @param repository
 	 * @param personalItem

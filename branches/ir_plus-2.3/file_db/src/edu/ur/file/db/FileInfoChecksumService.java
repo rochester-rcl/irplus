@@ -79,4 +79,11 @@ public interface FileInfoChecksumService {
 	 * @return count of failed checksums
 	 */
 	public Long getChecksumInfoFailsCount();
+	
+	/**
+	 * Get all file info checksums where it failed the check
+	 * 
+	 * @return - where it is currently failing the check
+	 */
+	public List<FileInfoChecksum> getAllFailingChecksums();
 }

@@ -332,6 +332,7 @@ public class DefaultInstitutionalCollectionService implements
 		
 		// collections may not be moved due to duplicate collection name
 		LinkedList<InstitutionalCollection> collectionsNotMoved = new LinkedList<InstitutionalCollection>();
+		LinkedList<InstitutionalCollection> oldParents = new LinkedList<InstitutionalCollection>();
 		// move collections first
 		if( collectionsToMove != null )
 		{
@@ -339,6 +340,9 @@ public class DefaultInstitutionalCollectionService implements
 		    {
 		    	log.debug("Adding collection " + collection + " to destination " + destination);
 			    try {
+			    	if( collection.getParent() != null ){
+			    	    oldParents.add(collection.getParent());
+			    	}
 					destination.addChild(collection);
 				} catch (DuplicateNameException e) {
 					collectionsNotMoved.add(collection);
@@ -358,7 +362,7 @@ public class DefaultInstitutionalCollectionService implements
 			    {
 			    	log.debug("Adding institutional item " + item + " to destination " + destination);
 			    	item.setInstitutionalCollection(destination);
-			    	institutionalItemService.saveInstitutionalItem(item);	
+			    	institutionalItemService.saveInstitutionalItem(item);
 			    }
 			}
 	
@@ -370,6 +374,11 @@ public class DefaultInstitutionalCollectionService implements
 		        {
 		     	    institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(movedCollection);
 		        }
+		    }
+		    institutionalCollectionStatsCacheService.updateChildToParentCollectionStats(destination);
+		    for( InstitutionalCollection oldParent : oldParents ){
+		        this.saveCollection(oldParent);
+			    institutionalCollectionStatsCacheService.updateChildToParentCollectionStats(oldParent);
 		    }
 		}
 		
@@ -385,14 +394,19 @@ public class DefaultInstitutionalCollectionService implements
 			List<InstitutionalCollection> collectionsToMove){
 
 		LinkedList<InstitutionalCollection> collectionsNotMoved = new LinkedList<InstitutionalCollection>();
-
+        LinkedList<InstitutionalCollection> oldParents = new LinkedList<InstitutionalCollection>();
 		if( collectionsToMove != null )
 		{
 		    for( InstitutionalCollection collection : collectionsToMove)
 		    {
 		    	log.debug("Adding collection " + collection + " to repository " + repository);
 			    try {
+			    	if( collection.getParent() != null ){
+			    	    oldParents.add(collection.getParent());
+			    	}
 					repository.addInstitutionalCollection(collection);
+					
+					
 				} catch (DuplicateNameException e) {
 					collectionsNotMoved.add(collection);
 				}
@@ -405,6 +419,10 @@ public class DefaultInstitutionalCollectionService implements
 		    for(InstitutionalCollection movedCollection : collectionsToMove)
 		    {
 		    	institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(movedCollection);
+		    }
+		    for( InstitutionalCollection oldParent : oldParents ){
+		        this.saveCollection(oldParent);
+			    institutionalCollectionStatsCacheService.updateChildToParentCollectionStats(oldParent);
 		    }
 		}
 		
