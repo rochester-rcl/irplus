@@ -59,6 +59,13 @@ public interface FileInfoChecksumDAO extends CrudDAO<FileInfoChecksum>, Countabl
 			OrderType orderType);
 	
 	/**
+	 * Get all file info checksums where it failed the check
+	 * 
+	 * @return - where it is currently failing the check
+	 */
+	public List<FileInfoChecksum> getAllFailingChecksums();
+	
+	/**
 	 * Get a count of fails for checksum infos.
 	 * 
 	 * @return count of failed checksums.

@@ -136,6 +136,7 @@ public class DefaultInstitutionalCollectionStatsCacheService implements
 		for( InstitutionalCollection c : parents){
 			updateCollectionCache(c);
 		}
+		updateCollectionCache(collection);
 	}
 	
 	private void updateCollectionCache(InstitutionalCollection collection){
@@ -146,7 +147,7 @@ public class DefaultInstitutionalCollectionStatsCacheService implements
 		getItemCountWithChildren(collection, true);
 	}
 	
-	private synchronized CollectionStatsInfo getInfo(Long collectionId){
+	private CollectionStatsInfo getInfo(Long collectionId){
 		// hit has first
 		CollectionStatsInfo info = collectionInfos.get(collectionId);
 		if( info == null ){

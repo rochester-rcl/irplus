@@ -51,7 +51,7 @@ public interface InstitutionalItemIndexService extends Serializable{
 	 * 
 	 * @param institutionalItem
 	 */
-	public void addItem(InstitutionalItem institutionalItem, File insitutionalItemIndex) throws NoIndexFoundException;
+	public void addItem(InstitutionalItem institutionalItem, File insitutionalItemIndex, boolean create) throws NoIndexFoundException;
 	
 
 	/**
@@ -73,11 +73,5 @@ public interface InstitutionalItemIndexService extends Serializable{
 	 */
 	public void deleteItem(Long id, File insitutionalItemIndex);
 	
-	/**
-	 * Optimize the index.
-	 * 
-	 * @param institutionalItemIndex
-	 */
-	public void optimize(File institutionalItemIndex);
 
 }

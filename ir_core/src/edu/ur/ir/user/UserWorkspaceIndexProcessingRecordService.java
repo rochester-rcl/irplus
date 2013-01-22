@@ -55,13 +55,6 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
     public void save(UserWorkspaceIndexProcessingRecord userWorkspaceIndexProcessingRecord);
  
 	/**
-	 * Get all workspace index processing records 
-	 * 
-	 * @return List of all index processing types
-	 */
-	public List<UserWorkspaceIndexProcessingRecord> getAll();
-	
-	/**
 	 * Get the processing record by the workspace item id, user id and file system type.
 	 * 
 	 * @param userId - id of the user who owns the item
@@ -101,7 +94,7 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
 	public List<UserWorkspaceIndexProcessingRecord> saveAll(PersonalFile personalFile, 
 			IndexProcessingType processingType);
     /**
-     * Add all items within the given user to be processed
+     * Add all file system objects available to the given user to be processed
      * 
      * @param user - user with all items to be processed
      * @param processing type - type of processing to be performed.
@@ -110,6 +103,12 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
     public void reIndexAllUserItems( IrUser user,
 			IndexProcessingType processingType) throws IOException;
     
-  
+    /**
+     * Will delete and set all user workspaces to be re-indexed
+     * 
+     * @param processing type - type of processing to be performed.
+     * @throws IOException 
+     */
+    public void reIndexAllWorkspaceUsers(IndexProcessingType processingType) throws IOException;
 
 }

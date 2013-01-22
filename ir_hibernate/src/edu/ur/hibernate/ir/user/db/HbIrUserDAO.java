@@ -74,7 +74,8 @@ public class HbIrUserDAO implements IrUserDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**
@@ -300,5 +301,17 @@ public class HbIrUserDAO implements IrUserDAO {
 	    });
 		return users;	
 		
+	}
+	
+    /**
+	 * Gets all users who have a non-null index location
+	 * 
+	 * @return all users who have a non null index location
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersWithWorkspaceIndex() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
+		.getNamedQuery("getUsersWithPersonalIndexFolder");		
+		return (List<IrUser>) q.list();	
 	}
 }

@@ -415,21 +415,22 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		if (itemObjectType.equalsIgnoreCase(ItemFile.TYPE)) {
 			Set<Long> irFileId = new HashSet<Long>();
 			ItemFile itemFile = (ItemFile) removeItemObject;
-			irFileId.add(itemFile.getIrFile().getId());
+			if( itemFile != null ){
+			    irFileId.add(itemFile.getIrFile().getId());
 			
-			item.removeItemFile(itemFile);
+			    item.removeItemFile(itemFile);
 			
-			itemService.makePersistent(item);
+			    itemService.makePersistent(item);
 			
-			// Delete irFile if not used by PersonalFile, ItemFile or ResearcherFile
-			itemService.deleteUnUsedIrFiles(irFileId);
+			    // Delete irFile if not used by PersonalFile, ItemFile or ResearcherFile
+			    itemService.deleteUnUsedIrFiles(irFileId);
+			}
 		} else {
 			ItemLink itemLink = (ItemLink) removeItemObject;
-			
-			item.removeLink(itemLink);
-			
-			itemService.makePersistent(item);
-			
+			if( itemLink != null ){
+			    item.removeLink(itemLink);
+			    itemService.makePersistent(item);
+			}
 		}
 
 		// Update personal item index

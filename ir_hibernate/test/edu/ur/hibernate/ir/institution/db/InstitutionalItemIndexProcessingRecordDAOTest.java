@@ -124,7 +124,7 @@ public class InstitutionalItemIndexProcessingRecordDAOTest {
  	    InstitutionalItemIndexProcessingRecord other = institutionalItemIndexProcessingRecordDAO.getById(itemIndexProcessingRecord.getId(), false);
         assert other.equals(itemIndexProcessingRecord) : "index processing record " + itemIndexProcessingRecord + "should be equal" + other;
          
-        List<InstitutionalItemIndexProcessingRecord> records = institutionalItemIndexProcessingRecordDAO.getAllOrderByItemIdUpdatedDate();
+        List<InstitutionalItemIndexProcessingRecord> records = institutionalItemIndexProcessingRecordDAO.getAllOrderByItemIdUpdatedDate(0, 1);
         
         assert records.size() == 1 : "Should have at 1 record but has " + records.size();
         assert records.contains(other) : "records should contain other";

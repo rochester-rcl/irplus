@@ -98,6 +98,15 @@ public class DefaultFileInfoChecksumService implements FileInfoChecksumService {
 			int maxResults, boolean onlyFails, OrderType orderType) {
 		return fileInfoChecksumDAO.getChecksumInfosDateOrder(start, maxResults, onlyFails, orderType);
 	}
+	
+	/**
+	 * Get all file info checksums where it failed the check
+	 * 
+	 * @return - where it is currently failing the check
+	 */
+	public List<FileInfoChecksum> getAllFailingChecksums(){
+		return fileInfoChecksumDAO.getAllFailingChecksums();
+	}
 
 	
 	public Long getChecksumInfoFailsCount() {

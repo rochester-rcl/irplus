@@ -125,7 +125,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		try {
 			noTimeDate = simpleDateFormat.parse(dateStr);
 			// block for updating download counts
-			synchronized(this) {
 			    fileDownloadInfo = fileDownloadInfoDAO.getFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
 			    if (fileDownloadInfo == null) {
 				    fileDownloadInfo = new FileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
@@ -133,7 +132,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 				    fileDownloadInfo.setDownloadCount(fileDownloadInfo.getDownloadCount() + 1);
 			    }
 			    save(fileDownloadInfo);
-			}
 		} catch (ParseException e) {
 			log.error("A parse problem should never occur ", e);
 		}
@@ -166,7 +164,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		Date noTimeDate = null;
 		try {
 			noTimeDate = simpleDateFormat.parse(dateStr);
-			synchronized(this){
 			    ipIgnoreFileDownloadInfo = ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
 			    if (ipIgnoreFileDownloadInfo == null) {
 				    ipIgnoreFileDownloadInfo = new IpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
@@ -174,7 +171,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 				    ipIgnoreFileDownloadInfo.setDownloadCount(ipIgnoreFileDownloadInfo.getDownloadCount() + 1);
 			    }
 			    save(ipIgnoreFileDownloadInfo);
-			}
 		} catch (ParseException e) {
 			log.error("A parse problem should never occur ", e);
 		}

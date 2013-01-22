@@ -135,11 +135,6 @@ UserWorkspaceIndexProcessingRecordService
 		return userWorkspaceIndexProcessingRecordDAO.get(fileSystem, userId, processingType);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<UserWorkspaceIndexProcessingRecord> getAll() {
-		return userWorkspaceIndexProcessingRecordDAO.getAll();
-	}
-
 	public List<UserWorkspaceIndexProcessingRecord> getAllOrderByIdDate() {
 		return userWorkspaceIndexProcessingRecordDAO.getAllOrderByUserIdDate();
 	}
@@ -263,47 +258,117 @@ UserWorkspaceIndexProcessingRecordService
 	}
 
 	
+	/**
+	 * Get the user workspace index processing record data access object.
+	 * 
+	 * @return
+	 */
 	public UserWorkspaceIndexProcessingRecordDAO getUserWorkspaceIndexProcessingRecordDAO() {
 		return userWorkspaceIndexProcessingRecordDAO;
 	}
 
+	/**
+	 * Set the workspace index processing record data access object
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordDAO
+	 */
 	public void setUserWorkspaceIndexProcessingRecordDAO(
 			UserWorkspaceIndexProcessingRecordDAO userWorkspaceIndexProcessingRecordDAO) {
 		this.userWorkspaceIndexProcessingRecordDAO = userWorkspaceIndexProcessingRecordDAO;
 	}
 	
+	/**
+	 * Get the user file system service.
+	 * 
+	 * @return
+	 */
 	public UserFileSystemService getUserFileSystemService() {
 		return userFileSystemService;
 	}
 
+	/**
+	 * Set the user file system service.
+	 * 
+	 * @param userFileSystemService
+	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
 	}
 	
+	/**
+	 * Get the user publishing file system service.
+	 * 
+	 * @return
+	 */
 	public UserPublishingFileSystemService getUserPublishingFileSystemService() {
 		return userPublishingFileSystemService;
 	}
 
+	/**
+	 * Set the user publishing file system service.
+	 * 
+	 * @param userPublishingFileSystemService
+	 */
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
 	}
 	
+	/**
+	 * Get the index processing type service.
+	 * 
+	 * @return
+	 */
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
 
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
+	/**
+	 * Get the user service.
+	 * 
+	 * @return
+	 */
 	public UserService getUserService() {
 		return userService;
 	}
 
+	/**
+	 * Set the user service.
+	 * 
+	 * @param userService
+	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+		/**
+     * Will delete and set all user workspaces to be re-indexed
+     * 
+     * @param processing type - type of processing to be performed.
+     * @throws IOException 
+     */
+	public void reIndexAllWorkspaceUsers(IndexProcessingType processingType)
+			throws IOException {
+		List<IrUser> users = userService.getUsersWithWorkspaceIndex();
+		log.debug("re indexing " + users.size() + " accounts");
+		for(IrUser user : users)
+		{
+			user.setReBuildUserWorkspaceIndex(true);
+			userService.makeUserPersistent(user);
+			this.reIndexAllUserItems(user, processingType);
+		}
+		
+	}
+	
 
 }

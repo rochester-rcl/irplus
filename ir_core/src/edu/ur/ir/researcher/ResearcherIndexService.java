@@ -65,12 +65,5 @@ public interface ResearcherIndexService extends Serializable{
 	public void addResearchers(List<Researcher> researchers, File researcherIndexFolder,
 			boolean overwriteExistingIndex);
 	
-	/**
-	 * Optimize the specified researcher index.
-	 * 
-	 * @param researcherIndex
-	 */
-	public void optimize(File researcherIndex);
-
 
 }
