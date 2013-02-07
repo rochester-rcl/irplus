@@ -20,6 +20,7 @@ package edu.ur.ir.web.action.user;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
@@ -171,9 +172,12 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 					repositoryService.unlockVersionedFile(versionedFile, user);
 				}
 				
-				if( collaboratorIds != null && collaboratorIds.length > 0 )
+				if( (collaboratorIds != null && collaboratorIds.length > 0) || notifyOwner )
 				{
-					List<Long> collaborators = Arrays.asList(collaboratorIds);
+					List<Long> collaborators = new LinkedList<Long>();
+					if( collaboratorIds != null ){
+					  collaborators = Arrays.asList(collaboratorIds);
+					}
 				    inviteUserService.notifyCollaboratorsOfNewVersion(personalFile, collaborators, notifyOwner);
 				}
 			}
