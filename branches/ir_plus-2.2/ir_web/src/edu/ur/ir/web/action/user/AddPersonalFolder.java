@@ -297,6 +297,11 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		    {
 			    return "accessDenied";
 		    }
+		    
+            if( folder.getParent() != null ){
+		        parentFolder = folder.getParent();	
+		        parentFolderId = parentFolder.getId();
+		    }
 		    folderName = folder.getName();
 		    folderDescription = folder.getDescription();
 		   

@@ -171,12 +171,15 @@ public class ViewPersonalFolders extends ActionSupport implements
 			{
 				log.debug("Deleting file with id " + fileIds[index]);
 				PersonalFile pf = userFileSystemService.getPersonalFile( fileIds[index], false);
-				 if( !pf.getOwner().getId().equals(userId))
-				 {
-				   	return "accessDenied";
-				 }
-				deleteFileFromIndex(pf, user);
-				userFileSystemService.delete(pf, user, "OWNER DELETING FILE");
+				// make sure the personal file is found
+				if( pf != null ){
+				    if( !pf.getOwner().getId().equals(userId))
+				    {
+				   	    return "accessDenied";
+				    }
+				    deleteFileFromIndex(pf, user);
+				    userFileSystemService.delete(pf, user, "OWNER DELETING FILE");
+				}
 			}
 		}
 		createFileSystem();
