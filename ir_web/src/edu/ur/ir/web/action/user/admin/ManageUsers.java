@@ -87,10 +87,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** user to edit */
 	private IrUser irUser;
-	
+
 	/** Default email */
 	private UserEmail defaultEmail;
 	
+
+
 	/** Person service */
 	private PersonService personService;
 	
@@ -1446,6 +1448,22 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return repositoryService.isExternalAuthenticationEnabled();
 	}
 
+	/**
+	 * Set the irUser to modify.
+	 * 
+	 * @param irUser
+	 */
+	public void setIrUser(IrUser irUser) {
+		this.irUser = irUser;
+	}
 
+	/**
+	 * Default email.
+	 * 
+	 * @param defaultEmail
+	 */
+	public void setDefaultEmail(UserEmail defaultEmail) {
+		this.defaultEmail = defaultEmail;
+	}
 
 }
