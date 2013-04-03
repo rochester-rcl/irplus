@@ -1,0 +1,78 @@
+
+To upgrade from IR+ 2.1 to 2.2:
+
+1. Download the new 2.2 version
+
+2. Unzip folder 2.2 zip 
+
+3. Rebuild the war file
+    -Make sure you copy in your old properties file (properties/production/ir_plus.properties)
+
+4. Shut down tomcat
+
+5. As a precaution back up your system
+    - Database
+    - File Store ( where IR+ is set to save the files and indexes) 
+    - Back up old war file (ir_plus.war)
+
+
+6. Run the following sql script: 
+       
+ 
+select * 
+from ir_user.personal_file pf1
+where exists( select * from ir_user.personal_file pf2
+where pf2.user_id = pf1.user_id
+and pf2.versioned_file_id = pf1.versioned_file_id
+and pf2.personal_file_id != pf1.personal_file_id)
+
+If NO ROWS return then you are OK.  If this returns it means the user
+has the same file in two locations in their file system.  You will need to 
+identify the duplicate records and delete one of them.  Please contact me for
+help.
+
+
+7.  Run the following sql script:
+
+select *
+from ir_user.user_email email1
+where exists( select * from ir_user.user_email email2
+where email2.user_email_id != email1.user_email_id
+and lower(email2.email) = lower(email1.email))
+order by user_id;
+
+If NO ROWS return then you are OK.  If you find any rows you will need to 
+remove the duplicate email - this means a user has two emails with different case.
+Please contact me for help.
+
+        
+8. Run the sql script named:
+
+ -  /sql/postgres/postgres-upgrade-2.1-to-2.2.sql
+
+   This can be done using the command line interface or pgadmin.
+   NOTE:  This script DOES alter the table structure.  
+
+
+8. Delete the old ir_plus war file from the tomcat  webapps directory
+
+9. Delete the old ir_plus directory in tomcat webapps directory
+    
+10. Copy the the new war file to the tomcat directory
+
+11. Re start tomcat
+
+12.  Verify the installation is running correctly - visit website
+
+
+
+
+If using handle server:
+
+1.  Kill handle server process
+
+2.  Delete old jar files from bin directory EXCEPT for the handle.jar
+
+3.  Move new jar files into handle server bin directory
+
+4.  Restart the handle server
