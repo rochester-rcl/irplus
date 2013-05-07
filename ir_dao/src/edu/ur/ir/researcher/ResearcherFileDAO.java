@@ -18,7 +18,9 @@ package edu.ur.ir.researcher;
 
 import java.util.List;
 
+import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.file.IrFile;
 
 
 /**
@@ -28,7 +30,8 @@ import edu.ur.dao.CrudDAO;
  * @author Sharmila Ranganathan
  *
  */
-public interface ResearcherFileDAO extends CrudDAO<ResearcherFile>
+public interface ResearcherFileDAO extends CountableDAO, 
+CrudDAO<ResearcherFile>
 {
 	/**
 	 * Get the files for researcher id and listed file ids.  If the list of fileIds 
@@ -79,4 +82,12 @@ public interface ResearcherFileDAO extends CrudDAO<ResearcherFile>
 	 *  @return Count of researcher files containing this ir file
 	 */
 	public Long getResearcherFileCount(Long irFileId) ;
+	
+	/**
+	 * Get all researcher files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of researcher files being used.
+	 */
+	public List<ResearcherFile> getResearcherFilesWithIrFile(IrFile irFile);
 }

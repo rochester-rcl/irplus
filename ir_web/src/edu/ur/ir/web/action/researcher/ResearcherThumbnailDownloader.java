@@ -51,10 +51,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware{
 	private static final Logger log = Logger.getLogger(RepositoryThumbnailDownloader.class);
 
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response ;
+	private HttpServletResponse response ;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** id of the picture */
 	private Long irFileId;
@@ -77,7 +77,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware{
      * @return {@link #SUCCESS}
      */
     public String execute() throws Exception {
-    	log.debug("Trying to download the researcher thumbnail to user");
+    	log.debug("Trying to download the instutional collection thumbnail to user");
     	
     	Researcher researcher = researcherService.getResearcher(researcherId, false);
     	
@@ -95,11 +95,11 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware{
     				    FileInfo info = transform.getTransformedFile();
     				    if( irFile.isPublicViewable() )
     	    		    {
-    	    		        webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+    	    		        webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
     	    		    }
     	    		    else
     	    		    {
-    	    			    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
+    	    			    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
     	    		    }
     			    }
     		    }
@@ -109,66 +109,43 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware{
     }
     
     
-	/**
-	 * Sets the servlet response.
-	 * 
-	 * @see org.apache.struts2.interceptor.ServletResponseAware#setServletResponse(javax.servlet.http.HttpServletResponse)
-	 */
 	public void setServletResponse(HttpServletResponse response) {
 		this.response = response;
 	}
 
-	/**
-	 * Set the io web util helper.
-	 * 
-	 * @param webIoUtils
-	 */
+
+	public WebIoUtils getWebIoUtils() {
+		return webIoUtils;
+	}
+
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}
 
-	/**
-	 * Sets the servlet request.
-	 * 
-	 * @see org.apache.struts2.interceptor.ServletRequestAware#setServletRequest(javax.servlet.http.HttpServletRequest)
-	 */
+
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
+		
 	}
 
-	/**
-	 * Set the id of the file.
-	 * 
-	 * @param irFileId
-	 */
+
 	public void setIrFileId(Long irFileId) {
 		this.irFileId = irFileId;
 	}
 
-	/**
-	 * Set the researcher service.
-	 * 
-	 * @param researcherService
-	 */
+
 	public void setResearcherService(ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
 
-	/**
-	 * Set the id of the researcher.
-	 * 
-	 * @param researcherId
-	 */
+
 	public void setResearcherId(Long researcherId) {
 		this.researcherId = researcherId;
 	}
+
+
 	
-	/**
-	 * Id of the user trying to access the information.
-	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
-	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

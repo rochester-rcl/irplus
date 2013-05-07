@@ -21,7 +21,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.ir.user.ExternalAccountType;
@@ -34,7 +33,7 @@ import edu.ur.order.OrderType;
  *
  */
 public interface ExternalAccountTypeDAO extends CountableDAO, 
-CrudDAO<ExternalAccountType>, NameListDAO, UniqueNameDAO<ExternalAccountType>, ListAllDAO{
+CrudDAO<ExternalAccountType>, NameListDAO, UniqueNameDAO<ExternalAccountType>{
 	
 	/**
 	 * Get the list of external account types by name

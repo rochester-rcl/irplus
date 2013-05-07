@@ -19,13 +19,12 @@ package edu.ur.ir.item.metadata.marc;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * @author Nathan Sarr
  *
  */
-public interface ExtentTypeSubFieldMapperDAO extends CrudDAO<ExtentTypeSubFieldMapper>, ListAllDAO{
+public interface ExtentTypeSubFieldMapperDAO extends CrudDAO<ExtentTypeSubFieldMapper>{
 	
 	/**
 	 * Get by the extent type id.

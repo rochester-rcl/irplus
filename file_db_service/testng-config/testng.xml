@@ -26,6 +26,8 @@
 		<classes>
 		    <class name="edu.ur.file.db.service.DefaultFileServerServiceTest" />
 		    <class name="edu.ur.file.db.service.DefaultMimeTypeServiceTest" />
+		    <class name="edu.ur.file.db.service.DefaultChecksumCheckerServiceTest" />
+		    <class name="edu.ur.file.db.service.DefaultChecksumServiceTest" />
 		</classes>
 	</test>
 </suite>

@@ -18,7 +18,6 @@ package edu.ur.metadata.marc;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.UniqueNameDAO;
 
 /**
@@ -28,6 +27,6 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface MarcSubFieldDAO  extends CountableDAO, 
-CrudDAO<MarcSubField>, UniqueNameDAO<MarcSubField>, ListAllDAO{
+CrudDAO<MarcSubField>, UniqueNameDAO<MarcSubField>{
 
 }

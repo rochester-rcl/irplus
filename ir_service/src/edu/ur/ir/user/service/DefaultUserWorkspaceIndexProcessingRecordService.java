@@ -9,13 +9,8 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.FileCollaborator;
-import edu.ur.ir.file.VersionedFile;
-import edu.ur.ir.groupspace.GroupWorkspaceFile;
-import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
-import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
@@ -47,18 +42,12 @@ UserWorkspaceIndexProcessingRecordService
 	/** File system service for users. */
 	private UserFileSystemService userFileSystemService;
 	
-	/** File system service for group workspaces. */
-	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
-
-	/** user publishing file system service */
+    /** user publishing file system service */
     private UserPublishingFileSystemService userPublishingFileSystemService;
     
 	/** Service for dealing with processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-	/** security service to deal with user information */
-	private SecurityService securityService;
-
 	/** service for dealing with users */
 	private UserService userService;
 	
@@ -85,8 +74,6 @@ UserWorkspaceIndexProcessingRecordService
 		List<SharedInboxFile> inboxFiles = userFileSystemService.getSharedInboxFiles(user);
 		Set<PersonalFile> rootFiles = user.getRootFiles();
 		Set<PersonalItem> rootItems = user.getRootPersonalItems();
-		List<GroupWorkspaceFolder> groupWorkspaceFolders = groupWorkspaceFileSystemService.getAllFoldersUserHasPermissionFor(user, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
-		List<GroupWorkspaceFile> groupWorkspaceFiles = groupWorkspaceFileSystemService.getAllFilesUserHasPermissionFor(user, VersionedFile.VIEW_PERMISSION);
 		
 		for( PersonalFile rootFile : rootFiles)
 		{
@@ -96,16 +83,6 @@ UserWorkspaceIndexProcessingRecordService
 		for(PersonalItem personalItem : rootItems)
 		{
 			save(user.getId(), personalItem, processingType);
-		}
-		
-		for(GroupWorkspaceFolder folder : groupWorkspaceFolders)
-		{
-			save(user.getId(), folder, processingType);
-		}
-		
-		for(GroupWorkspaceFile file : groupWorkspaceFiles)
-		{
-			save(user.getId(), file, processingType);
 		}
 		
 		// re-index shared inbox files
@@ -156,6 +133,11 @@ UserWorkspaceIndexProcessingRecordService
 	public UserWorkspaceIndexProcessingRecord get(Long userId,
 			FileSystem fileSystem, IndexProcessingType processingType) {
 		return userWorkspaceIndexProcessingRecordDAO.get(fileSystem, userId, processingType);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<UserWorkspaceIndexProcessingRecord> getAll() {
+		return userWorkspaceIndexProcessingRecordDAO.getAll();
 	}
 
 	public List<UserWorkspaceIndexProcessingRecord> getAllOrderByIdDate() {
@@ -281,202 +263,47 @@ UserWorkspaceIndexProcessingRecordService
 	}
 
 	
-	/**
-	 * Get the user workspace index processing record data access object.
-	 * 
-	 * @return
-	 */
 	public UserWorkspaceIndexProcessingRecordDAO getUserWorkspaceIndexProcessingRecordDAO() {
 		return userWorkspaceIndexProcessingRecordDAO;
 	}
 
-	/**
-	 * Set the workspace index processing record data access object
-	 * 
-	 * @param userWorkspaceIndexProcessingRecordDAO
-	 */
 	public void setUserWorkspaceIndexProcessingRecordDAO(
 			UserWorkspaceIndexProcessingRecordDAO userWorkspaceIndexProcessingRecordDAO) {
 		this.userWorkspaceIndexProcessingRecordDAO = userWorkspaceIndexProcessingRecordDAO;
 	}
 	
-	/**
-	 * Get the user file system service.
-	 * 
-	 * @return
-	 */
 	public UserFileSystemService getUserFileSystemService() {
 		return userFileSystemService;
 	}
 
-	/**
-	 * Set the user file system service.
-	 * 
-	 * @param userFileSystemService
-	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
 	}
 	
-	/**
-	 * Get the user publishing file system service.
-	 * 
-	 * @return
-	 */
 	public UserPublishingFileSystemService getUserPublishingFileSystemService() {
 		return userPublishingFileSystemService;
 	}
 
-	/**
-	 * Set the user publishing file system service.
-	 * 
-	 * @param userPublishingFileSystemService
-	 */
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
 	}
 	
-	/**
-	 * Get the index processing type service.
-	 * 
-	 * @return
-	 */
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
 
-	/**
-	 * Set the index processing type service.
-	 * 
-	 * @param indexProcessingTypeService
-	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
-	/**
-	 * Get the user service.
-	 * 
-	 * @return
-	 */
 	public UserService getUserService() {
 		return userService;
 	}
 
-	/**
-	 * Set the user service.
-	 * 
-	 * @param userService
-	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
-	}
-	
-	/**
-	 * Get the group workspace file system service.
-	 * 
-	 * @return the group workspace file system service.
-	 */
-	public GroupWorkspaceFileSystemService getGroupWorkspaceFileSystemService() {
-		return groupWorkspaceFileSystemService;
-	}
-
-	/**
-	 * Set the group workspace file system service.
-	 * 
-	 * @param groupWorkspaceFileSystemService
-	 */
-	public void setGroupWorkspaceFileSystemService(
-				GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
-		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
-	}	
-	
-	/**
-	 * Update all indexes for a group workspace file - since a workspace file can be shared across multiple users, we may
-	 * want to update all users.  This method provides this option.
-	 * 
-	 * @param workspaceFile - workspace file to update
-	 * @param processingType - type of processing
-	 * 
-	 * @return list of records updated.
-	 */
-	public List<UserWorkspaceIndexProcessingRecord> saveAll(
-			GroupWorkspaceFile workspaceFile, IndexProcessingType processingType) {
-		
-		LinkedList<UserWorkspaceIndexProcessingRecord> records = new LinkedList<UserWorkspaceIndexProcessingRecord>();
-    	
-    	//add the new version to all users
-		Set<IrUser> users = securityService.getUsersWithPermissionForObject(workspaceFile.getVersionedFile(), VersionedFile.VIEW_PERMISSION);
-    	
-    	for(IrUser user : users)
-    	{
-    	    records.add(save(user.getId(), workspaceFile, processingType));
- 		}
-    	return records;
-	}
-	
-	/**
-	 * Update all indexes for a group workspace folder - since a workspace folder can be shared across multiple users, we may
-	 * want to update all users.  This method provides this option.
-	 * 
-	 * @param workspaceFolder - workspace folder to update
-	 * @param processingType - type of processing
-	 * 
-	 * @return list of records updated.
-	 */
-	public List<UserWorkspaceIndexProcessingRecord> saveAll(
-			GroupWorkspaceFolder workspaceFolder, IndexProcessingType processingType) {
-		
-		LinkedList<UserWorkspaceIndexProcessingRecord> records = new LinkedList<UserWorkspaceIndexProcessingRecord>();
-		
-    	
-    	//add the new version to all users
-		Set<IrUser> users = securityService.getUsersWithPermissionForObject(workspaceFolder, GroupWorkspaceFolder.FOLDER_READ_PERMISSION);
-    	
-    	for(IrUser user : users)
-    	{
-    	    records.add(save(user.getId(), workspaceFolder, processingType));
- 		}
-    	return records;
-	}
-
-	/**
-     * Will delete and set all user workspaces to be re-indexed
-     * 
-     * @param processing type - type of processing to be performed.
-     * @throws IOException 
-     */
-	public void reIndexAllWorkspaceUsers(IndexProcessingType processingType)
-			throws IOException {
-		List<IrUser> users = userService.getUsersWithWorkspaceIndex();
-		log.debug("re indexing " + users.size() + " accounts");
-		for(IrUser user : users)
-		{
-			user.setReBuildUserWorkspaceIndex(true);
-			userService.makeUserPersistent(user);
-			this.reIndexAllUserItems(user, processingType);
-		}
-		
-	}
-	
-	/**
-	 * Get the security service.
-	 * 
-	 * @return
-	 */
-	public SecurityService getSecurityService() {
-		return securityService;
-	}
-
-	/**
-	 * Set the security service.
-	 * 
-	 * @param securityService
-	 */
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 }

@@ -26,7 +26,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.groupspace.GroupWorkspaceInviteService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.FileSharingException;
@@ -100,9 +99,6 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	/** Service for inviting users */
 	private InviteUserService inviteUserService;
 	
-	
-	/* service to deal with invitations to a group workspace */
-	private GroupWorkspaceInviteService groupWorkspaceInviteService;
 
 
 
@@ -152,7 +148,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 			}
 			
 			// token is a combination of random number and email
-			String emailToken = TokenGenerator.getToken() + email.getEmail();
+			String emailToken = TokenGenerator.getToken();
 			email.setVerifiedFalse(emailToken);
 			irUser.addUserEmail(email, false);
 			userService.makeUserPersistent(irUser);
@@ -190,7 +186,6 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	 * 
 	 * @return
 	 * @throws FileSharingException 
-	 * @throws UnVerifiedEmailException 
 	 */
 	public String setVerified() throws FileSharingException, UnVerifiedEmailException
 	{
@@ -214,7 +209,6 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		log.debug("invite user service = " + inviteUserService);
 		log.debug("user id = " + userEmail.getIrUser().getId());
 		log.debug(" user email = " + userEmail.getEmail() );
-		groupWorkspaceInviteService.addUserToGroupsForEmail(userEmail.getEmail());
 		inviteUserService.sharePendingFilesForEmail(userEmail.getIrUser().getId(), userEmail.getEmail());
 
 		return "viewEmails";
@@ -242,7 +236,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		}
 
 		UserEmail userEmail = userService.getEmail(emailId, false);
-		userEmail.setVerifiedFalse(TokenGenerator.getToken() + userEmail.getEmail());
+		userEmail.setVerifiedFalse(TokenGenerator.getToken() );
 	    userService.sendAccountVerificationEmailForUser(userEmail.getToken(), userEmail.getEmail(), irUser.getUsername());
 
 		return "added";
@@ -522,23 +516,12 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		return emailVerificationMessage;
 	}
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
 	public void setInviteUserService(InviteUserService inviteUserService) {
 		this.inviteUserService = inviteUserService;
-	}
-
-	
-	/**
-	 * Set the group workspace invite service.
-	 * 
-	 * @param groupWorkspaceInviteService
-	 */
-	public void setGroupWorkspaceInviteService(
-			GroupWorkspaceInviteService groupWorkspaceInviteService) {
-		this.groupWorkspaceInviteService = groupWorkspaceInviteService;
 	}
 
 

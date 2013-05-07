@@ -62,7 +62,7 @@ YAHOO.ur.file.upload =
 	        var fileInput = document.createElement('input');
 	        fileInput.type = 'file';
 	        fileInput.name = 'file';
-	        fileInput.size = '135';
+	        fileInput.size = '123';
 
             var tableRow1 = table.insertRow(rowCount);
             var tableCell1 = tableRow1.insertCell(0);

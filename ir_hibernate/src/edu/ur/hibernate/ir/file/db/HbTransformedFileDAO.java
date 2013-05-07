@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.file.db;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.file.db.FileInfo;
@@ -56,6 +58,17 @@ public class HbTransformedFileDAO implements TransformedFileDAO{
 		hbCrudDAO = new HbCrudDAO<TransformedFile>(TransformedFile.class);
 	}
 	
+	
+	/**
+	 * Get all transformed files in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	/**
 	 * Get a transfomed file by id.
 	 * 

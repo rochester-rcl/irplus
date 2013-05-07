@@ -25,14 +25,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.SearchHelper;
@@ -53,7 +50,7 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 	private static final long serialVersionUID = -2397275247687886048L;
 
 	/** Analyzer for dealing with analyzing the search */
-	private transient Analyzer analyzer;
+	private Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultNameAuthoritySearchService.class);
@@ -113,13 +110,9 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 		String indexFolder = nameAuthorityIndex.getAbsolutePath();
 		
 		IndexSearcher searcher = null;
-		IndexReader reader = null;
 		try {
-			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			reader = IndexReader.open(directory, true);
-			searcher = new IndexSearcher(reader);
-			
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			searcher = new IndexSearcher(indexFolder);
+			QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
@@ -153,14 +146,6 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 					searcher.close();
 				} catch (IOException e) {
 					log.error("the searcher could not be closed", e);
-				}
-			}
-			if( reader != null )
-			{
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error("the reader could not be closed", e);
 				}
 			}
 		} 

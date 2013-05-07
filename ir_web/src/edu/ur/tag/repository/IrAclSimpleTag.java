@@ -132,8 +132,9 @@ public class IrAclSimpleTag extends SimpleTagSupport{
              }
              
              
-            
-             if( aclManager.hasPermission(resolvedDomainObject, user, hasPermission))
+             Long count = aclManager.hasPermission(resolvedDomainObject, user, hasPermission);
+             
+             if( count > 0)
              {
             	 granted = true;
              }

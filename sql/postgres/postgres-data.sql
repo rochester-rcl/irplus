@@ -111,6 +111,11 @@ insert into
 ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
 values (nextval('ir_item.content_type_seq'), 0, 'Form', null, 'FORM');
 
+insert into 
+ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.content_type_seq'), 0, 'Thesis', null, 'THESIS');
+
+
 -- ---------------------------------------------
 -- Default Contributor types
 -- ---------------------------------------------
@@ -4657,14 +4662,6 @@ insert into ir_user.role (role_id, version, name, description)
 select nextval('ir_user.role_seq'), 0, 'ROLE_COLLECTION_ADMIN', 'Indicates the user is a 
 Collection Administrator';
 
-insert into ir_user.role (role_id, version, name, description)
-select nextval('ir_user.role_seq'), 0, 'ROLE_AFFLIATION_APPROVER', 
-'Indicates the user can approve user affilations';
-
-insert into ir_user.role (role_id, version, name, description)
-select nextval('ir_user.role_seq'), 0, 'ROLE_GROUP_WORKSPACE_CREATOR', 
-'Indicates the user can create group workspaces';
-
 -- ---------------------------------------------
 -- Insert the admin role into the database
 -- ---------------------------------------------
@@ -4699,24 +4696,12 @@ ir_user.ir_user, ir_user.role
 where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='COLLECTION_AUTHOR';
 
+
 insert into ir_user.user_role(user_id, role_id)
 select ir_user.ir_user.user_id, ir_user.role.role_id from
 ir_user.ir_user, ir_user.role
 where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='ROLE_IMPORTER';
-
-insert into ir_user.user_role(user_id, role_id)
-select ir_user.ir_user.user_id, ir_user.role.role_id from
-ir_user.ir_user, ir_user.role
-where ir_user.ir_user.username = 'admin'
-and ir_user.role.name ='ROLE_AFFLIATION_APPROVER';
-
-insert into ir_user.user_role(user_id, role_id)
-select ir_user.ir_user.user_id, ir_user.role.role_id from
-ir_user.ir_user, ir_user.role
-where ir_user.ir_user.username = 'admin'
-and ir_user.role.name ='ROLE_GROUP_WORKSPACE_CREATOR';
-
 
 -- ---------------------------------------------
 -- Insert the user role into the database
@@ -5013,11 +4998,6 @@ index but the files have not changed in the record');
 insert into 
 ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
 values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE', 'A record is to be deleted from the index');
-
-insert into 
-ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
-values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE_INDEX', 'the index needs to be deleted and rebuilt');
-
 
 -- -----------------------------------
 --  Insert the dublin core 
@@ -7163,3 +7143,4 @@ VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'),
         ' ', 
         'a', 
         0);
+ 

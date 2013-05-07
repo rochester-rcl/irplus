@@ -239,10 +239,10 @@ public interface UserFileSystemService extends Serializable{
 	/**
 	 * Allow a user to move folders and files to a given location.
 	 * 
-	 * @param destination
-	 * @param foldersToMove
-	 * @param filesToMove
-	 * 
+	 * @param destination - destination folder to move the files and folders to
+	 * @param foldersToMove - list of folders to move
+	 * @param filesToMove - list of files to move
+
 	 * @return list of files and folders that cannot be moved.
 	 */
 	public List<FileSystem> moveFolderSystemInformation(PersonalFolder destination, 
@@ -258,6 +258,13 @@ public interface UserFileSystemService extends Serializable{
 	 * @param filesToMove - files to move
 	 * 
 	 * @return list of files and folders that cannot be moved.
+	 */
+	/**
+	 * @param user
+	 * @param foldersToMove
+	 * @param filesToMove
+
+	 * @return
 	 */
 	public List<FileSystem> moveFolderSystemInformation(IrUser user, 
 			List<PersonalFolder> foldersToMove, 
@@ -373,6 +380,14 @@ public interface UserFileSystemService extends Serializable{
 	 * @return Personal files using this IrFile
 	 */
 	public Long getPersonalFileCount(IrFile irFile);
+	
+	/**
+	 * Get all personal files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of personal files being used.
+	 */
+	public List<PersonalFile> getPersonalFilesWithIrFile(IrFile irFile);
 	
 	/**
 	 * Get a count of the shared files in this user's In-box

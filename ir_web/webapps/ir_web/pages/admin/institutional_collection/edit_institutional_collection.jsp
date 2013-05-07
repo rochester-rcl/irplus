@@ -47,13 +47,16 @@
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
 
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
 
  	<ur:js src="page-resources/js/admin/edit_institutional_collection.js"/>
  	<ur:js src="page-resources/js/admin/add_group_to_collection.js"/>
+ 	
+ 	
+ 	
     
     <!--  Style for dialog boxes -->
     <style>
@@ -101,7 +104,7 @@
             </div>
             
             
-            <!--  set up tabs for the collection -->
+            <!--  set up tabs for the workspace -->
 	        <div id="collection-properties-tabs" class="yui-navset">
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>Collection Information</em></a></li>

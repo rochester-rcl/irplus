@@ -20,10 +20,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.researcher.ResearcherFile;
 import edu.ur.ir.researcher.ResearcherFolder;
@@ -72,8 +72,8 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("researcherFolderCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("researcherFolderCount"));
 	}
 
 	/**
@@ -86,10 +86,9 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	public ResearcherFolder getRootResearcherFolder(String name, Long researcherId)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootResearcherFolderByNameResearcher");
-		q.setString("name", name);
-		q.setLong("researcherId", researcherId);
-		return (ResearcherFolder) q.uniqueResult();
+		Object[] values = new Object[] {name, researcherId};
+		return (ResearcherFolder) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRootResearcherFolderByNameResearcher", 
+				values));
 	}
 	
 	/**
@@ -102,10 +101,9 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	public ResearcherFolder getResearcherFolder(String name, Long parentId)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherFolderByNameParent");
-		q.setString("name", name);
-		q.setLong("parentId", parentId);
-		return (ResearcherFolder) q.uniqueResult();
+		Object[] values = new Object[] {name, parentId};
+		return (ResearcherFolder) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFolderByNameParent", 
+				values));
 	}
 	
 	/**
@@ -114,11 +112,9 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getNodesLeftRightGreaterEqual(Long value, Long rootId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherFoldersValueGreaterEqual");
-		q.setLong("leftValue", value);
-		q.setLong("rightValue", value);
-		q.setLong("rootId", rootId);
-		return (List<ResearcherFolder>) q.list();
+		Long[] values = new Long[] {value, value, rootId};
+		return (List<ResearcherFolder>) 
+		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherFoldersValueGreaterEqual", values);
 	}
 	
 	/**
@@ -127,11 +123,12 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getAllNodesNotInChildFolder(ResearcherFolder researcherFolder)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherFoldersNotInChildTree");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rightValue", researcherFolder.getRightValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		return (List<ResearcherFolder>) q.list();
+		Long[] ids = new Long[] {researcherFolder.getLeftValue(),
+				researcherFolder.getRightValue(), 
+				researcherFolder.getTreeRoot().getId()};
+		List<ResearcherFolder> listTree =  
+			(List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherFoldersNotInChildTree", ids);
+		return listTree;
 	}
 	
 	/**
@@ -139,9 +136,10 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getAllResearcherFoldersForResearcher(Long researcherId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherFoldersForResearcher");
-		q.setLong("id", researcherId);
-		return (List<ResearcherFolder>)q.list();
+		List<ResearcherFolder> collections =  
+			(List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFoldersForResearcher", 
+				researcherId);
+		return collections;
 	}
 	
 	/**
@@ -151,10 +149,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getSubFoldersForFolder(Long researcherId, Long parentFolderId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getSubFoldersForResearcherFolder");
-		q.setLong("researcherId", researcherId);
-		q.setLong("parentFolderId", parentFolderId);
-		return (List<ResearcherFolder>)q.list();
+		
+		Long[] values = new Long[] {researcherId, parentFolderId};
+		
+		List<ResearcherFolder> collections =  
+			(List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getSubFoldersForResearcherFolder", 
+					values);
+		return collections;
 	}
 	
 	/**
@@ -164,9 +165,11 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getRootFolders(Long researcherId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootResearcherFolders");
-		q.setLong("researcherId", researcherId);
-		return (List<ResearcherFolder>)q.list();
+		
+		List<ResearcherFolder> collections =  
+			(List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRootResearcherFolders", 
+					researcherId);
+		return collections;
 	}
 
 	/**
@@ -183,13 +186,25 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getPath(ResearcherFolder researcherFolder)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getResearcherFolderPath");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		q.setLong("researcherId", researcherFolder.getResearcher().getId());
-		return (List<ResearcherFolder>) q.list();
+		Long[] values = new Long[] {researcherFolder.getLeftValue(),
+				researcherFolder.getTreeRoot().getId(), 
+				researcherFolder.getResearcher().getId()};
+		return (List<ResearcherFolder>) 
+		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFolderPath", values);
 	}
 	
+    
+
+	/**
+	 * Get all researcher folders in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	/**
 	 * Get all researcher folders by id.
 	 * 
@@ -228,11 +243,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFile> getAllFilesForFolder(ResearcherFolder researcherFolder) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherFilesForFolder");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rightValue", researcherFolder.getRightValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		return (List<ResearcherFile>)q.list();	
+		Long[] ids = new Long[] {researcherFolder.getLeftValue(),
+				researcherFolder.getRightValue(), 
+				researcherFolder.getTreeRoot().getId()};
+		List<ResearcherFile> files =  
+			(List<ResearcherFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherFilesForFolder", 
+					ids);
+		return files;
 	}
 	
 	/**
@@ -244,11 +261,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherPublication> getAllPublicationsForFolder(ResearcherFolder researcherFolder) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherPublicationsForFolder");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rightValue", researcherFolder.getRightValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		return (List<ResearcherPublication>)q.list();
+		Long[] ids = new Long[] {researcherFolder.getLeftValue(),
+				researcherFolder.getRightValue(), 
+				researcherFolder.getTreeRoot().getId()};
+		List<ResearcherPublication> publications =  
+			(List<ResearcherPublication>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherPublicationsForFolder", 
+					ids);
+		return publications;
 	}
 
 	/**
@@ -260,11 +279,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherInstitutionalItem> getAllInstitutionalItemsForFolder(ResearcherFolder researcherFolder) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherInstitutionalItemsForFolder");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rightValue", researcherFolder.getRightValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		return (List<ResearcherInstitutionalItem>) q.list();
+		Long[] ids = new Long[] {researcherFolder.getLeftValue(),
+				researcherFolder.getRightValue(), 
+				researcherFolder.getTreeRoot().getId()};
+		List<ResearcherInstitutionalItem> institutionalItems =  
+			(List<ResearcherInstitutionalItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherInstitutionalItemsForFolder", 
+					ids);
+		return institutionalItems;
 	}
 
 	
@@ -277,11 +298,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherLink> getAllLinksForFolder(ResearcherFolder researcherFolder) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherLinksForFolder");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rightValue", researcherFolder.getRightValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		return (List<ResearcherLink>) q.list();
+		Long[] ids = new Long[] {researcherFolder.getLeftValue(),
+				researcherFolder.getRightValue(), 
+				researcherFolder.getTreeRoot().getId()};
+		List<ResearcherLink> links =  
+			(List<ResearcherLink>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherLinksForFolder", 
+					ids);
+		return links;
 	}
 	
 	/**
@@ -293,11 +316,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrFile> getAllIrFilesForFolder(ResearcherFolder researcherFolder) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllIrFilesForResearcherPageFolder");
-		q.setLong("leftValue", researcherFolder.getLeftValue());
-		q.setLong("rightValue", researcherFolder.getRightValue());
-		q.setLong("rootId", researcherFolder.getTreeRoot().getId());
-		return (List<IrFile>) q.list();
+		Long[] ids = new Long[] {researcherFolder.getLeftValue(), 
+				researcherFolder.getRightValue(), 
+				researcherFolder.getTreeRoot().getId()};
+		List<IrFile> files =  
+			(List<IrFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllIrFilesForFolder", 
+					ids);
+		return files;
 	}
 
 	
@@ -315,12 +340,9 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 		{
 			for(ResearcherFolder f : folders)
 			{
-				Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherFoldersNotInChildFolders");
-				q.setLong("researcherId", researcherId);
-				q.setLong("rootId", rootFolderId);
-				q.setLong("leftValue", f.getLeftValue());
-				q.setLong("rightValue", f.getRightValue());
-			    foundFolders.addAll((List<ResearcherFolder>) q.list());
+				Object[] values = {researcherId, rootFolderId, f.getLeftValue(), f.getRightValue()};
+			     foundFolders.addAll((List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllResearcherFoldersNotInChildFolders", 
+					values));
 			}
 		}
 		return foundFolders;
@@ -335,13 +357,12 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getAllOtherRootFolders(final List<Long> rootFolderIds, 
 			final Long researcherId) {
+		String[] parameters = {"researcherId", "folders"};
+		Object[] values = {researcherId, rootFolderIds};
 		List<ResearcherFolder> foundFolders = new LinkedList<ResearcherFolder>();
 		if( rootFolderIds.size() > 0 )
 		{
-		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllOtherRootResearcherFolders");
-		    q.setLong("researcherId", researcherId);
-		    q.setParameterList("folders",  rootFolderIds);
-		    foundFolders = (List<ResearcherFolder>) q.list();
+		   foundFolders = (List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQueryAndNamedParam("getAllOtherRootResearcherFolders", parameters, values);;
 		}
 		return foundFolders;
 	}
@@ -354,15 +375,13 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ResearcherFolder> getFolders(final Long researcherId, final List<Long> folderIds) {
-		
+		String[] parameters = {"researcherId", "folders"};
+		Object[] values = {researcherId, folderIds};
 		List<ResearcherFolder> foundFolders = new LinkedList<ResearcherFolder>();
 		if( folderIds.size() > 0 )
-		{
-		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getAllResearcherFoldersInList");
-		    q.setLong("researcherId", researcherId);
-		    q.setParameterList("folders", folderIds);
-		    foundFolders = (List<ResearcherFolder>)q.list();
-		}
+        {
+			foundFolders = (List<ResearcherFolder>) hbCrudDAO.getHibernateTemplate().findByNamedQueryAndNamedParam("getAllResearcherFoldersInList", parameters, values); 
+        }
 		return foundFolders;
 	}
 	

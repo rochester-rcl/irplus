@@ -140,7 +140,7 @@ public class WithdrawInstitutionalPublication extends ActionSupport implements U
 		this.withdrawAllVersions = withdrawAllVersions;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 		
 	}

@@ -58,7 +58,7 @@
     <!-- named query for getting a department-->
 	<query name="getFieldByName">
 		from Field as Field where
-		Field.name = :name
+		Field.name = ?
 	</query>
 
 	<!-- named query for getting all departments ordered by name asc -->

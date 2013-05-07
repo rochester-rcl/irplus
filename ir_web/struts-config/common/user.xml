@@ -20,7 +20,6 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd" [
     <!ENTITY researcher SYSTEM "user_researcher.xml">
-    <!ENTITY group_workspace SYSTEM "user_group_workspace.xml">
     ]>
 <struts>
     
@@ -103,11 +102,6 @@
         <!--  Researcher actions                -->
         <!--  ************************************ -->
         &researcher;
-        
-        <!--  ************************************ -->
-        <!--  Group workspace actions              -->
-        <!--  ************************************ -->
-        &group_workspace;
                 
                 
         <!--  ************************************ -->
@@ -254,7 +248,7 @@
         </action>
         
         <!--  Rename file  -->
-        <action name="*PersonalFile" class="edu.ur.ir.web.action.user.RenamePersonalFile" method="{1}">
+        <action name="*File" class="edu.ur.ir.web.action.user.RenamePersonalFile" method="{1}">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/rename_file_form.jsp</result>
@@ -285,7 +279,7 @@
             method="viewLocations">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/workspace/move_folder.jsp</result>
+            <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
         </action>
         
         <action name="movePersonalFolderInformation"
@@ -293,12 +287,7 @@
             method="move">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result type="redirectAction" name="success">
-        	      <param name="actionName">workspace.action</param>
-        	      <param name="namespace">/user</param>
-        	      <param name="parentFolderId">${destination.id}</param>
-        	</result>
-        	<result name="error">/pages/user/workspace/move_folder.jsp</result>
+            <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
         </action>
         
         <!--  ************************************ -->
@@ -405,7 +394,7 @@
             method="viewLocations">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/workspace/move_collection.jsp</result>
+            <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
         </action>
         
         <action name="movePersonalCollectionInformation"
@@ -413,13 +402,7 @@
             method="move">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result type="redirectAction" name="success">
-        	      <param name="actionName">workspace.action</param>
-        	      <param name="namespace">/user</param>
-        	      <param name="parentCollectionId">${destination.id}</param>
-        	      <param name="tabName">COLLECTION</param>
-        	</result>
-            <result name="error">/pages/user/workspace/move_collection.jsp</result>
+            <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
         </action>        
 
         <!--  ************************************ -->
@@ -1103,6 +1086,7 @@
             <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
         </action> 
 
+ 
         <!--  ************************************ -->
         <!--  Auto share folder actions (Folder)   -->
         <!--  ************************************ -->
@@ -1133,7 +1117,19 @@
             <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
         </action>
         
+        <action name="getFolderAutoSharePermissions" method="getPermissions"  
+        		class="edu.ur.ir.web.action.user.AutoShareFolder">
+        	<interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/edit_folder_auto_share_permissions_form.jsp</result>
+        </action>
         
+        <action name="updateFolderAutoSharePermissions" method="updatePermissions"  
+        		class="edu.ur.ir.web.action.user.AutoShareFolder">
+        	<interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/edit_folder_auto_share_permissions_form.jsp</result>
+        </action>
         
         <!--  ************************************ -->
         <!--  Change Password  actions			       -->
@@ -1218,14 +1214,6 @@
             <result name="get">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/persons/person_deleted.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
-        </action>
-        
-        <!--  special action for a user who is editing their own name in their account section -->
-        <action name="userInitialCreatePerson" 
-            method="create"
-            class="edu.ur.ir.web.action.person.ManagePersons">
-            <interceptor-ref name="crudStack" />
-            <result name="added">/pages/user/login/add_authoring_name_form_frag.jsp</result>
         </action>
         
         <!--  ************************************ -->

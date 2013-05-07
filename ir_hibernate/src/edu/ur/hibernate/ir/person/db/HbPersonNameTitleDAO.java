@@ -36,9 +36,6 @@ import edu.ur.ir.person.PersonNameTitleDAO;
 public class HbPersonNameTitleDAO  extends 
     HbCrudDAO<PersonNameTitle> implements PersonNameTitleDAO{
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = -1869309053580253259L;
-
 	/**
 	 * Default Constructor
 	 */

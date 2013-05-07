@@ -26,8 +26,8 @@ var lockFileAction = basePath + 'user/lockVersionedFile.action';
 var unLockFileAction = basePath + 'user/unLockVersionedFile.action';
 
 // Action to rename file
-var fileRenameAction = basePath + 'user/renamePersonalFile.action';
-var getFileNameAction = basePath + 'user/getPersonalFile.action';
+var fileRenameAction = basePath + 'user/renameFile.action';
+var getFileNameAction = basePath + 'user/getFile.action';
 var changeOwnerAction = basePath + 'user/changeOwner.action';
 
 // actions for inviting users

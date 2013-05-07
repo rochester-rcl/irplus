@@ -461,6 +461,15 @@ public interface InstitutionalItemService extends Serializable{
 	public Long getCountByGenericItem(Long genericItemId);
 	
 	/**
+	 * Get all institutional items that contain any of the generic item ids in the given list.
+	 * 
+	 * @param genericItemIds - list of generic item ids
+	 * @return list of institutional items found.
+	 */
+	public List<InstitutionalItem> getInstitutionalItemsByGenericItemIds(List<Long> genericItemIds);
+
+	
+	/**
 	 * Get a list of items for a specified repository by first character of the name
 	 * 
 	 * @param rowStart - Start row to fetch the data from

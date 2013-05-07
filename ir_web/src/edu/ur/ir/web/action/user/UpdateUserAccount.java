@@ -120,7 +120,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	private Long licenseId;
 	
 	/** Authenticator for ldap username/password */
-	private transient LdapAuthenticator authenticator;
+	private LdapAuthenticator authenticator;
 	
 	/** Authentication provider for ldap */
 	private UrLdapAuthenticationProvider ldapAuthProvider;
@@ -376,7 +376,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -497,6 +497,15 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	/**
+	 * Determine if external authentication enabled.
+	 * 
+	 * @return - true if external authentication enabled
+	 */
+	public boolean getExternalAuthenticationEnabled(){
+		return repositoryService.isExternalAuthenticationEnabled();
 	}
 
 }

@@ -75,7 +75,7 @@
 	<query name="getResearcherPublicationCount">
 		select count(*) 
 		from ResearcherPublication as ResearcherPublication where
-		ResearcherPublication.publication.id = :itemId
+		ResearcherPublication.publication.id = ?
 	</query>
 	
     

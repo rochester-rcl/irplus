@@ -24,6 +24,7 @@ import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFileDAO;
 
@@ -134,13 +135,27 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 	 * 
 	 * @return the found files
 	 */
-	public Long getFileWithSpecifiedIrFile(Long irFileId) {
+	public Long getPersonalFileCount(Long irFileId) {
 		
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate()
-			.findByNamedQuery("getPersonalFilesWithIrFileId", irFileId));
+			.findByNamedQuery("getPersonalFileCountWithIrFileId", irFileId));
 		
 		
+	}
+	
+	
+	/**
+	 * Get all item files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of item files being used.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonalFile> getPersonalFilesWithIrFile(IrFile irFile) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPersonalFilesWithIrFileId");
+		q.setParameter("irFileId", irFile.getId());
+		return q.list();
 	}
 	
 	/**
@@ -228,6 +243,16 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 		q.setParameter("ownerId", ownerId);
 		q.setParameter("collaboratorId", sharedWithUserId );
 		return (Long) q.uniqueResult();
+	}
+	
+	/**
+	 * Get all personal collections in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 

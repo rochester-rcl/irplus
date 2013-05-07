@@ -1,4 +1,4 @@
-<jsp:directive.page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" />
+<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
 
 <!--  
@@ -46,14 +46,24 @@
          <td align="left" class="input"><textarea id="user_file_description" 
              name="userFileDescription" cols="47" rows="2"></textarea></td>
     </tr>
-    <tr>
+        <tr>
          <td class="label">Keep Locked</td>
          <td align="left" class="input"><input type="checkbox" name="keepLocked" value="true"/></td>
     </tr>
     <c:if test="${!empty personalFile.versionedFile.collaborators}">
     <tr>
-         <td class="label">Notify Collaborators</td>
-         <td align="left" class="input"><input type="checkbox" selected="true" name="notifyCollaborators" value="true"/></td>
+        <td colspan="2">Select collaborators to notify of update by Email</td>
     </tr>
+    <tr>
+        <td class="label">${personalFile.versionedFile.owner.firstName}&nbsp;${personalFile.versionedFile.owner.lastName} </td>
+        <td align="left" class="input"><input type="checkbox"  name="notifyOwner" value="true"/></td>
+    </tr>
+    <c:forEach items="${personalFile.versionedFile.collaborators}" var="collaborator">
+    <tr>
+         <td class="label">${collaborator.collaborator.firstName}&nbsp;${collaborator.collaborator.lastName} </td>
+         <td align="left" class="input"><input type="checkbox"  name="collaboratorIds" value="${collaborator.id}"/></td>
+    </tr>
+    </c:forEach>
+    
     </c:if>
 </table>

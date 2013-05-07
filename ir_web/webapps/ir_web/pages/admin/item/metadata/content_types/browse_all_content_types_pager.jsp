@@ -66,6 +66,5 @@
 		</ur:lastPage>	
 				    
 	</ur:pager>	
-</div>
-				         
+</div>     
 				         

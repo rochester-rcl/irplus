@@ -61,10 +61,10 @@
                             <ul>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewAffiliations.action" />"><span class="menu_text"><fmt:message key="menu.affiliations" /></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPendingApproval.action" />"><span class="menu_text"><fmt:message key="menu.viewPendingApproval" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileInfoChecksums.action"/>"><span class="menu_text">Checksum Information</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewContentTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewContributorTypes" /></span></a></li>
                                 
-               
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewCopyrightStatements.action"/>"><span class="menu_text">Copyright Statements</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDepartments.action" />"><span class="menu_text"><fmt:message key="menu.departments"/></span></a></li>
                                 <li class="yuimenuitem">
@@ -79,9 +79,7 @@
                                         </div>
                                     </div>                    
                                 </li>
-                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInviteInfos.action"/>"><span class="menu_text">Invite Information</span></a></li>
-                                </c:if>
+                                
                                 
                                 
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
@@ -90,7 +88,6 @@
                                 </c:if>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFields.action" />"><span class="menu_text"><fmt:message key="menu.fields"/></span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>"><span class="menu_text">File Storage</span></a></li>
-				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewGroupWorkspaces.action"/>"><span class="menu_text">Group Workspaces</span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>"><span class="menu_text">Handle Name Authorities</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewIdentifierTypes"/></span></a></li>
                                 

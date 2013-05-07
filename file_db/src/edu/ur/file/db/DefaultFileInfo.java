@@ -463,17 +463,18 @@ public class DefaultFileInfo implements FileInfo {
 	 * 
 	 * @see edu.ur.file.db.FileInfo#addFileInfoChecksum(edu.ur.file.checksum.ChecksumCalculator)
 	 */
-	public void addFileInfoChecksum(ChecksumCalculator checksumCalculator) {
+	public FileInfoChecksum addFileInfoChecksum(ChecksumCalculator checksumCalculator) {
 		String checksum = checksumCalculator.calculate(new File(this.getFullPath()));
         FileInfoChecksum fileInfoChecksum = new FileInfoChecksum(checksum, checksumCalculator.getAlgorithmType(), this);
         
+        // if the checksum algorithm has  already been calculated then don't re-add it
         FileInfoChecksum oldChecksum = getFileInfoChecksum(checksumCalculator.getAlgorithmType());
-        if(oldChecksum != null)
+        if(oldChecksum == null)
         {
-        	fileInfoChecksums.remove(oldChecksum);
+        	fileInfoChecksums.add(fileInfoChecksum);
         }
         
-        fileInfoChecksums.add(fileInfoChecksum);
+        return fileInfoChecksum;
 	}
 
 	

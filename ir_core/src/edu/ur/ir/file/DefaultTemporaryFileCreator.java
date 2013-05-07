@@ -29,9 +29,6 @@ import org.apache.commons.io.FileUtils;;
  */
 public class DefaultTemporaryFileCreator implements TemporaryFileCreator{
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = -2342604088046253377L;
-	
 	/** temporary directory to create */
 	private String temporaryDirectory;
 	

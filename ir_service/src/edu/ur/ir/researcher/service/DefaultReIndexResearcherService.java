@@ -62,6 +62,8 @@ public class DefaultReIndexResearcherService implements ReIndexResearchersServic
 		    overwriteExistingIndex = false;
 		    rowStart = rowStart + batchSize;
 		}
+		//optimize the index.
+		researcherIndexService.optimize(researcherIndexFolder);
 		
 		return numProcessed;
 		

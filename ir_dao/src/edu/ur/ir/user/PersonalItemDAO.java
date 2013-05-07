@@ -19,6 +19,7 @@ package edu.ur.ir.user;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.item.GenericItem;
 
 /**
  * Interface for accessing and storing personal item information.
@@ -67,4 +68,12 @@ public interface PersonalItemDAO  extends CrudDAO<PersonalItem>
 	 * @return
 	 */
 	public PersonalItem getPersonalItem(Long genericItemId);
+	
+	/**
+	 * Get all personal items which have the specified generic item ids 
+	 * 
+	 * @param itemIds - list of generic item ids
+	 * @return - all personal items that contain the generic item id.
+	 */
+	public List<PersonalItem> getAllPersonalItemsByGenericItemIds(List<Long> itemIds);
 }

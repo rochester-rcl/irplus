@@ -20,6 +20,8 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
+
 <div class="pager">
 	<ur:pager currentPageNumber="${currentPageNumber}" 
 	     startPageNumber="${startPageNumber}"  
@@ -65,5 +67,6 @@
 				    
 	</ur:pager>	
 </div>
+
 				         
 				         

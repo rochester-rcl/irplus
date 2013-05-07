@@ -71,6 +71,13 @@ public interface UserGroupService extends Serializable{
 	public IrUserGroup get(String name);
 
 	/**
+	 * Get all user groups.
+	 * 
+	 * @return
+	 */
+	public List<IrUserGroup> getAll();
+
+	/**
 	 * Get a user group by id.
 	 * 
 	 * @param id

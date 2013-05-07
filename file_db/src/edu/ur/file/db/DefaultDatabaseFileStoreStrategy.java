@@ -16,7 +16,6 @@
 package edu.ur.file.db;
 
 import java.io.File;
-import java.io.Serializable;
 
 import edu.ur.file.IllegalFileSystemNameException;
 
@@ -28,7 +27,7 @@ import edu.ur.file.IllegalFileSystemNameException;
  * @author Nathan Sarr
  *
  */
-public interface DefaultDatabaseFileStoreStrategy extends Serializable{
+public interface DefaultDatabaseFileStoreStrategy {
 	
 	
 	/**

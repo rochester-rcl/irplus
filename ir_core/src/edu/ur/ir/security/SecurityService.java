@@ -68,21 +68,10 @@ public interface SecurityService extends Serializable{
      * @param sid - secure id 
      * @param permission - permission to check for
      * 
-     * @return true if the user has the specified permission for the given domain instance.
-     */
-    public boolean hasPermission(Object domainInstance, Sid sid, String permission);
-    
-    /**
-     * Determine if the user has the specified permission.
-     * 
-     * @param domainInstance - domain instance to check
-     * @param sid - secure id 
-     * @param permission - permission to check for
-     * 
      * @return the number of times the sid has the given permission - 0 indicates the sid does
      * not have the permission
      */
-    public Long getPermissionCount(Object domainInstance, Sid sid, String permission);
+    public Long hasPermission(Object domainInstance, Sid sid, String permission);
     
 	/**
 	 * Creates an ACL object for the specified domain instance if
@@ -229,18 +218,6 @@ public interface SecurityService extends Serializable{
 	public Set<Sid> getSidsWithPermissionForObject(Object domainInstance, String permission);
 	
 	/**
-	 * Returns all users with the specified permission on the domain instance.  This
-	 * should only return users with explicit permissions set on them.  This will NOT
-	 * return a user who has the permission by being within a group that is given the permission.
-	 * 
-	 * @param domainInstance - domain instance to check
-	 * @param permission - permissions the sid must have
-	 * 
-	 * @return List of sids with the specified permissions.
-	 */
-	public Set<IrUser> getUsersWithPermissionForObject(Object domainInstance, String permission);
-	
-	/**
 	 * Return all secure id's who have the identified permission and are within
 	 * the specified set of sids.
 	 * 
@@ -252,37 +229,16 @@ public interface SecurityService extends Serializable{
 	 * @return all sids who meet the specified criteria
 	 */
 	public Set<Sid> getSidsWithPermissionForObject(Object domainInstance, String permission, List<Sid> specificSids);
-
-	/**
-	 * Create the permissions for user control entries.  This is a bulk operation.
-	 * 
-	 * @param entries - list of entries
-	 * @param permissions - list of permissions to give to each entry
-	 * 
-	 * @return number of entries created
-	 */
-	public int createPermissionsForUserControlEntries(List<IrUserAccessControlEntry> entries,
-			List<IrClassTypePermission> permissions);
 	
 	/**
-	 * Create user control entries for the list of users for the
-	 * specified acls.  This is a bulk operation
+	 * Update the permissions for the user - first removes all old permissions
+	 * then updates with the new permissions.
 	 * 
-	 * @param users - list of users to create the entries for
-	 * @param acl - acl to add the entries to
-	 * 
-	 * @return number of entries created
+	 * @param domainInstance - domain instance to update the permissions for
+	 * @param user - user to update the permissions for
+	 * @param newPermissions - new permissions to give to the user
 	 */
-	public int createUserControlEntriesForUsers(List<IrUser> users, List<IrAcl> acls );
-	
-	/**
-	 * Get the list of users for the given access control list.
-	 * 
-	 * @param acl - acl to the the access control entries for
-	 * @param users - list of users to get for the acl
-	 * 
-	 * @return - list of users found.
-	 */
-	public List<IrUserAccessControlEntry> getUserControlEntriesForUsers(IrAcl acl, List<IrUser> users);
+	public void updatePermissions(Object domainInstance, IrUser user, 
+			Collection<IrClassTypePermission> newPermissions);
 }
 

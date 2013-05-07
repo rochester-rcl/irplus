@@ -65,8 +65,8 @@ public class HbFileCollaboratorDAO implements FileCollaboratorDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("fileCollaboratorCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileCollaboratorCount"));
 	}
 	
 	/**
@@ -79,6 +79,42 @@ public class HbFileCollaboratorDAO implements FileCollaboratorDAO {
 	  	return (List<FileCollaborator>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("findCollaboratorsForVersionedFileId", versionedFileId);
 	}
 	
+	/**
+	 * Get the file collaborator for the user id and versioned file id.
+	 * 
+	 * @param userId - id of the user who is a collaborator
+	 * @param versionedFileId - id of the versioned file.
+	 * 
+	 * @return the file collaborator.
+	 */
+	public FileCollaborator findByUserIdVersionedFileId(Long userId, Long versionedFileId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findCollaboratorForUserVersionedFileId");
+		q.setParameter("versionedFileId", versionedFileId);
+		q.setParameter("userId", userId);
+		return (FileCollaborator)q.uniqueResult();
+	}
+	
+	/**
+	 * Get the list for file collaborator objects for the user id and versioned file ids.
+	 * 
+	 * @param userId - id of the user who is a collaborator
+	 * @param versionedFileIds - List of versioned files to check for
+	 * 
+	 * @return the file collaborator.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<FileCollaborator> findByUserIdVersionedFileId(Long userId, List<Long> versionedFileIds)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findCollaboratorForUserVersionedFileIdList");
+		q.setParameterList("versionedFileIds", versionedFileIds);
+		q.setParameter("userId", userId);
+		return (List<FileCollaborator>)q.list();
+	}
+
+	public List<FileCollaborator> getAll() {
+		return hbCrudDAO.getAll();
+	}
 
 	public FileCollaborator getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);

@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.statistics.db;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -80,8 +81,12 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 	}
 
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("ipIgnoreFileDownloadInfoCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("ipIgnoreFileDownloadInfoCount"));
+	}
+
+	public List<IpIgnoreFileDownloadInfo> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public IpIgnoreFileDownloadInfo getById(Long id, boolean lock) {
@@ -99,8 +104,9 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 	@SuppressWarnings("unchecked")
 	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(final int rowStart,
 			final int maxResults) {
+        List<IpIgnoreFileDownloadInfo> foundItems = new LinkedList<IpIgnoreFileDownloadInfo>();
 		
-         List<IpIgnoreFileDownloadInfo> foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
