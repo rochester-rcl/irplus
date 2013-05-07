@@ -1,0 +1,241 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+package edu.ur.ir.repository;
+
+
+import java.util.Properties;
+
+import org.testng.annotations.Test;
+
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.test.helper.PropertiesLoader;
+import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.user.IrUser;
+
+
+/**
+ * Test the Repository Class
+ * 
+ * @author Nathan Sarr
+ * 
+ */
+
+@Test(groups = { "baseTests" }, enabled = true)
+public class RepositoryTest {
+	
+	/** Properties file with testing specific information. */
+	PropertiesLoader propertiesLoader = new PropertiesLoader();
+	
+	/** Get the properties file  */
+	Properties properties = propertiesLoader.getProperties();
+	
+	/**
+	 * Test the basic get and set  methods
+	 * 
+	 * @param description
+	 */
+	public void testBasicRepositorySets() 
+	{
+		Repository repository  = new Repository();
+		repository.setDescription("myDescription");
+		repository.setName("myName");
+		
+		assert repository.getDescription().equals("myDescription") : "Descriptions should be equal";
+		assert repository.getName().equals("myName") : "Names should be equal";
+	}
+	
+	/**
+	 * Test equals and hash code methods.
+	 */
+	public void testRepositoryEquals()
+	{
+		Repository repository1  = new Repository();
+		Repository repository2  = new Repository();
+		Repository repository3  = new Repository();
+		
+		repository1.setName("name1");
+		repository2.setName("name2");
+		repository3.setName("name1");
+		
+		assert repository1.equals(repository3): "Repositorys should be the same";
+		assert !repository2.equals(repository1): "The repositorys should not be the same";
+		assert repository1.hashCode() == repository3.hashCode() : "Hash codes should be the same";
+		assert repository2.hashCode() != repository3.hashCode() : "Hash codes should not be the same";
+	}
+	
+	/**
+	 * Test adding/removing an irCollection from a repository
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void testAddCollection() throws DuplicateNameException, LocationAlreadyExistsException
+	{
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"a_test_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+		
+		InstitutionalCollection c = repo.createInstitutionalCollection("myCollection");
+		
+		
+		assert repo.getInstitutionalCollections().contains(c) : "Repository " + repo.toString() + " should "
+		 + "contain collection c " + c.toString();
+		
+		assert c.getPath().equals("/"): "Path should equal /" +
+		 " but equals " + c.getPath();
+		
+		assert c.getFullPath().equals("/myCollection/"): "Path should equal /myCollection/ " + 
+		 "but equals " + c.getFullPath();
+		
+		assert repo.removeInstitutionalCollection(c) : "Collection " + c.toString() + 
+		    "should be removed";
+		
+		assert !repo.getInstitutionalCollections().contains(c) : "Repository should no longer "
+			+ "contain collection " + c.toString();
+		
+		repoHelper.cleanUpRepository();
+	}
+	
+	/**
+	 * Test adding/removing an irCollection from a repository
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void testGetCollectionByName() throws DuplicateNameException, LocationAlreadyExistsException
+	{
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"a_test_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+		
+		InstitutionalCollection c = repo.createInstitutionalCollection("myCollection");
+		
+		assert repo.getInstitutionalCollection("myCollection").equals(c) : "Repository " + repo.toString() + " should "
+		 + "contain collection c " + c.toString();
+		
+		assert repo.removeInstitutionalCollection(c) : "Collection " + c.toString() + 
+		    "should be removed";
+		
+		assert repo.getInstitutionalCollection("myCollection") == null : "Repository should no longer "
+			+ "contain collection " + c.toString();
+		
+		repoHelper.cleanUpRepository();
+	}
+	
+	/**
+	 * Test moving a repository from inside the tree to 
+	 * a top level tree. 
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void testMakeIrCollectionTopLevel() throws DuplicateNameException, LocationAlreadyExistsException
+	{
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"a_test_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+		
+		InstitutionalCollection c = repo.createInstitutionalCollection("myCollection");
+		InstitutionalCollection subCollection = c.createChild("subCollection");
+		
+		assert subCollection.getLeftValue() == 2L : "Sub collection should have left value of 2 but is " + 
+		    subCollection.getLeftValue();
+		
+		assert subCollection.getRightValue() == 3L : "Sub collection should have right value of 3 but is " + 
+		    subCollection.getRightValue();
+		
+		assert c.getLeftValue() == 1L : "Sub collection should have left value of  1 but is " + c.getLeftValue();
+		assert c.getRightValue() == 4L : "Sub collection should have right value of 4 but is " + c.getRightValue();
+		
+		assert c.getChildren().contains(subCollection) : "Collection c should contain child " + subCollection;
+		
+		assert subCollection.getPath().equals("/myCollection/") : "Path should "
+			+ "equal /myCollection/ but equals " + subCollection.getPath();
+
+		assert subCollection.getFullPath().equals("/myCollection/subCollection/") : "Path should "
+			+ "equal /myCollection/subCollection/ but equals " + subCollection.getFullPath();
+		
+		
+		repo.addInstitutionalCollection(subCollection);
+
+		assert subCollection.getLeftValue() == 1L : "Sub collection should now have a left value of 1 but is " +
+		    subCollection.getLeftValue();
+		
+		assert subCollection.getRightValue() == 2L : "Sub collection should now have a right value of 2 but is " +
+		    subCollection.getRightValue();
+		
+		assert subCollection.getPath().equals("/") : "Path should "
+			+ "equal / but equals " + subCollection.getPath();
+
+		assert subCollection.getFullPath().equals("/subCollection/") : "Path should "
+			+ "equal /subCollection/ but equals " + subCollection.getFullPath();
+
+		assert !c.getChildren().contains(subCollection) : "Collection c should NOT contain child " + subCollection;
+		assert c.getParent() == null : "The parent should be null but is " + c.getParent();
+		
+		assert c.getTreeRoot().equals(c) : "The root should be equal to itself but equals " + c.getTreeRoot(); 
+		
+		repoHelper.cleanUpRepository();
+	}
+	
+	/**
+	 * Test setting default license.
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void testUpdateDefaultLicense() throws LocationAlreadyExistsException
+	{
+		IrUser user = new IrUser("name", "password");
+		VersionedLicense versionedLicense = new VersionedLicense(user, "License text", "my license");
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"a_test_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+		
+		LicenseVersion version1 = versionedLicense.getCurrentVersion();
+		repo.updateDefaultLicense(user, version1);
+		assert repo.getDefaultLicense().equals(version1);
+		
+		versionedLicense.addNewVersion("new license Text", user);
+		LicenseVersion version2 = versionedLicense.getCurrentVersion();
+		assert version2.getLicense().getText().equals("new license Text");
+		repo.updateDefaultLicense(user, version2);
+		assert repo.getRetiredLicense(version1) != null : "Should find retired license " + version1;
+		assert repo.getDefaultLicense().equals(version2);
+		assert repo.getRetiredLicense(version2) == null : "Should not find version 2";
+		
+		repo.updateDefaultLicense(user, version2);
+		assert repo.getRetiredLicense(version2) == null : "Should not find version 2";
+
+		
+		// clean up the repository
+		repoHelper.cleanUpRepository();
+	}
+}

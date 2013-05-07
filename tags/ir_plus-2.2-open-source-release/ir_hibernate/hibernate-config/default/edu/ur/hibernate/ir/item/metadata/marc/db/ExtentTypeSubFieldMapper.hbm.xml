@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008-2011 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for identifier type sub field mapper
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.item.metadata.marc">
+	<class name="ExtentTypeSubFieldMapper" schema="ir_metadata_marc" table="extent_type_sub_field_mapper"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="extent_type_sub_field_mapper_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_metadata_marc.extent_type_sub_field_mapper_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+	    <!--  parent mapper -->
+		<many-to-one class="MarcDataFieldMapper"
+			name="marcDataFieldMapper" 
+			column="data_field_mapper_id" 
+			unique="true"
+			access="field" 
+			not-null="true"/>
+			
+		<!--  marc sub field -->
+		<many-to-one class="edu.ur.metadata.marc.MarcSubField"
+			name="marcSubField" 
+			column="marc_sub_field_id" 
+			unique="true"
+			access="field" 
+			not-null="true"/>
+		
+		<!--  identifier type -->
+		<many-to-one class="edu.ur.ir.item.ExtentType"
+			name="extentType" 
+			column="extent_type_id" 
+			access="field" 
+			unique="true"
+			not-null="true"/>
+	 </class>
+	 
+	 <!-- Gets mapping by contributor type id  -->
+	 <query name="getExtentTypeMapperByExtentTypeId">
+	    from ExtentTypeSubFieldMapper as mapping 	    
+	    where mapping.extentType.id = :extentTypeId
+	 </query>
+	 
+	 <!-- Gets mapping by marc data field  -->
+	 <query name="getExtentTypeMapperByDataField">
+	    from ExtentTypeSubFieldMapper as mapping 	    
+	    where mapping.marcDataFieldMapper.marcDataField.code = :code
+	    and mapping.marcDataFieldMapper.indicator1 = :indicator1
+	    and mapping.marcDataFieldMapper.indicator2 = :indicator2
+	    and mapping.marcSubField.name = :subField
+	 </query>
+	 
+	
+</hibernate-mapping>

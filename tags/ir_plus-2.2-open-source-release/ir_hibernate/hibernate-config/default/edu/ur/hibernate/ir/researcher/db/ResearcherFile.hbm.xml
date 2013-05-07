@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a researcher ir file.
+	
+	@author SHarmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.researcher">
+
+	<class name="ResearcherFile" schema="ir_researcher" table="researcher_file"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="researcher_file_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_researcher.researcher_file_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<property name="versionNumber" column="version_number" type="int"
+			not-null="true" access="field" />
+						
+        <!--  The ir file this researcher holds -->
+        <many-to-one name="irFile" 
+              class="edu.ur.ir.file.IrFile" 
+              unique="true" 
+              column="ir_file_id" 
+              cascade="save-update"
+              not-null="true" 
+              access="field"/>
+        
+        <!--  The researcher folder -->
+        <many-to-one name="parentFolder" class="ResearcherFolder" 
+              unique="true" 
+              column="researcher_folder_id" 
+              cascade="save-update"
+              access="field"/>
+
+        <!--  The researcher who owns this file -->
+        <many-to-one name="researcher" 
+              class="Researcher" 
+              unique="true" 
+              column="researcher_id" 
+              not-null="true" 
+              access="field"/>
+
+        
+	</class>
+
+	 <!-- named query for a getting a file  -->
+	 <query name="getFileWithSpecifiedResearcherIdAndIrFileID">
+		select ResearcherFile 
+		from ResearcherFile as ResearcherFile where
+		   ResearcherFile.researcher.id = ?  and ResearcherFile.irFile.id = ?
+	</query>
+	
+	<!-- named query for getting files in a folder -->
+	<query name="getFilesInAFolderForResearcher">
+		select ResearcherFile from ResearcherFile as ResearcherFile where
+		ResearcherFile.researcher.id = ? and ResearcherFile.parentFolder.id = ?
+	</query>
+	
+	<!-- named query for getting files in a folder -->
+	<query name="getRootResearcherFiles">
+		from ResearcherFile as ResearcherFile where
+		ResearcherFile.researcher.id = ? and ResearcherFile.parentFolder.id is NULL
+	</query>
+	
+
+	<!-- named query for getting the count of irFile being used in item files -->
+	<query name="getResearcherFileCount">
+		select count(*) 
+		from ResearcherFile as ResearcherFile where
+		ResearcherFile.irFile.id = ?
+	</query>
+	
+	<!-- named query for getting the count of irFile being used in item files -->
+	<query name="getResearcherFilesWithIrFileId">
+		select researcherFile 
+		from ResearcherFile as researcherFile where
+		researcherFile.irFile.id = :irFileId
+	</query>
+	
+	
+    
+</hibernate-mapping>

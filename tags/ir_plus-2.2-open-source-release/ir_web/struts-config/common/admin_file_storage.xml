@@ -1,0 +1,89 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+       <!--  ************************************ -->
+       <!--  View file storage action    -->
+       <!--  ************************************ -->
+       <action name="viewFileStorage" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileServers">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/file_storage/view_file_servers.jsp</result>
+        </action>
+        
+        <!--  Manages a single file server -->
+        <action name="*FileServer"
+            method="{1}"
+            class="edu.ur.ir.web.action.file.storage.ManageFileServers">
+            <interceptor-ref name="crudStack" />
+            <result name="view">/pages/admin/file_storage/file_server.jsp</result>
+            <result name="getAll">/pages/admin/file_storage/file_servers_table.jsp</result>
+            <result name="added">/pages/admin/file_storage/server_form.jsp</result>
+            <result name="get">/pages/admin/file_storage/server_form.jsp</result>
+            <result name="deleted">/pages/admin/file_storage/file_server_deleted.jsp</result>
+        </action>
+        
+        <action name="viewFileDatabase" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileDatabase">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/file_storage/file_database.jsp</result>
+        </action>
+        
+        <!--  Manages a single file database -->
+        <action name="*FileDatabase"
+            method="{1}"
+            class="edu.ur.ir.web.action.file.storage.ManageFileDatabase">
+            <interceptor-ref name="crudStack" />
+            <result name="view">/pages/admin/file_storage/file_database.jsp</result>
+            <result name="added">/pages/admin/file_storage/file_database_form.jsp</result>
+            <result name="get">/pages/admin/file_storage/file_database_form.jsp</result>
+            <result name="getAll">/pages/admin/file_storage/file_database_table.jsp</result>
+            <result name="deleted">/pages/admin/file_storage/file_database_deleted.jsp</result>
+        </action>
+        
+        
+       <!--  ************************************ -->
+       <!--  Checksum Infos    -->
+       <!--  ************************************ -->
+       <action name="viewFileInfoChecksums" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="viewChecksumInfos" >
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_infos.jsp</result>
+        </action>
+        
+        <action name="viewFileInfoChecksum" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="viewFileInfoChecksum" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+            <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
+        </action>
+        
+        <action name="resetFileInfoChecksum" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="resetFileInfoChecksum" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+            <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
+        </action>
+        
+        <action name="checkFileInfoChecksum"
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="checkFileInfoChecksum" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
+            <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
+        </action>
