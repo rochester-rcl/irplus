@@ -86,7 +86,7 @@ public class DefaultUserSearchService implements UserSearchService{
 		IndexReader reader = null;
 		try {
 			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			reader = IndexReader.open(directory, true);
+			reader = IndexReader.open(directory);
 			searcher = new IndexSearcher(reader);
 			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_36, fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);

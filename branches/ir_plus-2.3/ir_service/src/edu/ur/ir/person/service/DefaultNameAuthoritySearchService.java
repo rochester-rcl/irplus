@@ -116,7 +116,7 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 		IndexReader reader = null;
 		try {
 			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			reader = IndexReader.open(directory, true);
+			reader = IndexReader.open(directory);
 			searcher = new IndexSearcher(reader);
 			
 			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_36, fields, analyzer);

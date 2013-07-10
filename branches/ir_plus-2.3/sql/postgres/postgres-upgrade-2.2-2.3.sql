@@ -67,3 +67,12 @@ ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq;
 ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
 
+
+-- ---------------------------------------------
+-- Create a re-index service
+-- ---------------------------------------------
+
+insert into 
+ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
+values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE_INDEX', 'the index needs to be deleted and rebuilt');
+
