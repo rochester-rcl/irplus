@@ -251,6 +251,11 @@
                            <br/>
                            <br/>
                            
+                           <a href="<c:url value="/admin/updateStatsCache.action"/>">Update Statistics Cache</a>
+                           
+                           <br/>
+                           <br/>
+                           
                            <a href="<c:url value="/admin/reIndexResearchers.action"/>">Re-Index Researchers</a>
                            
                            <br/>
@@ -261,9 +266,7 @@
                            <br/>
                            <br/>
                            
-                           <c:url var="resetAllHandles" value="/admin/resetAllHandles.action"/>
-                           
-                           <a href="${resetAllHandles}">Reset all handles</a>
+                           <a href="<c:url value="/admin/reIndexAllUserWorkspaces.action"/>">Re-Index All User Workspaces</a>
                            <br/>
                            <br/>
                        </c:if>
