@@ -69,6 +69,9 @@ UserWorkspaceIndexProcessingRecordService
 			userService.makeUserPersistent(user);
 		}
 		
+		if(log.isDebugEnabled()){
+		  log.debug("re-indexing user workspace " + user.getFirstName() + " " + user.getLastName());
+		}
 		List<PersonalFolder> personalFolders = userFileSystemService.getAllPersonalFoldersForUser(user.getId());
 		List<PersonalCollection> personalCollections = userPublishingFileSystemService.getAllPersonalCollectionsForUser(user.getId());
 		List<SharedInboxFile> inboxFiles = userFileSystemService.getSharedInboxFiles(user);

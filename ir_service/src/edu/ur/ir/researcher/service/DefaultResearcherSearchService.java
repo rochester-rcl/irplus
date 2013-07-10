@@ -334,7 +334,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		}
 		
 		FSDirectory directory = FSDirectory.open(new File(indexFolder));
-		IndexReader reader = IndexReader.open(directory, true);
+		IndexReader reader = IndexReader.open(directory);
 		IndexSearcher searcher = new IndexSearcher(reader);
 		
 		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_36, fields, analyzer);

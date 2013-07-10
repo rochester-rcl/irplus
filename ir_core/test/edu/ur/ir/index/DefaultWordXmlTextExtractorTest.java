@@ -143,7 +143,7 @@ public class DefaultWordXmlTextExtractorTest {
 		// store the document
 		IndexWriter writer = null;
 		try {
-			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_35,  new StandardWithICUFoldingFilter());
+			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36,  new StandardWithICUFoldingFilter());
 			indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 			writer = new IndexWriter(dir, indexWriterConfig);
 			writer.addDocument(doc);

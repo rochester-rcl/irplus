@@ -166,7 +166,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		IndexReader reader = IndexReader.open(dir,  true);
+		IndexReader reader = IndexReader.open(dir);
 		IndexSearcher searcher = new IndexSearcher(reader);
 		QueryParser parser = new QueryParser(Version.LUCENE_35, field, new StandardAnalyzer(Version.LUCENE_35));
 		Query q1 = parser.parse(queryString);

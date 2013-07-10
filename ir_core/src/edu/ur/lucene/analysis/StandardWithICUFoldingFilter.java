@@ -1,21 +1,16 @@
 package edu.ur.lucene.analysis;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Set;
-
-import org.apache.lucene.analysis.LowerCaseFilter;
-import org.apache.lucene.analysis.StopAnalyzer;
-import org.apache.lucene.analysis.StopFilter;
-import org.apache.lucene.analysis.StopwordAnalyzerBase;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.WordlistLoader;
+import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.icu.ICUFoldingFilter;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.Version;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Set;
 
 /**
  * This was adapted from apache standard analyzer
@@ -24,7 +19,6 @@ import org.apache.lucene.util.Version;
  *
  */
 public class StandardWithICUFoldingFilter extends StopwordAnalyzerBase {
-	
 	 /** Default maximum allowed token length */
 	  public static final int DEFAULT_MAX_TOKEN_LENGTH = 255;
 
@@ -52,7 +46,7 @@ public class StandardWithICUFoldingFilter extends StopwordAnalyzerBase {
 	   * @param stopWords stop words */
 	  public StandardWithICUFoldingFilter(Version matchVersion, Set<?> stopWords) {
 	    super(matchVersion, stopWords);
-	    replaceInvalidAcronym = matchVersion.onOrAfter(Version.LUCENE_24);
+	    replaceInvalidAcronym = matchVersion.onOrAfter(Version.LUCENE_36);
 	  }
 
 	  /** Builds an analyzer with the default stop words ({@link
@@ -106,7 +100,6 @@ public class StandardWithICUFoldingFilter extends StopwordAnalyzerBase {
 	  protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
 	    final StandardTokenizer src = new StandardTokenizer(matchVersion, reader);
 	    src.setMaxTokenLength(maxTokenLength);
-	    src.setReplaceInvalidAcronym(replaceInvalidAcronym);
 	    TokenStream tok = new StandardFilter(matchVersion, src);
 	    tok = new LowerCaseFilter(matchVersion, tok);
 	    tok = new StopFilter(matchVersion, tok, stopwords);
@@ -119,7 +112,6 @@ public class StandardWithICUFoldingFilter extends StopwordAnalyzerBase {
 	      }
 	    };
 	  }
-
 
 
 }
