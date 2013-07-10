@@ -87,3 +87,22 @@
             <result name="success">/pages/admin/checksum_info/view_checksum_info.jsp</result>
             <result name="notFound">/pages/admin/checksum_info/checksum_not_found.jsp</result>
         </action>
+        
+        <action name="viewResetAllFailingChecksums" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="viewResetAllFailingChecksums" >
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/checksum_info/view_reset_all_failed_checksum_info.jsp</result>
+        </action>
+        
+        <action name="resetAllFileInfoChecksums" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileInfoChecksums"
+            method="resetAllFileInfoChecksums" >
+            <interceptor-ref name="crudStack"/>
+            <result type="redirectAction" name="success">
+              <param name="actionName">viewFileInfoChecksums</param>
+              <param name="onlyFails">true</param>
+            </result>
+            
+        </action>
+        
