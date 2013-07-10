@@ -145,6 +145,34 @@
                 <cron-expression>0/30 * * * * ?</cron-expression>
             </cron>
         </trigger>
+        
+     <!--  update the stats cache -->
+     <job>
+            <name>StatsCacheUpdateJob</name>
+            <group>DEFAULT</group>
+            <description>
+                A job that updates statistics cache
+            </description>
+            <job-class>
+                edu.ur.ir.repository.service.UpdateStatsCacheJob
+            </job-class>
+            <volatility>false</volatility>
+            <durability>true</durability>
+            <recover>false</recover>
+     </job>
+    
+        <!--  run every 4 hours: 0 0 0/4 * * ? -->
+        <trigger>
+            <cron>
+                <name>statsCacheUpdateJob</name>
+                <group>DEFAULT</group>
+                <job-name>StatsCacheUpdateJob</job-name>
+                <job-group>DEFAULT</job-group>
+                <cron-expression>0 0/10 * * * ?</cron-expression>
+            </cron>
+        </trigger>
+        
+        
     
   </schedule>       
 </job-scheduling-data>
