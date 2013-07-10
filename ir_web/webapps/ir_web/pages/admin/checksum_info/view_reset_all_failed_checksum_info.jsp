@@ -20,6 +20,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -51,13 +52,7 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-    <ur:js src="pages/js/ur_table.js"/>
-    <script type="text/javascript">
-		  function updateUrl()
-		  {
-			  document.checksumStatus.submit();
-		  }
-    </script>
+    
 </head>
 
 <body class="yui-skin-sam">
@@ -68,32 +63,19 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Checksum Information</h3>
-         <c:url var="viewFileInfoChecksums" value="/admin/viewFileInfoChecksums.action"/>
-          <c:url var="viewResetAllFailingChecksums" value="/admin/viewResetAllFailingChecksums.action"/>
-          
-         
+        
+        <h3><a href="<c:url value="/admin/viewFileInfoChecksums.action"/>">All Checksums</a> &gt; Reset All Failed Checksums</h3>
+        
         <div id="bd">
-            <form name="checksumStatus" action="${viewFileInfoChecksums}" method="get">
-				             <input type="hidden" name="rowStart" value="0"/>
-			                 <input type="hidden" name="startPageNumber" value="1"/>
-			                 <input type="hidden" name="currentPageNumber" value="1"/>
-			                 <input type="hidden" name="sortElement" value="${sortElement}"/>		
-			                 <input type="hidden" name="sortType" value="${sortType}"/>	
-				         Filter By Status:
-				         <select name="onlyFails" onchange="javascript:updateUrl();">
-				             <option value="false" <c:if test="${!onlyFails}"> selected="selected" </c:if>>All</option>
-				             <option value="true"  <c:if test="${onlyFails}"> selected="selected" </c:if>>Check Failed</option>
-						 </select>
-			</form>
-			<br/>
-			<a href="${viewResetAllFailingChecksums}">Reset all failing checksums</a>
-			<br/>
-            <c:import url="checksum_info_table.jsp"/>
-            
-         </div>
-        <!--  end body div -->
-      
+           <c:url var="resetAllChecksumsUrl" value="/admin/resetAllFileInfoChecksums.action"/>
+            <!--  end body div -->
+            <form method="post" action="${resetAllChecksumsUrl}">
+                Reset Reason:<input type="text" name="notes" size="70"/> <br/><br/>
+                <input type="submit" value="Reset All Failed Checksums"/>
+            </form> <br/><br/>
+        </div>
+        
+       
         <!--  this is the footer of the page -->
         <c:import url="/inc/footer.jsp"/>
   
