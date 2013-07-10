@@ -1,33 +1,37 @@
 IR+ 2.1 to 2.2
 ==========================
 
+- Fix for Microsoft possible word corruption issue (.pptx, .xlsx, .xlsx) 
+
+- Checksum checker to auto check files with weekly reporting
+
 - Added no-index meta-tags to help stop google from indexing restricted content
 
 - Fixes for tomcat 7 JSTL tag issues
 
-- back-ported (from 3.0) hanging indent on search for items faceting (browse-items.jsp)
+- Hanging indent on search for items faceting (browse-items.jsp)
 
-- back-ported (from 3.0) paging fixes tomcat 7.0 for browse-items.jsp
+- Paging fixes tomcat 7.0 for browse-items.jsp
 
-- back-ported image fix on browse-items.jsp - images are no longer streatched to fit the 
+- Image fix on browse-items.jsp - images are no longer stretched to fit the 
   given area
   
-- back-ported updated to struts 2.3.4
+- Updated to struts 2.3.4
 
-- back ported fix for constraint on ir_user.personal_file to make sure the same file cannot
+- Fix for constraint on ir_user.personal_file to make sure the same file cannot
 be added to more than one location in the file system
 
-- back ported (from 3.0) ability to send collaborators emails if new file version added
+- Ability to send collaborators emails if new file version added
 
-- back ported (from 3.0) ability to auto share folders and sub-folders
+- Ability to auto share folders and sub-folders
 
-- back ported (from 3.0) ability to see all files you are sharing with a particular user
+- Ability to see all files you are sharing with a particular user
 
-- back ported - removed fedora tables from sql script
+- Removed fedora tables from sql script
 
-- back ported (3.0) - added invite schema
+- Added invite schema
 
-- added set focus when creating new personal folder
+- Added set focus when creating new personal folder
 
 - Updates for google scholar indexing
 
