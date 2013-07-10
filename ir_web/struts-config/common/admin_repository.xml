@@ -21,6 +21,15 @@
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/admin/repository/edit_repository.jsp</result>
         </action>
+        
+        
+       <!--  ************************************ -->
+        <!--  Repository actions                   -->
+        <!--  ************************************ -->
+        <action name="updateStatsCache" class="edu.ur.ir.web.action.repository.UpdateAllStatsCache">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
  
  
         <action name="createRepository" 
@@ -58,12 +67,21 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
+         <!--  re-index all user workspaces in the repository -->
+        <action name="reIndexAllUserWorkspaces" 
+            class="edu.ur.ir.web.action.user.ReIndexAllUsersWithWorkspace">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
         <!--  re-index all the researchers in the repository -->
         <action name="reIndexResearchers" 
             class="edu.ur.ir.web.action.researcher.ReIndexResearchers">
             <interceptor-ref name="editStack"/>
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
+        
+        
         
         <!--  re-index all the person name Authorities in the repository -->
         <action name="reIndexPersonNameAuthorities" 
