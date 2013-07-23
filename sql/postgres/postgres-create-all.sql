@@ -1707,6 +1707,7 @@ CREATE TABLE ir_item.item_file
   version_number INTEGER NULL,
   description TEXT NULL,
   is_public Boolean,
+  can_view_in_player BOOLEAN DEFAULT FALSE NOT NULL,
   FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),
   FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id),
   UNIQUE (ir_file_id, item_id)

@@ -108,11 +108,14 @@ public class FileTypeImgTag extends CommonSimpleTag implements HtmlImage{
 		    	}
 	    		if(extension.equalsIgnoreCase("mp3") || 
 	    		   extension.equalsIgnoreCase("wav") ||
-	    		   extension.equalsIgnoreCase("mp4") ||
 	    		   extension.equalsIgnoreCase("aac"))
 	    		{
 	    			output = "<span class=\"musicFileImg\"></span>";
 	    		}
+	    		if(extension.equalsIgnoreCase("mp4") ||  extension.equalsIgnoreCase("mov"))
+	 	    	{
+	 	    		output = "<span class=\"movieFileImg\"></span>";
+	 	    	}
 	    	}
 	    	
 	        JspWriter o = context.getOut();

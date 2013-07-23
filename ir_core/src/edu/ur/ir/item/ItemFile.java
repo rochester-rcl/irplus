@@ -16,6 +16,8 @@
 
 package edu.ur.ir.item;
 
+import java.util.LinkedList;
+
 import edu.ur.ir.file.IrFile;
 import edu.ur.persistent.CommonPersistent;
 
@@ -47,8 +49,11 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 	/** Version number of the IrFile */
 	private int versionNumber;
 	
-	/** Indicates whether the file is publicaly viewable or not */
+	/** Indicates whether the file is publicly viewable or not */
 	private boolean isPublic = false;
+
+	/** indicates if the file can be played in web player */
+	private boolean canViewInPlayer = false;
 	
 	/**
      * Package protected constructor 
@@ -63,6 +68,7 @@ public class ItemFile extends CommonPersistent implements ItemObject {
      */
     public ItemFile(GenericItem item, IrFile irFile)
     {
+ 
     	setItem(item);
     	setIrFile(irFile);
     }
@@ -231,4 +237,24 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
+	
+
+	/**
+	 * Determine if the user can view the file in the current player.
+	 * 
+	 * @return
+	 */
+	public boolean getCanViewInPlayer() {
+		return canViewInPlayer;
+	}
+
+	/**
+	 * Determine if the user can view the file in the current player.
+	 *  
+	 * @param canViewInPlayer
+	 */
+	public void setCanViewInPlayer(boolean canViewInPlayer) {
+		this.canViewInPlayer = canViewInPlayer;
+	}
+
 }

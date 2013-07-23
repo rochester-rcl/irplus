@@ -45,6 +45,9 @@
 			not-null="false" access="field" />			
  
  		<property name="isPublic" column="is_public" type="boolean"
+			not-null="false" access="field" />
+		
+		<property name="canViewInPlayer" column="can_view_in_player" type="boolean"
 			not-null="false" access="field" />	
 						
  		<many-to-one class="edu.ur.ir.file.IrFile" 

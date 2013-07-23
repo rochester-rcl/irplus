@@ -372,6 +372,9 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 			    order = max.getOrder() + 1;
 		    }
 		    itemFile.setOrder(order);
+		   
+		    String extension = irFile.getFileInfo().getExtension();
+		    itemFile.setCanViewInPlayer(extension != null && PlayerUtil.canPlay(extension));
 
 			itemFiles.add(itemFile);
 		} else {

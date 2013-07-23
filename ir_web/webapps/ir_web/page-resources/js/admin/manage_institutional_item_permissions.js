@@ -34,6 +34,13 @@ YAHOO.ur.institution.item.permission = {
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
         	action + '?itemFileId=' + itemFileId + '&public=' + isPublic, null);
     },
+    
+    updatePlayFileInPlayer : function(itemFileId, itemId, playInViewer){
+    	var action = basePath + 'admin/updateViewInPlayer.action';
+    	
+    	var transaction = YAHOO.util.Connect.asyncRequest('POST', 
+            	action, null, 'itemFileId=' + itemFileId + '&playInViewer=' + playInViewer);
+    },
 
     /**
      * Update view permission for file
