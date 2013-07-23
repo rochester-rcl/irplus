@@ -148,7 +148,7 @@ span.reportEditBtnImg{background-position: 0 -1138px;}
 
 /* file images */
 span.whiteFileImg, span.wordFileImg, span.imgFileImg, span.pdfFileImg,
-span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFileImg, span.musicFileImg
+span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFileImg, span.musicFileImg, span.movieFileImg
 {
     display: inline;
 	overflow: hidden;
@@ -159,7 +159,7 @@ span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFile
 	align:bottom;
 	font-size: 15px;
 }
-
+span.movieFileImg{background-position: 0 -278px;}
 span.whiteFileImg{background-position: 0 -838px;}
 span.wordFileImg{background-position: 0 -1058px;}
 span.imgFileImg{background-position: 0 -878px;}
