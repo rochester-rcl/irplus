@@ -1,0 +1,85 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:s="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+    <!-- ****************************************** --> 
+    <!-- Spring Security                             -->
+    <!-- ****************************************** -->  
+
+
+	<bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="daoAuthenticationProvider"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="irUserDAO"/>
+		<property name="passwordEncoder"><ref bean="passwordEncoder"/></property>
+	</bean>
+	
+	<!-- context source for connecting to the LDAP directory and loading ldap user information -->
+	<bean id="ldapUserService"
+        class="edu.ur.ir.user.service.DefaultLdapUserService">
+        <property name="userSearch" ref="userSearch"/>
+        <property name="userService" ref="userService"/>
+        <property name="externalAccountTypeService" ref="externalAccountTypeService"/>
+        <property name="externalAccountTypeName" value="${external.account.type.name}"/>
+    </bean>
+	
+	<!-- context source for connecting to the LDAP directory -->
+	<bean id="contextSource"
+        class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+        <constructor-arg value="${ldap.server.location}"/>
+        <property name="userDn" value="${user.dn}"/>
+        <property name="anonymousReadOnly" value="true"/>
+    </bean>
+	
+	<!-- user search for the LDAP directory -->
+	<bean id="userSearch"
+       class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+          <constructor-arg index="0" value=""/>
+          <constructor-arg index="1" value="(uid={0})"/>
+          <constructor-arg index="2" ref="contextSource" />
+    </bean> 
+    
+    <!-- used for connecting to an ldap provider -->
+    <bean id="ldapAuthProvider"
+        class="edu.ur.ir.security.service.UrLdapAuthenticationProvider">
+       <constructor-arg>
+           <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+               <constructor-arg ref="contextSource"/>
+                <property name="userSearch" ref="userSearch"/>
+           </bean>
+       </constructor-arg>
+       <property name="userDetailsContextMapper" ref="ldapUserService"/>
+    </bean>
+             
+
+	
+	<!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
+	<bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener"/>
+
+	<!-- Sha Password encoder to use SHA-1 password encoding -->
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
+</beans>

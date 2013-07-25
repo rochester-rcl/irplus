@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a version.
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.item">
+	<class name="ItemVersion" schema="ir_item" table="item_version"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="item_version_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_item.item_version_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<property name="versionNumber" column="version_number" type="int"
+			 not-null="true" access="field" />
+			 
+		<many-to-one class="edu.ur.ir.item.VersionedItem" 
+		    not-null="true"
+		    optimistic-lock="false"
+			unique="true" 
+			name="versionedItem" 
+			column="versioned_item_id" 
+			access="field" 
+			insert="true"
+			update="true" 
+			cascade="save-update"/>
+					
+		<many-to-one class="edu.ur.ir.item.GenericItem"
+		    optimistic-lock="false"
+		    lazy="false"
+		    fetch="join"
+		    not-null="true"
+			insert="true"
+			update="true" 
+			cascade="save-update"
+			name="item" 
+			column="item_id"  
+			access="field"/>
+	</class>
+		
+	<!--  Get a count of versioned items in the system -->
+	<query name="itemVersionCount">
+	    select count(*) from ItemVersion
+	</query>
+	
+	<!-- named query for getting the item version containing specified irFile -->
+	<query name="getItemVersionContainingIrFile">
+        select itemVersion 
+        from ItemVersion itemVersion 
+        join itemVersion.item as item 
+        join item.itemFiles as itemFile 
+        join itemFile.irFile as irFile
+        where irFile.id = ?
+	</query>
+	
+	<!-- named query for getting the count of GenericItem being used in item version-->
+	<query name="getItemVersionCountContainingGenericItem">
+		select count(*) 
+		from ItemVersion as ItemVersion where
+		ItemVersion.item.id = ?
+	</query>
+</hibernate-mapping>
