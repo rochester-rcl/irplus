@@ -17,7 +17,6 @@
 package edu.ur.ir.index;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xslf.XSLFSlideShow;
 import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.opc.PackageAccess;
 
 public class DefaultPowerPointXmlTextExtractor implements FileTextExtractor{
 
@@ -70,13 +70,11 @@ public class DefaultPowerPointXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		OPCPackage p = null;
+		OPCPackage p = OPCPackage.open(f.getAbsolutePath(), PackageAccess.READ);
 		try
 		{
-			p = XSLFSlideShow.openPackage(f.getAbsolutePath());
 			XSLFSlideShow slideShow = new XSLFSlideShow(p);
 			XSLFPowerPointExtractor extractor = new XSLFPowerPointExtractor(slideShow);
-			
 
 			String myText = extractor.getText();
 			if( myText != null && !myText.trim().equals(""))
@@ -98,18 +96,12 @@ public class DefaultPowerPointXmlTextExtractor implements FileTextExtractor{
 			log.error("could not get text for word document " + f.getAbsolutePath(), e);
 			throw(e);
 		}
-		
 		finally
 		{
 			if(p!=null)
 			{
-				try {
-					p.close();
-					p = null;
-				} catch (IOException e) {
-					log.debug(e);
-					p = null;
-				}
+				p.revert();
+				p = null;
 			}
 		}
 		return text;

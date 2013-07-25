@@ -77,6 +77,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
 
 
+
 	/**
 	 * Get the xml output for the item
 	 *  
@@ -525,7 +526,8 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 			if( publishedDate != null )
 			{
 		        Element citationElement = doc.createElement("dc:date");
-		        Text data = doc.createTextNode(SimpleDateFormatter.getDate(publishedDate));
+		        SimpleDateFormatter sdf = new SimpleDateFormatter();
+		        Text data = doc.createTextNode(sdf.getDate(publishedDate));
 		        citationElement.appendChild(data);
     	        oaiDc.appendChild(citationElement);
 			}
@@ -571,7 +573,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	}
 	
 	/**
-	 * Add handle url if it exists otherwise use the url for the site
+	 * Add handle url.
 	 * 
 	 * @param doc
 	 * @param oaiDc
@@ -590,7 +592,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		else
 		{
 			Element identifier = doc.createElement("dc:identifier");
-		    Text data = doc.createTextNode(institutionalItemVersionUrlGenerator.createUrl(item));
+		    Text data = doc.createTextNode(this.institutionalItemVersionUrlGenerator.createUrl(item.getVersionedInstitutionalItem().getInstitutionalItem(), item.getVersionNumber()));
 		    identifier.appendChild(data);
 		    oaiDc.appendChild(identifier);
 		}
@@ -689,10 +691,15 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		 }
 
 	}
-
+	
+	/**
+	 * Set the url generator.
+	 * 
+	 * @param institutionalItemVersionUrlGenerator
+	 */
 	public void setInstitutionalItemVersionUrlGenerator(
-			InstitutionalItemVersionUrlGenerator institutionalItemUrlGenerator) {
-		this.institutionalItemVersionUrlGenerator = institutionalItemUrlGenerator;
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 
 }

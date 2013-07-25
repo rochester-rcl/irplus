@@ -38,31 +38,32 @@ import edu.ur.ir.researcher.ResearcherService;
  */
 public class NextResearcherPicture extends ActionSupport {
 	
-	// Eclipse generated Id 
+	/** Eclipse generated Id */
 	private static final long serialVersionUID = 4772718072456323110L;
 	
-	// Logger for file upload */
+	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(NextResearcherPicture.class);
 	
-	// Service for dealing with researcher */
+	/** Service for dealing with researcher */
 	private ResearcherService researcherService;
 	
-	// Determine if the user is initializing wants the next or previous
-	// picture
+	/**
+	 * Determine if the user is initializing wants the next or previous
+	 * picture
+	 */
 	private String type;
 	
-	//  Current picture location 
+	/**  Current picture location */
 	private int currentResearcherLocation;
 	
-	// helper for dealing with researcher information 
+	/** helper for dealing with researcher information */
 	private RandomResearcherPictureHelper researcherPictureHelper = new RandomResearcherPictureHelper();
 	
-	// researchers found 
+	/** researchers found */
 	private List<Researcher> researchers = new LinkedList<Researcher>();
 	
-	// total number of researchers
-	private int totalResearcherCount = 0;
-	
+	/** total number of researchers in the system */
+	private Long researcherCount;
 
 	/**
      * Gets the next ir file to be downloaded
@@ -79,74 +80,49 @@ public class NextResearcherPicture extends ActionSupport {
     	// get the first set of researchers
         researchers = researcherPictureHelper.getResearchers(type, researcherService, currentResearcherLocation);
         currentResearcherLocation = researcherPictureHelper.getCurrentResearcherLocation();
-        
-        totalResearcherCount = researcherPictureHelper.getResearcherCount();
+        researcherCount = researcherService.getPublicResearcherCount();
         return SUCCESS;
     }
    
 
-	/**
-	 * Type of location.
-	 * 
-	 * @return
-	 */
 	public String getType() {
 		return type;
 	}
 
-	/**
-	 * Set type location
-	 * 
-	 * @param type
-	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	/**
-	 * Get the current picture location.
-	 * 
-	 * @return
-	 */
 	public int getCurrentResearcherLocation() {
 		return currentResearcherLocation;
 	}
 
-	/**
-	 * Set the current location 
-	 * 
-	 * @param currentLocation
-	 */
 	public void setCurrentResearcherLocation(int currentLocation) {
 		this.currentResearcherLocation = currentLocation;
 	}
 
-	/**
-	 * Set the researcher service.
-	 * 
-	 * @param researcherService
-	 */
+	public ResearcherService getResearcherService() {
+		return researcherService;
+	}
+
 	public void setResearcherService(ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
 
-	/**
-	 * Get the list of reseachers to show.
-	 * 
-	 * @return
-	 */
 	public List<Researcher> getResearchers() {
 		return researchers;
 	}
 
-	/**
-	 * Get the total researcher count.
-	 * 
-	 * @return
-	 */
-	public int getTotalResearcherCount() {
-		return totalResearcherCount;
+	public void setResearchers(List<Researcher> researchers) {
+		this.researchers = researchers;
 	}
 
+	public int  getResearchersCount() {
+		return researchers.size();
+	}
+	
+	public Long getResearcherCount() {
+		return researcherCount;
+	}
 
 }

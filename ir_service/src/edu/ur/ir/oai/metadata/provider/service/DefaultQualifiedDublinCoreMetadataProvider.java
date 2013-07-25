@@ -564,7 +564,8 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 			if( publishedDate != null )
 			{
 		        Element citationElement = doc.createElement("dcterms:issued");
-		        Text data = doc.createTextNode(SimpleDateFormatter.getDate(publishedDate));
+		        SimpleDateFormatter sdf = new SimpleDateFormatter();
+		        Text data = doc.createTextNode(sdf.getDate(publishedDate));
 		        citationElement.appendChild(data);
     	        oaiDc.appendChild(citationElement);
 			}

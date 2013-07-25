@@ -80,6 +80,9 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 	/** Row End */
 	private int rowEnd;
 	
+	/** determine if the contributor type is an authoring type */
+	private boolean authoringType = false;
+
 	/** Service for dealing with institutional item version services */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
@@ -103,6 +106,7 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 		added = false;
 		ContributorType myContributorType = 
 			contributorTypeService.get(contributorType.getName());
+		myContributorType.setAuthorType(authoringType);
 		if( myContributorType == null)
 		{
 		    contributorTypeService.save(contributorType);
@@ -133,6 +137,7 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 		// then they are trying to rename it to the same name.
 		if(other == null || other.getId().equals(contributorType.getId()))
 		{
+			contributorType.setAuthorType(authoringType);
 			contributorTypeService.save(contributorType);
 		    IrUser user = userService.getUser(userId, false);
 		    institutionalItemVersionService.setAllVersionsAsUpdatedForContributorType(contributorType, user, "Contributor Type Updated");
@@ -374,7 +379,14 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
 	}
-
+	
+	/**
+	 * Set to true if the user is an authoring user
+	 * @param authoringType
+	 */
+	public void setAuthoringType(boolean authoringType) {
+		this.authoringType = authoringType;
+	}
 
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
@@ -387,9 +399,9 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 	
 	/**
 	 * Set the user id
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 }

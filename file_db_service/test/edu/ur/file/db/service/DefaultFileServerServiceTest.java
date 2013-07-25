@@ -80,9 +80,6 @@ public class DefaultFileServerServiceTest {
 	@BeforeClass
 	public void setUp() {
 		properties = new PropertiesLoader().getProperties();
-		System.out.println("property 2= " +  properties.getProperty("defaultFileServerService.server_path") );
-		System.out.println("property 1= " +  properties.getProperty("fileServerService.server_path") );
-
 	}
 	
 	/**

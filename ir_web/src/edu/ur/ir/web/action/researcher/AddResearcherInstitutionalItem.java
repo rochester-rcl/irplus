@@ -408,7 +408,7 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 		this.institutionalItem = institutionalItem;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

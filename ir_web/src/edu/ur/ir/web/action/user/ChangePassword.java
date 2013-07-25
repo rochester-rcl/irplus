@@ -67,11 +67,7 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		log.debug("Execute called");
 
 		validToken = true;
-		
-		if( token != null && !token.trim().equals(""))
-		{
-		    userToChangePassword = userService.getUserByToken(token); 
-		}
+		userToChangePassword = userService.getUserByToken(token); 
 		
 		if (userToChangePassword == null)
 		{
@@ -232,7 +228,7 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		this.password = password;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

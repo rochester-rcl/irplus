@@ -268,7 +268,7 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

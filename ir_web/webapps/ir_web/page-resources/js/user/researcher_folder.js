@@ -404,16 +404,18 @@ YAHOO.ur.researcher.folder = {
 		YAHOO.ur.researcher.folder.newLinkDialog.render();
 	 },
 	   
-    // function to edit link information
+    // function to edit folder information
     editLink : function(linkId)
     {
-	     /*  This call back updates the html when editing the link  */
+	     /*
+	      * This call back updates the html when editing the folder
+	      */
 	      var callback =
 	      {
 	          success: function(o) 
 	          {
-	 		      // check for the timeout - forward user to login page if timeout
-		          // occurred
+	 		      // check for the timeout - forward user to login page if timout
+		          // occured
 		          if( !urUtil.checkTimeOut(o.responseText) )
 		          {       		           
 		        	  

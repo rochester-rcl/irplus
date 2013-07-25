@@ -36,8 +36,8 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbDefaultFileInfoDAO implements FileInfoDAO {
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = -8291539190008760466L;
+	/* eclipse generated id  */
+	private static final long serialVersionUID = -1375103403125377920L;
 	
 	/**
 	 * Helper for persisting information using hibernate. 
@@ -130,6 +130,10 @@ public class HbDefaultFileInfoDAO implements FileInfoDAO {
 		Object[] values = {name, parentFolderId};
 		return (DefaultFileInfo) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFileByDisplayParent", values));
+	}
+
+	public List<DefaultFileInfo> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public DefaultFileInfo getById(Long id, boolean lock) {

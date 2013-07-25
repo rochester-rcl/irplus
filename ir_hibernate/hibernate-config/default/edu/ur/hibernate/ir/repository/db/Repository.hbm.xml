@@ -61,15 +61,7 @@
 		<!-- folder for indexed user data -->
 		<property name="userIndexFolder" column="user_index_folder" type="string"
 			not-null="false" />
-	
-	    <!-- folder for collection index folder -->
-		<property name="institutionalCollectionIndexFolder" column="institutional_collection_index_folder" type="string"
-			not-null="false" />
-	
-	    <!-- folder for user group index folder -->
-		<property name="userGroupIndexFolder" column="user_group_index_folder" type="string"
-			not-null="false" />
-
+			
 		<property name="lastSubscriptionProcessEmailDate" column="last_email_subscriber_process_sent_date" type="timestamp" 
 		          access="field" />	
 		
@@ -83,10 +75,6 @@
 			
 		<!-- folder for indexed researcher data -->
 		<property name="researcherIndexFolder" column="researcher_index_folder" type="string"
-			not-null="false" />
-		
-				<!-- folder for indexed researcher data -->
-		<property name="groupWorkspaceIndexFolder" column="group_workspace_index_folder" type="string"
 			not-null="false" />
 			
 		<!-- Default file database for the repository to files-->

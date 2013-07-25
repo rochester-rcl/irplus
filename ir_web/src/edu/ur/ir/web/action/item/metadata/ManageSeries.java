@@ -322,7 +322,7 @@ public class ManageSeries extends Pager implements Preparable, UserIdAware{
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

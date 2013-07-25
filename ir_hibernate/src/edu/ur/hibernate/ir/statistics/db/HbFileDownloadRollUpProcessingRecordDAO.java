@@ -68,9 +68,13 @@ public class HbFileDownloadRollUpProcessingRecordDAO implements FileDownloadRoll
                     throws HibernateException, SQLException {
 		      
 		        Query q = session.getNamedQuery("insertAllRepositoryFileIds");
-			    return Long.valueOf(q.executeUpdate());
+			    return new Long(q.executeUpdate());
             }
 		});
+	}
+
+	public List<FileDownloadRollUpProcessingRecord> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public FileDownloadRollUpProcessingRecord getById(Long id, boolean lock) {

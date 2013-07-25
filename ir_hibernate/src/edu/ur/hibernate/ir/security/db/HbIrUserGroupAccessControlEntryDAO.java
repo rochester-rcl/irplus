@@ -16,8 +16,8 @@
 
 package edu.ur.hibernate.ir.security.db;
 
+import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -66,8 +66,18 @@ IrUserGroupAccessControlEntryDAO
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irUserGroupAccessEntryCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irUserGroupAccessEntryCount"));
+	}
+
+	
+	/**
+	 * Get all user access control entries.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**

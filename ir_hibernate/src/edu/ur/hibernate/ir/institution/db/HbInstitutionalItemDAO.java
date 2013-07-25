@@ -73,6 +73,17 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
     }
 
 	/**
+	 * Return all institutional items.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	
+	/**
 	 * Get an institutional item by it's id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
@@ -387,7 +398,20 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForGenericItem", genericItemId));
 	}
 
-	
+	/**
+	 * Get all institutional items that contain any of the generic item ids in the given list.
+	 * 
+	 * @param genericItemIds - list of generic item ids
+	 * @return list of institutional items found.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getInstitutionalItemsByGenericItemIds(List<Long> genericItemIds) {
+	  //getInstitutionalItemsForGenericItemIds
+	  Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+	  Query q = session.getNamedQuery("getInstitutionalItemsForGenericItemIds");
+	  q.setParameterList("itemIds", genericItemIds);
+	  return q.list();
+	}
 	/**
 	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getCollectionItemsBetweenChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, char, java.lang.String)
 	 */

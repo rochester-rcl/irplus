@@ -51,7 +51,7 @@
         <ur:js src="page-resources/js/menu/main_menu.js"/>
         
         <!--  base path information -->
- 	    <ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	    <ur:js src="pages/js/base_path.js"/>
  	    <ur:js src="page-resources/js/util/ur_util.js"/>
         <ur:js src="page-resources/js/public/home.js"/>
         
@@ -96,7 +96,7 @@
                        <div class="contentBoxContent">
                            <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
                            <form method="get" action="${searchRepositoryItems}">
-                                <p>Search: <input type="text" name="query" id="search" size="50" />
+                                <p>Search: <input type="text" name="query" size="50"/>
                                  <br/>
                                  <br/>
                                     <button type="submit" class="ur_button" 

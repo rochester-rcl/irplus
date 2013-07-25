@@ -16,6 +16,9 @@
 package edu.ur.file.db;
 
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.ur.persistent.BasePersistent;
 
@@ -27,21 +30,39 @@ import edu.ur.persistent.BasePersistent;
  */
 public class FileInfoChecksum extends BasePersistent{
 	
-	/**  Eclipse generated id */
+	/*  Eclipse generated id */
 	private static final long serialVersionUID = 6519842197106981561L;
 
-	/**  The checksum value  */
+	/*  The checksum value  */
 	private String checksum;
 	
-	/**  The checksum algorithm used  */
+	/*  The checksum algorithm used  */
 	private String algorithmType;
 	
-	/** File info object representing the file the checksum is for */
+	/* File info object representing the file the checksum is for */
 	private FileInfo fileInfo;
 	
-	/** Date the checksum was calculated */
+	/* Date the checksum was calculated */
 	private Timestamp dateCalculated;
 	
+	/* date the checksum was re-calculated */
+	private Timestamp dateReCalculated;
+	
+	/* last time the check passed */
+	private Timestamp dateLastCheckPassed;
+
+	/* indicates if the last check passed */
+	private boolean reCalculatedPassed = true;
+	
+	/* the calculated checksum check value on the given date */
+	private String reCalculatedValue;
+	
+	/* indicates the checksum should be checked */
+	private boolean reCalculateChecksum = true;
+
+	/*  list of reset history */
+	private Set<FileInfoChecksumResetHistory> resetHistory = new HashSet<FileInfoChecksumResetHistory>();
+
 	/**
 	 * Package protected constructor
 	 */
@@ -59,6 +80,8 @@ public class FileInfoChecksum extends BasePersistent{
 		this.algorithmType = algorithmType;
 		this.fileInfo = fileInfo;
 		this.dateCalculated = new Timestamp(new java.util.Date().getTime());
+		this.dateReCalculated = new Timestamp(dateCalculated.getTime());
+		this.reCalculatedValue = checksum;
 	}
 
 	/**
@@ -102,6 +125,7 @@ public class FileInfoChecksum extends BasePersistent{
 	 */
 	public String toString()
 	{
+
 		StringBuffer sb = new StringBuffer(" [id = " );
 		sb.append(id);
 		sb.append("Checksum = ");
@@ -110,6 +134,16 @@ public class FileInfoChecksum extends BasePersistent{
 		sb.append( algorithmType);
 		sb.append( " date calculated = " );
 		sb.append( dateCalculated );
+		sb.append(" date reCalculated = ");
+		sb.append(dateReCalculated);
+		sb.append(" reCalculated passed = ");
+		sb.append(reCalculatedPassed);
+		sb.append(" reCalculatedVale = ");
+		sb.append(reCalculatedValue);
+		sb.append(" reCalculateChecksum = ");
+		sb.append(reCalculateChecksum);
+		sb.append(" dateLastCheckPassed = ");
+		sb.append(dateLastCheckPassed);
 		sb.append(" ] ");
 		
 		return sb.toString();
@@ -160,13 +194,135 @@ public class FileInfoChecksum extends BasePersistent{
 		this.fileInfo = fileInfo;
 	}
 
+	/**
+	 * Date the checksum was calculated.
+	 * 
+	 * @return
+	 */
 	public Timestamp getDateCalculated() {
 		return dateCalculated;
 	}
 
+	/**
+	 * Date the checksum was checked.
+	 * 
+	 * @param dateCalculated
+	 */
 	void setDateCalculated(Timestamp dateCalculated) {
 		this.dateCalculated = dateCalculated;
 	}
 	
+	/**
+	 * Date the checksum was recalculated.
+	 * 
+	 * @return
+	 */
+	public Timestamp getDateReCalculated() {
+		return dateReCalculated;
+	}
+
+	/**
+	 * Set the date that the checksum was recalculated.
+	 * 
+	 * @param dateReCalculated
+	 */
+	public void setDateReCalculated(Timestamp dateReCalculated) {
+		this.dateReCalculated = dateReCalculated;
+	}
+
+	/**
+	 * Determine if the recalculation of the checksum passed.
+	 * 
+	 * @return true if the last checksum recalculation passed.
+	 */
+	public boolean getReCalculatedPassed() {
+		return reCalculatedPassed;
+	}
+
+	/**
+	 * Set to true if the re-calculation passed.
+	 * 
+	 * @param reCalculatedPassed
+	 */
+	public void setReCalculatedPassed(boolean reCalculatedPassed) {
+		this.reCalculatedPassed = reCalculatedPassed;
+	}
+
+	/**
+	 * Get the recalculated value.
+	 * 
+	 * @return
+	 */
+	public String getReCalculatedValue() {
+		return reCalculatedValue;
+	}
+
+	/**
+	 * Set the recalculated value.
+	 * 
+	 * @param reCalculatedValue
+	 */
+	public void setReCalculatedValue(String reCalculatedValue) {
+		this.reCalculatedValue = reCalculatedValue;
+	}
+
+	/**
+	 * Get the recalculated checksum.
+	 * 
+	 * @return
+	 */
+	public boolean getReCalculateChecksum() {
+		return reCalculateChecksum;
+	}
+
+	/**
+	 * Set the recalculated checksum.
+	 * 
+	 * @param reCalculateChecksum
+	 */
+	public void setReCalculateChecksum(boolean reCalculateChecksum) {
+		this.reCalculateChecksum = reCalculateChecksum;
+	}
+	
+	/**
+	 * Last time the checksum was checked and it was the same.
+	 * 
+	 * @return
+	 */
+	public Timestamp getDateLastCheckPassed() {
+		return dateLastCheckPassed;
+	}
+
+	/**
+	 * Last time the checksum was checked and it was the same.
+	 * 
+	 * @return
+	 */
+	public void setDateLastCheckPassed(Timestamp dateLastCheckPassed) {
+		this.dateLastCheckPassed = dateLastCheckPassed;
+	}
+
+	
+	public FileInfoChecksumResetHistory reset(String newChecksum, 
+			 Long userId, String notes){
+		FileInfoChecksumResetHistory resetHistory = new FileInfoChecksumResetHistory (newChecksum, 
+				this, userId, notes);
+		this.checksum = newChecksum;
+		this.resetHistory.add(resetHistory);
+		return resetHistory;
+	}
+	
+	/**
+	 * List of unmodifiable reset histories.
+	 * 
+	 * @return list of reset histories
+	 */
+	public Set<FileInfoChecksumResetHistory> getResetHistory() {
+		return Collections.unmodifiableSet(resetHistory);
+	}
+
+	void setResetHistory(Set<FileInfoChecksumResetHistory> resetHistory) {
+		this.resetHistory = resetHistory;
+	}
 
 }

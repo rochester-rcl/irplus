@@ -113,90 +113,42 @@ public class ResearcherPersonalLink extends BasePersistent implements Orderable 
 		return true;
 	}
 
-	/**
-	 * Researcher this link belongs to.
-	 * 
-	 * @return
-	 */
 	public Researcher getResearcher() {
 		return researcher;
 	}
 
-	/**
-	 * Set the researcher this link belongs to.
-	 * 
-	 * @param researcher
-	 */
 	public void setResearcher(Researcher researcher) {
 		this.researcher = researcher;
 	}
 
-	/**
-	 * Get the string url value.
-	 * 
-	 * @return
-	 */
 	public String getUrl() {
 		return url;
 	}
 
-	/**
-	 * Set the string url value.
-	 * 
-	 * @param url
-	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.ur.order.Orderable#getOrder()
-	 */
 	public int getOrder() {
 		return order;
 	}
 
-	/**
-	 * Set the order for this link.
-	 * 
-	 * @param order
-	 */
 	void setOrder(int order) {
 		this.order = order;
 	}
 
-	/**
-	 * Get the name for the link
-	 * 
-	 * @return
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Set the name for the link.
-	 * 
-	 * @param name
-	 */
 	void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * Get the description for the link.
-	 * 
-	 * @return
-	 */
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * Set the decription for the link.
-	 * 
-	 * @param description
-	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}

@@ -321,6 +321,15 @@ public interface ResearcherFileSystemService extends Serializable{
 	public Long getResearcherFileCount(IrFile irFile) ;
 	
 	/**
+	 * Get all researcher files uses the specified ir file.
+	 * 
+	 * @param irFile - ir file being used
+	 * @return the list of researcher files being used.
+	 */
+	public List<ResearcherFile> getResearcherFilesWithIrFile(IrFile irFile);
+	
+	
+	/**
 	 * Get the count of researcher publication using this generic item
 	 * 
 	 * @param item Item to be searched for in the researcher publication

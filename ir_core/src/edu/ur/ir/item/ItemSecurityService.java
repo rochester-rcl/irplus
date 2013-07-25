@@ -97,9 +97,10 @@ public interface ItemSecurityService extends Serializable{
 	 * @param user  user to check
 	 * @param permission  permission to check
 	 * 
-	 * @return true if the user has permission on the given item
+	 * @return number of times the permission was found for the user a count greater than one means the user has
+	 * the specified permission.
 	 */
-	public boolean hasPermission(GenericItem item, IrUser user, ItemPermission permission);
+	public long hasPermission(GenericItem item, IrUser user, ItemPermission permission);
 
 	/**
 	 * Remove the group from the item acl.

@@ -49,6 +49,13 @@ public interface NewsService extends Serializable{
 	public boolean deleteNewsItem(NewsItem newsItem);
 	
 	/**
+	 * Get all news items.
+	 * 
+	 * @return
+	 */
+	public List<NewsItem> getNewsItems(); 
+	
+	/**
 	 * Get  News item based on the given criteria.
 
 	 * @param rowStart - start position in paged set

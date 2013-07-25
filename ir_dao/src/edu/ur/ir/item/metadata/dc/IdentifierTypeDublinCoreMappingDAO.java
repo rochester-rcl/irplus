@@ -18,7 +18,6 @@ package edu.ur.ir.item.metadata.dc;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 
 /**
  * Persistence interface for identifier type dublin core
@@ -27,7 +26,7 @@ import edu.ur.dao.ListAllDAO;
  * @author Nathan Sarr
  *
  */
-public interface IdentifierTypeDublinCoreMappingDAO  extends CountableDAO, CrudDAO<IdentifierTypeDublinCoreMapping>, ListAllDAO{
+public interface IdentifierTypeDublinCoreMappingDAO  extends CountableDAO, CrudDAO<IdentifierTypeDublinCoreMapping>{
 	
 	/**
 	 * Get the mapping by identifier type id

@@ -38,7 +38,7 @@ import edu.ur.file.mime.TopMediaTypeDAO;
  */
 public class DefaultMimeTypeService implements MimeTypeService{
 	
-	/** eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = 7576783157449909674L;
 
 	/** Top media type persistance.  */
@@ -113,6 +113,16 @@ public class DefaultMimeTypeService implements MimeTypeService{
 	}
 
 	/**
+	 * Get all subtype extensions
+	 * 
+	 * @see edu.ur.file.db.service.MimeTypeService#getAllSubTypeExtensions()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SubTypeExtension> getAllSubTypeExtensions() {
+		return subTypeExtensionDAO.getAll();
+	}
+
+	/**
 	 * Get all sub type extensions name order.
 	 * 
 	 * @see edu.ur.file.db.service.MimeTypeService#getAllSubTypeExtensionsNameOrder()
@@ -144,6 +154,16 @@ public class DefaultMimeTypeService implements MimeTypeService{
 	}
 
 	/**
+	 * Get all sub types.
+	 * 
+	 * @see edu.ur.file.db.service.MimeTypeService#getAllSubTypes()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAllSubTypes() {
+		return subTypeDAO.getAll();
+	}
+
+	/**
 	 * Get all sub types ordered by name.
 	 * 
 	 * @see edu.ur.file.db.service.MimeTypeService#getAllSubTypesNameOrder()
@@ -153,6 +173,16 @@ public class DefaultMimeTypeService implements MimeTypeService{
 		return subTypeDAO.getAllNameOrder();
 	}
 
+	/**
+	 * Get all top media types.  This can be an expensive operation
+	 * depending on the number of top media types.
+	 * 
+	 * @see edu.ur.file.db.service.MimeTypeService#getAllTopMediaType()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAllTopMediaType() {
+		return topMediaTypeDAO.getAll();
+	}
 
 	/**
 	 * Get all top media types in name order.

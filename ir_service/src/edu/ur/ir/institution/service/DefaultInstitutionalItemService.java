@@ -117,19 +117,18 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public void deleteInstitutionalItem(InstitutionalItem institutionalItem, IrUser deletingUser) {
 		
 		Set<GenericItem> genericItemsToDelete = new HashSet<GenericItem>();
+		Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 		
+		// get the generic item for each version
+		for(InstitutionalItemVersion version : versions)
+		{
+			GenericItem genericItem = version.getItem();
+			genericItemsToDelete.add(genericItem);
+		}
 		
 		// Delete ResearcherInstitutionalItem referring to this institutional item
 		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
 		deletedInstitutionalItemService.addDeleteHistory(institutionalItem, deletingUser);
-			
-		// get the generic item for each version
-		for(InstitutionalItemVersion version : institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions())
-		{
-			GenericItem genericItem = version.getItem();
-			genericItemsToDelete.add(genericItem);		
-		}
-		
 		institutionalItemDAO.makeTransient(institutionalItem);
 
 		// Check to see if generic item can be deleted
@@ -247,7 +246,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 
 	
 	/**
-	 * Return the list of found items 
+	 * Return the list of found items for the given institutional item ids
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#getInstitutionalItems(java.util.List)
 	 */
@@ -349,6 +348,17 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		
 		return institutionalItemDAO.getCountByGenericItem(genericItemId);
 	}
+	
+	/**
+	 * Get all institutional items that contain any of the generic item ids in the given list.
+	 * 
+	 * @param genericItemIds - list of generic item ids
+	 * @return list of institutional items found.
+	 */
+	public List<InstitutionalItem> getInstitutionalItemsByGenericItemIds(List<Long> genericItemIds){
+		return institutionalItemDAO.getInstitutionalItemsByGenericItemIds(genericItemIds);
+	}
+
 
 	/**
 	 * Get repository items with the specified first character and orderd by name

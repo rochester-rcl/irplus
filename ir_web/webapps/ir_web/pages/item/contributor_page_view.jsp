@@ -54,7 +54,7 @@
    
         <!-- Source File -->
         <ur:js src="page-resources/js/menu/main_menu.js"/>
-        <ur:js src="page-resources/js/util/base_path.jsp"/>
+        <ur:js src="pages/js/base_path.js"/>
 
  	    
  	</head>
@@ -80,7 +80,7 @@
                                         <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                         <c:param name="researcherId" value="${researcher.id}"/>
                                    </c:url>
-                                   <img src="${url}"/>
+                                   <img class="centered_thumbnail" src="${url}"/>
                                </c:if>	    
 								
 						        <c:if test="${researcher.primaryPicture == null }">
@@ -219,7 +219,7 @@
 				    <h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				</c:if> 
             	<c:import url="contributor_page_view_pager.jsp"/>
-            	<br/>
+            	
             	<div class="dataTable">
 				    <urstb:table width="100%">
 					    <urstb:thead>

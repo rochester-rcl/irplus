@@ -110,6 +110,21 @@ public class HbFileInviteInfoDAO implements FileInviteInfoDAO {
 		return q.list();
 	}
 	
+	/**
+	 * Find the Invite information for all invites that contain the specified versioned file ids and the 
+	 * given emails.
+	 * 
+	 * @param versionedFileIds - list of versioned file ids the invite should have
+	 * @param email - email the invite should have
+	 * @return list of invite infos found
+	 */
+	@SuppressWarnings("unchecked")
+	public List<FileInviteInfo> getInviteInfosWithVersionedFilesAndEmail(List<Long> versionedFileIds, String email) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInviteInfosWithVersionedFilesAndEmail");
+		q.setParameter("email", email.trim().toLowerCase());
+		q.setParameterList("versionedFileIds", versionedFileIds);
+		return q.list();
+	}
 	
 	/**
 	 * Get the list of invite infos ordered by inviteor
@@ -166,6 +181,15 @@ public class HbFileInviteInfoDAO implements FileInviteInfoDAO {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInviteInfoMadeByUser");
 		q.setParameter("userId",user.getId());
 		return q.list();
+	}
+	
+	/**
+	 * Get all user external accounts.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<FileInviteInfo> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 }

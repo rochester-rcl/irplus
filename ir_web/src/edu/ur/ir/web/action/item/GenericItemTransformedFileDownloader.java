@@ -57,10 +57,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 	private static final Logger log = Logger.getLogger(GenericItemTransformedFileDownloader.class);
 
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response ;
+	private HttpServletResponse response ;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** System code for the transformed file  */
 	private String systemCode;
@@ -122,20 +122,19 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
         	if( tf != null )
         	{
         		FileInfo info = tf.getTransformedFile();
-        	    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+        	    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
         	}
         }
         else if ( user != null)
         {
-        	if( genericItem.getOwner().equals(user) || 
-        	    user.hasRole(IrRole.ADMIN_ROLE) ||
-            	itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) )
+        	if( genericItem.getOwner().equals(user) || user.hasRole(IrRole.ADMIN_ROLE) ||
+            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
         	{
         		TransformedFile tf = irFile.getTransformedFileBySystemCode(systemCode);
             	if( tf != null )
             	{
             		FileInfo info = tf.getTransformedFile();
-            	    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+            	    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
             	}
         	}
         }
@@ -163,6 +162,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 		this.systemCode = systemCode;
 	}
 
+	public WebIoUtils getWebIoUtils() {
+		return webIoUtils;
+	}
+
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
 	}
@@ -174,7 +177,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 	}
 
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

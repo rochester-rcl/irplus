@@ -44,6 +44,8 @@
 			not-null="true" access="field" />
 		
 	    <property name="uniqueSystemCode" column="unique_system_code" type="string" access="field" />
+	    
+	    <property name="authorType" column="author_type" type="boolean" not-null="true" access="field" />
 
 		<property name="description" column="description" type="string"
 			not-null="false" access="field"/>

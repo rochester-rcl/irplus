@@ -46,7 +46,7 @@
 
  	<ur:js src="page-resources/js/admin/add_group_to_item.js"/>
  	
- 	<ur:js src="page-resources/js/util/base_path.jsp"/>
+ 	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	
@@ -83,22 +83,13 @@
                 <c:param name="institutionalItemId" value="${institutionalItemId}"/>
                 <c:param name="showItemFileTab" value="true"/> 
             </c:url>
-            <input type="button" 
-                class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
-                onclick="javascript:window.location='${viewItem}'" value="Done">
-           
+            <a href="${viewItem}">Done</a>
             <br/>
             <br/>
             <div id="all_user_groups">
                 <c:import url="all_item_file_user_groups_frag.jsp"></c:import>
             </div>
-            <input type="button" 
-                class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
-                onclick="javascript:window.location='${viewItem}'" value="Done">
+
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
         

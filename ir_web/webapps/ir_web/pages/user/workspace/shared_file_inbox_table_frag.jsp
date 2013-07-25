@@ -21,12 +21,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <div class="dataTable">
     <ur:basicForm method="post" id="my_shared_inbox_files" name="mySharedInboxFiles" >
     <input type="hidden" id="shared_inbox_files_count" value="${sharedInboxFilesCount}">
-    <c:if test="${!empty(sharedInboxFiles)}">
+    <c:if test="${!empty (sharedInboxFiles) }">
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
@@ -77,7 +78,7 @@
     </c:if>
 	<input type="hidden" id="shared_destination_folder_id" name="destinationFolderId" value=""/>
     </ur:basicForm>
-    <c:if test="${empty(sharedInboxFiles)}">
+    <c:if test="${empty (sharedInboxFiles) }">
        <h3>There are no shared files currently in your inbox.</h3>
     </c:if>
 </div>

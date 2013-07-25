@@ -161,7 +161,7 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		log.debug("move called");
 		user = userService.getUser(userId, false);
 
-		List<FileSystem> notMoved;
+		List<FileSystem> notMoved = new LinkedList<FileSystem>();
 		actionSuccess = true;
 
 		List<Long> listCollectionIds = new LinkedList<Long>();
@@ -208,19 +208,16 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		{
 			String message = getText("collectionNamesAlreadyExist");
 			actionSuccess = false;
-			StringBuffer sb = new StringBuffer(message);
 			for(FileSystem fileSystem : notMoved)
 			{
-			    sb.append( " " + fileSystem.getName() );
+			    message = message + " " + fileSystem.getName();
 			}
-			addFieldError("moveError", sb.toString());
-			//load the data
-	        viewLocations();	
-	        return ERROR;
+			addFieldError("moveError", message);
 		}
 		
 		
-			
+		//load the data
+        viewLocations();		
 		
 		return SUCCESS;
 	}
@@ -280,9 +277,9 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 	/**
 	 * Allow a user id to be passed in.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -102,6 +102,7 @@ YAHOO.ur.personal.collection =
     {
         document.getElementById('myCollections_parentCollectionId').value = collectionId;
         YAHOO.ur.personal.collection.destroyMenus();
+
         myPersonalCollectionsTable.submitForm(myCollectionAction);
         YAHOO.ur.personal.collection.insertHiddenParentCollectionId();
     },
@@ -804,6 +805,10 @@ YAHOO.ur.personal.collection =
      */
     init: function() 
     {
+	    if (document.getElementById('myCollections_showCollection').value == 'true')
+	    {
+		    YAHOO.ur.user.workspace.setActiveIndex("COLLECTION");
+	    }
         var parentCollectionId = document.getElementById('myCollections_parentCollectionId').value;
         YAHOO.ur.personal.collection.getCollectionByIdWithoutLoadingSharedInboxFiles(parentCollectionId);
         YAHOO.ur.personal.collection.createNewCollectionDialog();

@@ -126,7 +126,10 @@ public class IrAclTag extends TagSupport {
             	 log.debug("Resoved object = " + resolvedDomainObject);
              }
              
-             if( aclManager.hasPermission(resolvedDomainObject, user, hasPermission))
+             
+             Long count = aclManager.hasPermission(resolvedDomainObject, user, hasPermission);
+             
+             if( count > 0)
              {
             	 return Tag.EVAL_BODY_INCLUDE;
              }

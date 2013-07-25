@@ -34,7 +34,6 @@ DROP TABLE ir_metadata_marc.data_field_mapper;
 DROP SEQUENCE ir_metadata_marc.data_field_mapper_seq;
 
 DROP SCHEMA ir_metadata_marc;
-
 -- ---------------------------------------------
 -- Drop Institutional Repository Metadata tables/schema
 -- ---------------------------------------------
@@ -51,9 +50,7 @@ DROP SCHEMA ir_metadata_dublin_core;
 -- ---------------------------------------------
 -- Drop security tables
 -- ---------------------------------------------
- 
-
-
+  
 DROP TABLE ir_security.role_control_entry_permission;
 DROP TABLE ir_security.role_control_entry;
 DROP TABLE ir_security.user_control_entry_permission;
@@ -64,8 +61,6 @@ DROP TABLE ir_security.acl;
 ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT invite_permissions_class_type_permission_id_fkey;
 ALTER TABLE ir_user.folder_invite_permissions DROP CONSTRAINT folder_invite_permissions_class_type_permission_id_fkey;
 ALTER TABLE ir_user.folder_auto_share_permissions DROP CONSTRAINT folder_auto_share_permissions_class_type_permission_id_fkey;
-ALTER TABLE ir_group_workspace.group_workspace_email_invite_permissions DROP CONSTRAINT group_workspace_email_invite_perm_class_type_permission_id_fkey;
-
 DROP TABLE ir_security.class_type_permission;
 DROP TABLE ir_security.class_type;
 
@@ -77,47 +72,6 @@ DROP SEQUENCE ir_security.acl_seq;
 DROP SEQUENCE ir_security.class_type_seq;
 
 DROP SCHEMA ir_security;
-
--- ---------------------------------------------
--- Drop Group workspaces tables/schema
--- ---------------------------------------------
-
-DROP TABLE ir_group_workspace.group_workspace_project_page_file_system_link;
-DROP TABLE ir_group_workspace.group_workspace_project_page_institutional_item;
-DROP TABLE ir_group_workspace.group_workspace_project_page_publication;
-DROP TABLE ir_group_workspace.group_workspace_project_page_file;
-DROP TABLE ir_group_workspace.group_workspace_project_page_folder;
-DROP TABLE ir_group_workspace.group_workspace_project_page_image;
-DROP TABLE ir_group_workspace.group_workspace_project_page_member;
-DROP TABLE ir_group_workspace.group_workspace_project_page;
-DROP TABLE ir_group_workspace.group_workspace_email_invite_permissions;
-DROP TABLE ir_group_workspace.group_workspace_email_invite;
-DROP TABLE ir_group_workspace.group_workspace_user;
-DROP TABLE ir_group_workspace.group_workspace_file;
-DROP TABLE ir_group_workspace.group_workspace_folder;
-DROP TABLE ir_group_workspace.group_workspace;
-DROP TABLE ir_group_workspace.group_workspace_file_delete_record;
-
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_file_system_link_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_institutional_item_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_publication_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_file_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_folder_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_image_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_member_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_project_page_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_user_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_email_invite_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_file_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;
-DROP SEQUENCE ir_group_workspace.group_workspace_file_delete_record_seq;
-
-DROP SCHEMA ir_group_workspace;
-
-
-
-
 
 -- ---------------------------------------------
 -- Drop ir_repository information

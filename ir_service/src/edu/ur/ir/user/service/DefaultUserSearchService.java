@@ -24,15 +24,11 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.NumericUtils;
-import org.apache.lucene.util.Version;
 
 import edu.ur.ir.SearchHelper;
 import edu.ur.ir.SearchResults;
@@ -66,7 +62,7 @@ public class DefaultUserSearchService implements UserSearchService{
 			DefaultUserIndexService.USER_NAMES};
 	
 	/** Analyzer for dealing with analyzing the search */
-	private transient Analyzer analyzer;
+	private Analyzer analyzer;
 
 
 	public SearchResults<IrUser> search(File userIndexFolder, String query,
@@ -83,12 +79,9 @@ public class DefaultUserSearchService implements UserSearchService{
 		
 		String indexFolder = userIndexFolder.getAbsolutePath();
 		IndexSearcher searcher = null;
-		IndexReader reader = null;
 		try {
-			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			reader = IndexReader.open(directory, true);
-			searcher = new IndexSearcher(reader);
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			searcher = new IndexSearcher(indexFolder);
+			QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
@@ -106,7 +99,7 @@ public class DefaultUserSearchService implements UserSearchService{
 				}
 				
 				Document d = searcher.doc(hits.scoreDocs[position].doc);
-				Long userId = NumericUtils.prefixCodedToLong(d.get(DefaultUserIndexService.USER_ID));
+				Long userId = new Long(d.get(DefaultUserIndexService.USER_ID));
 				log.debug( "user id = " + userId);
 				IrUser user = userService.getUser(userId, false);
 				users.add(user);
@@ -126,35 +119,27 @@ public class DefaultUserSearchService implements UserSearchService{
 					log.error("the searcher could not be closed", e);
 				}
 			}
-			if( reader != null )
-			{
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error("the reader could not be closed", e);
-				}
-			}
 		}
 		searchResults.setObjects(users);
 		return searchResults;
 	}
 
-	/**
-	 * Set the user service to access user information.
-	 * 
-	 * @param userService
-	 */
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
 
+	public Analyzer getAnalyzer() {
+		return analyzer;
+	}
 
-	/**
-	 * Set the analyzer for searching the index.
-	 * 
-	 * @param analyzer
-	 */
+
 	public void setAnalyzer(Analyzer analyzer) {
 		this.analyzer = analyzer;
 	}
