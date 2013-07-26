@@ -47,13 +47,6 @@
          <session-timeout>30</session-timeout>
      </session-config>
 
-	<!--  Cleans up the struts variables - this helps with memory leaks
-	      This was needed due to spring security filter -->
-    <filter>
-        <filter-name>struts-cleanup</filter-name>
-        <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
-    </filter>
-
 	<filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -67,16 +60,12 @@
 	</filter>
 
     <filter>
-        <filter-name>struts</filter-name>
-        <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
     </filter>
 
-
     <!--  This determines the order that the filters are executed -->
-    <filter-mapping>
-        <filter-name>struts-cleanup</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    
 
     <filter-mapping>
         <filter-name>OpenSessionInView</filter-name>
@@ -89,7 +78,7 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>struts</filter-name>
+        <filter-name>struts2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
