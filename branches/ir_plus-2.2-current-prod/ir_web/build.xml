@@ -107,6 +107,7 @@
 	    <echo message="project.version = ${project.version}"/>
 	    <echo message="dist.dir = ${dist.dir}"/>
 	    <echo message="report.dir = ${report.dir}"/>
+    	<echo message="do custom build = ${build.custom}"/>
     	
     	<echo message="${spring.config.data.source.test}"/>
     	<echo message="${spring.config.common.config}"/>
@@ -320,7 +321,7 @@
 		    <fileset dir="${custom.build.dir}/ir_web/spring-config/local"/>
 		</copy>
 		<copy todir="${production.staging.dir}/lib/" overwrite="true" 
-			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-2.1.jar"/>
+			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-2.2.jar"/>
 		
 		<copy todir="${production.staging.dir}/web-inf/" overwrite="true" 
 		    file="${custom.build.dir}/properties/production/ir_plus.properties"/>
