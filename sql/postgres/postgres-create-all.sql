@@ -3673,3 +3673,27 @@ ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper OWNER TO ir_plus;
 CREATE SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
 ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper_seq OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- Checksum Information
+-- ---------------------------------------------
+
+-- Create a new table to hold file checksum information in the system
+CREATE TABLE file_system.file_checksum_reset_history
+(
+  file_checksum_reset_history_id BIGINT NOT NULL PRIMARY KEY,
+  file_checksum_id BIGINT NOT NULL,
+  original_checksum TEXT NOT NULL,
+  new_checksum TEXT NOT NULL,
+  algorithm_type TEXT NOT NULL,
+  user_id BIGINT NOT NULL,
+  notes TEXT,
+  date_reset TIMESTAMP WITH TIME ZONE NOT NULL ,
+  version INTEGER,
+  FOREIGN KEY (file_checksum_id) REFERENCES file_system.file_checksum (file_checksum_id)
+);
+ALTER TABLE file_system.file_checksum_reset_history OWNER TO ir_plus;
+
+-- The checksum sequence
+CREATE SEQUENCE file_system.file_checksum_reset_history_seq;
+ALTER TABLE file_system.file_checksum_reset_history_seq OWNER TO ir_plus;
+
