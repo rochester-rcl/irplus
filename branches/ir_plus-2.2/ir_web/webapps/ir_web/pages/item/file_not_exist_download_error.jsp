@@ -29,7 +29,7 @@
 
 <html>
     <head>
-        <title>Viewing Institutional Publication: ${institutionalItemVersion.item.name} </title>
+        <title>File download error</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
     <!-- Core + Skin CSS -->
@@ -64,7 +64,7 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<h3> <div class="errorMessage"> File does not exist for download! </div> </h3> 
+				<h3> <div class="errorMessage"> File does not exist for download</div> </h3> 
 		    </div>
 		    <!--  end the body tag --> 
 		

@@ -48,6 +48,22 @@
 		</c:if>
 		> No  
 	</td>
+	
+	</tr>
+	<tr>
+	  <td align="left">
+		Can file be played in player:
+		<input type="radio" name="playFile_${itemFile.id}" value="true" onClick="javascript:YAHOO.ur.institution.item.permission.updatePlayFileInPlayer(${itemFile.id}, ${institutionalItemId}, 'true')"
+		<c:if test="${itemFile.canViewInPlayer}">
+			checked
+		</c:if>
+		> Yes  
+		<input type="radio" name="playFile_${itemFile.id}"  value="false" onClick="javascript:YAHOO.ur.institution.item.permission.updatePlayFileInPlayer(${itemFile.id}, ${institutionalItemId}, 'false')"
+		<c:if test="${!itemFile.canViewInPlayer}">
+			checked
+		</c:if>
+		> No  
+	  </td>
 	</tr>
 	</table>
 	<div class="clear">&nbsp;</div>

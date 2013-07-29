@@ -39,8 +39,21 @@
 				        <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
 					    <c:param value="${object.id}" name="itemFileId"/>
 				    </c:url>
-				    <a href="${itemFileDownload}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
+				     <c:url var="playFile" value="/playInstitutionalItemFile.action">
+				        <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
+					    <c:param value="${object.id}" name="itemFileId"/>
+					    <c:param value="${institutionalItemVersion.versionNumber}" name="versionNumber"/>
+					    <c:param value="${institutionalItemId}" name="institutionalItemId"/>
+				    </c:url>
+				    ${object.canViewInPlayer}
+				    <c:if test="${object.canViewInPlayer}">
+				      <a href="${playFile}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
+	                  ${object.irFile.nameWithExtension}</a> (<a href="${itemFileDownload}">Download</a>)&nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
+		            </c:if>
+		            <c:if test="${ !object.canViewInPlayer}">
+		              <a href="${itemFileDownload}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
 	                  ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
+		            </c:if>
 		            <br/>
 		            <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 		                Download Status:
