@@ -357,6 +357,7 @@ DROP TABLE file_system.file;
 DROP TABLE file_system.folder;
 DROP TABLE file_system.file_database;
 DROP TABLE file_system.file_server;
+DROP TABLE file_system.file_checksum_reset_history;
 
 DROP SEQUENCE file_system.file_checksum_seq;
 DROP SEQUENCE file_system.file_database_seq;
@@ -364,6 +365,7 @@ DROP SEQUENCE file_system.file_server_seq;
 DROP SEQUENCE file_system.folder_seq;
 DROP SEQUENCE file_system.file_system_name_seq;
 DROP SEQUENCE file_system.file_seq;
+DROP SEQUENCE file_system.file_checksum_reset_history_seq;
 
 DROP SCHEMA file_system;
 
