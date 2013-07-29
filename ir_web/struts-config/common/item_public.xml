@@ -18,8 +18,6 @@
        <!--  Public Item actions     -->
        <!--  ************************************ -->
         
- 
-        
         <action name="institutionalPublicationPublicView" 
             class="edu.ur.ir.web.action.institution.ViewInstitutionalPublication">
             <interceptor-ref name="default" />
@@ -27,6 +25,14 @@
             <result name="deleted">/pages/item/institutional_publication_deleted.jsp</result>
             <result name="not_found">/pages/item/institutional_publication_not_found.jsp</result>
             <result name="input">/pages/item/institutional_publication_not_found.jsp</result>
+        </action>
+        
+        <action name="playInstitutionalItemFile"
+                class="edu.ur.ir.web.action.institution.PlayInstitutionalItemFile">
+            <interceptor-ref name="default" />
+            <result name="success">/pages/item/play_file.jsp</result>
+            <result name="input">/pages/item/no_access_file_download_error.jsp</result>
+            <result name="not_found">/pages/item/file_not_exist_download_error.jsp</result>
         </action>
 
         <action name="fileDownloadForInstitutionalItem" 

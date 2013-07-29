@@ -295,6 +295,14 @@
             <result name="success" type="no-op"/>
         </action>
         
+         <!--  Update public view status  -->
+        <action name="updateViewInPlayer"
+            method="updateViewInPlayer"
+            class="edu.ur.ir.web.action.institution.UpdateViewInPlayer">
+            <interceptor-ref name="crudStack" />
+            <result name="success" type="no-op"/>
+        </action>
+        
        <!--  ************************************ 			   -->
        <!--  Review item -  actions     -->
        <!--  ************************************              -->
