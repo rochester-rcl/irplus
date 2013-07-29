@@ -115,31 +115,31 @@
 	       <tr>       
 	           <td align="left" class="label">Record Status(Leader/05)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="recordStatus" value="<c:if test="${recordStatus != ' '}">${recordStatus}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="recordStatus" value="<c:if test="${!empty recordStatus}">${recordStatus}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
 	           <td align="left" class="label">Bibliographic Level(Leader/07)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="bibliographicLevel" value="<c:if test="${bibliographicLevel != ' '}">${bibliographicLevel}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="bibliographicLevel" value="<c:if test="${!empty bibliographicLevel}">${bibliographicLevel}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
 	           <td align="left" class="label">Type Of Control(Leader/08)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="typeOfControl" value="<c:if test="${typeOfControl != ' '}">${typeOfControl}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="typeOfControl" value="<c:if test="${!empty typeOfControl}">${typeOfControl}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
 	           <td align="left" class="label">Encoding Level(Leader/17)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="encodingLevel" value="<c:if test="${encodingLevel != ' '}">${encodingLevel}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="encodingLevel" value="<c:if test="${!empty encodingLevel }">${encodingLevel}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
 	           <td align="left" class="label">Descriptive Cataloging Form(Leader/18)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="descriptiveCatalogingForm" value="<c:if test="${descriptiveCatalogingForm != ' '}">${descriptiveCatalogingForm}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="descriptiveCatalogingForm" value="<c:if test="${!empty descriptiveCatalogingForm }">${descriptiveCatalogingForm}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>
