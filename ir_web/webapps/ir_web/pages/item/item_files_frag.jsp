@@ -45,7 +45,7 @@
 					    <c:param value="${institutionalItemVersion.versionNumber}" name="versionNumber"/>
 					    <c:param value="${institutionalItemId}" name="institutionalItemId"/>
 				    </c:url>
-				    ${object.canViewInPlayer}
+				    
 				    <c:if test="${object.canViewInPlayer}">
 				      <a href="${playFile}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
 	                  ${object.irFile.nameWithExtension}</a> (<a href="${itemFileDownload}">Download</a>)&nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})

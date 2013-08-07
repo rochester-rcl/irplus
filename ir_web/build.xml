@@ -25,9 +25,9 @@
 
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-     
+     -->
  	<property name="yui.unzip" value="true"/>
- 	-->
+ 	
 
 
 	<!-- always disable emma -->
@@ -107,6 +107,7 @@
 	    <echo message="project.version = ${project.version}"/>
 	    <echo message="dist.dir = ${dist.dir}"/>
 	    <echo message="report.dir = ${report.dir}"/>
+    	<echo message="do custom build = ${build.custom}"/>
     	
     	<echo message="${spring.config.data.source.test}"/>
     	<echo message="${spring.config.common.config}"/>
