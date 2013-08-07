@@ -133,13 +133,13 @@
 	       <tr>       
 	           <td align="left" class="label">Encoding Level(Leader/17)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="encodingLevel" value="<c:if test="${!empty encodingLevel }">${encodingLevel}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="encodingLevel" value="<c:if test="${!empty encodingLevel}">${encodingLevel}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
 	           <td align="left" class="label">Descriptive Cataloging Form(Leader/18)</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="descriptiveCatalogingForm" value="<c:if test="${!empty descriptiveCatalogingForm }">${descriptiveCatalogingForm}</c:if>"/>
+		           <input type="text"  size="1" maxlength="1" name="descriptiveCatalogingForm" value="<c:if test="${!empty descriptiveCatalogingForm}">${descriptiveCatalogingForm}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>
