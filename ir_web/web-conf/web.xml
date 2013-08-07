@@ -50,7 +50,6 @@
 	<!--  Cleans up the struts variables - this helps with memory leaks
 	      This was needed due to spring security filter -->
 
-
 	<filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -82,7 +81,7 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>struts</filter-name>
+        <filter-name>struts2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
