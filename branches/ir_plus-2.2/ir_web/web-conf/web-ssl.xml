@@ -59,13 +59,11 @@
 	    </filter-class>
 	</filter>
 
-   <filter>
+    <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
     </filter>
 
-
-    <!--  This determines the order that the filters are executed -->
     <filter-mapping>
         <filter-name>OpenSessionInView</filter-name>
         <url-pattern>/*</url-pattern>
