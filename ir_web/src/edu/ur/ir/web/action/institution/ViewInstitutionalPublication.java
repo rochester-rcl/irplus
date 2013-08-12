@@ -42,6 +42,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.WebBrowserFileViewerHelper;
 import edu.ur.order.AscendingOrderComparator;
 
 
@@ -124,7 +125,24 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** Service for dealing with institutional item version inforamtion */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
-
+	/** file types that can be opened by the browser */
+	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
+	
+	
+	/**
+	 * Set the web frowser file viewer helper.
+	 * 
+	 * @param webBrowserFileViewerHelper
+	 */
+	public void setWebBrowserFileViewerHelper(
+			WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
+		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
+	}
+	
+	public WebBrowserFileViewerHelper getWebBrowserFileViewerHelper() {
+		return webBrowserFileViewerHelper;
+	}
+	
 
 	/**
 	 * Loads the institutional item.

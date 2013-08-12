@@ -33,6 +33,7 @@
             <result name="success">/pages/item/play_file.jsp</result>
             <result name="input">/pages/item/no_access_file_download_error.jsp</result>
             <result name="not_found">/pages/item/file_not_exist_download_error.jsp</result>
+            <result name="player_not_enabled">/pages/item/player_not_enabled.jsp</result>
         </action>
 
         <action name="fileDownloadForInstitutionalItem" 

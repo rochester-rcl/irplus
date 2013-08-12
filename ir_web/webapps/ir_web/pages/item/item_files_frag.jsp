@@ -46,11 +46,11 @@
 					    <c:param value="${institutionalItemId}" name="institutionalItemId"/>
 				    </c:url>
 				    
-				    <c:if test="${object.canViewInPlayer}">
+				    <c:if test="${object.canViewInPlayer && webBrowserFileViewerHelper.mediaPlayerEnabled}">
 				      <a href="${playFile}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
 	                  ${object.irFile.nameWithExtension}</a> (<a href="${itemFileDownload}">Download</a>)&nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
 		            </c:if>
-		            <c:if test="${ !object.canViewInPlayer}">
+		            <c:if test="${ !object.canViewInPlayer || !webBrowserFileViewerHelper.mediaPlayerEnabled}">
 		              <a href="${itemFileDownload}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
 	                  ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
 		            </c:if>
