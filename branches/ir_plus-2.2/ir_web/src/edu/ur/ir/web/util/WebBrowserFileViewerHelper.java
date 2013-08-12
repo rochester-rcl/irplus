@@ -23,6 +23,12 @@ public class WebBrowserFileViewerHelper implements Serializable {
     /* maximum file size to show in the browser */
     private Long maximumFileSize;
     
+    /* player key if needed */
+    private String mediaPlayerKey;
+
+    /* determine if the media player is enabled */
+	private boolean mediaPlayerEnabled = false;
+
 
 	/**
      * Returns true if the file type can be shown in the browser.
@@ -76,6 +82,22 @@ public class WebBrowserFileViewerHelper implements Serializable {
 	 */
 	public void setMaximumFileSize(Long maximumFileSize) {
 		this.maximumFileSize = maximumFileSize;
+	}
+	
+    public String getMediaPlayerKey() {
+		return mediaPlayerKey;
+	}
+
+	public void setMediaPlayerKey(String mediaPlayerKey) {
+		this.mediaPlayerKey = mediaPlayerKey;
+	}
+	
+	public boolean getMediaPlayerEnabled() {
+		return mediaPlayerEnabled;
+	}
+
+	public void setMediaPlayerEnabled(boolean mediaPlayerEnabled) {
+		this.mediaPlayerEnabled = mediaPlayerEnabled;
 	}
 
 	

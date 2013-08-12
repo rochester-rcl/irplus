@@ -12,6 +12,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.WebBrowserFileViewerHelper;
 
 /**
  * Allow a user to play an institutional item file.
@@ -58,6 +59,20 @@ public class PlayInstitutionalItemFile extends ActionSupport implements UserIdAw
 	
 	/* file to be played */
 	ItemFile itemFile;
+	
+	/** file types that can be opened by the browser */
+	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
+	
+	
+	/**
+	 * Set the web frowser file viewer helper.
+	 * 
+	 * @param webBrowserFileViewerHelper
+	 */
+	public void setWebBrowserFileViewerHelper(
+			WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
+		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
+	}
 
 
 
@@ -69,6 +84,10 @@ public class PlayInstitutionalItemFile extends ActionSupport implements UserIdAw
 	public String execute(){
 		
 	    log.debug("Trying to play file for the user");
+	    
+	    if(!webBrowserFileViewerHelper.getMediaPlayerEnabled()){
+	    	return "player_not_enabled";
+	    }
 	    
         if (itemFileId == null) {
         	log.error("file id is null");

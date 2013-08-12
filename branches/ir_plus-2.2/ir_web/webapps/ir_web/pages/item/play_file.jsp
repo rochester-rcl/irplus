@@ -53,7 +53,7 @@
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	
  	<script type="text/javascript" src="page-resources/jw_player/jwplayer.js"></script>
-    <script type="text/javascript">jwplayer.key="[ENTER KEY HERE]";</script>
+    <script type="text/javascript">jwplayer.key="${webBrowserFileViewerHelper.mediaPlayerKey}";</script>
     
  
   </head>
