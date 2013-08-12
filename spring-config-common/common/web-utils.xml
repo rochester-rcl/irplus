@@ -60,5 +60,8 @@
                 <value>bmp</value>
            </list>
       </property>
+      
+      <property name="mediaPlayerKey" value="${media.player.key}"/>
+      <property name="mediaPlayerEnabled" value="${media.player.enabled}"/>
    </bean>
 </beans>
