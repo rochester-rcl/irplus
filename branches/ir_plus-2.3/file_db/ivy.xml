@@ -26,7 +26,7 @@
     <info organisation="file_db" module="file_db"/>
     <dependencies>
 
-        <dependency org="ur_common_util" name="ur_common_util" rev="2.2" transitive="false" changing="true"/>
+        <dependency org="ur_common_util" name="ur_common_util" rev="2.2" changing="true"/>
         <dependency org="ur_persistence_util" name="ur_persistence_util" rev="2.2" transitive="false" changing="true"/>
 
         <!-- commons io files -->
@@ -34,11 +34,6 @@
             <artifact name="commons-io" type="jar"/>
         </dependency>
         
-        <!-- commons io files -->
-        <dependency org="commons-codec" name="commons-codec" rev="1.3" transitive="false">
-            <artifact name="commons-codec" type="jar"/>
-        </dependency>
-
         <!-- test ng files for testing -->
 	    <dependency org="org.testng" name="testng" rev="5.8" transitive="false">
 	        <artifact name="testng" type="jar"
