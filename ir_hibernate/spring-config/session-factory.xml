@@ -142,6 +142,7 @@
                 <value>edu/ur/hibernate/file/db/UniqueFileSystemName.hbm.xml</value>
                 <value>edu/ur/hibernate/file/db/DefaultFileInfo.hbm.xml</value> 
                 <value>edu/ur/hibernate/file/db/FileInfoChecksum.hbm.xml</value>
+                <value>edu/ur/hibernate/file/db/FileInfoChecksumResetHistory.hbm.xml</value>
                 <value>edu/ur/hibernate/file/db/TreeFolderInfo.hbm.xml</value>
                 <value>edu/ur/hibernate/file/db/DefaultFileDatabase.hbm.xml</value>
                 <value>edu/ur/hibernate/file/db/DefaultFileServer.hbm.xml</value>
