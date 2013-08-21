@@ -24,6 +24,7 @@
 			<class name="edu.ur.hibernate.file.db.HbTreeFolderInfoDAOTest" />
 			<class name="edu.ur.hibernate.file.db.HbFileDatabaseDAOTest" />
 			<class name="edu.ur.hibernate.file.db.HbFileInfoDAOTest" />
+			<class name="edu.ur.hibernate.file.db.HbFileInfoChecksumDAOTest" />
 			
 			<class name="edu.ur.hibernate.file.mime.HbTopMediaTypeDAOTest"/>
 			<class name="edu.ur.hibernate.file.mime.HbSubTypeDAOTest"/>
