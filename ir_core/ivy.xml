@@ -151,8 +151,18 @@
         </dependency>
         
         <!-- lucene files -->
-        <dependency org="org.apache.lucene" name="lucene-core" rev="2.4.1" transitive="false">
+        <dependency org="org.apache.lucene" name="lucene-core" rev="3.6.2" transitive="false">
             <artifact name="lucene-core" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.apache.lucene" name="lucene-icu" rev="3.6.2" transitive="false">
+            <artifact name="lucene-icu" type="jar"/>
+        </dependency>
+  
+        
+        
+        <dependency org="org.apache.lucene" name="lucene-icu4j" rev="3.2.0" >
+            <artifact name="lucene-icu4j" type="jar"/>
         </dependency>
         
         <!-- dom4j files -->
