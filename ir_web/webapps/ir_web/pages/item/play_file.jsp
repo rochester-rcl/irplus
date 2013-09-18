@@ -83,8 +83,8 @@
                 <script type="text/javascript">
                         jwplayer("myElement").setup({
                         file: "${itemFileDownload}",
-                        autoplay: true,
                         autostart: true,
+                        primary: "flash",
                         type:<c:if test="${itemFile.irFile.fileInfo.extension != 'mov'}">"${itemFile.irFile.fileInfo.extension}"</c:if><c:if test="${itemFile.irFile.fileInfo.extension == 'mov'}">"mp4"</c:if>
                 });
                 </script>
