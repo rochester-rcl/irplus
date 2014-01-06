@@ -89,7 +89,14 @@
                    <div class="yui-content">
                        <!--  first tab -->
                        <div id="tab1">
-                           <form method="post" name="viewRepository" action="admin/viewRepository.action">
+                           <form method="post" name="viewRepository" 
+                               <c:if test="${repository == null}">
+                                   action="createRepository.action"
+                               </c:if>
+                               <c:if test="${repository != null}">
+                                    action="updateRepository.action"
+                               </c:if>
+                           >
                    
                            <table class="formTable">
                            <tr>
@@ -222,14 +229,10 @@
                                  <tr>
                                      <td class="buttons" colspan="3" >
                              
-                                         <c:if test="${repository == null}">
-                                             <input type="submit" name="action:createRepository" value="Create"/>
-                                         </c:if>
-                                         <c:if test="${repository != null}">
-                                             <input type="submit" name="action:updateRepository" value="Save"/>
-                                         </c:if>
-                             
-                                         <input type="submit"  name="action:cancelRepository" value="Cancel"/>
+                                         <input type="submit" value="Save"/>
+                                         <c:url var="cancelRepositoryUrl" value="/admin/viewRepository.action"/>
+                                         <a href="${cancelRepositoryUrl}">Cancel</a>
+                                         
                                      </td>
                                  </tr>
                              </table>
