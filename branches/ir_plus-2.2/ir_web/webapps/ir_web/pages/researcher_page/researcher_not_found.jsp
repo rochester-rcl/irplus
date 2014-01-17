@@ -51,7 +51,7 @@
         <!--  base path information -->
  	    <ur:js src="pages/js/base_path.js"/>
  	    <ur:js src="page-resources/js/util/ur_util.js"/>
-   
+        <meta name="robots" content="noindex">
     </head>
     
     <body class="yui-skin-sam">
