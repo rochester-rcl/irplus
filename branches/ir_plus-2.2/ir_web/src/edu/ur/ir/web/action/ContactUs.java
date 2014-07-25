@@ -27,6 +27,9 @@ public class ContactUs extends ActionSupport{
 	/** subject of the message */
 	private String subject;
 	
+	private String reason;
+	
+
 	/** Service to help deal with help */
 	private PublicHelpService publicHelpService;
 	
@@ -40,8 +43,15 @@ public class ContactUs extends ActionSupport{
 	 */
 	public String execute()
 	{
+		log.debug("other testing");
 		log.debug("Sending email message subject = " + subject + " from = " + from + " message = " + message);
-		publicHelpService.sendHelpEmail(subject, from, message);
+		if( reason == null || reason.trim().equals("")){
+			publicHelpService.sendHelpEmail(subject, from, message);
+		}
+		else {
+			log.debug("NOT sending email");
+		}
+		
 		return SUCCESS;
 	}
 
@@ -66,6 +76,8 @@ public class ContactUs extends ActionSupport{
 		{
 			this.addFieldError("subject", "Must enter a subject");
 		}
+		
+
 	}
 	
 	public String getMessage() {
@@ -99,5 +111,14 @@ public class ContactUs extends ActionSupport{
 	public void setPublicHelpService(PublicHelpService publicHelpService) {
 		this.publicHelpService = publicHelpService;
 	}
+	
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
 
 }
