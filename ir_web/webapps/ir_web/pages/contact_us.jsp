@@ -99,6 +99,15 @@
 		                           cols="80" rows="20">${message}</textarea>
 	                          </td>
 			              </tr>
+			              <tr class="email-special-label">
+			                  <td align="left" >
+			                      Reason*:
+			                  </td>
+			                  <td>
+			                      <span class="errorMessage"><ir:printError errors="${fieldErrors}" key="reason"/></span> <br/>
+			                      <input type="text" name="reason" size="82"/>
+			                  </td>
+			              </tr>
 			              <tr>
 			                  <td><input type="submit" value="Send"/></td>
 			              </tr>
