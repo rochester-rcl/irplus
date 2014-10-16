@@ -241,12 +241,13 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 		    }
 		}
 		
+		/*
 		if( facetValues.size() != facetNames.size())
 		{
 			throw new IllegalStateException( "facet values and facet names must be the same size" +
 					" facet values size = " + facetValues.size() + 
 					" facet names size = " + facetNames.size() );
-		}
+		}*/
 		
 		LinkedList<FacetFilter> filters = new LinkedList<FacetFilter>();
 		
