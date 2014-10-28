@@ -77,6 +77,10 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	// id of the user.
 	private Long userId;
 	
+	private String format = "normal";
+	
+
+
 	// user service 
 	private UserService userService;
 
@@ -122,8 +126,14 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
         	
     	log.debug("show all fields = " + showAllFields);
     	File f = temporaryFileCreator.createTemporaryFile("mrc");
-    	String fileName = "institutional_item_version_" + version.getId();   	
-    	Record marcRecord = marcExportService.export(version, showAllFields);
+    	String fileName = "institutional_item_version_" + version.getId(); 
+    	
+        boolean isRda = false;
+    	if( format.equals("rda")){
+    		isRda = true;
+    	}
+    	
+    	Record marcRecord = marcExportService.export(version, showAllFields, isRda);
     	writer.writeFile(marcRecord, f);        	
     	webIoUtils.streamFile(fileName, f, "mrc", response, request, (1024*4), false, true);
     	f.delete();
@@ -141,6 +151,7 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
     	{
     		log.debug("get xml institutional item version  " + institutionalItemVersionId);
     	}
+    	
     	
     	XmlMarcFileWriter writer = new XmlMarcFileWriter();
     	InstitutionalItemVersion version = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
@@ -168,7 +179,10 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
         }
     	
     	log.debug("show all fields = " + showAllFields);
-    	Record marcRecord = marcExportService.export(version, showAllFields);
+    	
+    	
+    	
+    	Record marcRecord = marcExportService.export(version, showAllFields, format.equals("rda"));
     	writer.writeFile(marcRecord, f);        	
     	webIoUtils.streamFile(fileName, f, "xml", response, request, (1024*4), false, true);
     	f.delete();
@@ -226,6 +240,14 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 

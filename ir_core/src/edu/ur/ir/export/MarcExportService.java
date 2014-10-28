@@ -35,9 +35,10 @@ public interface MarcExportService extends Serializable{
 	 * @param version - institutional item version to convert.
 	 * @param showAllFields - will show all fields.  If set to false only header
 	 * title and main author will be shown.
+	 * @param isRda - determine if this should be an RDA record
 	 * 
 	 * @return marc4j record
 	 */
-	public Record export(InstitutionalItemVersion version, boolean showAllFields);
+	public Record export(InstitutionalItemVersion version, boolean showAllFields, boolean isRda);
 
 }
