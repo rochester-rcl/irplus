@@ -61,7 +61,7 @@ public class DefaultMarcOaiMetadataProvider implements OaiMetadataProvider{
          }
          Element metadataTag = doc.createElement("metadata");
          record.appendChild(metadataTag);
-         Record marcRecord = marcExportService.export(institutionalItemVersion, showAllFields);
+         Record marcRecord = marcExportService.export(institutionalItemVersion, showAllFields, false);
          marcXmlAppender.addToDocument(marcRecord, doc, metadataTag);
 	}
 

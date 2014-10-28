@@ -18,6 +18,7 @@ package edu.ur.ir.oai.metadata.provider.service;
 
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
@@ -80,6 +81,8 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	// default date form
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy");
 	
+	private DecimalFormat decimalFormat = new DecimalFormat("#.##");
+	
 	//  Service for dealing with mapping between content type and marc fields */
 	private MarcContentTypeFieldMapperService marcContentTypeFieldMapperService;
 	
@@ -106,7 +109,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	 * @see edu.ur.ir.export.MarcExportService#export(edu.ur.ir.institution.InstitutionalItemVersion, boolean)
 	 */
 	@SuppressWarnings("unchecked")
-	public Record export(InstitutionalItemVersion version, boolean showAllFields) {
+	public Record export(InstitutionalItemVersion version, boolean showAllFields, boolean isRda) {
         Record record = factory.newRecord();
         GenericItem item = version.getItem();
         ExternalPublishedItem externalPublishedItem = item.getExternalPublishedItem();
@@ -167,7 +170,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
         if( mapper != null )
         {
         	// add leader fields
-            handleLeader(record, mapper);
+            handleLeader(record, mapper, isRda);
             
             // add 006 fields
             ControlField control_006 = factory.newControlField("006", mapper.getControlField006());
@@ -184,13 +187,60 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 		
 		handleContributors(item, record);
 		ItemContributor ic = this.getMainAuthor(item);
-		handleTitle(item, ic, record);
+		handleTitle(item, ic, record, isRda);
 		
+		
+		if( isRda ){ 
+			DataField df040 = factory.newDataField("040", ' ', ' ');
+			df040.addSubfield(factory.newSubfield('a', "RRR"));
+			df040.addSubfield(factory.newSubfield('b', "eng"));
+			df040.addSubfield(factory.newSubfield('e', "rda"));
+			df040.addSubfield(factory.newSubfield('c', "RRR"));
+			
+			record.addVariableField(df040);
+			
+			
+			// hack - only add if the thesis type 
+		    if(this.isThesisType(item)){
+			    DataField df336 = factory.newDataField("336", ' ', ' ');
+			    df336.addSubfield(factory.newSubfield('a', "text"));
+			    df336.addSubfield(factory.newSubfield('b', "txt"));
+			    df336.addSubfield(factory.newSubfield('2', "rdacontent"));
+				
+			    record.addVariableField(df336);
+		    }
+			DataField df337 = factory.newDataField("337", ' ', ' ');
+			df337.addSubfield(factory.newSubfield('a', "computer"));
+			df337.addSubfield(factory.newSubfield('b', "c"));
+			df337.addSubfield(factory.newSubfield('2', "rdamedia"));
+				
+			record.addVariableField(df337);
+			
+			DataField df338 = factory.newDataField("338", ' ', ' ');
+			df338.addSubfield(factory.newSubfield('a', "online resource"));
+			df338.addSubfield(factory.newSubfield('b', "cr"));
+			df338.addSubfield(factory.newSubfield('2', "rdacarrier"));
+				
+			record.addVariableField(df338);
+			
+			for( ItemFile file: item.getItemFiles()){
+				if( file.getIrFile().getFileInfo().getExtension().equals("pdf")){
+				    DataField df347 = factory.newDataField("347", ' ', ' ');
+				    df347.addSubfield(factory.newSubfield('a', "text file"));
+				    df347.addSubfield(factory.newSubfield('b', file.getIrFile().getFileInfo().getExtension().toUpperCase()));
+				    df347.addSubfield(factory.newSubfield('c', decimalFormat.format(file.getIrFile().getFileInfo().getSize().doubleValue()/1048576d) + " MB"));
+				    df347.addSubfield(factory.newSubfield('2', "rda"));
+				    record.addVariableField(df347);
+				}
+			}
+		}
 		if( showAllFields )
 		{
+			
+			
 			if( externalPublishedItem != null )
 			{
-		        handlePublisher(record, externalPublishedItem, year);
+		        handlePublisher(record, externalPublishedItem, year, isRda);
 			}
 		    handleExtents(item, record);
 		    if( item.getDescription() != null && !item.getDescription().trim().equals(""))
@@ -205,7 +255,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 		    {
 			    handleAbstract(record, item.getItemAbstract());
 		    }
-		    handleFileType(record, item);
+		    handleFileType(record, item, isRda);
 		    handleIdentifiers(record, item.getItemIdentifiers());
 		    if( item.getItemKeywords() != null && !item.getItemKeywords().trim().equals(""))
 		    {
@@ -343,9 +393,15 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	}
 	
 	// we should use publisher information as stored in publisher name.
-	private void handlePublisher(Record record,ExternalPublishedItem externalPublishedItem, String year)
+	private void handlePublisher(Record record,ExternalPublishedItem externalPublishedItem, String year, boolean isRda)
 	{
-         DataField df = factory.newDataField("260", ' ', ' ');
+		DataField df = null;
+		 if( isRda ){
+			 df = factory.newDataField("264", ' ', '1');
+		 } else {
+			 df = factory.newDataField("260", ' ', ' ');
+		 }
+         
          if( externalPublishedItem.getPlaceOfPublication() != null )
          {
         	 String value = externalPublishedItem.getPlaceOfPublication().getName();
@@ -395,7 +451,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	 * @param record - record to add the data to.
 	 * 
 	 */
-	private void handleTitle(GenericItem item, ItemContributor ic, Record record)
+	private void handleTitle(GenericItem item, ItemContributor ic, Record record, boolean isRda)
 	{
 		char ind2 = '0';
 		String leadingArticles = "";
@@ -408,15 +464,24 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 		}
 		
 		DataField df = factory.newDataField("245", '1', ind2);
-		df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(leadingArticles + item.getName())));
 		
-		if( ic != null )
-		{
-		    df.addSubfield(factory.newSubfield('h', "[electronic resource] /"));
-		}
-		else
-		{
-			df.addSubfield(factory.newSubfield('h', "[electronic resource]"));
+		if(isRda){
+			if( ic != null ){
+				df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(leadingArticles + item.getName() + " /")));
+			}else {
+				df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(leadingArticles + item.getName())));
+			}
+				
+		} else{
+			df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(leadingArticles + item.getName())));
+			if( ic != null )
+			{
+			    df.addSubfield(factory.newSubfield('h', "[electronic resource] /"));
+			}
+			else
+			{
+				df.addSubfield(factory.newSubfield('h', "[electronic resource]"));
+			}
 		}
 		
 		if( ic != null )
@@ -623,7 +688,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	 * @param record
 	 * @param item
 	 */
-	private void handleFileType(Record record, GenericItem item)
+	private void handleFileType(Record record, GenericItem item, boolean isRda)
 	{
 		boolean hasPdf = false;
 		for(ItemFile file : item.getItemFiles())
@@ -637,7 +702,15 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 		if( hasPdf )
 		{
 			DataField df = factory.newDataField("538", ' ', ' ');
-			df.addSubfield(factory.newSubfield('a', "System requirements: PDF viewer/reader."));
+			if( isRda)
+			{
+				df.addSubfield(factory.newSubfield('a', "PDF file."));
+			}
+			else
+			{
+				df.addSubfield(factory.newSubfield('a', "System requirements: PDF viewer/reader."));
+			}
+			
 			record.addVariableField(df);
 		}
 		
@@ -784,6 +857,17 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 		}
 	}
 	
+	private boolean isThesisType(GenericItem item)
+	{
+		for(ItemContentType itemContentType : item.getItemContentTypes() )
+		{
+			MarcContentTypeFieldMapper mapper = marcContentTypeFieldMapperService.getByContentTypeId(itemContentType.getContentType().getId());
+			return (mapper != null && mapper.isThesis());
+		}
+		return false;
+		
+	}
+	
 	/**
 	 * Handle the url for the record.
 	 * 
@@ -803,7 +887,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 	 * @param record
 	 * @param mapper
 	 */
-	private void handleLeader(Record record, MarcContentTypeFieldMapper mapper)
+	private void handleLeader(Record record, MarcContentTypeFieldMapper mapper, Boolean isRda)
 	{
 		// these are specific to thesis
 		Leader leader = record.getLeader();
@@ -820,7 +904,14 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 			leader.setTypeOfRecord(' ');
 		}
 		leader.setImplDefined1(new char[]{mapper.getBibliographicLevel(), mapper.getTypeOfControl()});
-		leader.setImplDefined2(new char[]{mapper.getEncodingLevel(), mapper.getDescriptiveCatalogingForm(), ' '});
+		
+		// if this is an RDA record 
+		// set value to i
+		if( isRda ){
+			leader.setImplDefined2(new char[]{mapper.getEncodingLevel(),'i', ' '});
+		} else {
+		    leader.setImplDefined2(new char[]{mapper.getEncodingLevel(), mapper.getDescriptiveCatalogingForm(), ' '});
+		}
 	    leader.setCharCodingScheme('a');
 	}
 	

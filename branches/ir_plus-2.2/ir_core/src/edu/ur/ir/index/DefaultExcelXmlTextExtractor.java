@@ -71,7 +71,7 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		OPCPackage p = OPCPackage.open(f.getAbsolutePath(), PackageAccess.READ);
+		OPCPackage p = OPCPackage.open(f.getAbsolutePath(), PackageAccess.READ_WRITE);
 		try
 		{
 			XSSFWorkbook workbook = new XSSFWorkbook(p);
