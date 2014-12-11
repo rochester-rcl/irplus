@@ -66,7 +66,7 @@
         <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> &gt; New Repository License</h3>
   
         <div id="bd">
-	        <form method="post" class="formTable">
+	        <form method="post" class="formTable" action="saveNewRepositoryLicense.action">
 	            <table>
 	                <tr>
 	                    <td class="label"><div class="errorMessage"><ir:printError errors="${fieldErrors}"  key="name"/></div>License Name*:</td>
@@ -81,8 +81,9 @@
 	                    <td class="input"><textarea name="text" rows="30" cols="70"></textarea></td>
 	                </tr>
 	                <tr>
-	                    <td class="input" colspan="2" align="center"><input type="submit" name="action:saveNewRepositoryLicense" value="Save"/>
-	                    <input type="submit" name="action:viewRepositoryLicenses" value="Cancel"/></td>
+	                    <td class="input" colspan="2" align="center"><input type="submit" value="Save"/>
+	                    <c:url var="cancelUrl" value="/admin/viewRepositoryLicenses.action"/>
+                                         <a href="${cancelUrl}">Cancel</a></td>
 	                </tr>
 	            </table>
 	        </form>
