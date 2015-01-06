@@ -71,6 +71,11 @@ p,fieldset,table,pre {
 	margin-bottom:1em;
 }
 
+/* special class to hide element to protect emails*/
+.email-special-label {
+    display:none;
+}
+
 .link-button {
     font: bold 11px Arial;
     text-decoration: none;
