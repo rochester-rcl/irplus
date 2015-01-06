@@ -294,14 +294,33 @@
 			    </c:url>
 			    <h3><a href="${oaiDcUrl}">Get OAI Record - Metadata Prefix: ${prefix}</a></h3>
 			</c:forEach>
+			
+			
+			<c:url var="rdaMrcExport" value="/exportToMarcMrcFile.action">
+			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
+			        <c:param name="format" value="rda"/>
+			</c:url>
+			<h3><a href="${rdaMrcExport}">Download RDA as MARC (.mrc)</a></h3>
+			<c:url var="rdaXmlExport" value="/exportToMarcXmlFile.action">
+			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
+			        <c:param name="format" value="rda"/>
+			</c:url>
+			<h3><a href="${rdaXmlExport}">Download RDA as MARCXML (.xml)</a></h3>
+			
+			
+			
+			
+			
 			<c:url var="marcMrcExport" value="/exportToMarcMrcFile.action">
 			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
+			        <c:param name="format" value="normal"/>
 			</c:url>
-			<h3><a href="${marcMrcExport}">Download MARC as .mrc file</a></h3>
+			<h3><a href="${marcMrcExport}">Download AACR2 as MARC (.mrc)</a></h3>
 			<c:url var="marcXmlExport" value="/exportToMarcXmlFile.action">
 			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
+			        <c:param name="format" value="normal"/>
 			</c:url>
-			<h3><a href="${marcXmlExport}">Download MARC as .xml file</a></h3>
+			<h3><a href="${marcXmlExport}">Download AACR2 as MARCXML (.xml)</a></h3>
 			</c:if>
 			
 			  <!-- *************************  All versions Start *************************  -->
