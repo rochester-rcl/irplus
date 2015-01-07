@@ -44,7 +44,7 @@
 
             
             <c:if test="${user == null}">
-                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="viewUserRegistration.action"/>"><span class="userImg">&nbsp;</span><span class="menu_text">Create Account</span></a></li>    
+                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/viewUserRegistration.action"/>"><span class="userImg">&nbsp;</span><span class="menu_text">Create Account</span></a></li>    
                     <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/user/workspace.action"/>"><span class="doorInImg">&nbsp;</span><span class="menu_text">Login</span></a></li>    
             </c:if>
             <c:if test="${user != null}">
