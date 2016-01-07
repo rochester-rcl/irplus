@@ -110,7 +110,7 @@
           YAHOO.util.Event.onDOMReady(init);
 	       
 	    </script>
-	    		 
+	    <ur:js src="page-resources/js/google_analytics.js"/>		 
     </head>
     
     <body class="yui-skin-sam">

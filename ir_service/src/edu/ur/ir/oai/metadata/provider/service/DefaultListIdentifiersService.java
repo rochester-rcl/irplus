@@ -34,6 +34,7 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersionService;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -86,9 +87,14 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
+	
+	/** service to send emails on error */
+	private ErrorEmailService errorEmailService;
 
 
 	
+
+
 	/**
 	 * List the identifiers for the system.
 	 * 
@@ -604,16 +610,19 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		 
 		 Document doc = impl.createDocument(null, "ListRecords", null);
 
+		List<InstitutionalItemVersion> versions = null;
+		List<DeletedInstitutionalItemVersion> deletedVersions = null;
+		
 		if(!resumptionToken.getDeleted())
 		{
-			List<InstitutionalItemVersion> versions = getVersions(resumptionToken);
+			versions = getVersions(resumptionToken);
 		    addRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()), resumptionToken);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		else if( resumptionToken.getDeleted() )
 		{
-			List<DeletedInstitutionalItemVersion> versions = getDeletedVersions(resumptionToken);
-		    addDeletedRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()), resumptionToken);
+			deletedVersions = getDeletedVersions(resumptionToken);
+		    addDeletedRecords(deletedVersions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()), resumptionToken);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		 
@@ -622,7 +631,30 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		 // do not output the headers
 		 Element root = doc.getDocumentElement();
 		 serializer.getDomConfig().setParameter("xml-declaration", false);
-		 serializer.write(root, lsOut);
+		 try{
+			 serializer.write(root, lsOut);
+		 } catch(Exception e){
+			 StringBuffer buffer = new StringBuffer();
+			 if(versions != null){
+				 buffer.append("Regular - institutional item ids = [ ");
+				 for(InstitutionalItemVersion v:versions){
+					 buffer.append(v.getVersionedInstitutionalItem().getInstitutionalItem().getId() + ", ");
+				 }
+				 buffer.append("]");
+			 } else if( deletedVersions != null ){
+				 buffer.append("Deleted - institutional item ids = [ ");
+				 for(DeletedInstitutionalItemVersion v:deletedVersions){
+					 buffer.append(v.getDeletedInstitutionalItem().getInstitutionalItemId() + ", ");
+				 }
+				 buffer.append("]");
+			 } else {
+				 buffer.append("Not regular or deleted?");
+			 }
+			 errorEmailService.sendError(buffer.toString());
+			 errorEmailService.sendError(e);
+			 errorEmailService.sendError(lsOut.toString());
+		 }
+		 
 		 return stringWriter.getBuffer().toString();
 	}
 	
@@ -739,6 +771,14 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		}
 		
 		return resumptionToken;
+	}
+	
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
 
   

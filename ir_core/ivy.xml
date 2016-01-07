@@ -128,7 +128,7 @@
 	        <artifact name="commons-beanutils" type="jar"/> 
         </dependency>
         
-        <dependency org="commons-collections" name="commons-collections" rev="3.2.1" transitive="false">
+        <dependency org="commons-collections" name="commons-collections" rev="3.2.2" transitive="false">
 	        <artifact name="commons-collections" type="jar"/> 
         </dependency>
         

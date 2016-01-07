@@ -168,6 +168,10 @@ public class PlayInstitutionalItemFile extends ActionSupport implements UserIdAw
 	public void setItemId(Long itemId) {
 		this.itemId = itemId;
 	}
+	
+	public String getMediaPlayerKey(){
+		return webBrowserFileViewerHelper.getMediaPlayerKey();
+	}
 
 	public void setItemService(ItemService itemService) {
 		this.itemService = itemService;

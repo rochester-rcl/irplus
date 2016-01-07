@@ -52,6 +52,7 @@
  	    <ur:js src="pages/js/base_path.js"/>
  	    <ur:js src="page-resources/js/util/ur_util.js"/>
         <meta name="robots" content="noindex">
+        <ur:js src="page-resources/js/google_analytics.js"/>
     </head>
     
     <body class="yui-skin-sam">

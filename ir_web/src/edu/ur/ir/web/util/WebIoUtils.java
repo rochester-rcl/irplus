@@ -133,6 +133,10 @@ public class WebIoUtils {
             //tell it to download only
             response.addHeader("Content-Disposition", "attachment; filename=\"" + 
         		 fullFileName + "\"");
+        } else {
+        	log.debug("inline it!");
+        	response.addHeader("Content-Disposition", "inline; filename=\"" + 
+              		 fullFileName + "\"");
         }
         
         String contentType = null;
@@ -243,7 +247,11 @@ public class WebIoUtils {
             //tell it to download only
             response.addHeader("Content-Disposition", "attachment; filename=\"" + 
         		 fullFileName + "\"");
-        }
+        }else {
+        	log.debug("inline it");
+        	response.addHeader("Content-Disposition", "inline; filename=\"" + 
+             		 fullFileName + "\"");
+       }
         
         String contentType = null;
         if( extension != null)

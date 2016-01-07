@@ -71,6 +71,7 @@
                 padding: 0px;
             }
         </style>
+        <ur:js src="page-resources/js/google_analytics.js"/>
     </head>
     
     <body class="yui-skin-sam">

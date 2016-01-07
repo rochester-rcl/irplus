@@ -50,7 +50,7 @@
         <!--  base path information -->
  	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/pages/js/base_path.js"/>
  	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/js/util/ur_util.js"/>
-   
+        <ur:js src="page-resources/js/google_analytics.js"/>
     </head>
     
     <body class="yui-skin-sam">

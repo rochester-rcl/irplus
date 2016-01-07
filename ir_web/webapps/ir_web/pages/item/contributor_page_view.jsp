@@ -56,7 +56,7 @@
         <ur:js src="page-resources/js/menu/main_menu.js"/>
         <ur:js src="pages/js/base_path.js"/>
 
- 	    
+ 	    <ur:js src="page-resources/js/google_analytics.js"/>
  	</head>
     
     <body class="yui-skin-sam">

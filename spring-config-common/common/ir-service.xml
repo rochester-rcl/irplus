@@ -798,6 +798,7 @@
        <property name="institutionalCollectionService" ref="institutionalCollectionService" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listSetsService" ref="listSetsService"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
    

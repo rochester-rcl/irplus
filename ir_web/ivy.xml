@@ -32,11 +32,11 @@
         <dependency org="ur_tags" name="ur_tags" rev="2.2" transitive="false" changing="true"/>
         
         <!--  struts 2 files and dependencies -->
-        <dependency org="org.apache.struts" name="struts2-core" rev="2.3.16.3" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-core" rev="2.3.24.1" transitive="false">
             <artifact name="struts2-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.3.16.3" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.3.24.1" transitive="false">
             <artifact name="struts2-spring-plugin" type="jar"/>
         </dependency>
         
@@ -48,7 +48,7 @@
             <artifact name="commons-fileupload" type="jar"/>
         </dependency>
         
-        <dependency org="org.freemarker" name="freemarker" rev="2.3.20" transitive="false">
+        <dependency org="org.freemarker" name="freemarker" rev="2.3.23" transitive="false">
             <artifact name="freemarker" type="jar"/>
         </dependency>
 
@@ -57,7 +57,7 @@
         </dependency>
         
         <!--  xwork files -->
-        <dependency org="org.apache.struts.xwork" name="xwork-core" rev="2.3.16.3" transitive="false">
+        <dependency org="org.apache.struts.xwork" name="xwork-core" rev="2.3.24.1" transitive="false">
             <artifact name="xwork-core" type="jar"/>
         </dependency>
         
