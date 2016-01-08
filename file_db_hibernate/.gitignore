@@ -1,6 +1,6 @@
 /build/
+/file_db_hibernate/
 /ivy/
 /lib/
 /reports/
 /test-build/
-/metadata/

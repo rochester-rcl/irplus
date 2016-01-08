@@ -1,6 +1,5 @@
 /build/
+/file_db_dao/
 /ivy/
 /lib/
 /reports/
-/test-build/
-/metadata/
