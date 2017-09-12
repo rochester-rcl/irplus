@@ -45,6 +45,7 @@
 	    <echo message="project.version = ${project.version}"/>
 	    <echo message="dist.dir = ${dist.dir}"/>
 	    <echo message="report.dir = ${report.dir}"/>
+    	<echo message="produciton.config = ${properties.config.production}"/>
     </target>
 
 

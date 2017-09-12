@@ -38,6 +38,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 import edu.ur.ir.web.util.WebIoUtils;
 
 
@@ -79,8 +80,9 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	
 	private String format = "normal";
 	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
 
-
+	
 	// user service 
 	private UserService userService;
 
@@ -115,7 +117,8 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
     	
 	    boolean showAllFields = false;
     	
-    	if( user != null && user.hasRole(IrRole.ADMIN_ROLE))
+    	if( user != null && (user.hasRole(IrRole.ADMIN_ROLE) || 
+    			institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, version.getItem().getId())))
     	{
     		showAllFields = true;	
     	}
@@ -168,7 +171,8 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
     	
     	boolean showAllFields = false;
      	
-     	if( user!= null && user.hasRole(IrRole.ADMIN_ROLE))
+     	if( user!= null && (user.hasRole(IrRole.ADMIN_ROLE) || 
+     			institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, version.getItem().getId())))
      	{
      		log.debug("user is admin");
      		showAllFields = true;	
@@ -249,6 +253,12 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	public void setFormat(String format) {
 		this.format = format;
 	}
+	
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
+
 
 
 }

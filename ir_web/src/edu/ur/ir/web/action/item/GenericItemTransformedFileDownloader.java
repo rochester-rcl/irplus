@@ -36,6 +36,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
@@ -79,8 +80,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
     
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
-
 	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
+
+
 	/**
      * Allows a file to be downloaded
      *
@@ -127,8 +130,11 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
         }
         else if ( user != null)
         {
-        	if( genericItem.getOwner().equals(user) || user.hasRole(IrRole.ADMIN_ROLE) ||
-            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
+        	if( genericItem.getOwner().equals(user) || 
+        			user.hasRole(IrRole.ADMIN_ROLE) ||
+            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) || 
+            	institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItem.getId())
+            	)
         	{
         		TransformedFile tf = irFile.getTransformedFileBySystemCode(systemCode);
             	if( tf != null )
@@ -176,12 +182,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 		
 	}
 
-
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-
 
 
 	public void setItemFileId(Long itemFileId) {
@@ -193,15 +196,14 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 		this.userService = userService;
 	}
 
-
-
-
 	public void setItemService(ItemService itemService) {
 		this.itemService = itemService;
 	}
 
-
-
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
 
 	public void setItemFileSecurityService(
 			ItemFileSecurityService itemFileSecurityService) {

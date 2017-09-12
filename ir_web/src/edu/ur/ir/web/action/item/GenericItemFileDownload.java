@@ -35,6 +35,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 import edu.ur.ir.web.util.WebBrowserFileViewerHelper;
 import edu.ur.ir.web.util.WebIoUtils;
 
@@ -83,7 +84,11 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	/** file types that can be opened by the browser */
 	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
 	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
 	
+	
+	
+
 	/**
 	 * Set the web frowser file viewer helper.
 	 * 
@@ -169,10 +174,11 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         {
         	log.debug("is owner = " + genericItem.getOwner().equals(user) + " has permissions " + 
         			itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) +
-        			" is admin = " + user.hasRole(IrRole.ADMIN_ROLE));
+        			" is admin = " + user.hasRole(IrRole.ADMIN_ROLE) );
         	if( genericItem.getOwner().equals(user) || 
             	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) || 
-            	user.hasRole(IrRole.ADMIN_ROLE)
+            	user.hasRole(IrRole.ADMIN_ROLE) || 
+            	institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItem.getId()) 
                )
         	{
         		if(!genericItem.getOwner().equals(user))
@@ -301,5 +307,9 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 		this.itemFileSecurityService = itemFileSecurityService;
 	}
 
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
 
 }

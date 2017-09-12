@@ -34,6 +34,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 
 
 /**
@@ -87,8 +88,11 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 	
 	/** Service for accessing user information */
 	private UserService userService;
+	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
 
 	
+
 	/**
 	 * Prepare for action
 	 */
@@ -104,7 +108,8 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 		IrUser accessingUser = userService.getUser(userId, false);
 		
 		// make sure the user is the owner or administrator.
-		if( userId == null || (!owner.getId().equals(userId) && !accessingUser.hasRole(IrRole.ADMIN_ROLE)) )
+		if( userId == null || (!owner.getId().equals(userId) && !accessingUser.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(accessingUser, genericItemId)) )
 		{
 			return "accessDenied";
 		}
@@ -231,6 +236,12 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
+
 
 
 }

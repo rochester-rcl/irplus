@@ -36,6 +36,7 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 
 /**
  * Action to add a link to the item.
@@ -96,7 +97,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	/** Id of institutional item being edited */
 	private Long institutionalItemId;
 
-
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
 
 
 	/**
@@ -120,7 +121,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
         IrUser user = userService.getUser(userId, false);
 		
 		// make sure the user is the owner.
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -157,7 +159,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
         IrUser user = userService.getUser(userId, false);
 		
 		// make sure the user is the owner.
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -301,4 +304,12 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	public void setInstitutionalItemId(Long institutionalItemId) {
 		this.institutionalItemId = institutionalItemId;
 	}
+	
+
+
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
+
 }

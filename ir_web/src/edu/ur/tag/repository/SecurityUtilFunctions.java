@@ -234,8 +234,8 @@ public class SecurityUtilFunctions {
         }
 
         if (domainObject == null) {
-            // Of course they have access to a null object!
-           granted = true;
+           // this is either a mistake or check should not be used	
+           granted = false;
         }
         else
         {
@@ -251,7 +251,7 @@ public class SecurityUtilFunctions {
              } 
              else 
              {
-            	 return false;
+            	 granted = false;
              }
      		
              if( user != null )
@@ -266,6 +266,8 @@ public class SecurityUtilFunctions {
                      if( count > 0)
                      {
                 	     granted = true;
+                     } else {
+                    	 granted = false;
                      }
             	 }
              }

@@ -62,6 +62,7 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.simple.type.AscendingNameComparator;
 
@@ -290,6 +291,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** service for dealing with institutional item version information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
+
 
 
 	/**
@@ -312,7 +316,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public String viewItemMetadata() {
 		log.debug("view item metadata item id =  " + item.getId() + " user id = " + userId + " owner id = " + item.getOwner().getId());
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -357,7 +362,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getSeriesInformation() {
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -377,7 +383,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	{
 	
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -394,7 +401,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public String getExtentInformation() 
 	{
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -412,7 +420,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	{
 	
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -429,7 +438,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public String getPublisherInformation() 
 	{
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -445,7 +455,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public String getPlaceOfPublicationInformation() 
 	{
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -456,7 +467,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public String saveContentType() 
 	{
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -501,7 +513,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		IrUser user = userService.getUser(userId, false);
 		
-		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 			return "accessDenied";
 		}
@@ -1530,6 +1543,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public void setPlaceOfPublicationService(
 			PlaceOfPublicationService placeOfPublicationService) {
 		this.placeOfPublicationService = placeOfPublicationService;
+	}
+
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
 	}
 
 	

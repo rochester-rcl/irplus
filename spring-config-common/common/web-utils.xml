@@ -35,6 +35,13 @@
        <property name="repositoryService" ref="repositoryService"/>
    </bean>
    
+   
+   <!-- security helper  -->
+   <bean id="institutionalCollectionPermissionHelper" class="edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper">
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="institutionalCollectionSecurityService" ref="institutionalCollectionSecurityService"/>
+   </bean>
+   
 
 
    <!-- File group entries for the web application -->

@@ -45,6 +45,7 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**
@@ -136,7 +137,11 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
+
 	
+	
+
 	/**
 	 * Execute method
 	 */
@@ -146,7 +151,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -176,7 +182,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -199,7 +206,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -234,7 +242,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -285,7 +294,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -336,7 +346,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -360,7 +371,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -578,4 +590,10 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
+	
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
+
 }

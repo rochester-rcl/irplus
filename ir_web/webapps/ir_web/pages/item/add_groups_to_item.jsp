@@ -82,7 +82,7 @@
                 <c:param name="itemId" value="${item.id}"/>
                 <c:param name="institutionalItemId" value="${institutionalItemId}"/> 
             </c:url>
-            <a class="link-button" href="${viewItem}">Done</a>
+            <a href="${viewItem}">Done</a>
             <br/>
             <br/>
             <div id="all_user_groups">

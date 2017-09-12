@@ -34,8 +34,6 @@ import net.handle.hdllib.HandleException;
 import net.handle.hdllib.HandleStorage;
 import net.handle.hdllib.HandleValue;
 import net.handle.hdllib.ScanCallback;
-import net.handle.util.StreamTable;
-import net.cnri.util.StreamUtil;
 
 import net.handle.hdllib.Util;
 
@@ -228,7 +226,7 @@ public class IrHandleStorage implements HandleStorage{
 	
 	}
 
-	public void init(StreamTable arg0) throws Exception {
+	public void init() throws Exception {
 	    log.debug("init called - initializing spring context");
 		/** Application context for loading bean specific information */
 		ctx = new ClassPathXmlApplicationContext("applicationContext.xml");

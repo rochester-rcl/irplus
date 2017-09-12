@@ -52,6 +52,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.action.user.FileSystemSortHelper;
+import edu.ur.ir.web.util.InstitutionalCollectionPermissionHelper;
 import edu.ur.order.AscendingOrderComparator;
 
 /**
@@ -149,6 +150,9 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	
 	/** service for dealing with institutional item version information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
+
 
 	/**
 	 * Prepare for action
@@ -169,7 +173,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	public String getFolders()
 	{
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -206,7 +211,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 */
 	public String addFile() throws NoIndexFoundException {
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -301,7 +307,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 */
 	public String changeFileVersion() throws NoIndexFoundException {
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -334,7 +341,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 */
 	public String updateDescription() {
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -352,7 +360,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 */
 	public String getFiles() {
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -406,7 +415,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		log.debug("Remove FileId = " + itemObjectId);
 
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -457,7 +467,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		log.debug("Item file Id::"+itemObjectId);
 		
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -479,7 +490,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	public String moveFileDown() {
 		log.debug("Item file Id::"+itemObjectId);
 		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 		{
 		    return "accessDenied";
 		}
@@ -509,7 +521,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		
 		if( item != null )
 		{
-			if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+			if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+					!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId))
 			{
 				return "accessDenied";
 			}
@@ -529,7 +542,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		   user = userService.getUser(userId, false);
 		}
 		
-		if( user == null || (!personalItem.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		if( user == null || (!personalItem.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE) && 
+				!institutionalCollectionPermissionHelper.isInstitutionalCollectionAdmin(user, genericItemId)))
 		{
 		    return "accessDenied";
 		}
@@ -873,17 +887,14 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	}
 	
 	
-	
-	
+	public void setInstitutionalCollectionPermissionHelper(
+			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
+		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
 
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
-		
-	
-	
-	
-
 
 }

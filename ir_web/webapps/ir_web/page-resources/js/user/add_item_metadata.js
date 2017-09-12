@@ -1239,7 +1239,8 @@ YAHOO.ur.item.metadata = {
 	
 			document.getElementById("itemForm_publishedDate_day").value = day;
 			document.getElementById("itemForm_publishedDate_month").value = month;
-			document.getElementById("itemForm_publishedDate_year").value = year;	
+			document.getElementById("itemForm_publishedDate_year").value = year;
+			dialog.hide();
 		}
 	
 		var dialog = new YAHOO.widget.Dialog("containerDialog", {
@@ -1285,7 +1286,8 @@ YAHOO.ur.item.metadata = {
 	
 			document.getElementById("itemForm_releaseDate_day").value = day;
 			document.getElementById("itemForm_releaseDate_month").value = month;
-			document.getElementById("itemForm_releaseDate_year").value = year;		
+			document.getElementById("itemForm_releaseDate_year").value = year;
+			dialog.hide();
 		}
 	
 		var dialog = new YAHOO.widget.Dialog("containerDialog2", {
@@ -1330,7 +1332,8 @@ YAHOO.ur.item.metadata = {
 	
 			document.getElementById("itemForm_createdDate_day").value = day;
 			document.getElementById("itemForm_createdDate_month").value = month;
-			document.getElementById("itemForm_createdDate_year").value = year;		
+			document.getElementById("itemForm_createdDate_year").value = year;	
+			dialog.hide();
 		}
 	
 		var dialog = new YAHOO.widget.Dialog("containerDialog4", {
@@ -1376,6 +1379,7 @@ YAHOO.ur.item.metadata = {
 			document.getElementById("itemForm_dateAvailable_day").value = day;
 			document.getElementById("itemForm_dateAvailable_month").value = month;
 			document.getElementById("itemForm_dateAvailable_year").value = year;
+			dialog.hide();
 		}
 	
 		var dialog = new YAHOO.widget.Dialog("containerDialog3", {
