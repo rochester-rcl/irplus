@@ -128,7 +128,12 @@ public class DefaultResearcherService implements ResearcherService{
 	 * @see edu.ur.ir.researcher.ResearcherService#getResearcher(java.lang.Long, boolean)
 	 */
 	public Researcher getResearcher(Long id, boolean lock) {
-		return researcherDAO.getById(id, lock);
+		if( id != null ) {
+			return researcherDAO.getById(id, lock);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/**

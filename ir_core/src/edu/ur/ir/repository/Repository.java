@@ -384,9 +384,13 @@ public class Repository extends CommonPersistent {
 	 */
 	public IrFile getPicture(Long id)
 	{
+		if( id == null ) {
+			return null;
+		}
+		
 		for( IrFile f : pictures)
 		{
-			if( id.equals(f.getId()))
+			if(f != null && id.equals(f.getId()))
 			{
 				return f;
 			}

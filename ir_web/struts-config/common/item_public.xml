@@ -59,18 +59,21 @@
         <action name="startSearchRepositoryItems" 
              class="edu.ur.ir.web.action.institution.RepositoryInstitutionalItemSearch">
              <result name="success">/pages/item/browse_all_items.jsp</result>
+             <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="searchRepositoryItems" 
              class="edu.ur.ir.web.action.institution.RepositoryInstitutionalItemSearch"
              method="searchRepositoryInstitutionalItems">
              <result name="success">/pages/item/browse_all_items.jsp</result>
+             <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="filterSearchRepositoryItems" 
              class="edu.ur.ir.web.action.institution.RepositoryInstitutionalItemSearch"
              method="filteredSearchRepositoryInstitutionalItems">
              <result name="success">/pages/item/browse_all_items.jsp</result>
+             <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="browseRepositoryItems" 
@@ -86,6 +89,7 @@
              class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemSearch">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
              <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+             <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="searchCollectionItems" 
@@ -93,6 +97,7 @@
              method="searchCollectionInstitutionalItems">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
              <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+             <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="filterSearchCollectionItems" 
@@ -100,6 +105,7 @@
              method="filteredSearchCollectionInstitutionalItems">
              <result name="success">/pages/item/browse_collection_items.jsp</result>
              <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+             <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="browseCollectionItems" 
@@ -119,6 +125,7 @@
             class="edu.ur.ir.web.action.person.RepositoryPersonNameBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_all_items.jsp</result>
+            <result name="input">/pages/collection_not_found.jsp</result>
         </action>
   
         <action name="browseCollectionPersonNames" 
@@ -136,6 +143,7 @@
             class="edu.ur.ir.web.action.sponsor.RepositorySponsorNameBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_all_items.jsp</result>
+            <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
         <action name="browseCollectionSponsorNames" 
@@ -143,6 +151,7 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_collection_items.jsp</result>
             <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+            <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
        <!--  ***************************************************** -->
@@ -154,5 +163,6 @@
                class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/view_item_repository_license.jsp</result>
+            <result name="input">/pages/collection_not_found.jsp</result>
         </action>
         
