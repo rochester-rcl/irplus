@@ -222,7 +222,7 @@
 							<div class="facet_container">
 							    <div class="facet_search_selection">
 							          <h3>Current Search </h3>
-							          <p><strong>Search:</strong> ${searchDataHelper.userQuery} <br/></p>
+							          <p><strong>Search:</strong> <c:out value="${searchDataHelper.userQuery}"/> <br/></p>
 							          <c:forEach var="facet" varStatus="status" items="${searchDataHelper.facetTrail}">
 							              <c:url var="removeFacet" value="/filterSearchResearchers.action">
 							                  <c:param name="rowStart" value="0"/>
@@ -308,7 +308,7 @@
 
 							<div class="search_results_table">
 								<c:if test="${searchDataHelper.hitSize > 0}">
-						    		<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} (Relevance Ranked)</h3>  
+						    		<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: <c:out value="${searchDataHelper.userQuery}"/> (Relevance Ranked)</h3>  
 								</c:if>
 							    <div class="search_div_pager">
 							        <c:import url="search_all_researchers_pager.jsp"/>

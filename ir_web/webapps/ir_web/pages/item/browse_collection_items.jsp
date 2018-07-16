@@ -417,7 +417,7 @@
 						<div class="facet_container">
 						    <div class="facet_search_selection">
 						          <h3>Current Search</h3>
-						          <p><strong>Search:</strong> ${searchDataHelper.userQuery} <br/></p>
+						          <p><strong>Search:</strong> <c:out value="${searchDataHelper.userQuery}"/> <br/></p>
 						          <c:forEach var="facet" varStatus="status" items="${searchDataHelper.facetTrail}">
 						              <c:url var="removeFacet" value="/filterSearchCollectionItems.action">
 						                  <c:param name="facets" value="${facets}"/>
@@ -593,7 +593,7 @@
 						    </c:if>
 						    
 						      <c:if test="${searchDataHelper.hitSize <= 0}">
-						           <h3> No results found in collection for search: ${searchDataHelper.userQuery} </h3>
+						           <h3> No results found in collection for search: <c:out value="${searchDataHelper.userQuery}"/> </h3>
 						       </c:if>
 						        <!--  bottom pager -->	
 						        <div class="search_div_pager">

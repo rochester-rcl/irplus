@@ -397,7 +397,7 @@
 						<div class="facet_container">
 						    <div class="facet_search_selection">
 						          <h3>Current Search</h3>
-						          <p><strong>Search:</strong> ${searchDataHelper.userQuery} <br/></p>
+						          <p><strong>Search:</strong> <c:out value='${searchDataHelper.userQuery}'/> <br/></p>
 						          <c:forEach var="facet" varStatus="status" items="${searchDataHelper.facetTrail}">
 						              <c:url var="removeFacet" value="/filterSearchRepositoryItems.action">
 						                  <c:param name="rowStart" value="0"/>
@@ -527,7 +527,7 @@
 						        <c:import url="search_all_items_pager.jsp"/>
 						    </div>
 						    <c:if test="${searchDataHelper.hitSize > 0}">
-						    	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} (Relevance Ranked Order)</h3>               
+						    	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: <c:out value="${searchDataHelper.userQuery}"/> (Relevance Ranked Order)</h3>               
 						    
 						    <div class="dataTable">
 							
@@ -580,7 +580,7 @@
 						    
 						    
 						       <c:if test="${searchDataHelper.hitSize <= 0}">
-						           <h3> No results found  for search: ${searchDataHelper.userQuery} </h3>
+						           <h3> No results found  for search: <c:out value="${searchDataHelper.userQuery}"/> </h3>
 						       </c:if>
 						        <!--  bottom pager -->	
 						        <div class="search_div_pager">
