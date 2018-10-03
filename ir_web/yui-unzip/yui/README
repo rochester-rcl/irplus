@@ -1,0 +1,10 @@
+*** YUI 2.7.0r2 ***
+
+This revision supersedes 2.7.0r1, correcting several problems introduced by an incorrect pattern-matching script.
+
+*** YUI 2.7.0r1 ***
+
+This revision addresses a security vulnerability in specific .swf files distributed with this release.
+See http://yuilibrary.com/support/2.8.2/ for full details on this issue and how to address it.
+
+
