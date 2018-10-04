@@ -126,7 +126,7 @@ public class HbResearcherDAO implements ResearcherDAO {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
 		        Query q = null;
-		        if (orderType.equals(OrderType.ASCENDING_ORDER)) {
+		        if (orderType != null && orderType.equals(OrderType.ASCENDING_ORDER)) {
 		        	q = session.getNamedQuery("getAllResearcherByLastFirstNameAsc");
 		        } else {
 		        	q = session.getNamedQuery("getAllResearcherByLastFirstNameDesc");
@@ -157,7 +157,7 @@ public class HbResearcherDAO implements ResearcherDAO {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
 		        Query q = null;
-		        if (orderType.equals(OrderType.ASCENDING_ORDER)) {
+		        if (orderType != null && orderType.equals(OrderType.ASCENDING_ORDER)) {
 		        	q = session.getNamedQuery("getAllPublicResearcherByLastFirstNameAsc");
 		        } else {
 		        	q = session.getNamedQuery("getAllPublicResearcherByLastFirstNameDesc");

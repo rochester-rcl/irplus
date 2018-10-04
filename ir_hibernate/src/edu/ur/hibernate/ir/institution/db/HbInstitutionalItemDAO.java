@@ -271,7 +271,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = session.getNamedQuery("getRepositoryItemsByCharRangeOrderDesc");
 		} else {
 			q = session.getNamedQuery("getRepositoryItemsByCharRangeOrderAsc");
@@ -295,23 +295,28 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final int maxResults, final InstitutionalCollection collection,
 			final OrderType orderType) {
 		
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsByNameOrderDesc");
-		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsByNameOrderAsc");
-		}
+		if(collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsByNameOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsByNameOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 
 	}
 	
@@ -422,23 +427,28 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final char lastChar, final OrderType orderType) {
 
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = hbCrudDAO.getSessionFactory().getCurrentSession()
-					.getNamedQuery("getCollectionItemsByCharRangeOrderDesc");
-		} else {
-			q = hbCrudDAO.getSessionFactory().getCurrentSession()
-					.getNamedQuery("getCollectionItemsByCharRangeOrderAsc");
-		}
+		if(collection != null ) {
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = hbCrudDAO.getSessionFactory().getCurrentSession()
+						.getNamedQuery("getCollectionItemsByCharRangeOrderDesc");
+			} else {
+				q = hbCrudDAO.getSessionFactory().getCurrentSession()
+						.getNamedQuery("getCollectionItemsByCharRangeOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setCharacter("firstChar", Character.toLowerCase(firstChar));
-		q.setCharacter("lastChar", Character.toLowerCase(lastChar));
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setCharacter("firstChar", Character.toLowerCase(firstChar));
+			q.setCharacter("lastChar", Character.toLowerCase(lastChar));
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 
 	}
 
@@ -451,37 +461,46 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final int maxResults, final InstitutionalCollection collection,
 			final char firstChar, final OrderType orderType) {
 
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsByCharOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsByCharOrderAsc");
+			}
 
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsByCharOrderDesc");
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setCharacter("firstChar", Character.toLowerCase(firstChar));
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
 		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsByCharOrderAsc");
+			return new LinkedList<InstitutionalItem>();
 		}
-
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setCharacter("firstChar", Character.toLowerCase(firstChar));
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+		
 	}
 
 	/**
 	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getCount(edu.ur.ir.institution.InstitutionalCollection, char)
 	 */
 	public Long getCount(InstitutionalCollection collection, char nameFirstChar) {
-		Object[] values = new Object[]{
-				collection.getLeftValue(),
-				collection.getRightValue(),
-				collection.getTreeRoot().getId(),
-				Character.valueOf(Character.toLowerCase(nameFirstChar))};
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByChar", values));
+		if( collection != null ) {
+			Object[] values = new Object[]{
+					collection.getLeftValue(),
+					collection.getRightValue(),
+					collection.getTreeRoot().getId(),
+					Character.valueOf(Character.toLowerCase(nameFirstChar))};
+			return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByChar", values));
+		} else {
+			return 0;
+		}
+		
 
 	}
 
@@ -491,13 +510,18 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 */
 	public Long getCount(InstitutionalCollection collection,
 			char nameFirstCharRange, char namelastCharRange) {
-		Object[] values = new Object[]{
-				collection.getLeftValue(),
-				collection.getRightValue(),
-				collection.getTreeRoot().getId(),
-				Character.valueOf(Character.toLowerCase(nameFirstCharRange)),
-				Character.valueOf(Character.toLowerCase(namelastCharRange))};
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByCharRange", values));
+		if( collection != null ) {
+			Object[] values = new Object[]{
+					collection.getLeftValue(),
+					collection.getRightValue(),
+					collection.getTreeRoot().getId(),
+					Character.valueOf(Character.toLowerCase(nameFirstCharRange)),
+					Character.valueOf(Character.toLowerCase(namelastCharRange))};
+			return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByCharRange", values));
+		} else {
+			return 0l;
+		}
+		
 	}
 
 	/**
@@ -566,30 +590,35 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getItemsOrderByDate(final int rowStart, final int maxResults,
 			final InstitutionalCollection collection, final OrderType orderType) {
 		
-		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-		        
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateAsc");
-			    }
-			   
-			    q.setLong(0, collection.getId());
-			    
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-	            return q.list();
-		    }
-	    });
-        return foundItems;	
+		if( collection != null ) {
+			 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+				{
+				    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+				    {
+				        Query q = null;
+				        
+					    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+					    {
+					        q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateDesc");
+					    }
+				 	    else
+					    {
+					        q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateAsc");
+					    }
+					   
+					    q.setLong(0, collection.getId());
+					    
+					    q.setFirstResult(rowStart);
+					    q.setMaxResults(maxResults);
+					    q.setFetchSize(maxResults);
+			            return q.list();
+				    }
+			    });
+		        return foundItems;	
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -598,23 +627,29 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItem> getItems(final InstitutionalCollection collection,
 			final Date startDate, final Date endDate) {
-		log.debug("Trying dates " + startDate + " and " + endDate);
+		
+		if(collection != null && startDate != null && endDate != null ) {
+			log.debug("Trying dates " + startDate + " and " + endDate);
 
-		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			  
-			    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
-			   
-			    q.setLong(0, collection.getId());
-			    q.setTimestamp(1, startDate);
-			    q.setTimestamp(2, endDate);
-	            return q.list();
-		    }
-	    });
-        return foundItems;	
+			 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+			{
+			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+			    {
+			        Query q = null;
+				  
+				    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
+				   
+				    q.setLong(0, collection.getId());
+				    q.setTimestamp(1, startDate);
+				    q.setTimestamp(2, endDate);
+		            return q.list();
+			    }
+		    });
+	        return foundItems;	
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	
@@ -626,31 +661,37 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	@SuppressWarnings("unchecked")
 	public List<Long> getCollectionItemsIds(final int rowStart, final int maxResults,
 			final InstitutionalCollection collection, final OrderType orderType) {
-		 List<Long> foundIds = (List<Long>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getInstitutionalCollectionItemIdsOrderDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getInstitutionalCollectionItemIdsOrderAsc");
-			    }
-			    
-			    q.setLong(0, collection.getLeftValue());
-			    q.setLong(1, collection.getRightValue());
-			    q.setLong(2, collection.getTreeRoot().getId());
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-	            return q.list();
-		    }
-	    });
-	
-    return foundIds;	
+		
+		if( collection != null ) {
+			 List<Long> foundIds = (List<Long>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+				{
+				    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+				    {
+				        Query q = null;
+					    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+					    {
+					        q = session.getNamedQuery("getInstitutionalCollectionItemIdsOrderDesc");
+					    }
+				 	    else
+					    {
+					        q = session.getNamedQuery("getInstitutionalCollectionItemIdsOrderAsc");
+					    }
+					    
+					    q.setLong(0, collection.getLeftValue());
+					    q.setLong(1, collection.getRightValue());
+					    q.setLong(2, collection.getTreeRoot().getId());
+					    q.setFirstResult(rowStart);
+					    q.setMaxResults(maxResults);
+					    q.setFetchSize(maxResults);
+			            return q.list();
+				    }
+			    });
+			
+		    return foundIds;	
+		} else {
+			return new LinkedList<Long>();
+		}
+		
 	}
 
 	
@@ -677,27 +718,33 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, char firstChar, char lastChar,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangeOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangeOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangeOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangeOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 		
 	}
 
@@ -723,26 +770,31 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, char firstChar, OrderType orderType) {
 		
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		if(collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -763,25 +815,30 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsByName(int rowStart,
 			int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByNameOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByNameOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByNameOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByNameOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -856,14 +913,19 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 */
 	public Long getCount(InstitutionalCollection collection,
 			char nameFirstChar, Long contentTypeId) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("institutionalItemCountForCollectionContentTypeByChar");
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstChar)));
-		return (Long)q.uniqueResult();
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = session.getNamedQuery("institutionalItemCountForCollectionContentTypeByChar");
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstChar)));
+			return (Long)q.uniqueResult();
+		} else {
+			return 0l;
+		}
+		
 	}
 	
 	/**
@@ -879,15 +941,20 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public Long getCount(InstitutionalCollection collection,
 			char nameFirstCharRange, char nameLastCharRange, Long contentTypeId)
 	{
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("institutionalItemCountForCollectionContentTypeByCharRange");
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstCharRange)));
-		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(nameLastCharRange)));
-		return (Long)q.uniqueResult();
+		if(collection != null) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = session.getNamedQuery("institutionalItemCountForCollectionContentTypeByCharRange");
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstCharRange)));
+			q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(nameLastCharRange)));
+			return (Long)q.uniqueResult();
+		} else {
+			return 0l;
+		}
+		
 	}
 
 	/**
@@ -900,13 +967,18 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 * @return Items within the specified collection and its sub collection
 	 */
 	public Long getCount(InstitutionalCollection collection, Long contentTypeId) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeCount");
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		return (Long)q.uniqueResult();
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeCount");
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			return (Long)q.uniqueResult();
+		} else {
+			return 0l;
+		}
+		
 	}
 
 	/**
@@ -930,7 +1002,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			Long contentTypeId, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharRangeOrderDesc");
 	    }
@@ -968,7 +1040,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			char firstChar, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharOrderDesc");
 	    }
@@ -1006,7 +1078,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByNameOrderDesc");
 	    }
@@ -1052,12 +1124,17 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	@SuppressWarnings("unchecked")
 	public List<ContentTypeCount> getCollectionContentTypeCount(InstitutionalCollection collection)
 	{
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = session.getNamedQuery("getCollectionItemsSumByContentType");
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		return q.list();
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = session.getNamedQuery("getCollectionItemsSumByContentType");
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			return q.list();
+		} else {
+			return new LinkedList<ContentTypeCount>();
+		}
+		
 	}
 
 	/**
@@ -1081,24 +1158,30 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsBetweenCharPublicationDateOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			char firstChar, char lastChar, OrderType orderType) {
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = hbCrudDAO.getSessionFactory().getCurrentSession()
-					.getNamedQuery("getInstitutionalCollectionItemsByCharRangePublicationDateOrderDesc");
-		} else {
-			q = hbCrudDAO.getSessionFactory().getCurrentSession()
-					.getNamedQuery("getInstitutionalCollectionItemsByCharRangePublicationDateOrderAsc");
-		}
+		
+		if( collection != null) {
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = hbCrudDAO.getSessionFactory().getCurrentSession()
+						.getNamedQuery("getInstitutionalCollectionItemsByCharRangePublicationDateOrderDesc");
+			} else {
+				q = hbCrudDAO.getSessionFactory().getCurrentSession()
+						.getNamedQuery("getInstitutionalCollectionItemsByCharRangePublicationDateOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setCharacter("firstChar", Character.toLowerCase(firstChar));
-		q.setCharacter("lastChar", Character.toLowerCase(lastChar));
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setCharacter("firstChar", Character.toLowerCase(firstChar));
+			q.setCharacter("lastChar", Character.toLowerCase(lastChar));
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1124,27 +1207,33 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, char firstChar, char lastChar,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangePublicationDateOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangePublicationDateOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangePublicationDateOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getCollectionItemsContentTypeByCharRangePublicationDateOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1165,25 +1254,31 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int rowStart, int maxResults,
 			InstitutionalCollection collection, char firstChar,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsByCharPublicationDateOrderDesc");
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsByCharPublicationDateOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsByCharPublicationDateOrderAsc");
+			}
+
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setCharacter("firstChar", Character.toLowerCase(firstChar));
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
 		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsByCharPublicationDateOrderAsc");
+			return new LinkedList<InstitutionalItem>();
 		}
-
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setCharacter("firstChar", Character.toLowerCase(firstChar));
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+		
 	}
 
 	/**
@@ -1206,24 +1301,30 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			Long contentTypeId, char firstChar, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderAsc");
-	    }
+		
+		if( collection != null ) {
+			if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
 	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
 	}
 
 	/**
@@ -1241,23 +1342,29 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsPublicationDateOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsPublicationDateOrderDesc");
-		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsPublicationDateOrderAsc");
-		}
+		
+		if(collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsPublicationDateOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsPublicationDateOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1276,24 +1383,29 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsPublicationDateOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsContentTypeByPublicationDateOrderDesc");
-		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsContentTypeByPublicationDateOrderAsc");
-		}
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsContentTypeByPublicationDateOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsContentTypeByPublicationDateOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setLong("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setLong("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1316,7 +1428,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = session.getNamedQuery("getRepositoryItemsByCharRangePublicationDateOrderDesc");
 		} else {
 			q = session.getNamedQuery("getRepositoryItemsByCharRangePublicationDateOrderAsc");
@@ -1352,7 +1464,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			char lastChar, Long contentTypeId, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharRangeOrderDesc");
 	    }
@@ -1390,7 +1502,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			Long contentTypeId, char firstChar, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharPublicationDateOrderDesc");
 	    }
@@ -1428,7 +1540,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = session.getNamedQuery("getRepositoryItemsByCharPublicationDateOrderDesc");
 		} else {
 			q = session.getNamedQuery("getRepositoryItemsByCharPublicationDateOrderAsc");
@@ -1456,7 +1568,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int rowStart, int maxResults, Long repositoryId,
 			 OrderType orderType) {
 		Query q = null;
-		if( orderType.equals(OrderType.DESCENDING_ORDER))
+		if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRepositoryItemsByPublicationDateOrderDesc");
 	    }
@@ -1490,7 +1602,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			Long contentTypeId, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByPublicationDateOrderDesc");
 	    }
@@ -1522,23 +1634,30 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsFirstAvailableOrderDesc");
-		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsFirstAvailableOrderAsc");
-		}
+		
+		if(collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsFirstAvailableOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsFirstAvailableOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
+		
 	}
 
 	
@@ -1558,24 +1677,31 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderDesc");
-		} else {
-			q = session
-					.getNamedQuery("getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderAsc");
-		}
+		
+		if(collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+			if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderDesc");
+			} else {
+				q = session
+						.getNamedQuery("getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderAsc");
+			}
 
-		q.setLong("leftVal", collection.getLeftValue());
-		q.setLong("rightVal", collection.getRightValue());
-		q.setLong("rootId", collection.getTreeRoot().getId());
-		q.setLong("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return q.list();
+			q.setLong("leftVal", collection.getLeftValue());
+			q.setLong("rightVal", collection.getRightValue());
+			q.setLong("rootId", collection.getTreeRoot().getId());
+			q.setLong("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+			q.setMaxResults(maxResults);
+			q.setFetchSize(maxResults);
+			return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
+		
 	}
 
 	/**
@@ -1599,26 +1725,32 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			char firstChar, char lastChar, OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1644,27 +1776,34 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, char firstChar, char lastChar,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
+		
 	}
 
 	/**
@@ -1685,25 +1824,31 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int rowStart, int maxResults,
 			InstitutionalCollection collection, char firstChar,
 			OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharFirstAvailableOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharFirstAvailableOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		
+		if(collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharFirstAvailableOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharFirstAvailableOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1724,26 +1869,32 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(
 			int rowStart, int maxResults, InstitutionalCollection collection,
 			Long contentTypeId, char firstChar, OrderType orderType) {
-		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
-		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderDesc");
-	    }
- 	    else
-	    {
-	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderAsc");
-	    }
-	    
-		q.setParameter("leftVal", collection.getLeftValue());
-		q.setParameter("rightVal", collection.getRightValue());
-		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
-		q.setParameter("contentTypeId", contentTypeId);
-		q.setFirstResult(rowStart);
-	    q.setMaxResults(maxResults);
-	    q.setFetchSize(maxResults);
-        return q.list();
+		
+		if( collection != null ) {
+			Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+			Query q = null;
+		    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderDesc");
+		    }
+	 	    else
+		    {
+		        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderAsc");
+		    }
+		    
+			q.setParameter("leftVal", collection.getLeftValue());
+			q.setParameter("rightVal", collection.getRightValue());
+			q.setParameter("rootId", collection.getTreeRoot().getId());
+			q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+			q.setParameter("contentTypeId", contentTypeId);
+			q.setFirstResult(rowStart);
+		    q.setMaxResults(maxResults);
+		    q.setFetchSize(maxResults);
+	        return q.list();
+		} else {
+			return new LinkedList<InstitutionalItem>();
+		}
+		
 	}
 
 	/**
@@ -1761,9 +1912,11 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getRepositoryItemsFirstAvailableOrder(
 			int rowStart, int maxResults, Long repositoryId,
 			Long contentTypeId, OrderType orderType) {
+		
+		
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByFirstAvailableOrderDesc");
 	    }
@@ -1795,7 +1948,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			int rowStart, int maxResults, Long repositoryId, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsByFirstAvailableOrderDesc");
 	    }
@@ -1831,7 +1984,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			char lastChar, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsByCharRangeFirstAvailableOrderDesc");
 	    }
@@ -1870,7 +2023,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			char lastChar, Long contentTypeId, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharRangeFirstAvailableOrderDesc");
 	    }
@@ -1907,7 +2060,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsByCharFirstAvailableOrderDesc");
 	    }
@@ -1943,7 +2096,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			Long contentTypeId, char firstChar, OrderType orderType) {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 		Query q = null;
-	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
 	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharFirstAvailableOrderDesc");
 	    }

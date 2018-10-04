@@ -387,23 +387,27 @@
         <action name="viewResearcherBrowse" method="browseResearcher" 
             class="edu.ur.ir.web.action.researcher.ResearcherBrowse">
             <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+            <result name="input">/pages/researcher_page/researcher_not_found.jsp</result>
         </action>
 
         <action name="startSearchResearchers" 
              class="edu.ur.ir.web.action.researcher.ResearcherSearch">
              <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+             <result name="input">/pages/researcher_page/researcher_not_found.jsp</result>
         </action>
         
         <action name="searchResearchers" 
              class="edu.ur.ir.web.action.researcher.ResearcherSearch"
              method="searchResearchers">
              <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+             <result name="input">/pages/researcher_page/researcher_not_found.jsp</result>
         </action>
         
         <action name="filterSearchResearchers" 
              class="edu.ur.ir.web.action.researcher.ResearcherSearch"
              method="filteredSearchResearchers">
              <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+             <result name="input">/pages/researcher_page/researcher_not_found.jsp</result>
         </action>
         
         
@@ -441,6 +445,7 @@
          <action name="viewSponsorPage" 
                 class="edu.ur.ir.web.action.sponsor.ViewSponsor">
          	<result name="success">/pages/sponsor/sponsor_page_view.jsp</result>
+         	<result name="input">/pages/sponsor/sponsor_not_found.jsp</result>
          </action> 
          
         <!--  ************************************ -->
