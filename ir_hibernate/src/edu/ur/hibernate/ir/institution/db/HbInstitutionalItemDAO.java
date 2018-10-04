@@ -196,7 +196,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = session.getNamedQuery("getRepositoryItemsByNameOrderDesc");
 		} else {
 			q = session.getNamedQuery("getRepositoryItemsByNameOrderAsc");
@@ -234,7 +234,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = session.getNamedQuery("getRepositoryItemsByCharOrderDesc");
 		} else {
 			q = session.getNamedQuery("getRepositoryItemsByCharOrderAsc");
