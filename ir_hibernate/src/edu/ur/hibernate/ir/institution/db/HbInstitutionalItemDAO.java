@@ -498,7 +498,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 					Character.valueOf(Character.toLowerCase(nameFirstChar))};
 			return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByChar", values));
 		} else {
-			return 0;
+			return 0l;
 		}
 		
 
