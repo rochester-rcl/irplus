@@ -257,9 +257,14 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 		for( int index = 0 ; index < facetValues.size(); index++ )
 		{
 			// don't add the facet if the user has chosen to remove it
-			if( this.facetIndexToRemove != index )
+			if( this.facetIndexToRemove != index)
 			{
-		        filters.add(new FacetFilter(facetNames.get(index), facetValues.get(index), facetDisplayNames.get(index)));	
+				try {
+					filters.add(new FacetFilter(facetNames.get(index), facetValues.get(index), facetDisplayNames.get(index)));	
+				} catch (Exception e) {
+					//do nothing
+				}
+		        
 			}
 		}
 		
@@ -275,18 +280,23 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 		    	// if this is not the facet we are removing re-add it
 			    if( index != facetIndexToRemove)
 			    {
-			    	if( facets != null && !facets.trim().equals(""))
-				    {
-			    	    facets = facets + "|" + facetNames.get(index);
-			    	    this.facetValues = this.facetValues + "|" + facetValues.get(index);
-			    	    this.facetDisplayNames = this.facetDisplayNames + "|" + facetDisplayNames.get(index);
-				    }
-			    	else
-			    	{
-			    		facets = facetNames.get(index);
-				    	this.facetValues = facetValues.get(index);
-				    	this.facetDisplayNames = facetDisplayNames.get(index);
+			    	try {
+			    		if( facets != null && !facets.trim().equals(""))
+					    {
+				    	    facets = facets + "|" + facetNames.get(index);
+				    	    this.facetValues = this.facetValues + "|" + facetValues.get(index);
+				    	    this.facetDisplayNames = this.facetDisplayNames + "|" + facetDisplayNames.get(index);
+					    }
+				    	else
+				    	{
+				    		facets = facetNames.get(index);
+					    	this.facetValues = facetValues.get(index);
+					    	this.facetDisplayNames = facetDisplayNames.get(index);
+				    	}
+			    	} catch (Exception e) {
+			    		// do nothing
 			    	}
+			    	
 			    }
 		    }
 	    }
