@@ -47,8 +47,6 @@ public class DefaultPublicHelpService implements PublicHelpService{
 		 {
 			log.error("Messaging exception occured ", e);
 		 }
-		
-		
 	}
 
 	public JavaMailSender getMailSender() {

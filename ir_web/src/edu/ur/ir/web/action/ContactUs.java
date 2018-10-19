@@ -46,7 +46,12 @@ public class ContactUs extends ActionSupport{
 		log.debug("other testing");
 		log.debug("Sending email message subject = " + subject + " from = " + from + " message = " + message);
 		if( reason == null || reason.trim().equals("")){
-			publicHelpService.sendHelpEmail(subject, from, message);
+			try {
+				publicHelpService.sendHelpEmail(subject, from, message);
+			} catch (Exception e) {
+				// don't send error
+			}
+			
 		}
 		else {
 			log.debug("NOT sending email");

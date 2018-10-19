@@ -171,11 +171,11 @@ public class DefaultMarcFileToVersionedItemImporter
 
 		    log.debug("Tag: " + tag + " Indicator 1: " + ind1 + " Indicator 2: " + ind2);
 		    
-		    List subfields = field.getSubfields();
-	        Iterator i = subfields.iterator();
-
-	        while (i.hasNext()) {
-	            Subfield subfield = (Subfield) i.next();
+		   
+		    
+		    List<Subfield> subfields = field.getSubfields();
+	       
+		    for(Subfield subfield : subfields) {
 		        char code = subfield.getCode();
 		        String data = subfield.getData();
 		        log.debug("Subfield code: " + code + " Data element: " + data);
@@ -550,7 +550,11 @@ public class DefaultMarcFileToVersionedItemImporter
 	{
 		String data = "";
 		
-		List<Subfield> fields = field.getSubfields();
+		//must copy so sort does not affect concurrent execution
+		List<Subfield> fields = new LinkedList<Subfield>();
+		for(Object o : field.getSubfields()) {
+		    fields.add((Subfield)o);
+		}
 		Collections.sort(fields, this);
 		boolean first = true;
 		
@@ -593,12 +597,16 @@ public class DefaultMarcFileToVersionedItemImporter
 	 * 
 	 * @return the found keyword or null not found
 	 */
-	@SuppressWarnings("unchecked")
 	private String handleAllData(DataField field)
 	{
 		String data = "";
 		
-		List<Subfield> fields = field.getSubfields();
+		//must copy so sort does not affect concurrent execution
+		List<Subfield> fields = new LinkedList<Subfield>();
+		for(Object o : field.getSubfields()) {
+			fields.add((Subfield)o);
+		}
+		
 		Collections.sort(fields, this);
 	
 		for(Subfield f : fields)
@@ -627,7 +635,6 @@ public class DefaultMarcFileToVersionedItemImporter
 	 * @param field - field to get data from
 	 * @param item - item to add the data to
 	 */
-	@SuppressWarnings("unchecked")
 	private boolean handleOtherTags(DataField field, GenericItem item)
 	{
 		boolean handled = false;
@@ -638,12 +645,10 @@ public class DefaultMarcFileToVersionedItemImporter
 
 	    log.debug("Tag: " + tag + " Indicator 1: " + ind1 + " Indicator 2: " + ind2);
 	    
-	    List subfields = field.getSubfields();
-        Iterator i = subfields.iterator();
-
+	    @SuppressWarnings("unchecked")
+		List<Subfield> subfields = field.getSubfields();
         // iterate through sub fields
-        while (i.hasNext()) {
-            Subfield subfield = (Subfield) i.next();
+	    for(Subfield subfield : subfields) {
 	        char code = subfield.getCode();
 	        String data = subfield.getData();
 	        log.debug("Subfield code: " + code + " Data element: " + data);
