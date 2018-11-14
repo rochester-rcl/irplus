@@ -44,7 +44,7 @@
             <artifact name="commons-lang3" type="jar"/>
         </dependency>
         
-        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.3.2" transitive="false">
+        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.3.3" transitive="false">
             <artifact name="commons-fileupload" type="jar"/>
         </dependency>
         
