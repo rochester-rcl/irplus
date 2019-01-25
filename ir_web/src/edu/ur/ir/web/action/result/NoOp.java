@@ -17,7 +17,7 @@
 
 package edu.ur.ir.web.action.result;
 
-import org.apache.struts2.dispatcher.StrutsResultSupport;
+import org.apache.struts2.result.StrutsResultSupport;
 
 import com.opensymphony.xwork2.ActionInvocation;
 

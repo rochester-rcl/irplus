@@ -123,7 +123,7 @@
     <property name="javac.deprecation.mode" value="on"/>
 
      <!-- java version to compile with -->
-    <property name="javac.java.version" value="1.5"/>
+    <property name="javac.java.version" value="1.6"/>
 	
     <!-- project version -->
     <property name="project.version" value="2.2"/> 

@@ -17,15 +17,15 @@
 -->   
 
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd" [
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd" [
     <!ENTITY researcher SYSTEM "user_researcher.xml">
     ]>
 <struts>
     
     <include file="struts-default.xml"/>
     
-    <package name="user" namespace="/user" extends="struts-default">
+    <package name="user" namespace="/user" extends="struts-default" strict-method-invocation="false">
            <result-types>
                <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
            </result-types>

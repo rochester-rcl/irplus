@@ -20,14 +20,7 @@
      This is the build file for ir_web
 -->
 <project name="ir_web" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
-	
-	<!-- this automatically sets the YUI libraries to be unzipped  
-
-	          it does not matter what the value is so long as the 
-		     line is uncommented.
-     -->
- 	<property name="yui.unzip" value="true"/>
- 	
+	 	
 
 
 	<!-- always disable emma -->
@@ -156,7 +149,6 @@
     <target name="full-clean" depends="clean, clean-run-webapp-local,clean-production-staging" description="-->Clean the project and lib directory">
         <delete dir="${lib.dir}"/>
     	<delete dir="${ivy.dir}"/>
-    	<delete dir="${basedir}/yui-unzip"/>
     	<delete dir="${webapp.dir}/page-resources/yui"/>
     </target>	
 

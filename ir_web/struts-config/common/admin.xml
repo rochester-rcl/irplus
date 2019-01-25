@@ -17,8 +17,8 @@
 -->   
 
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd" [
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd" [
     <!ENTITY metadata SYSTEM "admin_metadata.xml">
     <!ENTITY user SYSTEM "admin_user.xml">
     <!ENTITY mime SYSTEM "admin_mime.xml">
@@ -33,7 +33,7 @@
     <include file="struts-default.xml"/>
   
     
-    <package name="admin" namespace="/admin" extends="struts-default">
+    <package name="admin" namespace="/admin" extends="struts-default" strict-method-invocation="false" >
     
         <result-types>
             <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>

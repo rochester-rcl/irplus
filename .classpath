@@ -120,14 +120,11 @@
 	<classpathentry kind="lib" path="ir_web/lib/postgresql-9.2-1002.jdbc4.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/servlet-api-6.0.37.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-collections-3.2.2.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/freemarker-2.3.23.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/commons-fileupload-1.3.2.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/ognl-3.0.19.jar"/>
-	<classpathentry kind="lib" path="ir_handle/handle-jar/handle.jar"/>
-	<classpathentry kind="lib" path="ir_handle/handle-jar/cnriutil.jar"/>
-	<classpathentry kind="lib" path="ir_handle/ir_handle/ir_handle-2.2.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/struts2-core-2.3.34.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/struts2-spring-plugin-2.3.34.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/xwork-core-2.3.34.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/commons-fileupload-1.3.3.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/freemarker-2.3.28.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/javax.activation-1.2.0.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/ognl-3.1.15.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/struts2-core-2.5.18.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/struts2-spring-plugin-2.5.18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

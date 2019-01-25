@@ -32,35 +32,30 @@
         <dependency org="ur_tags" name="ur_tags" rev="2.2" transitive="false" changing="true"/>
         
         <!--  struts 2 files and dependencies -->
-        <dependency org="org.apache.struts" name="struts2-core" rev="2.3.34" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-core" rev="2.5.18" transitive="false">
             <artifact name="struts2-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.3.34" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.5.18" transitive="false">
             <artifact name="struts2-spring-plugin" type="jar"/>
         </dependency>
         
-        <dependency org="org.apache.commons" name="commons-lang3" rev="3.1" transitive="false">
+        <dependency org="org.apache.commons" name="commons-lang3" rev="3.8.1" transitive="false">
             <artifact name="commons-lang3" type="jar"/>
         </dependency>
         
-        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.3.2" transitive="false">
+        <dependency org="commons-fileupload" name="commons-fileupload" rev="1.3.3" transitive="false">
             <artifact name="commons-fileupload" type="jar"/>
         </dependency>
         
-        <dependency org="org.freemarker" name="freemarker" rev="2.3.23" transitive="false">
+        <dependency org="org.freemarker" name="freemarker" rev="2.3.28" transitive="false">
             <artifact name="freemarker" type="jar"/>
         </dependency>
 
-        <dependency org="ognl" name="ognl" rev="3.0.19" transitive="false">
+        <dependency org="ognl" name="ognl" rev="3.1.15" transitive="false">
             <artifact name="ognl" type="jar"/>
         </dependency>
-        
-        <!--  xwork files -->
-        <dependency org="org.apache.struts.xwork" name="xwork-core" rev="2.3.34" transitive="false">
-            <artifact name="xwork-core" type="jar"/>
-        </dependency>
-        
+                
         <!--  jstl files -->
         <dependency org="jstl" name="jstl" rev="1.2" transitive="false">
             <artifact name="jstl" type="jar"/>
@@ -89,11 +84,20 @@
         <dependency org="org.springframework.security" name="spring-security-config" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-security-config" type="jar"/>
         </dependency>
+	   
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 
-        <!--  yui download -->
-	    <dependency org="yui" name="yui" rev="2.7.0" transitive="false" changing="true">
-	        <artifact name="yui" type="zip" url="http://yui.zenfs.com/releases/yui2/yui_2.7.0r2.zip"/> 
+
+        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.11.1" transitive="false">
+            <artifact name="log4j-core" type="jar"/>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.11.1" transitive="false">
+            <artifact name="log4j-api" type="jar"/>
+        </dependency>
+
+
 
          <!--  spring security libraries --> 
         <dependency org="org.springframework.security" name="spring-security-web" rev="3.0.2.RELEASE" transitive="false">

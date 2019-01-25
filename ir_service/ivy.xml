@@ -57,5 +57,9 @@
             <artifact name="quartz" type="jar"/>
         </dependency>
         
+        <dependency org="com.sun.activation" name="javax.activation" rev="1.2.0" transitive="false" >
+         <artifact name="javax.activation" type="jar"/>
+        </dependency>
+        
     </dependencies>
 </ivy-module>

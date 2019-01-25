@@ -17,8 +17,8 @@
 -->   
 
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd" [
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd" [
     <!ENTITY item_public SYSTEM "item_public.xml">
     <!ENTITY oai_harvesting SYSTEM "admin_file_storage.xml">
     ]>
@@ -28,7 +28,7 @@
     <include file="struts-default.xml"/>
     <include file="config-browser.xml"/>
     
-    <package name="default" extends="struts-default">
+    <package name="default" extends="struts-default" strict-method-invocation="false">
         
         <result-types>
             <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>

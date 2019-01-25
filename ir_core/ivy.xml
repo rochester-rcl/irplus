@@ -103,6 +103,10 @@
             <artifact name="spring-expression" type="jar"/>
         </dependency>
         
+        <dependency org="org.springframework" name="spring-tx" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-tx" type="jar"/>
+        </dependency>
+        
         
         <!--  spring ldap libraries --> 
         <dependency org="org.springframework.ldap" name="spring-ldap-core" rev="1.3.0.RELEASE" transitive="false">
