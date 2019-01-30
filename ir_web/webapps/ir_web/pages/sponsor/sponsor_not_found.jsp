@@ -25,7 +25,7 @@
 
 <html>
     <head>
-        <title>Publication not found</title>
+        <title>Collection not found</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -62,13 +62,10 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>Institutional Publication Not Found</h3> 
+               <h3>Sponsor Not Found</h3> 
                
-               <p>The institutional publication could not be found if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> with the information below</p>
-   
-               <h3>Institutional Item Id: <c:out value="${institutionalItemId}"/></h3>
-               <h3>Version number: <c:out value="${versionNumber}"/></h3>
-               <h3>Institutional Item Version id: <c:out value="${institutionalItemVersionId}"/></h3>
+               <p>The Sponsor could not be found if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> 
+    
             </div>
             <!--  end the body tag --> 
 

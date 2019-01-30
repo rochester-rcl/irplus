@@ -114,9 +114,11 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	        throws CorruptIndexException, IOException, ParseException 
 	{
 		log.debug("orginal query 4 = " + mainQueryString);
+		
+		FacetSearchHelper helper = new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		if( searchDirectoryIsEmpty(indexFolder) || isInvalidQuery(mainQueryString))
 		{
-			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
+			return helper;
 		}
 		
 		IndexSearcher searcher = new IndexSearcher(indexFolder);
@@ -129,44 +131,52 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
 		// putting a * following a diacritic does not work
 		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
-		Query mainQuery = parser.parse(executedQuery);
-		if( log.isDebugEnabled() )
-		{
-			log.debug("main query = " + executedQuery );
-			log.debug("main query parsed = " + mainQuery + " maxNumberOfMainQueryHits = " + maxNumberOfMainQueryHits );
+		
+		
+		
+		try {
+			Query mainQuery = parser.parse(executedQuery);
+			if( log.isDebugEnabled() )
+			{
+				log.debug("main query = " + executedQuery );
+				log.debug("main query parsed = " + mainQuery + " maxNumberOfMainQueryHits = " + maxNumberOfMainQueryHits );
+			}
+			
+			
+			TopDocs topDocs = searcher.search(mainQuery,  maxNumberOfMainQueryHits);
+			
+			// determine the set of data we should use to determine facets
+			HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(
+					topDocs, 
+					numberOfHitsToProcessForFacets, 
+					numberOfResultsToCollectForFacets,
+					searcher);
+
+			QueryWrapperFilter mainQueryWrapper = new QueryWrapperFilter(mainQuery);
+			log.debug("executeSearchWithFacets 1 query = " + mainQuery);
+			DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
+			OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), reader.maxDoc());
+			
+			
+			HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
+			
+			// process the data and determine the facets
+	        helper = processPossibleFacets(possibleFacets, 
+	        		reader, 
+	        		mainQueryBitSet, 
+	        		facetResults, 
+	        		topDocs, 
+	        		numberOfIdsToCollect, 
+	        		idsToCollectStartPosition,
+	        		numberOfFactsToShow,
+	        		mainQueryString,
+	        		searcher);
+			helper.setExecutedQuery(executedQuery);
+	        searcher.close();
+		} catch (Exception e) {
+			//eat error
 		}
 		
-		
-		TopDocs topDocs = searcher.search(mainQuery,  maxNumberOfMainQueryHits);
-		
-		// determine the set of data we should use to determine facets
-		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(
-				topDocs, 
-				numberOfHitsToProcessForFacets, 
-				numberOfResultsToCollectForFacets,
-				searcher);
-
-		QueryWrapperFilter mainQueryWrapper = new QueryWrapperFilter(mainQuery);
-		log.debug("executeSearchWithFacets 1 query = " + mainQuery);
-		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
-		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), reader.maxDoc());
-		
-		
-		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
-		
-		// process the data and determine the facets
-        FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
-        		reader, 
-        		mainQueryBitSet, 
-        		facetResults, 
-        		topDocs, 
-        		numberOfIdsToCollect, 
-        		idsToCollectStartPosition,
-        		numberOfFactsToShow,
-        		mainQueryString,
-        		searcher);
-		helper.setExecutedQuery(executedQuery);
-        searcher.close();
         return helper;
 	}
 	
@@ -586,13 +596,18 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			String fixedQuery = filter.getQuery();
 		    QueryParser subQueryParser = new QueryParser(filter.getField(), keywordAnalyzer);
 		    fixedQuery = "\"" + fixedQuery +"\"";
-		    Query subQuery = subQueryParser.parse(fixedQuery);
+		    try {
+		    	Query subQuery = subQueryParser.parse(fixedQuery);
+				   
+			    if(log.isDebugEnabled())
+				{
+					log.debug("fixed query in get sub query filters 1 is " + subQuery);
+				}
+			    luceneFilters.add(new QueryWrapperFilter(subQuery));
+		    } catch (Exception e) {
+		    	 // bad search - return empty filter
+		    }
 		   
-		    if(log.isDebugEnabled())
-			{
-				log.debug("fixed query in get sub query filters 1 is " + subQuery);
-			}
-		    luceneFilters.add(new QueryWrapperFilter(subQuery));
 		}
 		
 		return luceneFilters;

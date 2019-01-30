@@ -55,7 +55,7 @@
         <dependency org="ognl" name="ognl" rev="3.1.15" transitive="false">
             <artifact name="ognl" type="jar"/>
         </dependency>
-                
+        
         <!--  jstl files -->
         <dependency org="jstl" name="jstl" rev="1.2" transitive="false">
             <artifact name="jstl" type="jar"/>

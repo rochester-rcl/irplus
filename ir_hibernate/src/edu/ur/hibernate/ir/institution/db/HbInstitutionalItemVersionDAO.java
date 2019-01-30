@@ -126,7 +126,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	{
 		
 		Query q = null;
-		if( orderType.equals(OrderType.DESCENDING_ORDER))
+		if( orderType != null && orderType.equals(OrderType.DESCENDING_ORDER))
 		{
 		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPublicationVersionsByPersonNameIdTitleDesc");
 		}
@@ -156,7 +156,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final int rowStart, final int maxResults,
 			final List<Long> personNameIds, final OrderType orderType) {
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = hbCrudDAO.getSessionFactory().getCurrentSession()
 					.getNamedQuery(
 							"getPublicationVersionsByPersonNameIdDownloadDesc");
@@ -213,7 +213,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final int rowStart, final int maxResults, final long sponsorId,
 			final OrderType orderType) {
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = hbCrudDAO.getSessionFactory().getCurrentSession()
 					.getNamedQuery("getPublicationsForSponsorDesc");
 		} else {
@@ -256,7 +256,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final int rowStart, final int maxResults, final long sponsorId,
 			final OrderType orderType) {
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = hbCrudDAO.getSessionFactory().getCurrentSession()
 					.getNamedQuery("getPublicationsForSponsorDepositDateDesc");
 		} else {
@@ -281,7 +281,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final int rowStart, final int maxResults, final long sponsorId,
 			final OrderType orderType) {
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
@@ -329,7 +329,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final int rowStart, final int maxResults,
 			final List<Long> personNameIds, final OrderType orderType) {
 		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+		if (orderType != null && orderType.equals(OrderType.DESCENDING_ORDER)) {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()

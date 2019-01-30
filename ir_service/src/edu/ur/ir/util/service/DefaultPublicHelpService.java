@@ -43,12 +43,10 @@ public class DefaultPublicHelpService implements PublicHelpService{
 				mimeMessageHelper.setText(message);
 			    mailSender.send(mimeMessage);
 		 } 
-		 catch (MessagingException e) 
+		 catch (Exception e) 
 		 {
 			log.error("Messaging exception occured ", e);
 		 }
-		
-		
 	}
 
 	public JavaMailSender getMailSender() {

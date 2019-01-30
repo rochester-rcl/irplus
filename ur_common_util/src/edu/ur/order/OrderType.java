@@ -61,11 +61,13 @@ public class OrderType {
 		{
 			return ASCENDING_ORDER;
 		}
-		if( type.equalsIgnoreCase("desc") || type.equalsIgnoreCase("descending"))
+		else if( type.equalsIgnoreCase("desc") || type.equalsIgnoreCase("descending"))
 		{
 			return DESCENDING_ORDER;
+		} else {
+			return ASCENDING_ORDER;
 		}
-		return null;
+		
 	}
 	
 	/**

@@ -106,9 +106,9 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 		added = false;
 		ContributorType myContributorType = 
 			contributorTypeService.get(contributorType.getName());
-		myContributorType.setAuthorType(authoringType);
 		if( myContributorType == null)
 		{
+			contributorType.setAuthorType(authoringType);
 		    contributorTypeService.save(contributorType);
 		    added = true;
 		}

@@ -16,6 +16,7 @@
 
 package edu.ur.ir.web.action.institution;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -129,6 +130,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		rowEnd = rowStart + numberOfResultsToShow;
 		log.debug("looking at collection " + institutionalCollection);
 		
+		institutionalItems = new LinkedList<InstitutionalItem>();
 
 		if( contentTypeId == -1l )
 		{
@@ -254,7 +256,9 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    }
 		}
 		
-		log.debug("institutionalItems size = " + institutionalItems.size());
+		if(institutionalItems != null ) {
+			log.debug("institutionalItems size = " + institutionalItems.size());			
+		}
 		log.debug("total hits = " + totalHits);
 
 		if(rowEnd > totalHits)
