@@ -409,7 +409,7 @@
 						                  <c:param name="query" value="${searchDataHelper.userQuery}"/>
 						                  <c:param name="facetIndexToRemove" value="${status.index}"/>
 						              </c:url>
-						          <p><strong>${facet.displayName}:&nbsp;</strong>${facet.query}  <a href="${removeFacet}">(Remove)</a><br/></p>
+						          <p><strong><c:out value='${facet.displayName}'/>:&nbsp;</strong><c:out value='${facet.query}'/><a href="${removeFacet}">(Remove)</a><br/></p>
 						          </c:forEach>
 						     </div>
 						     
@@ -431,7 +431,7 @@
 						                          <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                          <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                      </c:url>
-						                      <div class="hanging_indent"><a href="${authorFilter}">${author.facetName} (${author.hits})</a></div>
+						                      <div class="hanging_indent"><a href="${authorFilter}"><c:out value='${author.facetName}'/> (<c:out value='${author.hits}'/>)</a></div>
 						                  </c:if>
 						              </c:forEach>
 						          </ir:facet>
@@ -452,7 +452,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                    <div class="hanging_indent"><a href="${collectionFilter}">${collection.facetName} (${collection.hits})</a></div> 
+						                    <div class="hanging_indent"><a href="${collectionFilter}"><c:out value='${collection.facetName}'/> (<c:out value='${collection.hits}'/>)</a></div> 
 						                 </c:if>
 						             </c:forEach>
 						        </ir:facet>
@@ -473,7 +473,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                    <div class="hanging_indent"><a href="${formatFilter}"> ${format.facetName} (${format.hits})</a></div>
+						                    <div class="hanging_indent"><a href="${formatFilter}"> <c:out value='${format.facetName}'/> (<c:out value='${format.hits}'/>)</a></div>
 						                  </c:if>
 						              </c:forEach>
 						          </ir:facet>
@@ -494,7 +494,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <div class="hanging_indent"><a href="${subjectFilter}">${subject.facetName} (${subject.hits})</a></div>
+						                     <div class="hanging_indent"><a href="${subjectFilter}"><c:out value='${subject.facetName}'/> (<c:out value='${subject.hits}'/>)</a></div>
 						                 </c:if>
 						             </c:forEach>
 						         </ir:facet>
@@ -515,7 +515,7 @@
 						                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 						                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 						                     </c:url>
-						                     <div class="hanging_indent"><a href="${languageFilter}">${language.facetName} (${language.hits})</a></div>
+						                     <div class="hanging_indent"><a href="${languageFilter}"><c:out value='${language.facetName}'/> (<c:out value='${language.hits}'/>)</a></div>
 						                 </c:if>
 						             </c:forEach>
 						        </ir:facet>
