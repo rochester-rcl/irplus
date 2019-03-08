@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -45,7 +46,7 @@ public class ManageMarcContributorTypeRelatorCode extends ActionSupport
 	private static final long serialVersionUID = -8258929517165194606L;
 	
 	//  Logger for managing copyright statements*/
-	private static final Logger log = Logger.getLogger(ManageMarcContributorTypeRelatorCode.class);
+	private static final Logger log = LogManager.getLogger(ManageMarcContributorTypeRelatorCode.class);
 	
 	// id of the contributor type relator code
 	private Long id;

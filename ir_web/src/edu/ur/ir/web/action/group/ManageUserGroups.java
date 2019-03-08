@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.group;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -52,7 +53,7 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 	private UserGroupService userGroupService;
 	
 	/**  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(ManageUserGroups.class);
+	private static final Logger log = LogManager.getLogger(ManageUserGroups.class);
 	
 	/** indicates the user group was added */
 	private boolean added;

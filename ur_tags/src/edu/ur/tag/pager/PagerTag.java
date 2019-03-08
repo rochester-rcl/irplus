@@ -21,7 +21,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * Simple pager tag.
@@ -32,7 +34,7 @@ import org.apache.log4j.Logger;
 public class PagerTag extends SimpleTagSupport {
 		
 	/** Logger */
-	private static final Logger log = Logger.getLogger(PagerTag.class);
+	private static final Logger log = LogManager.getLogger(PagerTag.class);
 
 	/** The page number to start the display */
 	private int startPageNumber;

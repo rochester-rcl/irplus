@@ -24,7 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleNameAuthority;
@@ -97,7 +98,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalItemService.class);
 	
 	/** generates unique handle names */
 	private UniqueHandleNameGenerator uniqueHandleNameGenerator;
@@ -105,9 +106,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	/** url generator for institutional items. */
 	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
 	
-
-
-
 
 	/**
 	 * Delete an institutional item and all files that are not connected to other resources

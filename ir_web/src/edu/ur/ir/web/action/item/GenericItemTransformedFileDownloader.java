@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.item;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -55,7 +56,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 	private Long userId;
 
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(GenericItemTransformedFileDownloader.class);
+	private static final Logger log = LogManager.getLogger(GenericItemTransformedFileDownloader.class);
 
 	/**  Servlet response to write to */
 	private HttpServletResponse response ;

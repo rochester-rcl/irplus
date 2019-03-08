@@ -20,7 +20,8 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -46,7 +47,7 @@ import net.handle.hdllib.Util;
 public class IrHandleStorage implements HandleStorage{
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(IrHandleStorage.class);
+	private static final Logger log = LogManager.getLogger(IrHandleStorage.class);
 	
 	/** service for dealing with handles */
 	private HandleService handleService;

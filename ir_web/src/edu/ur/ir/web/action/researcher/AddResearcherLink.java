@@ -17,7 +17,8 @@
 
 package edu.ur.ir.web.action.researcher;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -66,7 +67,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	private static final long serialVersionUID = 1355765084143781189L;
 	
 	/**  Logger for add researcher folder action */
-	private static final Logger log = Logger.getLogger(AddResearcherLink.class);
+	private static final Logger log = LogManager.getLogger(AddResearcherLink.class);
 	
 	/**  Researcher object */
 	private Long researcherId;

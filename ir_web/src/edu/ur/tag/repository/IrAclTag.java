@@ -30,7 +30,8 @@ import edu.ur.ir.user.IrRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -48,7 +49,7 @@ public class IrAclTag extends TagSupport {
 	private static final long serialVersionUID = 6325082719380355635L;
 
 	/** Log for IrAclTag */
-	private static final Logger log = Logger.getLogger(IrAclTag.class);
+	private static final Logger log = LogManager.getLogger(IrAclTag.class);
 
 	/** domain object */
     private Object domainObject;

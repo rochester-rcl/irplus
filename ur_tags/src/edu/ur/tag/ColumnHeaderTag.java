@@ -27,7 +27,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * Header tag for dealing with the header of a table.
@@ -38,7 +40,7 @@ import org.apache.log4j.Logger;
 public class ColumnHeaderTag extends SimpleTagSupport{
 	
 	/**  Logger for column tag */
-	private static final Logger log = Logger.getLogger(ColumnHeaderTag.class);
+	private static final Logger log = LogManager.getLogger(ColumnHeaderTag.class);
 	
 	/** Indicates if the filter is sortable */
 	private boolean sort = false;

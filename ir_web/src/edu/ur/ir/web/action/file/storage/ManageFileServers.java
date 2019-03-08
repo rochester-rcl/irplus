@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.file.storage;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -39,7 +40,7 @@ public class ManageFileServers extends ActionSupport implements Preparable{
 	private static final long serialVersionUID = -2322171837033103309L;
 	
 	/**  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(ManageFileServers.class);
+	private static final Logger log = LogManager.getLogger(ManageFileServers.class);
 	
 	/** Service for dealing with file servers */
 	private FileServerService fileServerService;

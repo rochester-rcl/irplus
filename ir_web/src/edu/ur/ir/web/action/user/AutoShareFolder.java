@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -52,7 +53,7 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	private static final long serialVersionUID = -2498774770801545420L;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger( AutoShareFolder.class);
+	private static final Logger log = LogManager.getLogger( AutoShareFolder.class);
 
 	/* id of the personal folder */
 	private Long personalFolderId;

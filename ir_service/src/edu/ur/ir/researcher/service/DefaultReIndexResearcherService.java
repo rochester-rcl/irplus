@@ -3,7 +3,8 @@ package edu.ur.ir.researcher.service;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.researcher.ReIndexResearchersService;
 import edu.ur.ir.researcher.Researcher;
@@ -26,7 +27,7 @@ public class DefaultReIndexResearcherService implements ReIndexResearchersServic
 	private ResearcherService researcherService;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultReIndexResearcherService.class);
+	private static final Logger log = LogManager.getLogger(DefaultReIndexResearcherService.class);
 	
 	/** Service for indexing user information */
 	private ResearcherIndexService researcherIndexService;

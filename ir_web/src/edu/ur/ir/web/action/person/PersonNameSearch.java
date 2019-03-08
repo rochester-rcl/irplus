@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.person;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.person.NameAuthoritySearchService;
@@ -44,7 +45,7 @@ public class PersonNameSearch extends Pager  {
 	private NameAuthoritySearchService nameAuthoritySearchService;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(PersonNameSearch.class);
+	private static final Logger log = LogManager.getLogger(PersonNameSearch.class);
 	
 	/**  Person name authorities as result of search  */
 	private List<PersonNameAuthority> nameAuthorities;

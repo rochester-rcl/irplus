@@ -16,7 +16,9 @@
 
 package edu.ur.ir.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
@@ -40,7 +42,7 @@ DescriptionAware, FileSystem{
 	private static final long serialVersionUID = 4509167297589083886L;
 
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(PersonalItem.class);
+	private static final Logger log = LogManager.getLogger(PersonalItem.class);
 	
 	/**  Item that is in the collection */
 	private VersionedItem versionedItem;

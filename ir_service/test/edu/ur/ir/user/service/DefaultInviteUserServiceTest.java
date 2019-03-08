@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -87,7 +88,7 @@ public class DefaultInviteUserServiceTest {
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInviteUserServiceTest.class);
+	private static final Logger log = LogManager.getLogger(DefaultInviteUserServiceTest.class);
 
 	/** User data access */
 	UserService userService = (UserService) ctx

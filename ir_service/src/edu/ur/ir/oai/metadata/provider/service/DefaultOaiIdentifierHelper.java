@@ -16,7 +16,8 @@
 
 package edu.ur.ir.oai.metadata.provider.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helps deal with OAI information
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
 public class DefaultOaiIdentifierHelper {
 	
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultOaiIdentifierHelper.class);
+	private static final Logger log = LogManager.getLogger(DefaultOaiIdentifierHelper.class);
 	
 	/**
 	 * Parse the oai id.

@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.institution;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -43,7 +44,7 @@ public class ReinstateInstitutionalPublication extends ActionSupport implements 
 	private static final long serialVersionUID = -2600747248386611252L;
 	
 	/**  Logger for preview publication action */
-	private static final Logger log = Logger.getLogger(WithdrawInstitutionalPublication.class);
+	private static final Logger log = LogManager.getLogger(WithdrawInstitutionalPublication.class);
 	
 	/** Id of the institutional item being viewed.  */
 	private Long institutionalItemId;

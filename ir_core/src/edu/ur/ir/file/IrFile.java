@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.persistent.BasePersistent;
 import edu.ur.file.IllegalFileSystemNameException;
@@ -51,7 +53,7 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	private FileInfo fileInfo;
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(IrFile.class);
+	private static final Logger log = LogManager.getLogger(IrFile.class);
 	
 	/** Set of files that have been transformed from this one. */
 	private Set<TransformedFile> transformedFiles = new HashSet<TransformedFile>();

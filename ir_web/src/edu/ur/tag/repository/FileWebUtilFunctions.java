@@ -24,7 +24,8 @@ import java.util.Set;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
@@ -52,7 +53,7 @@ public class FileWebUtilFunctions {
 	private static final long serialVersionUID = -8130846946682991084L;
 	
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(FileWebUtilFunctions.class);
+	private static final Logger log = LogManager.getLogger(FileWebUtilFunctions.class);
 	
 	/** Security service  */
 	private static SecurityService mySecurityService = null;

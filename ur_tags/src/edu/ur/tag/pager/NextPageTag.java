@@ -23,7 +23,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This tag displays the next page
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
 public class NextPageTag extends SimpleTagSupport {
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(NextPageTag.class);
+	private static final Logger log = LogManager.getLogger(NextPageTag.class);
 
 	public void doTag() throws JspException {
 		log.debug("do tag called");

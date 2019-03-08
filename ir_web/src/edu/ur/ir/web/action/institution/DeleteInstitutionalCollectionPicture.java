@@ -16,7 +16,8 @@
 
 package edu.ur.ir.web.action.institution;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -39,7 +40,7 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 	private static final long serialVersionUID = 3980266197680971615L;
 	
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(DeleteInstitutionalCollectionPicture.class);
+	private static final Logger log = LogManager.getLogger(DeleteInstitutionalCollectionPicture.class);
 
 	/** Repository service */
 	private RepositoryService repositoryService;

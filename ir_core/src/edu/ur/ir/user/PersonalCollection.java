@@ -23,7 +23,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
@@ -49,7 +50,7 @@ Serializable,  LongPersistentId, PersistentVersioned,
 DescriptionAware, NameAware, Comparable, FileSystem
 {
 	/** Logger */
-	private static final Logger log = Logger.getLogger(PersonalCollection.class);
+	private static final Logger log = LogManager.getLogger(PersonalCollection.class);
 	
 	/**  Children of this IrCollection */
 	private Set<PersonalCollection> children = new HashSet<PersonalCollection>();

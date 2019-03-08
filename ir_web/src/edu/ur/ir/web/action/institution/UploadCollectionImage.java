@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.institution;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -63,7 +64,7 @@ public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 	private String fileFileName;
 		
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(UploadCollectionImage.class);
+	private static final Logger log = LogManager.getLogger(UploadCollectionImage.class);
 	
 	/** Indicates if the picture is the primary picture  */
 	private boolean primaryCollectionPicture = false;

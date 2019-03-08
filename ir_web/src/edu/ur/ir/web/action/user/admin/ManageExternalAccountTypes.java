@@ -20,7 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -49,7 +50,7 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 	private ExternalAccountTypeService externalAccountTypeService;
 
 	/**  Logger for managing external account types*/
-	private static final Logger log = Logger.getLogger(ManageExternalAccountTypes.class);
+	private static final Logger log = LogManager.getLogger(ManageExternalAccountTypes.class);
 	
 	/** Set of external account types for viewing the external account types */
 	private List<ExternalAccountType> externalAccountTypes;

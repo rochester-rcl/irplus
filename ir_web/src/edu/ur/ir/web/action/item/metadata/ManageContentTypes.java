@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -45,7 +46,7 @@ public class ManageContentTypes extends Pager implements Preparable, UserIdAware
 	private ContentTypeService contentTypeService;
 	
 	/**  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(ManageContentTypes.class);
+	private static final Logger log = LogManager.getLogger(ManageContentTypes.class);
 	
 	/** Set of content types for viewing the content types */
 	private Collection<ContentType> contentTypes;

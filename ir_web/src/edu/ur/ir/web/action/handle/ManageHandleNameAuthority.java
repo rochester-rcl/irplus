@@ -2,7 +2,8 @@ package edu.ur.ir.web.action.handle;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -26,7 +27,7 @@ public class ManageHandleNameAuthority extends ActionSupport implements Preparab
 	private HandleService handleService;
 
 	/**  Logger for managing handle name authorities*/
-	private static final Logger log = Logger.getLogger(ManageHandleNameAuthority.class);
+	private static final Logger log = LogManager.getLogger(ManageHandleNameAuthority.class);
 	
 	/** Set of handle name authorities for viewing */
 	private Collection<HandleNameAuthority> handleNameAuthorities;

@@ -21,7 +21,8 @@ package edu.ur.ir.security.service;
 
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -47,7 +48,7 @@ public class DefaultAuthenticateUserOverrideService implements AuthenticateUserO
 	private static final long serialVersionUID = -5262888575707357395L;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultAuthenticateUserOverrideService.class);
+	private static final Logger log = LogManager.getLogger(DefaultAuthenticateUserOverrideService.class);
 	
 	/**
 	 * Authenticate the user and places them in the context.

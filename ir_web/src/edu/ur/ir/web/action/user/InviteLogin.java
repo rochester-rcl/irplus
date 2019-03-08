@@ -17,7 +17,9 @@
 
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -37,7 +39,7 @@ public class InviteLogin extends ActionSupport implements Preparable {
 	private static final long serialVersionUID = 3356945932175988498L;	
 
 	/**  Logger for add user action */
-	private static final Logger log = Logger.getLogger(InviteLogin.class);
+	private static final Logger log = LogManager.getLogger(InviteLogin.class);
 
 	/** Token to identify the invited user */
 	private String token;

@@ -5,7 +5,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
@@ -42,7 +43,7 @@ public class ItemTransformDownloadUrl  extends SimpleTagSupport{
 	private String var;
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(ItemTransformDownloadUrl.class);
+	private static final Logger log = LogManager.getLogger(ItemTransformDownloadUrl.class);
 
 	
 	public void doTag() throws JspException {

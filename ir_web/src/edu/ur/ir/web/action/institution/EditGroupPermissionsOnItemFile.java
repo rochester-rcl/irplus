@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.institution;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -75,7 +76,7 @@ public class EditGroupPermissionsOnItemFile extends ActionSupport implements Pre
 	private Long[] permissionIds = new Long[]{};
 	
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(EditGroupPermissionsOnItemFile.class);
+	private static final Logger log = LogManager.getLogger(EditGroupPermissionsOnItemFile.class);
 
 	/** permissions that can be given to a itemFile */
 	private List<IrClassTypePermission> permissions = new LinkedList<IrClassTypePermission>();

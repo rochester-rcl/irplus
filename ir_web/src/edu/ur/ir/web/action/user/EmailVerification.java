@@ -17,7 +17,8 @@
 
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -43,7 +44,7 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 	private static final long serialVersionUID = -2859616602684397278L;
 
 	/**  Logger for email verification action */
-	private static final Logger log = Logger.getLogger(EmailVerification.class);
+	private static final Logger log = LogManager.getLogger(EmailVerification.class);
 
 	/** Token to identify the email to be verified */
 	private String token;

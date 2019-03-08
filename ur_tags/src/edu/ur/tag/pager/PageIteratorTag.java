@@ -22,7 +22,8 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This tag displays the page iterator
@@ -36,7 +37,7 @@ public class PageIteratorTag extends SimpleTagSupport {
 	private String var; 
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(PageIteratorTag.class);
+	private static final Logger log = LogManager.getLogger(PageIteratorTag.class);
 
 	public void doTag() throws JspException {
 		log.debug("do tag called");

@@ -17,7 +17,8 @@
 
 package edu.ur.ir.repository.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.repository.VersionedFileLockStrategy;
@@ -35,7 +36,7 @@ import edu.ur.ir.user.IrUser;
 public class DefaultVersionedFileLockStrategy implements VersionedFileLockStrategy{
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultVersionedFileLockStrategy.class);
+	private static final Logger log = LogManager.getLogger(DefaultVersionedFileLockStrategy.class);
 	
 	/** Manager for access control lists */
 	private SecurityService securityService;

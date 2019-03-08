@@ -26,7 +26,8 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -55,7 +56,7 @@ public class IrAclSimpleTag extends SimpleTagSupport{
     private String hasPermission;
     
 	/** Log for IrAclTag */
-	private static final Logger log = Logger.getLogger(IrAclSimpleTag.class);
+	private static final Logger log = LogManager.getLogger(IrAclSimpleTag.class);
 
 
 	

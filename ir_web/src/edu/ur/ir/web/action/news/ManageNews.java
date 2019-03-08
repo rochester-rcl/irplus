@@ -22,7 +22,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -52,7 +53,7 @@ public class ManageNews extends Pager implements  Preparable{
 	private RepositoryService repositoryService;
 	
 	/**  Logger for managing news items*/
-	private static final Logger log = Logger.getLogger(ManageNews.class);
+	private static final Logger log = LogManager.getLogger(ManageNews.class);
 	
 	/** Set of news items for viewing the news items */
 	private Collection<NewsItem> newsItems;

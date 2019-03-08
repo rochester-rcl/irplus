@@ -28,7 +28,8 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
@@ -67,7 +68,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	private static final long serialVersionUID = 4772256208913792044L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserFileSystemService.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserFileSystemService.class);
 
 	/** Service class for dealing with the repository  */
 	private RepositoryService repositoryService;

@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.user;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -59,7 +60,7 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	private String fileDescription;
 	
 	/**  Logger for action */
-	private static final Logger log = Logger.getLogger(RenamePersonalFile.class);
+	private static final Logger log = LogManager.getLogger(RenamePersonalFile.class);
 	
 	/** Id of personal file */
 	private Long personalFileId;

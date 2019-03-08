@@ -18,7 +18,8 @@
 package edu.ur.ir.web.action;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -40,7 +41,7 @@ public class NextRepositoryPicture extends ActionSupport {
 	private static final long serialVersionUID = 470760718471391384L;
 		
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(NextRepositoryPicture.class);
+	private static final Logger log = LogManager.getLogger(NextRepositoryPicture.class);
 	
 	/**  The repository to get the pictures from */
 	private Repository repository;

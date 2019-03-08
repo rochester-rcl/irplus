@@ -3,7 +3,8 @@ package edu.ur.ir.researcher.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.FileSystem;
@@ -66,7 +67,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	private ResearcherDAO researcherDAO;
 	
 	/**  Logger for add files to item action */
-	private static final Logger log = Logger.getLogger(DefaultResearcherFileSystemService.class);
+	private static final Logger log = LogManager.getLogger(DefaultResearcherFileSystemService.class);
 
 	
 	/**

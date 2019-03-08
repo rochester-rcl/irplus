@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.researcher;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -46,7 +47,7 @@ public class ManageFields extends Pager implements Preparable, UserIdAware {
 	private FieldService fieldService;
 	
 	/**  Logger for managing fields*/
-	private static final Logger log = Logger.getLogger(ManageFields.class);
+	private static final Logger log = LogManager.getLogger(ManageFields.class);
 	
 	/** Set of fields for viewing the fields */
 	private Collection<Field> fields;

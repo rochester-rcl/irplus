@@ -23,7 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
@@ -49,7 +50,7 @@ public class DefaultNewsService  implements NewsService {
     RepositoryService repositoryService;
 
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultNewsService.class);
+	private static final Logger log = LogManager.getLogger(DefaultNewsService.class);
 
 	/**  Data access for a News item  */
 	private NewsDAO newsDAO;

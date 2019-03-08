@@ -24,7 +24,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.extractor.PowerPointExtractor;
 
@@ -41,7 +43,7 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 	private Set<String> acceptableFileTypeExtensions = new HashSet<String>();
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DefaultPowerPointTextExtractor.class);
+	private static final Logger log = LogManager.getLogger(DefaultPowerPointTextExtractor.class);
 
 	/**Maximum size of file this extractor will try to extract*/
 	private long maxFileExtractSizeInBytes = 6000000l;

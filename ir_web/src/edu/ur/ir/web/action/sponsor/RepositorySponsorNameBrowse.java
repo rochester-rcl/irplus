@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.sponsor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorService;
@@ -38,7 +39,7 @@ import edu.ur.order.OrderType;
 public class RepositorySponsorNameBrowse extends Pager{
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(RepositoryPersonNameBrowse.class);
+	private static final Logger log = LogManager.getLogger(RepositoryPersonNameBrowse.class);
 	
 	/** eclipse generated serial version id */
 	private static final long serialVersionUID = 7404992323965723601L;

@@ -19,7 +19,8 @@ package edu.ur.tag.repository;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.search.FacetFilter;
@@ -34,7 +35,7 @@ import edu.ur.ir.search.FacetResult;
 public class SearchUtilFunctions {
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(SearchUtilFunctions.class);
+	private static final Logger log = LogManager.getLogger(SearchUtilFunctions.class);
 	
 	/**
 	 * Returns true if the facet has been selected by the user

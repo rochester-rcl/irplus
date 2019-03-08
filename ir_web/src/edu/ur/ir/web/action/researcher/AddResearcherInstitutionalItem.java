@@ -20,7 +20,8 @@ package edu.ur.ir.web.action.researcher;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -54,7 +55,7 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 	private static final long serialVersionUID = -5294823577282271716L;
 
 	/**  Logger for add files to item action */
-	private static final Logger log = Logger.getLogger(AddResearcherInstitutionalItem.class);
+	private static final Logger log = LogManager.getLogger(AddResearcherInstitutionalItem.class);
 	
 	/** Service for item.  */
 	private ResearcherService researcherService;

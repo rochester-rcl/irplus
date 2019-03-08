@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -53,7 +54,7 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	private static final long serialVersionUID = -7805448742772845859L;
 	
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(AddItemToCollection.class);
+	private static final Logger log = LogManager.getLogger(AddItemToCollection.class);
 	
 	/** User making the changes */
 	private Long userId;

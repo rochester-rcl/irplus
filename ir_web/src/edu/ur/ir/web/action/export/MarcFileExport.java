@@ -21,7 +21,8 @@ import java.io.File;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.marc4j.marc.Record;
@@ -55,7 +56,7 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	private static final long serialVersionUID = -3752593484718291238L;
 
 	//  Logger for file upload */
-	private static final Logger log = Logger.getLogger(MarcFileExport.class);
+	private static final Logger log = LogManager.getLogger(MarcFileExport.class);
 	
 	// Servlet response to write to */
 	private HttpServletResponse response;

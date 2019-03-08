@@ -57,9 +57,17 @@
          <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" transitive="false">
             <artifact name="slf4j-api" type="jar"/>
         </dependency>
-
+        
         <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.8" transitive="false">
             <artifact name="slf4j-log4j12" type="jar"/>
+        </dependency>
+
+        <dependency org="log4j" name="log4j" rev="1.2.15" transitive="false">
+            <artifact name="log4j" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.11.1" transitive="false">
+            <artifact name="log4j-core" type="jar"/>
         </dependency>
         
         <dependency org="dom4j" name="dom4j" rev="1.6.1" transitive="false">

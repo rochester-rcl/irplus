@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.ir.security.IrAcl;
@@ -55,7 +56,7 @@ public class DefaultSecurityService implements SecurityService {
 	private static final long serialVersionUID = 8614907507229543784L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultSecurityService.class);
+	private static final Logger log = LogManager.getLogger(DefaultSecurityService.class);
 
 	/* Data access for ClassType*/
 	private IrClassTypeDAO irClassTypeDAO;

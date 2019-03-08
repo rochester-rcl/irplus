@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -48,7 +49,7 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 	private SponsorService sponsorService;
 	
 	/**  Logger for managing sponsors*/
-	private static final Logger log = Logger.getLogger(ManageSponsors.class);
+	private static final Logger log = LogManager.getLogger(ManageSponsors.class);
 	
 	/** Set of sponsors for viewing the sponsors */
 	private Collection<Sponsor> sponsors;

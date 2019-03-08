@@ -25,7 +25,8 @@ import java.util.HashSet;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.persistent.BasePersistent;
@@ -40,7 +41,7 @@ import edu.ur.persistent.BasePersistent;
 public class DefaultFileDatabase extends BasePersistent implements FileDatabase 
 {
 	/** Logger */
-	private static final Logger log = Logger.getLogger(DefaultFileDatabase.class);
+	private static final Logger log = LogManager.getLogger(DefaultFileDatabase.class);
 	
 	/**  Name for the file server */
 	private String name;

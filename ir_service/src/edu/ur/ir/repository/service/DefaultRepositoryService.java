@@ -24,7 +24,8 @@ import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
@@ -98,7 +99,7 @@ public class DefaultRepositoryService implements RepositoryService {
 	private UniqueNameGenerator uniqueNameGenerator;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultRepositoryService.class);
+	private static final Logger log = LogManager.getLogger(DefaultRepositoryService.class);
 	
 	/** Strategy for locking files  */
 	private VersionedFileLockStrategy versionedFileLockStrategy;
@@ -630,6 +631,10 @@ public class DefaultRepositoryService implements RepositoryService {
 			String fileName, 
 			String description) throws edu.ur.file.IllegalFileSystemNameException 
 	{
+	    log.debug("respository = " + repository);
+	    log.debug("file = " + f);
+	    log.debug("fileName = " + fileName);
+	    log.debug("description = " + description);
 		FileInfo info = fileServerService.addFile(repository.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), getExtension(fileName), 
 				FilenameUtils.removeExtension(fileName));

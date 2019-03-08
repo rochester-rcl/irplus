@@ -20,7 +20,8 @@ package edu.ur.ir.item.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
@@ -53,7 +54,7 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 	private ItemFileSecurityService itemFileSecurityService;
 	
 	/**  Logger for view personal collections action */
-	private static final Logger log = Logger.getLogger(DefaultItemSecurityService.class);
+	private static final Logger log = LogManager.getLogger(DefaultItemSecurityService.class);
 	
 
 	/**

@@ -20,7 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.StrutsStatics;
 
 import com.opensymphony.xwork2.ActionInvocation;
@@ -50,7 +51,7 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	private static final long serialVersionUID = 4890726152082586505L;
 
 	/**  Logger for acegi user interceptor */
-	private static final Logger log = Logger.getLogger(AcegiUserInterceptor.class);
+	private static final Logger log = LogManager.getLogger(AcegiUserInterceptor.class);
 	
 	/** Service for dealing with users */
 	private UserService userService;

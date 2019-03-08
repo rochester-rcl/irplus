@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.researcher;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
@@ -62,7 +63,7 @@ public class ResearcherBrowse extends Pager {
 	private String viewType = "browse";
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(ResearcherBrowse.class);
+	private static final Logger log = LogManager.getLogger(ResearcherBrowse.class);
 	
 	/** Default constructor */
 	public ResearcherBrowse()

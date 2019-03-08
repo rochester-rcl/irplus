@@ -1,6 +1,7 @@
 package edu.ur.ir.web.action.institution;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -15,7 +16,7 @@ public class UpdateViewInPlayer extends ActionSupport implements Preparable{
 	private static final long serialVersionUID = -2103332968950379073L;
 
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(UpdateViewInPlayer.class);
+	private static final Logger log = LogManager.getLogger(UpdateViewInPlayer.class);
 	
 	/** Institutional Item holding the files */
 	private GenericItem item;

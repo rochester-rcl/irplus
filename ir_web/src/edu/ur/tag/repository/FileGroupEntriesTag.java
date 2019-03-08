@@ -26,7 +26,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.security.IrAcl;
@@ -45,7 +46,7 @@ public class FileGroupEntriesTag extends SimpleTagSupport {
 	private static final long serialVersionUID = 5620239685924163067L;
 
 	/** Log for IrAclTag */
-	private static final Logger log = Logger.getLogger(FileGroupEntriesTag.class);
+	private static final Logger log = LogManager.getLogger(FileGroupEntriesTag.class);
 
 	/** domain object */
     private ItemFile itemFile;

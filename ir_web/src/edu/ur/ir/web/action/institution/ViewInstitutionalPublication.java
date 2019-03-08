@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -58,7 +59,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	private static final long serialVersionUID = -1195251150185063000L;
 	
 	/**  Logger for preview publication action */
-	private static final Logger log = Logger.getLogger(ViewInstitutionalPublication.class);
+	private static final Logger log = LogManager.getLogger(ViewInstitutionalPublication.class);
 	
 	/** Id of the institutional item being viewed.  */
 	private Long institutionalItemId;

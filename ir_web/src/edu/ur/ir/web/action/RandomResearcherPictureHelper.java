@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
@@ -59,7 +60,7 @@ public class RandomResearcherPictureHelper implements Serializable{
 
 
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(RandomResearcherPictureHelper.class);
+	private static final Logger log = LogManager.getLogger(RandomResearcherPictureHelper.class);
 	
 	/**
 	 * Get the next researchers to be shown.

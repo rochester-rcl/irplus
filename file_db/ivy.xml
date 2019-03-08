@@ -41,10 +41,15 @@
         </dependency>
 
          <!-- log 4j files -->
-        <dependency org="log4j" name="log4j" rev="1.2.15" transitive="false">
-            <artifact name="log4j" type="jar"/>
+        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.11.1" transitive="false">
+            <artifact name="log4j-core" type="jar"/>
         </dependency>
-     
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.11.1" transitive="false">
+            <artifact name="log4j-api" type="jar"/>
+        </dependency>
+        
         <!--  checkstyle jar files  -->
         <dependency org="checkstyle" name="checkstyle" rev="5.0" transitive="false">
             <artifact name="checkstyle" type="jar"/>

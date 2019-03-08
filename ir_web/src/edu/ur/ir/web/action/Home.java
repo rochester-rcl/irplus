@@ -22,7 +22,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -69,7 +70,7 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	private Repository repository;
 	
 	/**  Logger for editing files */
-	private static final Logger log = Logger.getLogger(Home.class);
+	private static final Logger log = LogManager.getLogger(Home.class);
 
     /**  Eclipse generated serial id */
 	private static final long serialVersionUID = -7590752368186801859L;

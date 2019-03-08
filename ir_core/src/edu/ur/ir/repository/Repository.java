@@ -22,7 +22,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
@@ -44,7 +46,7 @@ public class Repository extends CommonPersistent {
 	public static final long DEFAULT_REPOSITORY_ID = 1l;
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(Repository.class);
+	private static final Logger log = LogManager.getLogger(Repository.class);
 	
 	/**  Current location where files should be stored  */
 	private FileDatabase fileDatabase;

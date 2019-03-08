@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.person;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -48,7 +49,7 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 	private ContributorTypeService contributorTypeService;
 	
 	/**  Logger for managing contributor types*/
-	private static final Logger log = Logger.getLogger(ManageContributorTypes.class);
+	private static final Logger log = LogManager.getLogger(ManageContributorTypes.class);
 	
 	/** Set of contributor types for viewing the contributor types */
 	private Collection<ContributorType> contributorTypes;

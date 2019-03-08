@@ -25,7 +25,9 @@ import java.io.IOException;
 import javax.media.jai.InterpolationNearest;
 import javax.media.jai.JAI;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * Creates a PNG thumbnail from the given image.
@@ -39,7 +41,7 @@ public class PngThumbnailTransformer extends BaseBasicThumbnailTransformer{
 	private static final long serialVersionUID = 4177646177173397839L;
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(PngThumbnailTransformer.class);
+	private static final Logger log = LogManager.getLogger(PngThumbnailTransformer.class);
 	
     public PngThumbnailTransformer(){ 
     	setSize(100);

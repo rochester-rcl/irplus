@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -40,7 +42,7 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultItemIndexProcessingRecordJob.class);
+	private static final Logger log = LogManager.getLogger(DefaultItemIndexProcessingRecordJob.class);
 
 	
 	/**

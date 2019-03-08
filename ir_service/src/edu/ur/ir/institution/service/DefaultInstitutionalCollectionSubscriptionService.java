@@ -24,7 +24,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -61,7 +62,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
     private InstitutionalItemService institutionalItemService;
     
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionSubscriptionService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalCollectionSubscriptionService.class);
     
 	/**  Used to get the url for a given item */
 	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;

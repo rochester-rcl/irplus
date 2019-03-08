@@ -32,7 +32,9 @@ import javax.imageio.ImageWriter;
 import javax.media.jai.JAI;
 import javax.swing.ImageIcon;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 
 
@@ -45,7 +47,7 @@ import org.apache.log4j.Logger;
 public class JpegThumbnailTransformer extends BaseBasicThumbnailTransformer{
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(JpegThumbnailTransformer.class);
+	private static final Logger log = LogManager.getLogger(JpegThumbnailTransformer.class);
 
     /** eclipse generated id */
 	private static final long serialVersionUID = 3747655438497116611L;

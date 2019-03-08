@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.researcher;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -113,7 +114,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 	private Researcher researcher;
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(MoveResearcherInformation.class);
+	private static final Logger log = LogManager.getLogger(MoveResearcherInformation.class);
 
     /** current root location where all files are being moved from*/
     private Long parentFolderId;

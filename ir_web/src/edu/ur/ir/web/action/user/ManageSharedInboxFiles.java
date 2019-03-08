@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -72,7 +73,7 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	private InviteUserService inviteUserService;
 
 	/**  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(ManageSharedInboxFiles.class);
+	private static final Logger log = LogManager.getLogger(ManageSharedInboxFiles.class);
 	
 	/** Set of content types for viewing the content types */
 	private Collection<SharedInboxFile> sharedInboxFiles;	

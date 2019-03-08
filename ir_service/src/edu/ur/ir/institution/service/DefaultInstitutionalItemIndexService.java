@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -186,7 +187,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	public static final String COLLECTION_RIGHT_VALUE = "collection_right_value";
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemIndexService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalItemIndexService.class);
 	
 	
 	/**

@@ -27,7 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.marc4j.MarcException;
 import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
@@ -90,7 +91,7 @@ public class DefaultMarcFileToVersionedItemImporter
     implements MarcFileToVersionedItemImporter, Comparator<Subfield> {
 	
 	//  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultMarcFileToVersionedItemImporter.class);
+	private static final Logger log = LogManager.getLogger(DefaultMarcFileToVersionedItemImporter.class);
 	
 	// service to help with relator codes
 	private MarcContributorTypeRelatorCodeService marcContributorTypeRelatorCodeService;

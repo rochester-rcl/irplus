@@ -34,7 +34,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.w3c.dom.DOMImplementation;
@@ -69,7 +70,7 @@ public class DefaultResearcherExporter implements ResearcherExporter {
 	private JdbcTemplate jdbcTemplate;
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DefaultResearcherExporter.class);
+	private static final Logger log = LogManager.getLogger(DefaultResearcherExporter.class);
 	
 	/**
 	 * Data source for accessing the database.

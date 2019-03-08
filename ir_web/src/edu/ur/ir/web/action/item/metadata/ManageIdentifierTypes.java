@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -46,7 +47,7 @@ public class ManageIdentifierTypes extends Pager implements  Preparable, UserIdA
 	private IdentifierTypeService identifierTypeService;
 
 	/**  Logger for managing identifier types*/
-	private static final Logger log = Logger.getLogger(ManageIdentifierTypes.class);
+	private static final Logger log = LogManager.getLogger(ManageIdentifierTypes.class);
 	
 	/** Set of identifier types for viewing the identifier types */
 	private Collection<IdentifierType> identifierTypes;

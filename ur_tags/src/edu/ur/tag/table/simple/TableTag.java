@@ -22,7 +22,9 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.tag.base.CommonBaseHtmlTag;
 import edu.ur.tag.TagUtil;
@@ -69,7 +71,7 @@ public class TableTag extends CommonBaseHtmlTag implements HtmlTable {
 	private int columnCount;
 		
 	/** Logger */
-	private static final Logger log = Logger.getLogger(TableTag.class);
+	private static final Logger log = LogManager.getLogger(TableTag.class);
 
 	/** table body class */
 	private String tableBodyClass;

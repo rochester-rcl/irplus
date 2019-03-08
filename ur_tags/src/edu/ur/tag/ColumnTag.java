@@ -29,7 +29,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * Creates columns for a table
@@ -60,7 +62,7 @@ public class ColumnTag extends SimpleTagSupport {
 	private TableRowTag rowTag;
 	
 	/**  Logger for column tag */
-	private static final Logger log = Logger.getLogger(ColumnTag.class);
+	private static final Logger log = LogManager.getLogger(ColumnTag.class);
 
 	public void doTag() throws JspException {
 		try {

@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.institution;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -44,7 +45,7 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 	private static final long serialVersionUID = 979475905589306686L;
 	
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(ManageCollectionSubscription.class);
+	private static final Logger log = LogManager.getLogger(ManageCollectionSubscription.class);
 	
 	/** Id of the user to subscribe/unsubscribe */
 	private Long subscribeUserId;

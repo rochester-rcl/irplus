@@ -19,7 +19,8 @@ package edu.ur.hibernate.ir.researcher.db;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -44,7 +45,7 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	private static final long serialVersionUID = -2139557520714885135L;
 
 	/** Logger */
-	private static final Logger log = Logger.getLogger(HbResearcherFolderDAO.class);
+	private static final Logger log = LogManager.getLogger(HbResearcherFolderDAO.class);
 	
 	/** helper for dealing with database */
 	private final HbCrudDAO<ResearcherFolder> hbCrudDAO;

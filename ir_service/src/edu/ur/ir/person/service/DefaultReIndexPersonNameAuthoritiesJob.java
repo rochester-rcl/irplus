@@ -2,7 +2,8 @@ package edu.ur.ir.person.service;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -34,7 +35,7 @@ public class DefaultReIndexPersonNameAuthoritiesJob implements StatefulJob
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultReIndexUsersJob.class);
+	private static final Logger log = LogManager.getLogger(DefaultReIndexUsersJob.class);
 	
 	/**  Batch size for processing the records  */
 	public static final int DEFAULT_BATCH_SIZE = 25;

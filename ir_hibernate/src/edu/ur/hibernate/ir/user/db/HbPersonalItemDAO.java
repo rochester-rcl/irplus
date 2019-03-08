@@ -19,7 +19,8 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
@@ -40,7 +41,7 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
 	private static final long serialVersionUID = 9043983698017205264L;
 
 	/** Logger */
-	private static final Logger log = Logger.getLogger( HbPersonalItemDAO.class);
+	private static final Logger log = LogManager.getLogger( HbPersonalItemDAO.class);
 	
 	/**
 	 * Helper for persisting information using hibernate. 

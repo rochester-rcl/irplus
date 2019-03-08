@@ -22,7 +22,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -57,7 +58,7 @@ public class EditRepository extends ActionSupport implements Preparable,
 Validateable, UserIdAware{
 	
 	/**  Logger for editing a file database. */
-	private static final Logger log = Logger.getLogger(EditRepository.class);
+	private static final Logger log = LogManager.getLogger(EditRepository.class);
 	
 	/**  Name of the repository */
 	private String repositoryName;

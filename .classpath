@@ -47,15 +47,17 @@
 	<classpathentry kind="lib" path="ir_web/lib/checkstyle-5.0.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-beanutils-1.8.0.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-digester-2.0.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/commons-fileupload-1.3.3.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/commons-pool-1.5.1.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ehcache-1.6.0.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/el-api-6.0.37.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/emma_ant-2.0.5312.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/emma-2.0.5312.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ezmorph-1.0.6.jar"/>
@@ -64,6 +66,7 @@
 	<classpathentry kind="lib" path="ir_web/lib/file_db_service-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/file_db-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/fontbox-1.7.0.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/freemarker-2.3.28.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/hibernate-core-3.5.3-Final.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ir_core-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ir_dao-2.2.jar"/>
@@ -72,10 +75,11 @@
 	<classpathentry kind="lib" path="ir_web/lib/jai-codec-1.1.3.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/jai-core-1.1.3.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/javassist-3.11.0.GA.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/javax.activation-1.2.0.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/jempbox-1.7.0.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/jsp-api-6.0.37.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/jstl-1.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/lucene-core-2.4.1.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/lucene-misc-2.4.1.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/mail-1.4.1.jar"/>
@@ -83,6 +87,7 @@
 	<classpathentry kind="lib" path="ir_web/lib/metadata_hibernate-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/metadata_service-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/metadata-2.2.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/ognl-3.1.15.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/openxml4j-1.0-beta.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/pdfbox-1.7.0.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/poi-3.6.jar"/>
@@ -90,7 +95,9 @@
 	<classpathentry kind="lib" path="ir_web/lib/poi-ooxml-3.6.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/poi-ooxml-schemas-3.6.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/poi-scratchpad-3.6.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/postgresql-9.2-1002.jdbc4.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/quartz-1.8.3.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/servlet-api-6.0.37.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/slf4j-log4j12-1.5.8.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/spring-aop-3.0.2.RELEASE.jar"/>
@@ -109,22 +116,14 @@
 	<classpathentry kind="lib" path="ir_web/lib/spring-security-web-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/spring-tx-3.0.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/spring-web-3.0.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/struts2-core-2.5.18.jar"/>
+	<classpathentry kind="lib" path="ir_web/lib/struts2-spring-plugin-2.5.18.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/testng-5.8.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ur_common_util-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ur_persistence_util-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/ur_tags-2.2.jar"/>
 	<classpathentry kind="lib" path="ir_web/lib/xmlbeans-2.4.0.jar"/>
-	<classpathentry kind="lib" path="marc4j/2.4/marc4j.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/el-api-6.0.37.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/jsp-api-6.0.37.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/postgresql-9.2-1002.jdbc4.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/servlet-api-6.0.37.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/commons-collections-3.2.2.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/commons-fileupload-1.3.3.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/freemarker-2.3.28.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/javax.activation-1.2.0.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/ognl-3.1.15.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/struts2-core-2.5.18.jar"/>
-	<classpathentry kind="lib" path="ir_web/lib/struts2-spring-plugin-2.5.18.jar"/>
+	<classpathentry kind="lib" path="ur_common_util/lib/log4j-api-2.11.1.jar"/>
+	<classpathentry kind="lib" path="ur_common_util/lib/log4j-core-2.11.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

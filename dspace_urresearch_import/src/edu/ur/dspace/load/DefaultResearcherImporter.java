@@ -30,7 +30,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -100,7 +101,7 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	private FieldService researcherFieldService;
 
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultResearcherImporter.class);
+	private static final Logger log = LogManager.getLogger(DefaultResearcherImporter.class);
 	
 	/** template for accessing the database */
 	private JdbcTemplate jdbcTemplate;

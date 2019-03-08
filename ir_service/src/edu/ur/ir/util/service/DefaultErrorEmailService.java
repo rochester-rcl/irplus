@@ -6,7 +6,8 @@ import java.io.StringWriter;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -27,7 +28,7 @@ public class DefaultErrorEmailService implements ErrorEmailService{
     private JavaMailSender mailSender;
     
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultErrorEmailService.class);
+	private static final Logger log = LogManager.getLogger(DefaultErrorEmailService.class);
 	
 	/** Subject line for the email */
 	private String subject;

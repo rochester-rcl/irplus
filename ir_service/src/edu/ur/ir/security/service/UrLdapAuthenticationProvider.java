@@ -22,7 +22,8 @@ package edu.ur.ir.security.service;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -141,7 +142,7 @@ import edu.ur.ir.user.ExternalAccountTypeService;
 public class UrLdapAuthenticationProvider implements AuthenticationProvider {
     //~ Static fields/initializers =====================================================================================
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultSecurityService.class);
+	private static final Logger log = LogManager.getLogger(DefaultSecurityService.class);
 	
 	
     //~ Instance fields ================================================================================================

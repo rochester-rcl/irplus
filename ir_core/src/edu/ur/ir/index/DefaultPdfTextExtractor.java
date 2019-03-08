@@ -22,7 +22,9 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
@@ -35,7 +37,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
 public class DefaultPdfTextExtractor implements FileTextExtractor{
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(DefaultPdfTextExtractor.class);
+	private static final Logger log = LogManager.getLogger(DefaultPdfTextExtractor.class);
 	
 	/** Extensions this extractor can extract text for. */
 	private Set<String> acceptableFileTypeExtensions = new HashSet<String>();

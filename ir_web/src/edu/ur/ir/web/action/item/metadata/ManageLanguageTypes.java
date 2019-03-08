@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -46,7 +47,7 @@ public class ManageLanguageTypes extends Pager implements Preparable, UserIdAwar
 	private LanguageTypeService languageTypeService;
 	
 	/**  Logger for managing language types*/
-	private static final Logger log = Logger.getLogger(ManageLanguageTypes.class);
+	private static final Logger log = LogManager.getLogger(ManageLanguageTypes.class);
 	
 	/** Set of language types for viewing the language types */
 	private Collection<LanguageType> languageTypes;

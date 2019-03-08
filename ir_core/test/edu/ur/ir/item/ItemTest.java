@@ -20,7 +20,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
@@ -56,7 +57,7 @@ public class ItemTest {
 	Properties properties = propertiesLoader.getProperties();
 	
 	/**  Logger */
-	protected static final Logger log = Logger.getLogger(ItemTest.class);
+	protected static final Logger log = LogManager.getLogger(ItemTest.class);
 	
 	/**
 	 * Test the basic get and set  methods

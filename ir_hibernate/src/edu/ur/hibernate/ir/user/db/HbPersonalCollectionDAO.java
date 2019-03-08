@@ -19,7 +19,8 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -45,7 +46,7 @@ public class HbPersonalCollectionDAO implements PersonalCollectionDAO{
 	private static final long serialVersionUID = -8590531742101408339L;
 
 	/** Logger */
-	private static final Logger log = Logger.getLogger(HbPersonalCollectionDAO.class);
+	private static final Logger log = LogManager.getLogger(HbPersonalCollectionDAO.class);
 
 	/** Helper for stroring hibernate information. */
 	private final HbCrudDAO<PersonalCollection> hbCrudDAO;

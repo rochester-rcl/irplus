@@ -23,7 +23,9 @@ import java.util.HashSet;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.repository.License;
@@ -40,7 +42,7 @@ public class ItemTemplate extends CommonPersistent {
 
 	/**  Logger */
 	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(ItemTemplate.class);
+	private static final Logger log = LogManager.getLogger(ItemTemplate.class);
 	
 	/**  Set of links for information about this item. */
 	private Set<ItemLink> links = new HashSet<ItemLink>();

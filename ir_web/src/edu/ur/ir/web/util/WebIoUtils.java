@@ -26,7 +26,8 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.mime.MimeTypeService;
@@ -52,7 +53,7 @@ public class WebIoUtils {
 	private ResponseBufferedOutputWriter responseOutputWriter;
 	
 	/**  Logger for class */
-	private static final Logger log = Logger.getLogger(WebIoUtils.class);
+	private static final Logger log = LogManager.getLogger(WebIoUtils.class);
 	
 	
 	/**

@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
@@ -68,7 +69,7 @@ public class DefaultItemService implements ItemService {
 	private static final long serialVersionUID = 3943102947344838093L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultItemService.class);
+	private static final Logger log = LogManager.getLogger(DefaultItemService.class);
 	
 	/**  Data access for versioned items. */
 	private VersionedItemDAO versionedItemDAO;

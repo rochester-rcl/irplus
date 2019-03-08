@@ -27,7 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.NumberTools;
@@ -68,7 +69,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	private Analyzer analyzer;
 	
 	/**  Logger for editing a file database. */
-	private static final Logger log = Logger.getLogger(DefaultResearcherSearchService.class);
+	private static final Logger log = LogManager.getLogger(DefaultResearcherSearchService.class);
 	
 	/** max number of hits to retrieve */
 	private int maxNumberOfMainQueryHits = 10000;

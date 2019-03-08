@@ -22,7 +22,9 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.springframework.util.Assert;
 
 import edu.ur.cgLib.CgLibHelper;
@@ -46,7 +48,7 @@ public class IrAcl extends BasePersistent implements Acl
 	private static final long serialVersionUID = -9129654335946520747L;
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(IrAcl.class);
+	private static final Logger log = LogManager.getLogger(IrAcl.class);
 	
 	/**  The parent acl if one exists. */
 	private IrAcl irParentAcl;

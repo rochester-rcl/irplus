@@ -1,6 +1,7 @@
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -27,7 +28,7 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 	private static final long serialVersionUID = -3627366596099060879L;
 
 	/**  Logger for add irUser action */
-	private static final Logger log = Logger.getLogger(EditExternalAccount.class);
+	private static final Logger log = LogManager.getLogger(EditExternalAccount.class);
 	
 	/**  User object */
 	private Long userId;

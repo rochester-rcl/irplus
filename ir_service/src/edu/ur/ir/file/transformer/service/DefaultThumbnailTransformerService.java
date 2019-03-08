@@ -2,7 +2,9 @@ package edu.ur.ir.file.transformer.service;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.ErrorEmailService;
@@ -37,7 +39,7 @@ public class DefaultThumbnailTransformerService implements ThumbnailTransformerS
 	private IrFileTransformationFailureRecordDAO irFileTransformationFailureRecordDAO;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultThumbnailTransformerService.class);
+	private static final Logger log = LogManager.getLogger(DefaultThumbnailTransformerService.class);
 	
 	/** Temporary file creator to allow a temporary file to be created for processing */
 	private TemporaryFileCreator temporaryFileCreator;

@@ -24,7 +24,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import javax.sql.DataSource;
@@ -87,7 +88,7 @@ public class DefaultCommunityImporter implements CommunityImporter{
 	private ThumbnailTransformerService thumbnailTransformerService;
 
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultCommunityImporter.class);
+	private static final Logger log = LogManager.getLogger(DefaultCommunityImporter.class);
 	
 	/** template for accessing the database */
 	private JdbcTemplate jdbcTemplate;

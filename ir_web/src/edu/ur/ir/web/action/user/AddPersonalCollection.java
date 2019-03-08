@@ -17,7 +17,8 @@
 
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -60,7 +61,7 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 	private Long updateCollectionId;
 	
 	/**  Logger for add personal collection action */
-	private static final Logger log = Logger.getLogger(AddPersonalCollection.class);
+	private static final Logger log = LogManager.getLogger(AddPersonalCollection.class);
 	
 	/**  User object */
 	private Long userId;

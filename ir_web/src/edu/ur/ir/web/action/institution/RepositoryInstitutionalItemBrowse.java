@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.institution;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import edu.ur.ir.institution.InstitutionalItem;
@@ -40,7 +41,7 @@ import edu.ur.order.OrderType;
 public class RepositoryInstitutionalItemBrowse extends Pager {
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(RepositoryInstitutionalItemBrowse.class);
+	private static final Logger log = LogManager.getLogger(RepositoryInstitutionalItemBrowse.class);
 	
 	/** List of characters/options that can be selected */
 	private String[] alphaList = new String[]{

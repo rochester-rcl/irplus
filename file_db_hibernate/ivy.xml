@@ -80,7 +80,10 @@
             <artifact name="antlr" type="jar"/>
         </dependency>
         
-        
+        <!-- Log 4j Files Required for hibernate -->
+        <dependency org="log4j" name="log4j" rev="1.2.15" transitive="false">
+            <artifact name="log4j" type="jar"/>
+        </dependency>
         
         <!-- spring files -->
         <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">

@@ -21,7 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -61,7 +62,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	private static final long serialVersionUID = 8046524638321276009L;
 
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(AddPersonalFiles.class);
+	private static final Logger log = LogManager.getLogger(AddPersonalFiles.class);
 	
 	/* Personal Folder the user will be adding files to */
 	PersonalFolder personalFolder;

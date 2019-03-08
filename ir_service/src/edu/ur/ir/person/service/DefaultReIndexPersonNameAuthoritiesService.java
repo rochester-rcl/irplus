@@ -3,7 +3,8 @@ package edu.ur.ir.person.service;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.person.NameAuthorityIndexService;
 import edu.ur.ir.person.PersonNameAuthority;
@@ -27,7 +28,7 @@ public class DefaultReIndexPersonNameAuthoritiesService implements ReIndexPerson
 	private PersonService personService;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultReIndexPersonNameAuthoritiesService.class);
+	private static final Logger log = LogManager.getLogger(DefaultReIndexPersonNameAuthoritiesService.class);
 	
 	/** Service for indexing user information */
 	private NameAuthorityIndexService nameAuthorityIndexService;

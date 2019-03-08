@@ -27,7 +27,8 @@ import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.tree.PreOrderTreeSetNodeBase;
@@ -43,7 +44,7 @@ public class TreeFolderInfo extends PreOrderTreeSetNodeBase implements
 		Serializable, FolderInfo {
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(TreeFolderInfo.class);
+	private static final Logger log = LogManager.getLogger(TreeFolderInfo.class);
 
 	/**  Eclipse Generated id. */
 	private static final long serialVersionUID = -714164342008847164L;

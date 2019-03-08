@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 
 import edu.ur.ir.institution.InstitutionalItemVersion;
@@ -44,7 +45,7 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	private List<OaiMetadataProvider> providers = new LinkedList<OaiMetadataProvider>();
 	
 	/** logger */
-	private static Logger log = Logger.getLogger(DefaultOaiMetadataServiceProvider.class);
+	private static Logger log = LogManager.getLogger(DefaultOaiMetadataServiceProvider.class);
 	
 	/**
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#getProvider(java.lang.String)

@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.item;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -54,7 +55,7 @@ public class NameSearch extends Pager implements  UserIdAware, Preparable  {
 	private String query;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(NameSearch.class);
+	private static final Logger log = LogManager.getLogger(NameSearch.class);
 	
 	/**  Person name authorities as result of search  */
 	private List<PersonNameAuthority> nameAuthorities;

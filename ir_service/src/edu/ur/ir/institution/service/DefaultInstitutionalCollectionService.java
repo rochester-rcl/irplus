@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
@@ -66,7 +67,7 @@ public class DefaultInstitutionalCollectionService implements
 	private static final long serialVersionUID = 7984625061769816698L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalCollectionService.class);
 	
 	/**  Data access for an institutional collection  */
 	private InstitutionalCollectionDAO institutionalCollectionDAO;

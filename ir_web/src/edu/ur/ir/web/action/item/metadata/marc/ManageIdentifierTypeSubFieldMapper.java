@@ -20,7 +20,8 @@ package edu.ur.ir.web.action.item.metadata.marc;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -49,7 +50,7 @@ implements Preparable{
 	private static final long serialVersionUID = -1906137285921347780L;
 
 	//  Logger for managing copyright statements*/
-	private static final Logger log = Logger.getLogger(ManageIdentifierTypeSubFieldMapper.class);
+	private static final Logger log = LogManager.getLogger(ManageIdentifierTypeSubFieldMapper.class);
 	
 	// id of the maranger marc data field
 	private Long id;

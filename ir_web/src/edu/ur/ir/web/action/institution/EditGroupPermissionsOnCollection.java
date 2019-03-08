@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -80,7 +81,7 @@ public class EditGroupPermissionsOnCollection extends ActionSupport
 	private Long[] permissionIds = new Long[]{};
 	
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(EditGroupPermissionsOnCollection.class);
+	private static final Logger log = LogManager.getLogger(EditGroupPermissionsOnCollection.class);
 
 	/** permissions that can be given to a collection */
 	private List<IrClassTypePermission> permissions = new LinkedList<IrClassTypePermission>();

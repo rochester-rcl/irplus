@@ -20,7 +20,8 @@ package edu.ur.ir.web.action.user.admin;
 import java.io.File;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -51,7 +52,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	private static final long serialVersionUID = 4890200754192783056L;
 
 	/**  Logger  */
-	private static final Logger log = Logger.getLogger(ManageEmails.class);
+	private static final Logger log = LogManager.getLogger(ManageEmails.class);
 
 
 	/** user service */

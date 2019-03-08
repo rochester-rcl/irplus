@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
@@ -56,7 +57,7 @@ import javax.servlet.http.HttpSession;
 public class UrAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter{
 	
 	/**  Logger for managing departments*/
-	private static final Logger log = Logger.getLogger(UrAuthenticationProcessingFilter.class);
+	private static final Logger log = LogManager.getLogger(UrAuthenticationProcessingFilter.class);
     //~ Static fields/initializers =====================================================================================
 
     public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "j_username";

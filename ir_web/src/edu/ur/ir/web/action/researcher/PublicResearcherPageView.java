@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -45,7 +46,7 @@ Comparator<IrFile>, UserIdAware {
 	private static final long serialVersionUID = 5154383076462883720L;
 
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(PublicResearcherPageView.class);
+	private static final Logger log = LogManager.getLogger(PublicResearcherPageView.class);
 	
 	/** determine what the user is trying to do */
 	

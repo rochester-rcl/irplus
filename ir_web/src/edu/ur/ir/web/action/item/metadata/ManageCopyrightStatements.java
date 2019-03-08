@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -47,7 +48,7 @@ public class ManageCopyrightStatements extends Pager implements Preparable, User
 	private CopyrightStatementService copyrightStatementService;
 	
 	/**  Logger for managing copyright statements*/
-	private static final Logger log = Logger.getLogger(ManageCopyrightStatements.class);
+	private static final Logger log = LogManager.getLogger(ManageCopyrightStatements.class);
 	
 	/** Set of copyright statements for viewing the copyright statements */
 	private Collection<CopyrightStatement> copyrightStatements;

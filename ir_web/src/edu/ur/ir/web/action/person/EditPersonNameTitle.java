@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.person;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -35,7 +36,7 @@ public class EditPersonNameTitle extends ActionSupport implements Preparable, Va
 	private static final long serialVersionUID = -7050953690475661645L;
 
 	/**  Logger for editing a file database. */
-	private static final Logger log = Logger.getLogger(EditPersonNameTitle.class);
+	private static final Logger log = LogManager.getLogger(EditPersonNameTitle.class);
 	
 	/**  Id of the name of the person to edit. */
 	private Long personNameId;

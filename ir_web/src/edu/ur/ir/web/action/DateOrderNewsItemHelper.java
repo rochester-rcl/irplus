@@ -21,7 +21,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.news.NewsItem;
 import edu.ur.ir.news.NewsService;
@@ -47,7 +48,7 @@ public class DateOrderNewsItemHelper implements Serializable{
 	public static final String PREV = "PREV";
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(DateOrderNewsItemHelper.class);
+	private static final Logger log = LogManager.getLogger(DateOrderNewsItemHelper.class);
 	
 	/**  Current news location */
 	private int currentLocation;

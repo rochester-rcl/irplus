@@ -25,7 +25,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -44,7 +45,7 @@ public class PrintError extends SimpleTagSupport{
 	private String key;
 	
 	/**  Logger for managing users */
-	private static final Logger log = Logger.getLogger(PrintError.class);
+	private static final Logger log = LogManager.getLogger(PrintError.class);
 	
 	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException, IOException {

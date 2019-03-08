@@ -21,7 +21,8 @@ package edu.ur.ir.web.action.user;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -49,7 +50,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	private static final long serialVersionUID = -4567084083497516308L;
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(DownloadSharedInboxFile.class);
+	private static final Logger log = LogManager.getLogger(DownloadSharedInboxFile.class);
 	
 	/**  File to download */
 	private Long inboxFileId;

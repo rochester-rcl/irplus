@@ -18,7 +18,8 @@ package edu.ur.file.db.web.action.mime;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -42,7 +43,7 @@ public class ManageSubTypeExtensions extends Pager implements  Preparable{
 	private MimeTypeService mimeTypeService;
 	
 	/**  Logger for managing top media types*/
-	private static final Logger log = Logger.getLogger(ManageSubTypeExtensions.class);
+	private static final Logger log = LogManager.getLogger(ManageSubTypeExtensions.class);
 	
 	/** Set of top media types for viewing the top media types */
 	private Collection<SubTypeExtension> subTypeExtensions;

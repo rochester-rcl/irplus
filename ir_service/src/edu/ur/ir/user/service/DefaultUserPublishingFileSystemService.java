@@ -22,7 +22,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.FileSystem;
@@ -67,7 +68,7 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	private PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserPublishingFileSystemService.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserPublishingFileSystemService.class);
 
 	
 	/**

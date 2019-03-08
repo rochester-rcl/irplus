@@ -20,7 +20,8 @@ package edu.ur.ir.web.action;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -39,7 +40,7 @@ public class GetNewsArticle extends ActionSupport {
 	private static final long serialVersionUID = 5077640228407715934L;
 
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(GetNewsArticle.class);
+	private static final Logger log = LogManager.getLogger(GetNewsArticle.class);
 	
 	/**  News service */
 	private NewsService newsService;

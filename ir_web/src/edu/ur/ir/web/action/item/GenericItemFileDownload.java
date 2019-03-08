@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.item;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -52,7 +53,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	private static final long serialVersionUID = 5430030320610916010L;
 
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(GenericItemFileDownload.class);
+	private static final Logger log = LogManager.getLogger(GenericItemFileDownload.class);
 	
 	/**  File to download */
 	private Long itemFileId;

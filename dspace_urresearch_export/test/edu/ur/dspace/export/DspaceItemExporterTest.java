@@ -20,7 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.testng.annotations.Test;
 
@@ -42,7 +43,7 @@ public class DspaceItemExporterTest {
 	ItemExporter itemExporter = (ItemExporter)ctx.getBean("itemExporter");
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DspaceItemExporterTest.class);
+	private static final Logger log = LogManager.getLogger(DspaceItemExporterTest.class);
 	
 	public void testGetItems() throws IOException
 	{

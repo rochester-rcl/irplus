@@ -1,6 +1,7 @@
 package edu.ur.ir.web.action.person;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
@@ -26,7 +27,7 @@ public class ReIndexPersonNameAuthorities extends ActionSupport{
 	private Scheduler quartzScheduler;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(ReIndexResearchers.class);
+	private static final Logger log = LogManager.getLogger(ReIndexResearchers.class);
 	
 	/** Default Batch Size */
 	private int batchSize = 25;

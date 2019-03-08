@@ -16,7 +16,8 @@
 
 package edu.ur.ir.web.action.institution;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -43,7 +44,7 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 	private static final long serialVersionUID = 8663464316939434871L;
 
 	/**  Logger for preview publication action */
-	private static final Logger log = Logger.getLogger(DeleteInstitutionalItem.class);
+	private static final Logger log = LogManager.getLogger(DeleteInstitutionalItem.class);
 	
 	/** Id of the institutional item being viewed.  */
 	private Long institutionalItemId;

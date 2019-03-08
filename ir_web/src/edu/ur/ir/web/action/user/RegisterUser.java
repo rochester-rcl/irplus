@@ -21,7 +21,8 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -71,7 +72,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 	/*  Logger for add user action */
-	private static final Logger log = Logger.getLogger(RegisterUser.class);
+	private static final Logger log = LogManager.getLogger(RegisterUser.class);
 
 	/* Token to identify the invited user */
 	private String token;

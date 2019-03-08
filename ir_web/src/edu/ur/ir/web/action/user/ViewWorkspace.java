@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.user;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -56,7 +57,7 @@ UserIdAware {
 	private static final long serialVersionUID = 2267179706676467266L;
 	
 	/**  Logger for vierw workspace action */
-	private static final Logger log = Logger.getLogger(ViewWorkspace.class);
+	private static final Logger log = LogManager.getLogger(ViewWorkspace.class);
 	
 	/**  User object */
 	private Long userId;

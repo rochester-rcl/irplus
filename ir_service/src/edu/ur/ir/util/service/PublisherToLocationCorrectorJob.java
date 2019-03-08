@@ -20,7 +20,8 @@ package edu.ur.ir.util.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -56,7 +57,7 @@ import edu.ur.ir.item.PublisherService;
 public class PublisherToLocationCorrectorJob implements StatefulJob{
 	
 	//  Logger 
-	private static final Logger log = Logger.getLogger(PublisherToLocationCorrectorJob.class);
+	private static final Logger log = LogManager.getLogger(PublisherToLocationCorrectorJob.class);
 
 	/** Application context from spring  */
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";

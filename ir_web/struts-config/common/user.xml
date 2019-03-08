@@ -24,7 +24,7 @@
 <struts>
     
     <include file="struts-default.xml"/>
-    
+    <constant name="struts.multipart.maxSize" value="1000000000000000" />
     <package name="user" namespace="/user" extends="struts-default" strict-method-invocation="false">
            <result-types>
                <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
@@ -57,8 +57,7 @@
              <!-- U of R file upload stack -->
             <interceptor-stack name="urUploadStack">
                 <interceptor-ref name="emailError"/>
-                <interceptor-ref name="fileUploadStack"/>
-                <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="defaultStack"/>
                 <interceptor-ref name="user"/>
             </interceptor-stack>
           

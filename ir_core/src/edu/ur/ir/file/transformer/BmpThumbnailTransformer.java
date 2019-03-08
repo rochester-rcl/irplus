@@ -25,7 +25,8 @@ import java.io.IOException;
 import javax.media.jai.InterpolationNearest;
 import javax.media.jai.JAI;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Creates a bitmap thumbnail.
@@ -36,7 +37,7 @@ import org.apache.log4j.Logger;
 public class BmpThumbnailTransformer extends BaseBasicThumbnailTransformer{
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(BmpThumbnailTransformer.class);
+	private static final Logger log = LogManager.getLogger(BmpThumbnailTransformer.class);
 	
     /** eclipse generated id */
 	private static final long serialVersionUID = -1757483145237066322L;

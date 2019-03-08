@@ -20,7 +20,8 @@ package edu.ur.ir.web.action.researcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -47,7 +48,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	private static final long serialVersionUID = -6039053858718096614L;	
 
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(ResearcherPictureFileDownload.class);
+	private static final Logger log = LogManager.getLogger(ResearcherPictureFileDownload.class);
 	
 	/**  The new researcher */
 	private Researcher researcher;

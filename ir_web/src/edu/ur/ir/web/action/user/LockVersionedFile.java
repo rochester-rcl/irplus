@@ -17,7 +17,8 @@
 
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -47,7 +48,7 @@ public class LockVersionedFile extends ActionSupport implements UserIdAware {
 	private static final long serialVersionUID = -4846716439383595220L;
 
 	/**  Logger for add user action */
-	private static final Logger log = Logger.getLogger(LockVersionedFile.class);
+	private static final Logger log = LogManager.getLogger(LockVersionedFile.class);
 	
 	/** Service for accessing or deleting files */
 	private RepositoryService repositoryService;

@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.item;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -49,7 +50,7 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 	private static final long serialVersionUID = -1202241827964719011L;
 	
 	/**  Logger for preview publication action */
-	private static final Logger log = Logger.getLogger(ViewPersonalPublication.class);
+	private static final Logger log = LogManager.getLogger(ViewPersonalPublication.class);
 	
 	/** Parent collection id */
 	private Long parentCollectionId;

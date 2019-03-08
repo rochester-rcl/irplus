@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
@@ -60,7 +62,7 @@ Serializable,  LongPersistentId, PersistentVersioned,
 DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	
 	/* Logger */
-	private static final Logger log = Logger.getLogger(PersonalFolder.class);
+	private static final Logger log = LogManager.getLogger(PersonalFolder.class);
 	
 	/*  Children of this PersonalFolder */
 	private Set<PersonalFolder> children = new HashSet<PersonalFolder>();

@@ -26,7 +26,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import edu.ur.dspace.model.DspaceItem;
@@ -123,7 +124,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private SponsorService sponsorService;
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DefaultGenericItemPopulator.class);
+	private static final Logger log = LogManager.getLogger(DefaultGenericItemPopulator.class);
 	
 	
 	/** Helper for dspace dates */

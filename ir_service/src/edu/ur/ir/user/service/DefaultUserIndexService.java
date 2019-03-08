@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -67,7 +68,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	private Analyzer analyzer;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserIndexService.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserIndexService.class);
 	
 	/**  Service for sending an email when an error occurs */
 	private ErrorEmailService errorEmailService;

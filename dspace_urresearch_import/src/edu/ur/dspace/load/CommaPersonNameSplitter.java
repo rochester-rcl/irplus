@@ -16,7 +16,8 @@
 
 package edu.ur.dspace.load;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
@@ -32,7 +33,7 @@ import edu.ur.ir.person.PersonNameAuthority;
 public class CommaPersonNameSplitter implements AuthorNameSplitter {
 
 	/**  Logger */
-	private static final Logger log = Logger
+	private static final Logger log = LogManager
 			.getLogger(CommaPersonNameSplitter.class);
 
 	/* (non-Javadoc)

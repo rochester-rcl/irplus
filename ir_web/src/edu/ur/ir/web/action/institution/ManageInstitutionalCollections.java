@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.institution;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
@@ -85,7 +86,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 
 	
 	/**  Logger for view personal collections action */
-	private static final Logger log = Logger.getLogger(ManageInstitutionalCollections.class);
+	private static final Logger log = LogManager.getLogger(ManageInstitutionalCollections.class);
 
 	/** type of sort [ ascending | descending ] 
 	 *  this is for incoming requests */

@@ -23,7 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
@@ -110,7 +111,7 @@ public class DefaultUserService implements UserService {
 	private MailSender mailSender;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserService.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserService.class);
 	
 	/** Mail message to change password */
 	private SimpleMailMessage passwordTokenMessage;	

@@ -32,7 +32,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * Class that manages repositories in memory.  Once the class is
@@ -49,7 +51,7 @@ public class InMemoryRepositoryService implements RepositoryService{
 	private static final long serialVersionUID = 7283528544966743132L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(InMemoryRepositoryService.class);
+	private static final Logger log = LogManager.getLogger(InMemoryRepositoryService.class);
 	
 	/** Set of repositories in the system */
 	private Set<Repository> repositories = new HashSet<Repository>();

@@ -2,7 +2,8 @@ package edu.ur.ir.institution.service;
 
 import javax.mail.MessagingException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +21,7 @@ import edu.ur.ir.repository.service.test.helper.ContextHolder;
 public class SchedulerStatusOutToLogTest {
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(SchedulerStatusOutToLogTest.class);
+	private static final Logger log = LogManager.getLogger(SchedulerStatusOutToLogTest.class);
 	
 	/** Spring application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();

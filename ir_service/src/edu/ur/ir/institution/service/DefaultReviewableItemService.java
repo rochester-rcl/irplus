@@ -20,7 +20,8 @@ package edu.ur.ir.institution.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
@@ -68,7 +69,7 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 	private SimpleMailMessage itemAcceptedMessage;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultReviewableItemService.class);
+	private static final Logger log = LogManager.getLogger(DefaultReviewableItemService.class);
 
 	/** Service to save institutional item */
 	private InstitutionalItemService institutionalItemService;

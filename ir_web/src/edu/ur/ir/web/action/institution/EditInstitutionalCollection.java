@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -58,7 +59,7 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 	private Long userId;
 
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(EditInstitutionalCollection.class);
+	private static final Logger log = LogManager.getLogger(EditInstitutionalCollection.class);
 
 	/**  Generated version id */
 	private static final long serialVersionUID = 3604761597348556125L;

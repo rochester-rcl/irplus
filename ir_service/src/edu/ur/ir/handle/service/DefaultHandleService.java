@@ -19,7 +19,8 @@ package edu.ur.ir.handle.service;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
@@ -45,7 +46,7 @@ public class DefaultHandleService implements HandleService {
 	private HandleNameAuthorityDAO handleNameAuthorityDAO;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultHandleService.class);
+	private static final Logger log = LogManager.getLogger(DefaultHandleService.class);
 
 	/**
 	 * Delete the Handle name authority.

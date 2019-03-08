@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 
 import edu.ur.file.IllegalFileSystemNameException;
@@ -93,7 +95,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	private Long totalSizeForAllFilesBytes = 0L;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(VersionedFile.class);
+	private static final Logger log = LogManager.getLogger(VersionedFile.class);
 	
 	/** permissions that can be granted on versioned files */
 	public static final String VIEW_PERMISSION = "VIEW";

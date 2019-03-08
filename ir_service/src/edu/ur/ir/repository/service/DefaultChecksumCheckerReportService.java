@@ -6,7 +6,8 @@ import java.util.Date;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -25,7 +26,7 @@ public class DefaultChecksumCheckerReportService implements ChecksumCheckerRepor
     private JavaMailSender mailSender;
     
 	/*  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultChecksumCheckerReportService.class);
+	private static final Logger log = LogManager.getLogger(DefaultChecksumCheckerReportService.class);
 
 	/* checksum service */
 	private FileInfoChecksumService fileInfoChecksumService;

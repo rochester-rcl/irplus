@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.FileCollaborator;
@@ -52,7 +53,7 @@ UserWorkspaceIndexProcessingRecordService
 	private UserService userService;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceIndexProcessingRecordService.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserWorkspaceIndexProcessingRecordService.class);
 
 
 	/**

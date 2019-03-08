@@ -26,7 +26,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
@@ -70,7 +71,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	private Analyzer analyzer;
 	
 	/**  Logger for editing a file database. */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemSearchService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalItemSearchService.class);
 	
 	/** max number of hits to retrieve */
 	private int maxNumberOfMainQueryHits = 10000;

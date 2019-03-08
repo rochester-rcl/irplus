@@ -16,7 +16,8 @@
 
 package edu.ur.ir.web.action.group;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -56,7 +57,7 @@ public class UserGroup extends ActionSupport implements  Preparable {
 	private IrUserGroup userGroup;
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(UserGroup.class);
+	private static final Logger log = LogManager.getLogger(UserGroup.class);
 
 	
 	/* (non-Javadoc)

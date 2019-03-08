@@ -17,7 +17,8 @@
 
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -36,7 +37,7 @@ public class ForgotPassword extends ActionSupport {
 	private static final long serialVersionUID = 7491973408867996093L;
 
 	/**  Logger for add user action */
-	private static final Logger log = Logger.getLogger(ForgotPassword.class);
+	private static final Logger log = LogManager.getLogger(ForgotPassword.class);
 
 	/** Email id to send the password details */
 	private String email;

@@ -6,7 +6,8 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 /**
  * This will schedule the immediate action of re-indexing institutional items.
  * 
@@ -20,7 +21,7 @@ public class ReIndexInstitutionalItem extends ActionSupport{
 	private static final long serialVersionUID = 673513182573887635L;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(ReIndexInstitutionalItem.class);
+	private static final Logger log = LogManager.getLogger(ReIndexInstitutionalItem.class);
 	
 	/** processing service for indexing institutional items */
 	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;

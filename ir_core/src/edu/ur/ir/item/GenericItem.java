@@ -24,7 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.ItemFile;
@@ -59,7 +61,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	private String lowerCaseName;
     
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(GenericItem.class);
+	private static final Logger log = LogManager.getLogger(GenericItem.class);
 	
 	/**  Files associated with this item. */
 	private Set<ItemFile> itemFiles = new HashSet<ItemFile>();

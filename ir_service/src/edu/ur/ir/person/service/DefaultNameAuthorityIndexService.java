@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -55,7 +56,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	private Analyzer analyzer;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultNameAuthorityIndexService.class);
+	private static final Logger log = LogManager.getLogger(DefaultNameAuthorityIndexService.class);
 	
 	/** Person name authority id */ 
 	public static final String PERSON_NAME_AUTHORITY_ID = "person_name_authority_id";

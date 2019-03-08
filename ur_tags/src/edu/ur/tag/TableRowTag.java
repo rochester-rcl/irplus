@@ -27,7 +27,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class TableRowTag extends SimpleTagSupport{
 	
@@ -56,7 +58,7 @@ public class TableRowTag extends SimpleTagSupport{
 	private String submitUrl;
 	
 	/**  Logger*/
-	private static final Logger log = Logger.getLogger(TableRowTag.class);
+	private static final Logger log = LogManager.getLogger(TableRowTag.class);
 
 	
 	JspWriter o;

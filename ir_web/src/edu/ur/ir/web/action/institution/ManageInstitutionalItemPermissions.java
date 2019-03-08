@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -45,7 +46,7 @@ import edu.ur.ir.user.UserGroupService;
 public class ManageInstitutionalItemPermissions extends ActionSupport {
 
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(ManageInstitutionalItemPermissions.class);
+	private static final Logger log = LogManager.getLogger(ManageInstitutionalItemPermissions.class);
 
 	/**  Generated version id */
 	private static final long serialVersionUID = -3299577209727988331L;

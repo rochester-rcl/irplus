@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -81,7 +82,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	private boolean update = false;
 	
 	/**  Logger for managing copyright statements*/
-	private static final Logger log = Logger.getLogger(ManageContributorTypeDublinCoreMapping.class);
+	private static final Logger log = LogManager.getLogger(ManageContributorTypeDublinCoreMapping.class);
 	
 	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();

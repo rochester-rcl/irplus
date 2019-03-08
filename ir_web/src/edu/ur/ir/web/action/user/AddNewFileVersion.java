@@ -22,7 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -53,7 +54,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	private static final long serialVersionUID = -2621769968886370338L;
 	
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(AddNewFileVersion.class);
+	private static final Logger log = LogManager.getLogger(AddNewFileVersion.class);
 	
 	/** id of the personal file  */
 	private Long personalFileId;

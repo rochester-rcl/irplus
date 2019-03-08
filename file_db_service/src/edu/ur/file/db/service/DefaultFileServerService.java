@@ -20,7 +20,8 @@ package edu.ur.file.db.service;
 import java.io.File;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.checksum.ChecksumCalculator;
@@ -77,7 +78,7 @@ public class DefaultFileServerService implements FileServerService{
 	private DefaultDatabaseFileStoreStrategy defaultDatabaseFileStoreStrategy;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultFileServerService.class);
+	private static final Logger log = LogManager.getLogger(DefaultFileServerService.class);
 
 	/**
 	 * Default Constructor

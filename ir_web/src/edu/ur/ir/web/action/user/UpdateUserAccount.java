@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.ldap.authentication.LdapAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -42,7 +43,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	private static final long serialVersionUID = -7094483818911517181L;
 
 	/**  Logger for add user action */
-	private static final Logger log = Logger.getLogger(UpdateUserAccount.class);
+	private static final Logger log = LogManager.getLogger(UpdateUserAccount.class);
 	
 	/** Comparator for name based classes */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();

@@ -22,7 +22,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -35,7 +37,7 @@ public class DefaultWordXmlTextExtractor implements FileTextExtractor{
 	private Set<String> acceptableFileTypeExtensions = new HashSet<String>();
 	
 	/**  Logger  */
-	private static final Logger log = Logger.getLogger(DefaultWordXmlTextExtractor.class);
+	private static final Logger log = LogManager.getLogger(DefaultWordXmlTextExtractor.class);
 
 	/**Maximum size of file this extractor will try to extract*/
 	private long maxFileExtractSizeInBytes = 6000000l;

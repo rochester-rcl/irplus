@@ -22,7 +22,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
@@ -58,7 +59,7 @@ public class RandomRepositoryPictureHelper implements Comparator<IrFile>, Serial
 	public static final String PREV = "PREV";
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(RandomRepositoryPictureHelper.class);
+	private static final Logger log = LogManager.getLogger(RandomRepositoryPictureHelper.class);
 	
 	/**
      * Simple comparison to assure order.

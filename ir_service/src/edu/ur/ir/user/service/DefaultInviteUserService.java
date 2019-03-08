@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
@@ -79,7 +80,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	private static final long serialVersionUID = -6844595955214510755L;
 
 	/*  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInviteUserService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInviteUserService.class);
 	
 	/* Mail sender */
 	private transient MailSender mailSender;

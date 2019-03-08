@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
 
@@ -49,7 +50,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	private static final long serialVersionUID = -7162234617452646016L;
 
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(CollectionInstitutionalItemSearch.class);
+	private static final Logger log = LogManager.getLogger(CollectionInstitutionalItemSearch.class);
 	
 	/** helper that contains data for the searches  */
 	private FacetSearchHelper searchDataHelper;

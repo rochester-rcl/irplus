@@ -20,7 +20,8 @@ package edu.ur.ir.researcher.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.RepositoryService;
@@ -59,7 +60,7 @@ public class DefaultResearcherService implements ResearcherService{
 	private RepositoryService repositoryService;
 	
 	/**  Logger  */
-	private static final Logger log = Logger.getLogger(DefaultResearcherService.class);
+	private static final Logger log = LogManager.getLogger(DefaultResearcherService.class);
 
 	
 	/**

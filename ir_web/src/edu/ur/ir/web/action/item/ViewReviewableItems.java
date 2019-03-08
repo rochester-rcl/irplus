@@ -43,7 +43,8 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.AscendingOrderComparator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Action to view items pending review
@@ -75,7 +76,7 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(ViewReviewableItems.class);
+	private static final Logger log = LogManager.getLogger(ViewReviewableItems.class);
 	
 	/** User id */
 	private Long userId;

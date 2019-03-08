@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.Collections;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Abstract class that implements most of the tree node 
@@ -42,7 +43,7 @@ public abstract class PreOrderTreeSetNodeBase implements PreOrderTreeSetNode
     /** right value of the tree */
     protected Long rightValue = DEFAULT_RIGHT_VALUE;
     /**  Logger for the pre order tree set node  */
-    private static final Logger log = Logger.getLogger(PreOrderTreeSetNodeBase.class);
+    private static final Logger log = LogManager.getLogger(PreOrderTreeSetNodeBase.class);
     /**  Boolean that indicates if children are allowed. */
     protected boolean allowsChildren = true;
     /** parent of this node  */

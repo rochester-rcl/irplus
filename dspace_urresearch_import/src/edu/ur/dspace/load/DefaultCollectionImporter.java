@@ -30,7 +30,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.w3c.dom.DOMImplementation;
@@ -82,7 +83,7 @@ public class DefaultCollectionImporter implements CollectionImporter{
 	private ThumbnailTransformerService thumbnailTransformerService;
 	
 	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultCommunityImporter.class);
+	private static final Logger log = LogManager.getLogger(DefaultCommunityImporter.class);
 	
 	/** template for accessing the database */
 	private JdbcTemplate jdbcTemplate;

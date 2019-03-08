@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -53,7 +54,7 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	private static final long serialVersionUID = 7238213751595032189L;
 
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(PublicCollectionView.class);
+	private static final Logger log = LogManager.getLogger(PublicCollectionView.class);
 
 	/** Repository service for dealing with institutional repository information */
 	private RepositoryService repositoryService;

@@ -23,7 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -67,7 +68,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	private static final long serialVersionUID = 309356905404014230L;
 	
 	/**  Logger for add files to item action */
-	private static final Logger log = Logger.getLogger(AddFilesToItem.class);
+	private static final Logger log = LogManager.getLogger(AddFilesToItem.class);
 	
 	/** Service for item.  */
 	private ItemService itemService;

@@ -17,7 +17,8 @@
 
 package edu.ur.ir.web.action.user;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -37,7 +38,7 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 	private static final long serialVersionUID = 8841773111377070719L;
 
 	/**  Logger for add user action */
-	private static final Logger log = Logger.getLogger(ChangePassword.class);
+	private static final Logger log = LogManager.getLogger(ChangePassword.class);
 
 	/** Password token */
 	private String token;

@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class to write data out to the stream
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
 public class ResponseBufferedOutputWriter {
 	
 	/**  Logger for class */
-	private static final Logger log = Logger.getLogger(ResponseBufferedOutputWriter.class);
+	private static final Logger log = LogManager.getLogger(ResponseBufferedOutputWriter.class);
 	
 	/**
 	 * Writes the input stream to the given output stream.  Both streams are wrpaped

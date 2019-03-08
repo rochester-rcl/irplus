@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -46,7 +47,7 @@ public class ManagePlacesOfPublication  extends Pager implements Preparable, Use
 	private PlaceOfPublicationService placeOfPublicationService;
 	
 	/**  Logger for managing place of publications*/
-	private static final Logger log = Logger.getLogger(ManagePlacesOfPublication.class);
+	private static final Logger log = LogManager.getLogger(ManagePlacesOfPublication.class);
 	
 	/** Set of place of publications for viewing the place of publications */
 	private Collection<PlaceOfPublication> placesOfPublication;

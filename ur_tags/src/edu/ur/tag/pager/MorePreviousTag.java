@@ -23,7 +23,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This tag displays the previous set of pages
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
 public class MorePreviousTag extends SimpleTagSupport {
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(MorePreviousTag.class);
+	private static final Logger log = LogManager.getLogger(MorePreviousTag.class);
 
 	public void doTag() throws JspException {
 		log.debug("do tag called");

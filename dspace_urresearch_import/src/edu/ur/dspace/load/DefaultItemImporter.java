@@ -36,7 +36,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -101,7 +102,7 @@ public class DefaultItemImporter implements ItemImporter{
 	private RepositoryService repositoryService;
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DefaultItemImporter.class);
+	private static final Logger log = LogManager.getLogger(DefaultItemImporter.class);
 	
 	/**  Deals with getting the generic item information */
 	private GenericItemPopulator genericItemPopulator;

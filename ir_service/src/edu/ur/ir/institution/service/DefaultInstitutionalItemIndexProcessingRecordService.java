@@ -17,7 +17,8 @@ limitations under the License.
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
@@ -58,7 +59,7 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemIndexProcessingRecordService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalItemIndexProcessingRecordService.class);
 
 	/**
 	 * Delete the processing record.

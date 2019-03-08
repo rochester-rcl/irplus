@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Validateable;
@@ -101,7 +102,7 @@ public class ViewPersonalCollections extends ActionSupport implements
 	private String collectionNameSort = "none";
 	
 	/**  Logger for view personal collections action */
-	private static final Logger log = Logger.getLogger(ViewPersonalCollections.class);
+	private static final Logger log = LogManager.getLogger(ViewPersonalCollections.class);
 	
 	/** Service for dealing with user file system. */
 	private UserPublishingFileSystemService userPublishingFileSystemService;

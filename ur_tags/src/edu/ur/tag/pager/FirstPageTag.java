@@ -22,7 +22,8 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Displays the first page 
@@ -33,7 +34,7 @@ import org.apache.log4j.Logger;
 public class FirstPageTag extends SimpleTagSupport {
 	
 	/** Logger */
-	private static final Logger log = Logger.getLogger(FirstPageTag.class);
+	private static final Logger log = LogManager.getLogger(FirstPageTag.class);
 	
 	public void doTag() throws JspException {
 		log.debug("do tag called");

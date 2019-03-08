@@ -20,7 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helps with getting a dspace date into a format for processing.
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
 public class DspaceDateHelper {
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DspaceDateHelper.class);
+	private static final Logger log = LogManager.getLogger(DspaceDateHelper.class);
 
 	
 	/**

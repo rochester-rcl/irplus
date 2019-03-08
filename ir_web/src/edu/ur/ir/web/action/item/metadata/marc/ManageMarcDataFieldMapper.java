@@ -6,7 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -30,7 +31,7 @@ public class ManageMarcDataFieldMapper extends ActionSupport
 	private static final long serialVersionUID = -3190077043329308504L;
 	
 	//  Logger for managing copyright statements*/
-	private static final Logger log = Logger.getLogger(ManageMarcDataFieldMapper.class);
+	private static final Logger log = LogManager.getLogger(ManageMarcDataFieldMapper.class);
 	
 	// id of the maranger marc data field
 	private Long id;

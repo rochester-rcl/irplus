@@ -19,7 +19,8 @@ package edu.ur.dspace.load;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class responsible for splitting up a combined series and report number
@@ -30,7 +31,7 @@ import org.apache.log4j.Logger;
 public class SeriesReportNumberSplitter {
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(SeriesReportNumberSplitter.class);
+	private static final Logger log = LogManager.getLogger(SeriesReportNumberSplitter.class);
 	/**
 	 * Creates a list of a series and report number.  The first value in the list
 	 * is the series, the second value is the report number if one is found.

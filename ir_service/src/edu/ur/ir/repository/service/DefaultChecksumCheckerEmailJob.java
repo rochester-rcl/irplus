@@ -1,6 +1,7 @@
 package edu.ur.ir.repository.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -21,7 +22,7 @@ public class DefaultChecksumCheckerEmailJob implements StatefulJob{
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultChecksumCheckerEmailJob.class);
+	private static final Logger log = LogManager.getLogger(DefaultChecksumCheckerEmailJob.class);
 	
 	/**
 	 * Exceuction of the job

@@ -21,7 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.NumberTools;
@@ -54,7 +55,7 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 	private Analyzer analyzer;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceSearchService.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserWorkspaceSearchService.class);
 	
 	/** File system service for loading file system objects */
 	private UserFileSystemService userFileSystemService;

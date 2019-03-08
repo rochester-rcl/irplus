@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -87,7 +88,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	private InstitutionalCollectionService institutionalCollectionService;
 	
 	/**  Logger for view personal collections action */
-	private static final Logger log = Logger.getLogger(AddItemToInstitutionalCollection.class);
+	private static final Logger log = LogManager.getLogger(AddItemToInstitutionalCollection.class);
 	
 	/** Id of the generic item being edited.  */
 	private Long genericItemId;

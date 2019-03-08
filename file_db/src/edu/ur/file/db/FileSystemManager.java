@@ -24,7 +24,8 @@ import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.file.IllegalFileSystemNameException;
 
@@ -41,7 +42,7 @@ public class FileSystemManager implements Serializable{
 	/**
 	 * Logger for the file system manager
 	 */
-	private static final Logger log = Logger.getLogger(FileSystemManager.class);
+	private static final Logger log = LogManager.getLogger(FileSystemManager.class);
 	
 	/**
 	 * Eclipse generated id.

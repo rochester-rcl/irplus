@@ -19,7 +19,8 @@ package edu.ur.ir.web.action.statistics.admin;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -54,7 +55,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	private DownloadStatisticsService downloadStatisticsService;
 	
 	/**  Logger for managing ip addresses*/
-	private static final Logger log = Logger.getLogger(ManageIgnoreIpAddress.class);
+	private static final Logger log = LogManager.getLogger(ManageIgnoreIpAddress.class);
 	
 	/** Set of ip addresses for viewing the ip addresses */
 	private Collection<IgnoreIpAddress> ignoreIpAddresses;

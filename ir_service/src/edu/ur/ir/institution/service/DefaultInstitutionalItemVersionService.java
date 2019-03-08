@@ -21,7 +21,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
@@ -73,7 +74,7 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/**  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemVersionService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalItemVersionService.class);
 
 	
 	/**

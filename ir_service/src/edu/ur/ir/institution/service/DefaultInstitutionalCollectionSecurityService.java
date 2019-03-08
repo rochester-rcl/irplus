@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionPermission;
@@ -51,7 +52,7 @@ public class DefaultInstitutionalCollectionSecurityService implements Institutio
 	private static final long serialVersionUID = 744923312643937699L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionSecurityService.class);
+	private static final Logger log = LogManager.getLogger(DefaultInstitutionalCollectionSecurityService.class);
 	
 	/** Deals with institutional collection information  */
 	private InstitutionalCollectionService institutionalCollectionService; 

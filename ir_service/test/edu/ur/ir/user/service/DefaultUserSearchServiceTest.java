@@ -21,7 +21,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -78,7 +79,7 @@ public class DefaultUserSearchServiceTest {
 	DefaultUserIndexService userIndexService = (DefaultUserIndexService) ctx.getBean("userIndexService");
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserSearchServiceTest.class);
+	private static final Logger log = LogManager.getLogger(DefaultUserSearchServiceTest.class);
 
 
 	/**

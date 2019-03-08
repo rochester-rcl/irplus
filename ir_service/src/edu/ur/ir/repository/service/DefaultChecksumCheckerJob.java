@@ -3,7 +3,8 @@ package edu.ur.ir.repository.service;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -33,7 +34,7 @@ public class DefaultChecksumCheckerJob implements StatefulJob{
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultChecksumCheckerJob.class);
+	private static final Logger log = LogManager.getLogger(DefaultChecksumCheckerJob.class);
 	
 	/**
 	 * Exceuction of the job

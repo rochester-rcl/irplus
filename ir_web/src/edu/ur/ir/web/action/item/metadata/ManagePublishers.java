@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -46,7 +47,7 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 	private PublisherService publisherService;
 	
 	/**  Logger for managing publishers*/
-	private static final Logger log = Logger.getLogger(ManagePublishers.class);
+	private static final Logger log = LogManager.getLogger(ManagePublishers.class);
 	
 	/** Set of publishers for viewing the publishers */
 	private Collection<Publisher> publishers;

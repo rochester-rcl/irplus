@@ -20,7 +20,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -50,7 +51,7 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
 	private final HbCrudDAO<ResearcherInstitutionalItem> hbCrudDAO;
 
 	/**  Logger for add files to item action */
-	private static final Logger log = Logger.getLogger(HbResearcherInstitutionalItemDAO.class);
+	private static final Logger log = LogManager.getLogger(HbResearcherInstitutionalItemDAO.class);
 
 	
 	/**

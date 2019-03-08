@@ -20,7 +20,8 @@ package edu.ur.ir.web.action.researcher;
 import java.io.File;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -49,7 +50,7 @@ import edu.ur.ir.web.action.UserIdAware;
 public class EditResearcher extends ActionSupport implements UserIdAware, Preparable {
 
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(EditResearcher.class);
+	private static final Logger log = LogManager.getLogger(EditResearcher.class);
 
 	/**  Generated version id */
 	private static final long serialVersionUID = 8163031274176961387L;	

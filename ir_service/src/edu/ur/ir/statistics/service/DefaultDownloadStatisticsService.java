@@ -26,7 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
@@ -87,7 +88,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	private FileDownloadRollUpProcessingRecordDAO fileDownloadRollUpProcessingRecordDAO;
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(DefaultDownloadStatisticsService.class);
+	private static final Logger log = LogManager.getLogger(DefaultDownloadStatisticsService.class);
 
 	/**
 	 * Save file download info 

@@ -20,7 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -69,7 +70,7 @@ public class ItemImporterTest {
 			TransactionDefinition.PROPAGATION_REQUIRED);
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(ItemImporterTest.class);
+	private static final Logger log = LogManager.getLogger(ItemImporterTest.class);
 	
 	public void testItemImport() throws IOException, DuplicateNameException, IllegalFileSystemNameException, NoIndexFoundException
 	{

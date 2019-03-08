@@ -20,7 +20,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -44,7 +45,7 @@ Comparator<IrFile>{
 	public static final String PREV = "PREV";
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(InstitutionalCollectionPictureHelper.class);
+	private static final Logger log = LogManager.getLogger(InstitutionalCollectionPictureHelper.class);
 	
 	/**
      * Get the next picture after the given location.

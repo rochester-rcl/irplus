@@ -20,7 +20,8 @@ package edu.ur.ir.web.action;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -42,7 +43,7 @@ public class NextResearcherPicture extends ActionSupport {
 	private static final long serialVersionUID = 4772718072456323110L;
 	
 	/**  Logger for file upload */
-	private static final Logger log = Logger.getLogger(NextResearcherPicture.class);
+	private static final Logger log = LogManager.getLogger(NextResearcherPicture.class);
 	
 	/** Service for dealing with researcher */
 	private ResearcherService researcherService;

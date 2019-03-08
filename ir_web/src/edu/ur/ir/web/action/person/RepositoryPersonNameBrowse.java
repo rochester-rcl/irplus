@@ -18,7 +18,8 @@ package edu.ur.ir.web.action.person;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameService;
@@ -33,7 +34,7 @@ public class RepositoryPersonNameBrowse extends Pager {
 	private static final long serialVersionUID = -7121226780091062392L;
 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(RepositoryPersonNameBrowse.class);
+	private static final Logger log = LogManager.getLogger(RepositoryPersonNameBrowse.class);
 	
 	/** List of characters/options that can be selected */
 	private String[] alphaList = new String[]{

@@ -319,7 +319,7 @@
 		    file="${custom.build.dir}/properties/production/ir_plus.properties"/>
 		
 		<copy todir="${production.staging.dir}/classes" overwrite="true"
-			file="${custom.build.dir}/log4j-config/log4j.xml"/>
+			file="${custom.build.dir}/log4j-config/log4j2.xml"/>
 		
 	</target>
 	

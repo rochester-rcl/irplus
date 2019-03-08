@@ -23,7 +23,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 
 /**
@@ -38,7 +40,7 @@ public class DefaultPlainTextExtractor implements FileTextExtractor{
 	private Set<String> acceptableFileTypeExtensions = new HashSet<String>();
 	
 	/**  Logger */
-	private static final Logger log = Logger.getLogger(DefaultPlainTextExtractor.class);
+	private static final Logger log = LogManager.getLogger(DefaultPlainTextExtractor.class);
 	
 	/**  Buffer size of 1MB. */
 	public static final int bufferSize = 1024;

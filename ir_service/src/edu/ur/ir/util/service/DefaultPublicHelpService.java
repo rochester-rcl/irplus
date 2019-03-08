@@ -3,7 +3,8 @@ package edu.ur.ir.util.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -21,7 +22,7 @@ public class DefaultPublicHelpService implements PublicHelpService{
     private JavaMailSender mailSender;
     
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultPublicHelpService.class);
+	private static final Logger log = LogManager.getLogger(DefaultPublicHelpService.class);
 	
 	/** email address to send the help email to*/
 	private String toAddress;

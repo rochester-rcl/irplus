@@ -4,7 +4,8 @@ package edu.ur.ir.web.action.researcher;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -31,7 +32,7 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 	private Long researcherPublicationId;
 
 	/** Logger for add files to item action */
-	private static final Logger log = Logger.getLogger(ViewResearcherPublication.class);
+	private static final Logger log = LogManager.getLogger(ViewResearcherPublication.class);
 
 	/** Service for dealing with researcher file system information */
 	private ResearcherFileSystemService researcherFileSystemService;

@@ -21,7 +21,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -50,7 +51,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	private static final long serialVersionUID = -828719967486672639L;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(HbInstitutionalItemDAO.class);
+	private static final Logger log = LogManager.getLogger(HbInstitutionalItemDAO.class);
 	
 	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<InstitutionalItem> hbCrudDAO;
