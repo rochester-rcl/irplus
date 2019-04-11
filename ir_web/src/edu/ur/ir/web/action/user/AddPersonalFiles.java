@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -146,7 +147,9 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	{
 		
 		log.debug("Upload files called");
+		log.debug("folder id = " + folderId + " user id = " + userId);
 		IrUser user = userService.getUser(userId, false);
+		log.debug("Personal folder = " + personalFolder);
 		
 		//only authoring roles can add personal files
 		if( !user.hasRole(IrRole.AUTHOR_ROLE))
@@ -187,6 +190,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				    {
 					    log.debug( "Creating non EMPTY file " + fileFileName[index]);
 					    try {
+					    	log.debug("personal folder = " + personalFolder);
 							pf = createNonEmptyFile( repository,
 									file[index],
 									user, 
@@ -339,10 +343,14 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	}
 
 	public void prepare() throws Exception {
+		log.debug("prepare called");
+		
 		if( folderId != null && folderId > 0 )
 		{
 		    personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
 		}
+		
+		log.debug("personal folder = " + personalFolder);
 		
 	}
 
@@ -373,7 +381,8 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 			IrUser user, 
 			String fileName, 
 			String description) throws DuplicateNameException, IllegalFileSystemNameException
-	{
+	{ 
+		log.debug("personal folder = " + personalFolder);
 		PersonalFile pf = null;
 		if( personalFolder != null)
 		{

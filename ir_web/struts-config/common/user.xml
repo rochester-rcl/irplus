@@ -44,9 +44,7 @@
                  <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
-                 <interceptor-ref name="params">
- 	                 <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
-             	 </interceptor-ref>
+                 <interceptor-ref name="params"/>
                  <interceptor-ref name="prepare"/>
                  <interceptor-ref name="modelDriven"/>
                  <interceptor-ref name="conversionError"/>
@@ -66,14 +64,10 @@
                  <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
-                 <interceptor-ref name="params">
- 	                 <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
-             	 </interceptor-ref>
+                 <interceptor-ref name="params"/>
                  <interceptor-ref name="prepare"/>
                  <interceptor-ref name="modelDriven"/>
-                  <interceptor-ref name="params">
- 	                 <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
-             	 </interceptor-ref>
+                  <interceptor-ref name="params"/>
                  <interceptor-ref name="conversionError"/>
                  <interceptor-ref name="validation"/>
                  <interceptor-ref name="workflow"/>
