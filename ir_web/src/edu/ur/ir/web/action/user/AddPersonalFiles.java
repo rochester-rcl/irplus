@@ -26,7 +26,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
@@ -57,7 +56,7 @@ import edu.ur.ir.web.util.FileUploadInfo;
  * @author Nathan Sarr
  *
  */
-public class AddPersonalFiles extends ActionSupport implements UserIdAware, Preparable{
+public class AddPersonalFiles extends ActionSupport implements UserIdAware{
 
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 8046524638321276009L;
@@ -72,7 +71,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	private Long userId;
 	
 	/* the users folder to add the files to */
-	private Long folderId;
+	private Long[] folderId;
 	
 	/* Service for dealing with user information  */
 	private UserService userService;
@@ -147,7 +146,19 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	{
 		
 		log.debug("Upload files called");
-		log.debug("folder id = " + folderId + " user id = " + userId);
+		log.debug("folder id length = " + folderId.length);
+		
+		Long theFolderId = null;
+		if( folderId != null && folderId.length > 0 )
+		{
+			log.debug("folder id = " + folderId + " user id = " + userId);
+			theFolderId = folderId[0];
+		    personalFolder = userFileSystemService.getPersonalFolder(folderId[0], false);
+		}
+		
+		
+		
+		log.debug("folder id = " + theFolderId + " user id = " + userId);
 		IrUser user = userService.getUser(userId, false);
 		log.debug("Personal folder = " + personalFolder);
 		
@@ -335,25 +346,19 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	}
 
 	public Long getFolderId() {
-		return folderId;
+		
+		if(folderId != null && folderId.length > 0) {
+			return folderId[0];
+		} else {
+			return null;
+		}		
 	}
 
-	public void setFolderId(Long folderId) {
+	public void setFolderId(Long[] folderId) {
 		this.folderId = folderId;
 	}
 
-	public void prepare() throws Exception {
-		log.debug("prepare called");
-		
-		if( folderId != null && folderId > 0 )
-		{
-		    personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
-		}
-		
-		log.debug("personal folder = " + personalFolder);
-		
-	}
-
+	
 	public PersonalFolder getPersonalFolder() {
 		return personalFolder;
 	}

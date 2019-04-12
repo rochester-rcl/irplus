@@ -33,6 +33,7 @@
            <interceptors>
              <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
              <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
+             <interceptor name="urFileUpload" class="edu.ur.web.interceptor.UrFileUpload"/>
              
              <interceptor-stack name="default">
                 <interceptor-ref name="emailError"/>
@@ -52,10 +53,33 @@
              </interceptor-stack>
              
              
-             <!-- U of R file upload stack -->
+           
+            
             <interceptor-stack name="urUploadStack">
                 <interceptor-ref name="emailError"/>
-                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="scopedModelDriven"/>
+                <interceptor-ref name="modelDriven"/>
+                <interceptor-ref name="urFileUpload"/>
+                <interceptor-ref name="checkbox"/>
+                <interceptor-ref name="datetime"/>
+                <interceptor-ref name="multiselect"/>
+                <interceptor-ref name="staticParams"/>
+                <interceptor-ref name="actionMappingParams"/>
+                <interceptor-ref name="params"/>
+                <interceptor-ref name="conversionError"/>
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">input,back,cancel,browse</param>
+                </interceptor-ref>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">input,back,cancel,browse</param>
+                </interceptor-ref>
+                <interceptor-ref name="debugging"/>
                 <interceptor-ref name="user"/>
             </interceptor-stack>
           
