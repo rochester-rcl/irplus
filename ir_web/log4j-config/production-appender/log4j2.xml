@@ -4,13 +4,13 @@
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
-    <File name="File" fileName="/Users/nathans/ir_plus_local/assetstore/logs/ir_plus_log/ir_web.log" 
+    <File name="File" fileName="/ir/assetstore/ir_plus_log/ir_web.log" 
             immediateFlush="false" append="true">
             <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </File>
   </Appenders>
   <Loggers>
-    <Root level="DEBUG">
+    <Root level="ERROR">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="File"/>
     </Root>

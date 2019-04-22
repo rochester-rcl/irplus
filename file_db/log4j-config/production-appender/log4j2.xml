@@ -10,7 +10,7 @@
   
   
   <Loggers>
-    <Logger name="edu.ir" level="DEBUG"/>
+    <Logger name="edu.ir" level="ERROR"/>
     <Root level="ERROR">
         <AppenderRef ref="Console"/>
     </Root>
