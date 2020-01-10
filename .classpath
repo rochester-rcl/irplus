@@ -125,5 +125,6 @@
 	<classpathentry kind="lib" path="ir_web/lib/xmlbeans-2.4.0.jar"/>
 	<classpathentry kind="lib" path="ur_common_util/lib/log4j-api-2.11.1.jar"/>
 	<classpathentry kind="lib" path="ur_common_util/lib/log4j-core-2.11.1.jar"/>
+	<classpathentry kind="lib" path="marc4j/2.4/marc4j.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

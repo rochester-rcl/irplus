@@ -43,6 +43,7 @@
 		     <class name="edu.ur.hibernate.ir.news.db.NewsItemDAOTest"/>
 		     
 		     <class name="edu.ur.hibernate.ir.person.db.PersonNameAuthorityDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.person.db.PersonNameAuthorityIdentifierTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.person.db.PersonNameDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.person.db.ContributorTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.person.db.ContributorDAOTest"/>

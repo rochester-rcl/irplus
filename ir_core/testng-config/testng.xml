@@ -59,6 +59,7 @@
 			<class name="edu.ur.ir.institution.DeletedInstitutionalItemTest"/>
 			
 			<class name="edu.ur.ir.person.PersonTest"/>
+			<class name="edu.ur.ir.person.PersonNameAuthorityIdentifierTypeTest"/>
 		    <class name="edu.ur.ir.person.PersonNameTest"/>
 		    <class name="edu.ur.ir.person.ContributorTypeTest"/>
 		    <class name="edu.ur.ir.person.ContributorTest"/>

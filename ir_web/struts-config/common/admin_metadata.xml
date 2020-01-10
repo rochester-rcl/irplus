@@ -173,6 +173,33 @@
             <result name="success">/pages/admin/item/metadata/persons/persons_table.jsp</result>
         </action>
         
+        
+        <!--  ************************************ -->
+        <!--  Person Name Authority Identifier Type Actions  -->
+        <!--  ************************************ -->
+        
+         <action name="viewPersonNameAuthorityIdentTypes">
+            <result name="success">/pages/admin/item/metadata/persons/person_name_authority_identifier_type.jsp</result>
+        </action>
+        
+        <action name="getPersonNameAuthorityIdentTypes" 
+            class="edu.ur.ir.web.action.person.ManagePersonNameAuthorityIdentifierTypes"
+            method="viewPersonNameAuthorityIdentifierTypes">
+            <result name="success">/pages/admin/item/metadata/persons/person_name_authority_identifier_type_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*PersonNameAuthorityIdentType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.person.ManagePersonNameAuthorityIdentifierTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/persons/person_name_authority_identifier_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/persons/person_name_authority_identifier_type_added.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/persons/person_name_authority_identifier_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/persons/person_name_authority_identifier_type_form.jsp</result>
+        </action>
+        
+        
         <!--  ************************************ -->
         <!--  Person Edit/Name Actions             -->
         <!--  ************************************ -->

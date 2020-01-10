@@ -297,6 +297,14 @@
        <property name="personNameDAO" ref="personNameDAO"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Service to manage contributor type data -->
+   <!-- ****************************************** --> 
+   <bean id="defaultPersonNameAuthorityIdentifierTypeService" 
+       class="edu.ur.ir.person.service.DefaultPersonNameAuthorityIdentifierTypeService">
+       <property name="personNameAuthorityIdentifierTypeDAO" ref="personNameAuthorityIdentifierTypeDAO"/>
+   </bean>
+   
       
    <!-- ****************************************** --> 
    <!-- Service to manage copyright statement data -->

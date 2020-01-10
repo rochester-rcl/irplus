@@ -42,6 +42,7 @@
 		    <class name="edu.ur.ir.user.service.UserWorkspaceIndexProcessingRecordServiceTest"/>
 		    
 		    <class name="edu.ur.ir.person.service.DefaultPersonServiceTest"/>
+		    <class name="edu.ur.ir.person.service.DefaultPersonNameAuthorityIdentifierTypeServiceTest"/>
 		    <class name="edu.ur.ir.person.service.DefaultNameAuthorityIndexServiceTest"/>
 		    <class name="edu.ur.ir.person.service.DefaultContributorServiceTest"/>
 		    <class name="edu.ur.ir.person.service.DefaultContributorTypeServiceTest"/>

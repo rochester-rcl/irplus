@@ -19,7 +19,7 @@
 <suite name="ir_service">
 	<test name="UR IR Service Test">
 		<classes>
-			<class name="edu.ur.ir.researcher.service.ResearcherFileSystemServiceTest"/>
+			<class name="edu.ur.ir.person.service.DefaultPersonNameAuthorityIdentifierTypeServiceTest"/>
 		</classes>
 	</test>
 </suite>

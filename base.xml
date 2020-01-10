@@ -30,10 +30,10 @@
 	<property name="custom.build.dir" value="../../ir_plus_custom/"/>
 	
 	<!-- uncomment this to build a custom site - this is only needed if you have
-	modified jsp/source files
-	-->
-	<property name="build.custom" value="true"/>
+	modified jsp/source files - NOTE this must be commented out to de-activate
 	
+	<property name="build.custom" value="true"/>
+	-->
 	
     <!-- build directory -->
     <property name="build.dir" value="${basedir}/build"/> 

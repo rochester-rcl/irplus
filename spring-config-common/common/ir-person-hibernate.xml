@@ -42,6 +42,28 @@
        </property>
    </bean>
    
+   
+   <!-- ****************************************** --> 
+   <!-- Person Name Authority Identifier Type                      -->
+   <!-- ****************************************** --> 
+   <bean id="personNameAuthorityIdentifierTypeDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbPersonNameAuthorityIdentifierTypeDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="personNameAuthorityIdentifierTypeDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="personNameAuthorityIdentifierTypeDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
    <!-- ****************************************** --> 
    <!-- Person Name                                     -->
    <!-- ****************************************** --> 
