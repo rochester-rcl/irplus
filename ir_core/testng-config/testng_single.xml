@@ -19,7 +19,7 @@
 <suite name="ur_research">
 	<test name="UR IR Core Test">
 		<classes>
-		    <class name="edu.ur.ir.file.VersionedFileTest"/>
+		    <class name="edu.ur.ir.person.PersonTest"/>
 		</classes>
 	</test>
 </suite>

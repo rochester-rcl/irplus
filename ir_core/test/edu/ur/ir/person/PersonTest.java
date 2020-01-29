@@ -206,5 +206,62 @@ public class PersonTest {
 	    assert p.hashCode() == p3.hashCode() : "hash codes should be equal";
 	    assert p.hashCode() != p2.hashCode() : "hash codes should not be equal";
 	}
+	
+	/**
+	 * Test adding and removing  identifiers
+	 */
+	public void testPersonNameAuthorityIdentifiers()
+	{
+		PersonName name1 = new PersonName();
+		name1.setFamilyName("familyName");
+		name1.setForename("forename");
+		name1.setInitials("n.d.s");
+		name1.setMiddleName("MiddleName");
+		name1.setNumeration("III");
+		name1.setSurname("surname");
+		
+		PersonNameAuthority p = new PersonNameAuthority();
+		p.addName(name1, false);
+		
+		assert p.getAuthoritativeName() == null : "Authoritative name should be null";
+		assert p.getNames().contains(name1) : "Name 1 should be in the set";
+		
+		
+		PersonNameAuthorityIdentifierType pt = new PersonNameAuthorityIdentifierType();
+		pt.setName("orcid");
+		pt.setDescription("orcid identifier");
+		pt.setId(55l);
+		pt.setVersion(33);
+		
+		PersonNameAuthorityIdentifier ident1 = p.addIdentifier("123834347", pt);
+		
+		assert p.getIdentifiers().size() == 1 : "Size should be 1 but is " + p.getIdentifiers().size();
+		assert(p.getIdentifiers().contains(ident1));
+		
+		PersonNameAuthorityIdentifierType pt2 = new PersonNameAuthorityIdentifierType();
+		pt2.setName("blah");
+		pt2.setDescription("blah identifier");
+		pt2.setId(50l);
+		pt2.setVersion(2);
+		
+		PersonNameAuthorityIdentifier ident2 = p.addIdentifier("1238aaa", pt2);
+		
+		assert p.getIdentifiers().size() == 2 : "Size should be 2 but is " + p.getIdentifiers().size();
+		
+		assert(p.getIdentifiers().contains(ident2));
+		assert(p.getIdentifiers().contains(ident1));
+		
+		p.removeIdentifier(ident1);
+		
+		assert p.getIdentifiers().size() == 1 : "Size should be 1 but is " + p.getIdentifiers().size();
+		assert(p.getIdentifiers().contains(ident2));
+		assert(!p.getIdentifiers().contains(ident1));
+		
+		p.removeAllIdentifiers();
+		
+		assert p.getIdentifiers().isEmpty() : "Size should be 1 but is " + p.getIdentifiers().size();
+		
+		 
+	}
 
 }

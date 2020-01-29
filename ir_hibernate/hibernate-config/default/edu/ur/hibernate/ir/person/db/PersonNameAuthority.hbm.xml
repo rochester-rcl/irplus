@@ -70,6 +70,18 @@
 			<one-to-many class="PersonName"/>
 		</set>
 		
+		<!--  identifiers for this Item -->	
+		<set name="identifiers" 
+		    schema="person" 
+		    inverse="true" 
+		    cascade="all-delete-orphan" 
+		    access="field" 
+		    fetch="subselect"
+		    lazy="true">
+			<key column="person_name_authority_id" not-null="true"/>
+			<one-to-many class="PersonNameAuthorityIdentifier"/>
+		</set>
+		
 		<!-- Authoritative name for this person -->
 		<many-to-one class="PersonName" 
 			name="authoritativeName" 
@@ -84,6 +96,18 @@
 	<!--  Get a count of folders in the system -->
 	<query name="personCount">
 	    select count(*) from PersonNameAuthority
+	</query>
+	
+	<!-- named query for getting the identifier types that can be applied to an item -->
+	<query name="getPossibleNameAuthorityIdentifierTypes">
+        select identifierType 
+        from PersonNameAuthorityIdentifierType identifierType
+        where identifierType not in
+            ( select identifierType
+              from PersonNameAuthority as name
+              join name.identifiers as identifier
+              join identifier.personNameAuthorityIdentifierType as identifierType
+              where name.id = ?)
 	</query>
 	
 	<!-- named query for getting all personNames ordered by surname forename familyName-->

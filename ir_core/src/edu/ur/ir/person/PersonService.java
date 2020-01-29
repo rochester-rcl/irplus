@@ -118,6 +118,39 @@ public interface PersonService extends Serializable{
      * @param person name
      */
     public void save(PersonName name);
-
+    
+	/**
+	 * Get the person name authority identifier.
+	 * 
+	 * @param id - of the person name authority identifier
+	 * @param lock
+	 * @return
+	 */
+	public PersonNameAuthorityIdentifier getPersonNameAuthorityIdentifier(Long id, boolean lock);
+	
+	/**
+	 * Delete the person name authority identifier
+	 * 
+	 * @param personNameAuthorityIdentifier
+	 */
+	public void deletePersonNameAuthority(PersonNameAuthorityIdentifier personNameAuthorityIdentifier);
+	
+	/**
+	 * Get unused authority types available for the specified authority id.
+	 * 
+	 * @param authorityId - unique authority id of the person name
+	 * @return
+	 */
+	public List<PersonNameAuthorityIdentifierType> getPossibleIdentifierTypes(Long authorityId);
+	
+	/**
+	 * Get the identifier for the specified person name authority if it exists.
+	 * 
+	 * @param identifierTypeId - id for the type of identifier
+	 * @param personNameAuthorityId - id for the person name authority
+	 * 
+	 * @return - person name authority identifier
+	 */
+	public PersonNameAuthorityIdentifier getByTypeAuthority(Long identifierTypeId, Long personNameAuthorityId);
  
 }

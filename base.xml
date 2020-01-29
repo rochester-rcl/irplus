@@ -111,7 +111,7 @@
     <property name="ivy.report.dir" value="${report.dir}/ivy_report" />
 
     <!-- version of ivy to be used -->
-    <property name="ivy.version" value="2.2.0-rc1" />
+    <property name="ivy.version" value="2.5.0" />
 
     <!-- set the javac debug mode -->
     <property name="javac.debug.mode" value="on" />
@@ -157,7 +157,7 @@
        <!--  download Ivy from web site so that it can be used
               even without any special installation -->
        <echo message="Please wait this may take a few minutes - installing ivy..." />
-       <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
+       <get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
            dest="${ivy.jar}" usetimestamp="true" />
     </target>
 

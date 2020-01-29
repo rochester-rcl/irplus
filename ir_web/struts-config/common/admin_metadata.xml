@@ -199,6 +199,26 @@
             <result name="get">/pages/admin/item/metadata/persons/person_name_authority_identifier_type_form.jsp</result>
         </action>
         
+        <!--  ******************************************************** -->
+        <!--   Person Name Authority Identifiers          -->
+        <!--  ******************************************************** -->
+        <!--  This handles update, save and delete -->
+        <action name="*PersonNameAuthorityIdentifier" 
+            method="{1}"
+            class="edu.ur.ir.web.action.person.ManagePersonNameAuthorityIdentifier">
+            <interceptor-ref name="crudStack" />
+            <result name="edit">/pages/admin/item/metadata/persons/edit_person_name_authority_identifier.jsp</result>
+            <result name="added" type="redirectAction"> 
+                <param name="actionName">personEdit</param> 
+                <param name="personId">${personNameAuthority.id}</param> 
+            </result> 
+            <result name="addError">/pages/admin/item/metadata/persons/edit_person_name_authority_identifier.jsp</result>
+            <result name="deleted" type="redirectAction"> 
+                <param name="actionName">personEdit</param> 
+                <param name="personId">${personNameAuthority.id}</param> 
+            </result> 
+        </action>
+        
         
         <!--  ************************************ -->
         <!--  Person Edit/Name Actions             -->

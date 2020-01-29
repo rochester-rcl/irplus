@@ -11,7 +11,7 @@ public class PersonNameAuthorityIdentifier extends BasePersistent{
 
 	/**  The type of identifier   */
 	private PersonNameAuthorityIdentifierType personNameAuthorityIdentifierType;
-	
+
 	/**  Identifier value  */
 	private String value;
 	
@@ -45,21 +45,20 @@ public class PersonNameAuthorityIdentifier extends BasePersistent{
 	}
 
 	/**
-	 * Get the type of identifier.
+	 * Get the person name authority identifier type
 	 * 
-	 * @return the identifier value
+	 * @return
 	 */
-	public PersonNameAuthorityIdentifierType getIdentifierType() {
+	public PersonNameAuthorityIdentifierType getPersonNameAuthorityIdentifierType() {
 		return personNameAuthorityIdentifierType;
 	}
 
 	/**
-	 * Set the identifier type.
-	 * 
-	 * @param identifierType
+	 * Set the person name authority identifier type
+	 * @param personNameAuthorityIdentifierType
 	 */
-	public void setIdentifierType(PersonNameAuthorityIdentifierType identifierType) {
-		this.personNameAuthorityIdentifierType = identifierType;
+	public void setPersonNameAuthorityIdentifierType(PersonNameAuthorityIdentifierType personNameAuthorityIdentifierType) {
+		this.personNameAuthorityIdentifierType = personNameAuthorityIdentifierType;
 	}
 
 	/**
@@ -119,8 +118,8 @@ public class PersonNameAuthorityIdentifier extends BasePersistent{
 
 		final PersonNameAuthorityIdentifier other = (PersonNameAuthorityIdentifier) o;
 
-		if( ( personNameAuthorityIdentifierType != null && !personNameAuthorityIdentifierType.equals(other.getIdentifierType()) ) ||
-			( personNameAuthorityIdentifierType == null && other.getIdentifierType() != null ) ) return false;
+		if( ( personNameAuthorityIdentifierType != null && !personNameAuthorityIdentifierType.equals(other.getPersonNameAuthorityIdentifierType()) ) ||
+			( personNameAuthorityIdentifierType == null && other.getPersonNameAuthorityIdentifierType() != null ) ) return false;
 		
 		if( ( value != null && !value.equals(other.getValue()) ) ||
 			( value == null && other.getValue() != null ) ) return false;

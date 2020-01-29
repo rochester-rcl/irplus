@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -44,6 +46,8 @@ public class PersonNameAuthority extends BasePersistent{
 	
 	/**  Names used by the person. */
 	private Set<PersonName> names = new HashSet<PersonName>();
+	
+	private Set<PersonNameAuthorityIdentifier> identifiers = new HashSet<PersonNameAuthorityIdentifier>();
 
 
 	/**
@@ -176,6 +180,42 @@ public class PersonNameAuthority extends BasePersistent{
 		return true;
 	}
 	
+	/**
+	 * Remove the item identifier.
+	 * 
+	 * @param identifier
+	 * @return true if the item is removed
+	 */
+	public boolean removeIdentifier(PersonNameAuthorityIdentifier identifier)
+	{
+		return identifiers.remove(identifier);
+	}
+	
+	/**
+	 * Remove all  identifiers.
+	 * 
+	 */
+	public void removeAllIdentifiers()
+	{
+		identifiers.clear();
+		
+	}
+	
+	/**
+	 * Create an person name identifier with the specified value and type and add it to this name authority.
+	 * 
+	 * @param value - value of the identifier 
+	 * @param identifierType - type of identifier
+	 * @return - the created person identifier type.
+	 */
+	public PersonNameAuthorityIdentifier addIdentifier(String value, PersonNameAuthorityIdentifierType identifierType)
+	{
+		PersonNameAuthorityIdentifier identifier = new PersonNameAuthorityIdentifier(identifierType, this);
+		identifier.setValue(value);
+		identifiers.add(identifier);
+		return identifier;
+	}
+	
 	
 	/**
 	 * Set the name with the specified id as the authoritative name. If
@@ -273,6 +313,24 @@ public class PersonNameAuthority extends BasePersistent{
 	public void setNames(Set<PersonName> names) {
 		this.names = names;
 	}
+	
+	/**
+	 * Set the person name authority identifiers for this person name
+	 * 
+	 * @return
+	 */
+	public Set<PersonNameAuthorityIdentifier> getIdentifiers() {
+		return identifiers;
+	}
+
+	/**
+	 * Get the person name authority identifiers for this person name authority
+	 * 
+	 * @param identifiers
+	 */
+	public void setIdentifiers(Set<PersonNameAuthorityIdentifier> identifiers) {
+		this.identifiers = identifiers;
+	}
 
 	/**
 	 * 
@@ -310,6 +368,8 @@ public class PersonNameAuthority extends BasePersistent{
 
 		return true;
 	}
+	
+	
 	
 	/**
 	 *  This checks the name without using the id.

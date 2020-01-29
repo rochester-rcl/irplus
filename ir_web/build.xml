@@ -81,7 +81,7 @@
 	<property name="production.staging.dir" value="${basedir}/production-staging"/>
 	
 	<!-- location for production staging -->
-	<property name="production.web.xml" value="${webapp.conf.dir}/web-ssl.xml"/>
+	<property name="production.web.xml" value="${webapp.conf.dir}/web.xml"/>
 
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>

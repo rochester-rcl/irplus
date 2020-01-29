@@ -20,6 +20,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -85,8 +86,63 @@
 	        <br/>
 	         
 	         <div id="personNames"></div>
-	      
-	         <div id="newPersonNameDialog" class="hidden">
+
+			<div>
+				<c:if test="${personNameAuthority.id != null}">
+					<h3>Identifier Type Mappings</h3>
+					<c:url value="/admin/editPersonNameAuthorityIdentifier.action"
+						var="newIdentifierTypeMapperUrl">
+						<c:param name="personNameAuthorityId"
+							value="${personNameAuthority.id}" />
+					</c:url>
+					<a href="${newIdentifierTypeMapperUrl}">New Identifier</a>
+					<br />
+					<br />
+					<div class="dataTable">
+
+						<urstb:table width="100%">
+							<urstb:thead>
+								<urstb:tr>
+									<urstb:td>Id</urstb:td>
+									<urstb:td>Identifier Type</urstb:td>
+									<urstb:td>Value</urstb:td>
+									<urstb:td>Action</urstb:td>
+								</urstb:tr>
+							</urstb:thead>
+							<urstb:tbody var="ident" oddRowClass="odd" evenRowClass="even"
+								currentRowClassVar="rowClass"
+								collection="${personNameAuthority.identifiers}">
+								<urstb:tr cssClass="${rowClass}"
+									onMouseOver="this.className='highlight'"
+									onMouseOut="this.className='${rowClass}'">
+									<urstb:td>
+		                       ${ident.id}
+	                        </urstb:td>
+									<urstb:td>
+			                   ${ident.personNameAuthorityIdentifierType.name}
+	                        </urstb:td>
+									<urstb:td>
+			                   ${ident.value} 
+	                        </urstb:td>
+									<urstb:td>
+										<c:url
+											value="/admin/editPersonNameAuthorityIdentifier.action"
+											var="editUrl">
+											<c:param name="id" value="${ident.id}" />
+										</c:url>
+										<a href="${editUrl}">Edit</a> /<a
+											href="javascript:YAHOO.ur.person.names.deleteIdentifierMapping(${ident.id});">Delete</a>
+									</urstb:td>
+
+								</urstb:tr>
+							</urstb:tbody>
+						</urstb:table>
+					</div>
+				</c:if>
+
+			</div>
+
+			<div id="newPersonNameDialog" class="hidden">
 	             <div class="hd">Name Information</div>
 		         <div class="bd">
 		             <form id="addPersonName" name="newPersonNameForm" 
@@ -185,6 +241,13 @@
 		      </div>
 	      </div>
 	      
+	      
+	 <div id="deleteIdentifierDialog" class="hidden">
+	    <div class="hd">Delete Identifier</div>
+	    <div class="bd">
+		    <p>Are you sure you wish to delete the selected Identifier?</p>
+	    </div>
+    </div>
 
 	<!--  wait div -->
 	<div id="wait_dialog_box" class="hidden">

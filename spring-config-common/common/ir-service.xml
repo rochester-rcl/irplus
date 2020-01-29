@@ -295,6 +295,7 @@
        class="edu.ur.ir.person.service.DefaultPersonService">
        <property name="personNameAuthorityDAO" ref="personNameAuthorityDAO"/>
        <property name="personNameDAO" ref="personNameDAO"/>
+       <property name="personNameAuthorityIdentifierDAO" ref="personNameAuthorityIdentifierDAO"/>
    </bean>
    
    <!-- ****************************************** --> 

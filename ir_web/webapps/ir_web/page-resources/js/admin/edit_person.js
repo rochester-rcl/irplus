@@ -29,6 +29,8 @@ var newPersonNameAction = basePath + 'user/createPersonName.action';
 var deletePersonNameAction = basePath + 'user/deletePersonName.action';
 var updatePersonNameAction = basePath + 'user/updatePersonName.action';
 
+var deleteIdentifierAction = basePath + 'admin/deletePersonNameAuthorityIdentifier.action';
+
 // actions for adding people
 var newPersonAction = basePath + 'user/createPerson.action';
 
@@ -464,6 +466,59 @@ YAHOO.ur.person.names = {
 		    
 	},
 	
+	
+	/**
+	 * Creates a mac content type
+	 *
+	 */
+	createDeleteIdentifierDialog : function()
+	{
+		// redirect with delete
+		var handleIdentifierSubmit = function() {
+		    window.location = deleteIdentifierAction + '?id=' + deleteIdentifierId ;
+		};
+		
+			
+		// handle a cancel of deleting copyrigght statement dialog
+		var handleIdentifierCancel = function() {
+			YAHOO.ur.person.names.deleteIdentifierDialog.hide();
+		};
+		
+		
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// new copyrigght statement button is clicked.
+		YAHOO.ur.person.names.deleteIdentifierDialog = new YAHOO.widget.Dialog('deleteIdentifierDialog', 
+	        { width : "500px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Yes', handler:handleIdentifierSubmit, isDefault:true },
+						  { text:'No', handler:handleIdentifierCancel } ]
+			} );
+	     
+	    //center and show the delete dialog
+		YAHOO.ur.person.names.deleteIdentifierDialog.showDialog = function()
+	    {
+			YAHOO.ur.person.names.deleteIdentifierDialog.center();
+			YAHOO.ur.person.names.deleteIdentifierDialog.show();
+	    }
+	   
+				
+		// Render the Dialog
+		YAHOO.ur.person.names.deleteIdentifierDialog.render();
+	
+	},
+	
+	/**
+	 * Sets up the form and the delete
+	 */
+	deleteIdentifierMapping : function(id)
+	{
+	    deleteIdentifierId = id;	
+	    YAHOO.ur.person.names.deleteIdentifierDialog.showDialog();
+	},
+	
     	
 	// initialize the page
 	// this is called once the dom has
@@ -474,6 +529,7 @@ YAHOO.ur.person.names = {
 	    YAHOO.ur.person.names.createNewPersonNameDialog();
 	    YAHOO.ur.person.names.createDeletePersonNameDialog();
 	    YAHOO.ur.person.names.createDeletePersonNameMessageDialog();
+	    YAHOO.ur.person.names.createDeleteIdentifierDialog();
 	 }	
 }
 

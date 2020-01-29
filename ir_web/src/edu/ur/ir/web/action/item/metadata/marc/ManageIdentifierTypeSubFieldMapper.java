@@ -91,7 +91,6 @@ implements Preparable{
 	//post String value
 	private String postString;
 
-
 	// Used for sorting name based entities 
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 	/**

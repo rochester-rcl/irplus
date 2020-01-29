@@ -690,10 +690,6 @@ public class ItemDAOTest {
 		identifierTypeDAO.makeTransient(identifierType);
 		itemDAO.makeTransient(item);
 		tm.commit(ts);
-		
-	
-		
-		
 	}
 	
 	

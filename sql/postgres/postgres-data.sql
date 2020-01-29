@@ -7143,4 +7143,17 @@ VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'),
         ' ', 
         'a', 
         0);
+        
+        
+insert into 
+person.person_name_authority_identifier_type ( person_name_authority_identifier_type_id, version, name, description, unique_system_code) 
+values (nextval('person.person_name_authority_identifier_type_seq'), 0, 'LCNAF', 'Library of Congress Name Authority File (LCNAF) - https://id.loc.gov/authorities/names.html', 'LCNAF');
+
+insert into 
+person.person_name_authority_identifier_type ( person_name_authority_identifier_type_id, version, name, description, unique_system_code) 
+values (nextval('person.person_name_authority_identifier_type_seq'), 0, 'ORCID', 'Open Researcher and Contributor ID (ORCID) -  https://orcid.org/', 'ORCID');
+
+insert into 
+person.person_name_authority_identifier_type ( person_name_authority_identifier_type_id, version, name, description, unique_system_code) 
+values (nextval('person.person_name_authority_identifier_type_seq'), 0, 'VIAF', 'Virtual International Authority File (VIAF) -  http://viaf.org/', 'VIAF');
  

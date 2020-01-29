@@ -21,6 +21,9 @@ import java.util.List;
 
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
+import edu.ur.ir.person.PersonNameAuthorityIdentifier;
+import edu.ur.ir.person.PersonNameAuthorityIdentifierDAO;
+import edu.ur.ir.person.PersonNameAuthorityIdentifierType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameDAO;
 import edu.ur.ir.person.PersonService;
@@ -43,6 +46,9 @@ public class DefaultPersonService implements PersonService {
 	/** data access class for person names */
 	private PersonNameDAO personNameDAO;
 	
+	/** service for accessing person anem authority identifiers */
+	private PersonNameAuthorityIdentifierDAO personNameAuthorityIdentifierDAO;
+
 	/**
 	 * @see edu.ur.ir.person.PersonService#delete(edu.ur.ir.person.PersonNameAuthority)
 	 */
@@ -160,6 +166,35 @@ public class DefaultPersonService implements PersonService {
 		return personNameDAO.findPersonLikeFirstLastName(firstName, lastName, 0, 30);
 	}
 
+	/**
+	 * Get the person name authority identifier.
+	 * 
+	 * @param id - of the person name authority identifier
+	 * @param lock
+	 * @return
+	 */
+	public PersonNameAuthorityIdentifier getPersonNameAuthorityIdentifier(Long id, boolean lock) {
+		return personNameAuthorityIdentifierDAO.getById(id, lock);
+	}
+	
+	/**
+	 * Delete the person name authority identifier
+	 * 
+	 * @param personNameAuthorityIdentifier
+	 */
+	public void deletePersonNameAuthority(PersonNameAuthorityIdentifier personNameAuthorityIdentifier) {
+		personNameAuthorityIdentifierDAO.makeTransient(personNameAuthorityIdentifier);
+	}
+		
+	
+	public PersonNameAuthorityIdentifierDAO getPersonNameAuthorityIdentifierDAO() {
+		return personNameAuthorityIdentifierDAO;
+	}
+
+	public void setPersonNameAuthorityIdentifierDAO(PersonNameAuthorityIdentifierDAO personNameAuthorityIdentifierDAO) {
+		this.personNameAuthorityIdentifierDAO = personNameAuthorityIdentifierDAO;
+	}
+	
 	
 	/**
 	 * Get the person name authorities ordered by last name.
@@ -169,6 +204,29 @@ public class DefaultPersonService implements PersonService {
 	public List<PersonNameAuthority> getPersonNameAuthorityByLastName(
 			int rowStart, int maxResults, OrderType orderType) {
 		return personNameAuthorityDAO.getPersonNameAuthorityByLastName(rowStart, maxResults, orderType);
+	}
+	
+	/**
+	 * Get unused authority types available for the specified authority id.
+	 * 
+	 * @param authorityId - unique authority id of the person name
+	 * @return
+	 */
+	public List<PersonNameAuthorityIdentifierType> getPossibleIdentifierTypes(Long authorityId){
+		return personNameAuthorityDAO.getPossibleIdentifierTypes(authorityId);
+	}
+	
+	/**
+	 * Get the identifier for the specified person name authority if it exists.
+	 * 
+	 * @param identifierTypeId - id for the type of identifier
+	 * @param personNameAuthorityId - id for the person name authority
+	 * 
+	 * @return - person name authority identifier
+	 */
+	public PersonNameAuthorityIdentifier getByTypeAuthority(Long identifierTypeId, Long personNameAuthorityId)
+	{
+		return personNameAuthorityIdentifierDAO.getByTypeAuthority(identifierTypeId, personNameAuthorityId);
 	}
 
 }

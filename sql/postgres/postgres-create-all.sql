@@ -634,6 +634,26 @@ ALTER TABLE person.person_name_authority_identifier_type OWNER TO ir_plus;
 CREATE SEQUENCE person.person_name_authority_identifier_type_seq ;
 ALTER TABLE person.person_name_authority_identifier_type_seq OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- Person name authority Identifier table
+-- ---------------------------------------------
+CREATE TABLE person.person_name_authority_identifier
+(
+    person_name_authority_identifier_id BIGINT PRIMARY KEY,
+    person_name_authority_id BIGINT NOT NULL,
+    person_name_authority_identifier_type_id BIGINT NOT NULL,
+    version INTEGER,
+    value TEXT,
+    UNIQUE(person_name_authority_identifier_type_id, value),
+    FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority(person_name_authority_id),
+    FOREIGN KEY (person_name_authority_identifier_type_id) REFERENCES person.person_name_authority_identifier_type (person_name_authority_identifier_type_id) 
+);
+ALTER TABLE person.person_name_authority_identifier OWNER TO ir_plus;
+
+-- The item identifier sequence
+CREATE SEQUENCE person.person_name_authority_identifier_seq ;
+ALTER TABLE person.person_name_authority_identifier_seq OWNER TO ir_plus;
+
 
 -- ---------------------------------------------
 -- Constraint for birth date 
@@ -1811,9 +1831,7 @@ CREATE TABLE ir_item.item_identifier
     value TEXT,
     UNIQUE(identifier_type_id, value, item_id ),
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),
-    FOREIGN KEY (identifier_type_id) REFERENCES ir_item.identifier_type 
-
-(identifier_type_id) 
+    FOREIGN KEY (identifier_type_id) REFERENCES ir_item.identifier_type (identifier_type_id) 
 );
 ALTER TABLE ir_item.item_identifier OWNER TO ir_plus;
 

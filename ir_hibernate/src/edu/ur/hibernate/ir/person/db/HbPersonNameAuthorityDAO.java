@@ -22,8 +22,10 @@ import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
+import edu.ur.ir.person.PersonNameAuthorityIdentifierType;
 import edu.ur.order.OrderType;
 
 /**
@@ -109,6 +111,12 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 
 	public void makeTransient(PersonNameAuthority entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	@Override
+	public List<PersonNameAuthorityIdentifierType> getPossibleIdentifierTypes(Long authorityId) {
+		Object[] values = new Object[] {authorityId};
+		return (List<PersonNameAuthorityIdentifierType>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPossibleNameAuthorityIdentifierTypes", values);
 	}
 	
 

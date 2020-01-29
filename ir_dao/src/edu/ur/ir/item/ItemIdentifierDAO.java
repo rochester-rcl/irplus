@@ -37,5 +37,5 @@ public interface ItemIdentifierDAO extends CountableDAO, CrudDAO<ItemIdentifier>
 	 * 
 	 * @return the item identifier found.
 	 */
-	public ItemIdentifier getByTypeValue(Long identfierType, String value);
+	public ItemIdentifier getByTypeValue(Long identfierTypeId, String value);
 }

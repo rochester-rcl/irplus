@@ -18,6 +18,7 @@ package edu.ur.ir.person;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.item.IdentifierType;
 import edu.ur.order.OrderType;
 
 import java.util.List;
@@ -54,5 +55,15 @@ CrudDAO<PersonNameAuthority>{
 	 */
 	public List<PersonNameAuthority> getPersonNameAuthorityByLastName(int rowStart,
 			int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of identifier types that can be applied to this
+	 * person name authority. Identifier types that have already been used will not
+	 * be returned.
+	 * 
+	 * @param authorityId the person name authority to get possible identifier types for.
+	 * @return
+	 */
+	public List<PersonNameAuthorityIdentifierType> getPossibleIdentifierTypes(Long authorityId);
 
 }
