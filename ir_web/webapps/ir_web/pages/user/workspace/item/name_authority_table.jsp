@@ -72,9 +72,16 @@
 			                        <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.item.contributor.addName('${name.id}')"> Add</a>
 			                    </c:if>
 			                    <ir:authorName personName="${name}" displayDates="false"/><br/><br/>
-			                    
 			                </c:if>
 			            </c:forEach>
+			            <c:forEach var="identifier" items="${nameAuthority.identifiers}">
+			               <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode == 'ORCID'}">
+			                   <c:out value="${identifier.personNameAuthorityIdentifierType.name}"/>: <a href="<c:out value="https://orcid.org/${identifier.value}"/>"><c:out value="${identifier.value}"/></a> <br/>
+			               </c:if>
+			                <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode != 'ORCID'}">
+			                   <c:out value="${identifier.personNameAuthorityIdentifierType.name}: ${identifier.value}"/> 
+			                </c:if>
+			           </c:forEach>
 			        </td>
 			    </tr>
 			</c:forEach>

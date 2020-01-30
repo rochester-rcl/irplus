@@ -35,7 +35,9 @@ import edu.ur.ir.person.DeathDate;
 import edu.ur.ir.person.NameAuthorityIndexService;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
+import edu.ur.ir.person.PersonNameAuthorityIdentifierType;
 import edu.ur.ir.person.PersonService;
+import edu.ur.ir.person.service.DefaultPersonNameAuthorityIdentifierTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrRole;
@@ -96,7 +98,6 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	/** id of the person name */
 	private Long personNameId;
 	
-
 	/** Year person was born  */
 	private int birthYear;
 
@@ -138,6 +139,17 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	/** Service for dealing with institutional item version services */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
+	/** identifier type id */
+	private Long personNameAuthorityIdentifierTypeId;
+	
+	/** identifier type value */
+	private String personNameAuthorityIdentifierValue;
+	
+	/** identifier type service */
+	private DefaultPersonNameAuthorityIdentifierTypeService defaultPersonNameAuthorityIdentifierTypeService;
+	
+
+	
 
 	/** Default constructor */
 	public  ManagePersons() 
@@ -167,6 +179,12 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		personNameAuthority.addBirthDate(birthYear);
 		personNameAuthority.addDeathDate(deathYear);
 		personService.save(personNameAuthority);
+		
+		if(personNameAuthorityIdentifierTypeId != null && personNameAuthorityIdentifierValue != null && personNameAuthorityIdentifierValue.trim().length() > 0) {
+			PersonNameAuthorityIdentifierType ident = defaultPersonNameAuthorityIdentifierTypeService.get(personNameAuthorityIdentifierTypeId, false);
+			personNameAuthority.addIdentifier(personNameAuthorityIdentifierValue, ident);
+			personService.save(personNameAuthority);
+		}
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
@@ -710,7 +728,19 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
+	
+	public void setPersonNameAuthorityIdentifierTypeId(Long personNameAuthorityIdentifierTypeId) {
+		this.personNameAuthorityIdentifierTypeId = personNameAuthorityIdentifierTypeId;
+	}
 
+	public void setPersonNameAuthorityIdentifierValue(String personNameAuthorityIdentifierValue) {
+		this.personNameAuthorityIdentifierValue = personNameAuthorityIdentifierValue;
+	}
+
+	public void setDefaultPersonNameAuthorityIdentifierTypeService(
+			DefaultPersonNameAuthorityIdentifierTypeService defaultPersonNameAuthorityIdentifierTypeService) {
+		this.defaultPersonNameAuthorityIdentifierTypeService = defaultPersonNameAuthorityIdentifierTypeService;
+	}
 
 
 }

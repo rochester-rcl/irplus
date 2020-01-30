@@ -73,7 +73,20 @@
 						            <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
 						        </c:url>						                             
 						        <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name}
+						        <c:forEach var="identifier" items="${itemContributor.contributor.personName.personNameAuthority.identifiers}">
+				                    <br/>
+			                        <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode == 'ORCID'}">
+			                            <c:out value="${identifier.personNameAuthorityIdentifierType.name}"/>: <a href="<c:out value="https://orcid.org/${identifier.value}"/>"><c:out value="${identifier.value}"/></a> <br/>
+			                        </c:if>
+			                        <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode != 'ORCID'}">
+			                          <c:out value="${identifier.personNameAuthorityIdentifierType.name}: ${identifier.value}"/> 
+			                        </c:if>
+			                    </c:forEach>
+			                    <br/>
+			                 
+					          
 					        </td>
+					         
 					    </tr>
 				    </c:forEach>
 				</c:if>

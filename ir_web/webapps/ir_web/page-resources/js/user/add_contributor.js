@@ -491,6 +491,7 @@ YAHOO.ur.item.contributor = {
 		document.getElementById("person_birthdate_year").value = "";
 		document.getElementById("person_deathdate_year").value = "";
 		document.getElementById("person_myName").checked = false;
+		document.getElementById("person_authority_identifier_value").value = "";
 		
 	},
 	

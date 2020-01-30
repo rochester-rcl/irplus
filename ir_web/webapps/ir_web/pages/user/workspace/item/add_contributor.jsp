@@ -269,6 +269,20 @@
 				         			 name="personName.numeration" 
 				          			 value="" size="45"/> </td>
 					</tr>
+					<tr>
+					
+					
+						    <td align="left" class="label"> 
+						    <select name="personNameAuthorityIdentifierTypeId">
+		                        <c:forEach items="${personNameAuthorityIdentifierTypes}" var="identifierType">
+		                            <option value="${identifierType.id}">${identifierType.name}</option>
+		                        </c:forEach>
+		                    </select> 
+		                    </td>
+					        <td align="left" class="input"><input type="text"
+							    id="person_authority_identifier_value"
+		                   			 name="personNameAuthorityIdentifierValue" value="" size="45"/> </td>
+					    </tr>	
 					<tr>       
 					    <td align="left" class="label">Birth Year:</td>
 					    <td align="left" class="label">
@@ -281,6 +295,7 @@
 				          	Year:<input type="text" id="person_deathdate_year" name="deathYear" size="4" maxlength ="4"/>
 				       	</td>
 					</tr>
+					
 					<tr>
 					    <td align="left" class="label">My Name:</td>
 					    <td align="left" class="input"><input type="checkbox" 

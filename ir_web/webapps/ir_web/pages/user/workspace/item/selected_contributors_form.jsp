@@ -74,6 +74,15 @@
 				
 				<td class="tdItemSelect">
 				        <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/>
+				        <c:forEach var="identifier" items="${itemContributor.contributor.personName.personNameAuthority.identifiers}">
+				           <br/>
+			               <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode == 'ORCID'}">
+			                   <c:out value="${identifier.personNameAuthorityIdentifierType.name}"/>: <a href="<c:out value="https://orcid.org/${identifier.value}"/>"><c:out value="${identifier.value}"/></a> <br/>
+			               </c:if>
+			                <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode != 'ORCID'}">
+			                   <c:out value="${identifier.personNameAuthorityIdentifierType.name}: ${identifier.value}"/> 
+			                </c:if>
+			           </c:forEach>
 				</td>
 
 				<td class="tdItemSelect">

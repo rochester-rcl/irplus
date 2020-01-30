@@ -38,7 +38,9 @@ import edu.ur.ir.person.ContributorService;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
 import edu.ur.ir.person.PersonName;
+import edu.ur.ir.person.PersonNameAuthorityIdentifierType;
 import edu.ur.ir.person.PersonService;
+import edu.ur.ir.person.service.DefaultPersonNameAuthorityIdentifierTypeService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
@@ -129,8 +131,13 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	/** Institutional item service */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
+	/** identifier type service */
+	private DefaultPersonNameAuthorityIdentifierTypeService defaultPersonNameAuthorityIdentifierTypeService;
 
+	/** list of possible identifier types */
+	private List<PersonNameAuthorityIdentifierType> personNameAuthorityIdentifierTypes;
 
+	
 
 	/** used for sorting names */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
@@ -139,8 +146,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
 	private InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper;
-
-	
 	
 
 	/**
@@ -169,6 +174,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
+			personNameAuthorityIdentifierTypes = this.defaultPersonNameAuthorityIdentifierTypeService.getAll();
+			
 		}
 
 	}
@@ -595,6 +602,15 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	public void setInstitutionalCollectionPermissionHelper(
 			InstitutionalCollectionPermissionHelper institutionalCollectionPermissionHelper) {
 		this.institutionalCollectionPermissionHelper = institutionalCollectionPermissionHelper;
+	}
+	
+	public void setDefaultPersonNameAuthorityIdentifierTypeService(
+			DefaultPersonNameAuthorityIdentifierTypeService defaultPersonNameAuthorityIdentifierTypeService) {
+		this.defaultPersonNameAuthorityIdentifierTypeService = defaultPersonNameAuthorityIdentifierTypeService;
+	}
+	
+	public List<PersonNameAuthorityIdentifierType> getPersonNameAuthorityIdentifierTypes() {
+		return personNameAuthorityIdentifierTypes;
 	}
 
 }

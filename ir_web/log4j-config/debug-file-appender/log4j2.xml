@@ -3,7 +3,7 @@
   
   
   <Appenders>
-    <File name="File" fileName="/Users/nathans/ir_plus_local/assetstore/logs/ir_plus_log/ir_web.log" 
+    <File name="File" fileName="/Users/nsarr/project_data/ir_plus/ir/assetstore/logs/ir_plus_log/ir_web.log" 
             immediateFlush="false" append="true">
             <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </File>
