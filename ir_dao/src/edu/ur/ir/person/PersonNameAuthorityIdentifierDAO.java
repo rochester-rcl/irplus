@@ -9,22 +9,22 @@ public interface PersonNameAuthorityIdentifierDAO extends CountableDAO, CrudDAO<
 	/**
 	 * Get the person name identifier by type and value
 	 * 
-	 * @param identfierType the type of identifier
+	 * @param identfierTypeId the type of identifier
 	 * @param value the value of the identifier.
 	 * 
 	 * @return the item identifier found.
 	 */
-	public PersonNameAuthorityIdentifier getByTypeValue(Long identfierType, String value);
+	public PersonNameAuthorityIdentifier getByTypeValue(Long identfierTypeId, String value);
 	
     /**
 	 * Get the item identifier by type and person name authority id
 	 * 
-	 * @param identfierType the type of identifier
+	 * @param identfierTypeId the type of identifier
 	 * @param unique identifier for the person name authority 
 	 * 
 	 * @return the item identifier found.
 	 */
-	public PersonNameAuthorityIdentifier getByTypeAuthority(Long identfierType, Long personNameAuthorityId);
+	public PersonNameAuthorityIdentifier getByTypeAuthority(Long identfierTypeId, Long personNameAuthorityId);
 
 
 }

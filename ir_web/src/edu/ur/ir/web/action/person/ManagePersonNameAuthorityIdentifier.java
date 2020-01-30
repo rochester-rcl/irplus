@@ -14,9 +14,13 @@ import edu.ur.ir.person.PersonNameAuthorityIdentifier;
 import edu.ur.ir.person.PersonNameAuthorityIdentifierType;
 import edu.ur.ir.person.PersonService;
 import edu.ur.ir.person.service.DefaultPersonNameAuthorityIdentifierTypeService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.simple.type.AscendingNameComparator;
 
-public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implements Preparable{
+public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implements Preparable, UserIdAware{
 	
 	private static final long serialVersionUID = -5304256516050272949L;
 
@@ -30,6 +34,9 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 	
 	// id of the data field
 	private Long personNameAuthorityId;
+	
+	// get the list of identifier types
+	private List<PersonNameAuthorityIdentifierType> identifierTypes;
 	
 	// id of the person name authority identifier type
 	private Long personNameAuthorityIdentifierTypeId;
@@ -52,8 +59,14 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 	// Used for sorting name based entities 
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 	
+	/** User service */
+    private UserService userService;
+
 	// identifier type for person name
 	private PersonNameAuthorityIdentifierType identifierType;
+	
+	/** id of the user */
+    private Long userId;
 	
 	/**
 	 * Method to create a new person name Authority identifier
@@ -62,6 +75,11 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 	 */
 	public String save() {
 		log.debug("Save person name authority Identifier  called");
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+		    return "accessDenied";	
+		}
 
 		if (value == null || identifierType == null || personNameAuthority == null) {
 			message = "Invalid data identifier type = " + identifierType + " value = " + value
@@ -69,23 +87,28 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 			addFieldError("personAuthorityidentifierTypeMissingDataError", message);
 			return "addError";
 		}
-
+		
+		PersonNameAuthorityIdentifier existingIdentifier = personService.getByTypeValue(identifierType.getId(),value);
+		if(existingIdentifier != null && existingIdentifier.getPersonNameAuthority().getId() != personNameAuthority.getId()) {
+			message = "identifier type = " + identifierType + " value = " + value
+					+ " already exists for person name authority = " + existingIdentifier.getPersonNameAuthority();
+			addFieldError("personAuthorityidentifierTypeMissingDataError", message);
+			return "addError";
+		}
 		// update
 		if (personNameAuthorityIdentifier != null) {
 			// see if the identifier already exists for the person name
 			for (PersonNameAuthorityIdentifier pai : personNameAuthority.getIdentifiers()) {
 				if(pai.getId() == personNameAuthorityIdentifier.getId()) {
 					pai.setValue(value);
+					pai.setPersonNameAuthorityIdentifierType(identifierType);
 				}
 			}
 			personService.save(personNameAuthority);
 			
 		} else { // add
 			
-			if (personService.getByTypeAuthority(identifierType.getId(), personNameAuthority.getId()) != null) {
-				throw new IllegalStateException("trying to add an existing peronal authority identifier "
-						+ identifierType.getId() + " name id = " + personNameAuthority.getId());
-			}
+			 
 			personNameAuthority.addIdentifier(value, identifierType);
 			personService.save(personNameAuthority);
 		}
@@ -100,6 +123,11 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 	 */
 	public String delete()
 	{
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+		    return "accessDenied";	
+		}
 		personNameAuthority.removeIdentifier(personNameAuthorityIdentifier);
 		personService.save(personNameAuthority);
 		return "deleted";
@@ -123,6 +151,9 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 	}
 	
 	public void prepare() throws Exception {
+		 
+		identifierTypes = defaultPersonNameAuthorityIdentifierTypeService.getAll();
+		Collections.sort(identifierTypes, nameComparator);
 		if( id != null)
 		{
 			personNameAuthorityIdentifier = personService.getPersonNameAuthorityIdentifier(id, false);
@@ -175,8 +206,6 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 	 */
 	public List<PersonNameAuthorityIdentifierType> getIdentifierTypes()
 	{
-		List<PersonNameAuthorityIdentifierType> identifierTypes = personService.getPossibleIdentifierTypes(personNameAuthorityId);
-		Collections.sort(identifierTypes, nameComparator);
 		return identifierTypes;
 	}
 
@@ -237,6 +266,12 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 		this.value = value;
 	}
 	 
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 	 
 }

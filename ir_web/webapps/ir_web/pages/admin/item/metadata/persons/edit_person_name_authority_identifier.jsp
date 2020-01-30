@@ -82,7 +82,7 @@
 		          <select name="personNameAuthorityIdentifierTypeId">
 		          <c:forEach items="${identifierTypes}" var="identifierType">
 		               <option  
-		                <c:if test="${identifierType.id == identifierTypeSubFieldMapper.identifierType.id}">
+		                <c:if test="${identifierType.id == personNameAuthorityIdentifier.personNameAuthorityIdentifierType.id}">
 		                  selected="true"
 		                </c:if>
 		               
@@ -94,7 +94,7 @@
 	        <tr>       
 	           <td align="left" class="label">Value:*</td>
 		       <td align="left" class="input">
-		       <input type="text" name="value" size=50 value=""/>
+		       <input type="text" name="value" size=50 value="${personNameAuthorityIdentifier.value}"/>
 		       </td>
 	       </tr>
 	       

@@ -152,5 +152,16 @@ public interface PersonService extends Serializable{
 	 * @return - person name authority identifier
 	 */
 	public PersonNameAuthorityIdentifier getByTypeAuthority(Long identifierTypeId, Long personNameAuthorityId);
+	
+	
+	
+	/**
+	 * Find all any person name identifiers with the specified value
+	 *  
+	 * @param identfierTypeId - identifier type id
+	 * @param value - value of the identifier
+	 * @return
+	 */
+	public PersonNameAuthorityIdentifier getByTypeValue(Long identfierTypeId, String value);
  
 }

@@ -78,12 +78,13 @@ public class ManagePersonNameAuthorityIdentifierTypes  extends Pager implements 
 	 */
 	public String create()
 	{
-		log.debug("creating a person name identifier type = " + personNameAuthorityIdentifierType.getName());
 		IrUser user = userService.getUser(userId, false);
 		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 		    return "accessDenied";	
 		}
+		log.debug("creating a person name identifier type = " + personNameAuthorityIdentifierType.getName());
+		
 		added = false;
 		PersonNameAuthorityIdentifierType myIdentifierType = 
 			defaultPersonNameAuthorityIdentifierTypeService.get(personNameAuthorityIdentifierType.getName());
@@ -119,6 +120,12 @@ public class ManagePersonNameAuthorityIdentifierTypes  extends Pager implements 
 	public String update()
 	{
 		log.debug("updateing identifier type id = " + personNameAuthorityIdentifierType.getId());
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+		    return "accessDenied";	
+		}
+		
 		added = false;
 
 		PersonNameAuthorityIdentifierType other = 
@@ -149,6 +156,11 @@ public class ManagePersonNameAuthorityIdentifierTypes  extends Pager implements 
 	public String delete()
 	{
 		log.debug("Delete identifier types called");
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+		    return "accessDenied";	
+		}
 		if( personNameAuthorityIdentifierTypeIds != null )
 		{
 		    for(int index = 0; index < personNameAuthorityIdentifierTypeIds.length; index++)

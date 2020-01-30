@@ -229,4 +229,9 @@ public class DefaultPersonService implements PersonService {
 		return personNameAuthorityIdentifierDAO.getByTypeAuthority(identifierTypeId, personNameAuthorityId);
 	}
 
+	@Override
+	public PersonNameAuthorityIdentifier getByTypeValue(Long identfierTypeId, String value) {
+		return personNameAuthorityIdentifierDAO.getByTypeValue(identfierTypeId, value);
+	}
+
 }
