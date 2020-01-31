@@ -80,6 +80,7 @@ YAHOO.ur.person.name.authority.identifier.type =
 
 	    document.getElementById('newPersonNameAuthorityIdentifierTypeForm_name').value="";
 	    document.getElementById('newPersonNameAuthorityIdentifierTypeForm_description').value="";
+	    document.getElementById('newPersonNameAuthorityIdentifierTypeForm_id').value="";
 	    document.newPersonNameAuthorityIdentifierTypeForm.newPersonNameAuthorityIdentifierType.value = "true";
     }, 
     
@@ -105,7 +106,6 @@ YAHOO.ur.person.name.authority.identifier.type =
 	    {
 	        this.submit();
 	    };
-	
 		
 	    // handle a cancel of the adding identifier type dialog
 	    var handleCancel = function() 
@@ -227,7 +227,7 @@ YAHOO.ur.person.name.authority.identifier.type =
         {
             success: function(o) 
             {
-            	// check for the timeout - forward user to login page if timout
+            	// check for the timeout - forward user to login page if timeout
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {     
