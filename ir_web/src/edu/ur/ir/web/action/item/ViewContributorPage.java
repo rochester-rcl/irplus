@@ -34,6 +34,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
@@ -44,7 +45,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class ViewContributorPage extends Pager {
+public class ViewContributorPage extends Pager implements UserIdAware{
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = -3059332380151731902L;
@@ -52,6 +53,13 @@ public class ViewContributorPage extends Pager {
 	/** Id of contributor */
 	private Long personNameId;
 	
+	/**  Id for the user */
+	private Long userId;
+	
+	private IrUser user;
+	
+	
+
 	/** Service for dealing with person information */
 	private PersonService personService;
 
@@ -159,6 +167,10 @@ public class ViewContributorPage extends Pager {
 	 */
 	public String execute()
 	{
+		if(userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
 		if( personNameId == null )
 		{
 		    return "not_found";	
@@ -453,8 +465,6 @@ public class ViewContributorPage extends Pager {
 		this.sortElement = sortElement;
 	}
 
-
-
 	public void setTotalDownloads(long totalDownloads) {
 		this.totalDownloads = totalDownloads;
 	}
@@ -478,6 +488,14 @@ public class ViewContributorPage extends Pager {
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public IrUser getUser() {
+		return user;
 	}
 
 

@@ -66,6 +66,9 @@
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
             
+            <c:url var="editContributorUrl" value="/admin/personEdit.action">
+			    <c:param name="personId" value="${personName.personNameAuthority.id}"/>
+			</c:url>
             <!--  this is the body region of the page -->
             <div id="bd">
 				<table width ="100%">
@@ -88,7 +91,7 @@
 						        </c:if>
 						     </td>
 						     <td width="22%">
-						     	<h3><a href="${contributorRss}"><ir:authorName personName="${personName}" displayDates="true"/></a>&nbsp;<img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/></h3>
+						     	<h3><a href="${contributorRss}"><ir:authorName personName="${personName}" displayDates="true"/></a>&nbsp;<img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/><c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }"> (<a href="<c:out value="${editContributorUrl}"/>">Edit</a>) </c:if></h3>
 						     	
 						     	<table 	class="blueBox">
 						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
@@ -107,7 +110,7 @@
 			                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 						     </td>						
 							<td width="22%">
-								<h3><a href="${contributorRss}"><ir:authorName personName="${personName}" displayDates="true"/></a>&nbsp;<img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/></h3>
+								<h3><a href="${contributorRss}"><ir:authorName personName="${personName}" displayDates="true"/></a>&nbsp;<img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/><c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }"> (<a href="<c:out value="${editContributorUrl}"/>">Edit</a>) </c:if></h3>
 						     	
 						     	<table 	class="blueBox">
 						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
@@ -144,6 +147,15 @@
 
 					</tr>
             	</table>
+            	
+            	<c:forEach var="identifier" items="${personName.personNameAuthority.identifiers}">
+			       <br/>
+			       <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode == 'ORCID'}">
+			           <b></strong><c:out value="${identifier.personNameAuthorityIdentifierType.name}"/></b>: <a href="<c:out value="https://orcid.org/${identifier.value}"/>"><c:out value="${identifier.value}"/></a>
+			       </c:if>
+			   </c:forEach>
+            	
+            	
             	
                <c:url var="sortAscendingTitleUrl" value="/viewContributorPage.action">
                    <c:param name="rowStart" value="${rowStart}"/>

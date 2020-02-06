@@ -95,6 +95,9 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 			addFieldError("personAuthorityidentifierTypeMissingDataError", message);
 			return "addError";
 		}
+		
+		
+		
 		// update
 		if (personNameAuthorityIdentifier != null) {
 			// see if the identifier already exists for the person name
@@ -107,7 +110,13 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 			personService.save(personNameAuthority);
 			
 		} else { // add
-			
+			PersonNameAuthorityIdentifier alreadyAdded = personService.getByTypeAuthority(identifierType.getId(), personNameAuthority.getId());
+			if(alreadyAdded != null ) {
+				message = "identifier type = " + identifierType + " value = " + value
+						+ " already exists for this user = " + alreadyAdded;
+				addFieldError("personAuthorityidentifierTypeMissingDataError", message);
+				return "addError";
+			}
 			 
 			personNameAuthority.addIdentifier(value, identifierType);
 			personService.save(personNameAuthority);

@@ -71,20 +71,21 @@
 				            <td>
 				                <c:url var="contributorUrl" value="/viewContributorPage.action">
 						            <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
+						        </c:url>
+						        <c:url var="editContributorUrl" value="/admin/personEdit.action">
+						            <c:param name="personId" value="${itemContributor.contributor.personName.personNameAuthority.id}"/>
 						        </c:url>						                             
-						        <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name}
+						        <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name} <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }"> (<a href="<c:out value="${editContributorUrl}"/>">Edit</a>) </c:if>
 						        <c:forEach var="identifier" items="${itemContributor.contributor.personName.personNameAuthority.identifiers}">
-				                    <br/>
+			                         <br/>
 			                        <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode == 'ORCID'}">
-			                            <c:out value="${identifier.personNameAuthorityIdentifierType.name}"/>: <a href="<c:out value="https://orcid.org/${identifier.value}"/>"><c:out value="${identifier.value}"/></a> <br/>
+			                            <c:out value="${identifier.personNameAuthorityIdentifierType.name}"/>: <a href="<c:out value="https://orcid.org/${identifier.value}"/>"><c:out value="${identifier.value}"/></a>
 			                        </c:if>
 			                        <c:if test="${identifier.personNameAuthorityIdentifierType.uniqueSystemCode != 'ORCID'}">
 			                          <c:out value="${identifier.personNameAuthorityIdentifierType.name}: ${identifier.value}"/> 
 			                        </c:if>
 			                    </c:forEach>
-			                    <br/>
-			                 
-					          
+			                    <br/><br/>
 					        </td>
 					         
 					    </tr>

@@ -39,6 +39,7 @@ CREATE TABLE person.person_name_authority_identifier
     person_name_authority_identifier_type_id BIGINT NOT NULL,
     version INTEGER,
     value TEXT,
+    UNIQUE(person_name_authority_identifier_type_id, person_name_authority_id),
     UNIQUE(person_name_authority_identifier_type_id, value),
     FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority(person_name_authority_id),
     FOREIGN KEY (person_name_authority_identifier_type_id) REFERENCES person.person_name_authority_identifier_type (person_name_authority_identifier_type_id) 
