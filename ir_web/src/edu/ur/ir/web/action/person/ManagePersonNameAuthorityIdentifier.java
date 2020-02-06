@@ -110,6 +110,8 @@ public class ManagePersonNameAuthorityIdentifier extends ActionSupport  implemen
 			personService.save(personNameAuthority);
 			
 		} else { // add
+			
+			// make sure it doesn't already exist on the person - prevent duplicates
 			PersonNameAuthorityIdentifier alreadyAdded = personService.getByTypeAuthority(identifierType.getId(), personNameAuthority.getId());
 			if(alreadyAdded != null ) {
 				message = "identifier type = " + identifierType + " value = " + value
