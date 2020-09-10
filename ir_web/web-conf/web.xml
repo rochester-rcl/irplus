@@ -100,7 +100,7 @@
     
   <!--  UNCOMMENT both security constraints if using ssl -->
   
-  <!-- Define a Security Constraint on this application for ssl 
+  <!-- Define a Security Constraint on this application for ssl  -->
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>ir plus</web-resource-name>
@@ -110,9 +110,9 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  -->
+ 
   
-   <!--  oai should be a non secure url for OAIster   
+   <!--  oai should be a non secure url for OAIster    --> 
    <security-constraint>
     <web-resource-collection>
       <web-resource-name>ir plus</web-resource-name>
@@ -122,5 +122,5 @@
       <transport-guarantee>NONE</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-   --> 
+  
 </web-app>

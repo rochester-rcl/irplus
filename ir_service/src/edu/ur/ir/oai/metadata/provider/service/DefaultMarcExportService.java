@@ -848,7 +848,7 @@ public class DefaultMarcExportService implements MarcExportService, Comparator<E
 				DataField df = factory.newDataField("655", ' ', ' ');
 				df.setIndicator2('7');
 				
-				df.addSubfield(factory.newSubfield('a', "Electronic dissertations."));
+				df.addSubfield(factory.newSubfield('a', "Academic theses."));
 				df.addSubfield(factory.newSubfield('2', "lcgft"));
 				record.addVariableField(df);
 				// exit out once set
