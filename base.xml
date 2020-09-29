@@ -20,8 +20,8 @@
 	
 	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
 		     line is uncommented.
-		-->    
-	<property name="run.tests" value="true"/>
+		    
+	<property name="run.tests" value="true"/> -->
 	 
 	
 	<!-- custom build directory this SHOULD be created ouside the project

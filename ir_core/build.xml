@@ -57,6 +57,7 @@
     <!-- Set the location where the libraries this project is dependent -->
     <path id="libraries">
 	  <fileset dir="${lib.dir}" includes="*.jar"/>
+	  <fileset dir="jai_lib" includes="*.jar"/>
       <fileset dir="../marc4j/2.4" includes="*.jar"/>
     </path>
 	
